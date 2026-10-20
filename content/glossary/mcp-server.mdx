@@ -1,0 +1,21 @@
+---
+title: 'MCP server'
+category: agents
+definition: 'An MCP server exposes tools and data to AI agents through the Model Context Protocol, an open standard that lets assistants like ChatGPT, Claude, and coding agents use external products.'
+description: 'What an MCP server is, how AI agents use it, and what the GitCMS MCP server lets agents do.'
+related:
+  - coding-agent
+  - personal-ai-agent
+  - content-approval-workflow
+lastReviewed: '2026-10-10'
+---
+
+## Why it matters
+
+Before MCP, every AI tool needed custom integrations. With MCP, a product exposes one server, and any compatible agent can connect, authenticate, and call its tools.
+
+## The GitCMS MCP server
+
+GitCMS runs an MCP server at `https://mcp.gitcms.dev`. Connected agents can list your sites and collections, read entries, create content tasks, write and edit drafts, and submit them for review. In ChatGPT and Claude, GitCMS can open its visual editor inside the chat.
+
+Agents get structured access to content, not your repository credentials. See [AI agents](/agents) for setup by agent.

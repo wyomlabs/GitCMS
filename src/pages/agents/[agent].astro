@@ -1,0 +1,25 @@
+---
+import ContentLayout from '@/layouts/ContentLayout.astro'
+import { AgentDetailPage } from '@/components/landing/agent-detail-page'
+import {
+  agentList,
+  getAgentLandingDescription,
+  getAgentLandingTitle,
+} from '@/lib/agent-data'
+import { faqStructuredData } from '@/lib/structured-data'
+
+export function getStaticPaths() {
+  return agentList.map((agent) => ({ params: { agent: agent.slug }, props: { agent } }))
+}
+
+const { agent } = Astro.props
+const structuredData = faqStructuredData(agent.faqs)
+---
+<ContentLayout
+  title={getAgentLandingTitle(agent)}
+  description={getAgentLandingDescription(agent)}
+  path={`/agents/${agent.slug}`}
+  structuredData={structuredData}
+>
+  <AgentDetailPage agent={agent} client:load />
+</ContentLayout>

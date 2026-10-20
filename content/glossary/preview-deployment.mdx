@@ -1,0 +1,24 @@
+---
+title: 'Preview deployment'
+category: deploy
+definition: 'A preview deployment is a temporary copy of a website built from unpublished changes, so reviewers can see them on a real URL before they go live.'
+description: 'What preview deployments are, which hosts provide them, and how they help content review.'
+related:
+  - content-approval-workflow
+  - deployment
+  - branch
+  - ci-cd
+lastReviewed: '2026-10-10'
+---
+
+## How it works
+
+Hosts like Vercel, Netlify, and Cloudflare Pages build a separate URL for each branch or pull request. Reviewers open it and see the change exactly as visitors would.
+
+## For content review
+
+Reading a diff tells you what changed; a preview shows how it looks. Together they make review before publish practical for non-developers.
+
+## In GitCMS
+
+Content tasks are isolated from the live site, so hosts that build previews for branches can produce a preview for each task. Check your host's settings for branch previews.

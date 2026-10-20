@@ -1,0 +1,32 @@
+---
+title: 'Translate an entry into another locale'
+description: 'Create a translated version of a page or post in a site that has localization set up.'
+category: content
+agents:
+  - 'ChatGPT'
+  - 'Claude'
+  - 'Claude Code'
+  - 'OpenClaw'
+  - 'Hermes'
+order: 8
+lastReviewed: '2026-10-10'
+---
+
+## The prompt
+
+```text
+Translate [entry] on [site name] into [language]. Keep the frontmatter fields,
+links, and formatting. Adapt idioms naturally rather than translating word for
+word, and keep product names in English.
+
+Create the translated entry in the [locale] locale, in a content task, and
+submit it for review.
+```
+
+## How it runs
+
+Run this in an agent connected to GitCMS through MCP (see [AI agents](/agents)). On sites that use review before publish, the agent drafts inside a content task and submits it for review; a person publishes. On sites that publish directly, there's no draft step and saves go live on the next deploy, so ask the agent to show you the changes before it saves.
+
+## Before you run it
+
+The site needs locales configured. See [localization](/docs/features/localization-i18n).

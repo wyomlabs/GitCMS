@@ -1,0 +1,55 @@
+---
+title: GitCMS v1.5
+version: v1.5.0
+date: 2026-10-18
+description: GitCMS v1.5 brings a calmer, redesigned workspace, reviews right in the editor, and an invite-only beta of Change Requests with previews of unpublished changes.
+---
+
+# v1.5.0
+
+GitCMS v1.5 is about working together on the real website. The workspace has been redesigned around the way editors and reviewers actually move through their work, reviews now happen beside the text, and a new beta lets editors point at the live site and ask for a change.
+
+## What's new
+
+**Change Requests (invite-only beta)**
+
+Clients, marketers, and reviewers can now give feedback on the website itself. Open **Change Requests**, choose **Select element**, click the heading, image, or section that needs work, and say what should change. Numbered pins mark each comment on the page, and one request can cover as many pages as you need.
+
+Submitted requests reach your developers as a GitHub issue, with every piece of feedback listed and numbered. Reviewers can follow the conversation, reply to each item, and resolve feedback in GitCMS, while developers can answer on GitHub. Mentioning **F1**, **F2**, and so on in a GitHub comment attaches the reply to that feedback.
+
+**Hand requests to your coding agent**
+
+Owners and admins can choose **Copy prompt** on an open request and paste it into Claude Code, Codex, or Cursor. The prompt lists the open feedback, the page and element for each item, and how to deliver the work so it shows up back in GitCMS.
+
+**See changes before they go live (beta)**
+
+If your host builds a preview for each change, as Vercel and Netlify do, GitCMS now finds it. A change request opens on the preview of the work done for it, so reviewers can check the fix and resolve feedback without waiting for it to be published. Switch between **Live site** and **Preview** at any time.
+
+Content tasks get a **Preview site** button too, so editors can see a draft on the real website before it goes live. Owners can choose which deployment to use, or turn previews off, in **Site Settings → Preview deployments**.
+
+<Callout type="info" title="Approve GitHub access for previews">
+  To find previews, GitCMS needs read access to your repository's deployments
+  and commit statuses. GitHub asks the owner of your GitHub account or
+  organization to approve this once. Until then, everything else keeps working
+  and GitCMS shows the live site with a link to approve.
+</Callout>
+
+**A redesigned workspace**
+
+Every page now follows the same layout, with one clear next step. A side panel docks beside your work and follows you between pages: open a content task, its draft, or an entry's history without losing your place. Sites have their own address, settings open as a dialog from anywhere, and messages say what happened and offer the button that fixes it.
+
+**Reviews in the editor**
+
+Reviewers comment right beside the text they're reviewing, and see a draft's changes marked inline, including each changed field. Approve, request changes, and, if your site requires it, keep publishing waiting for approval. Each person only sees the actions their role allows.
+
+**Clearer setup**
+
+Adding a site happens in one dialog that shows what GitCMS found in your repository before asking anything. A repository can hold several websites, each set up and managed on its own, and invited editors land straight in the site they were invited to.
+
+**Fewer lost edits**
+
+Entries are checked against their fields before saving, with each problem shown beside the field. If someone published newer changes while you were working, GitCMS keeps your draft and helps you hand it to a developer instead of overwriting their work.
+
+---
+
+[Try GitCMS →](https://gitcms.dev)

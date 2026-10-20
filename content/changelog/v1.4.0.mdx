@@ -1,0 +1,49 @@
+---
+title: GitCMS v1.4
+version: v1.4.0
+date: 2026-08-20
+description: GitCMS v1.4 adds a visual editor for menus, footers, and theme settings kept in JSON, YAML, or TOML files, and opens the Change Requests beta to every workspace.
+---
+
+# v1.4.0
+
+Not everything on a website is a post or a page. Menus, footers, team lists, homepage sections, and theme settings usually live in data files. GitCMS v1.4 gives those files a form, so editors can change them without touching JSON, YAML, or TOML.
+
+## What's new
+
+**A visual editor for site data**
+
+Add a data file in **Configure → Site data**, choose **Auto-detect**, and GitCMS fills in the fields from what the file holds. Editors then find it in the sidebar, like **Navigation** or **Footer**, and change it in a form.
+
+Nested data stays easy to follow. Sections appear as tabs, groups and lists open one level at a time, short lists show as a table, and lists of words show as chips you can add to in place. Every field is checked before saving, including the ones inside groups and list items.
+
+**Only what you changed**
+
+GitCMS saves only the values you edited. Comments, key order, quoting, and indentation stay exactly as they were, so a theme's documented config keeps its documentation and the change shows as a small diff in your repository.
+
+You can also point a page at one part of a file, like `params` in a Hugo config, so build settings in the same file stay out of reach. Saving follows your site's publishing mode, exactly like entries.
+
+**Safe when someone else edits too**
+
+If someone saves the same file while you have unsaved changes, your edits stay and GitCMS tells you a newer version exists, instead of overwriting either version.
+
+**AI agents can edit site data**
+
+Agents connected through GitCMS MCP can now read and change site data alongside entries, following the same fields, rules, and publishing mode as editors.
+
+**Change Requests beta, now open to everyone**
+
+The Change Requests beta is no longer invite-only. Everyone who can edit a site can point at the live website, ask for changes, and follow them through to the preview and the published site.
+
+<Callout type="warn" title="Upgrade your site configuration">
+  Site data uses a new configuration layout. GitCMS offers the upgrade when you
+  open a site that needs it, or run `npx create-gitcms migrate --write` in your
+  repository. The upgrade only moves configuration; your content is untouched.
+  AI agents connected through MCP can work on a site once it has been upgraded.
+</Callout>
+
+Learn more in the [site data guide](/docs/features/site-data).
+
+---
+
+[Try GitCMS →](https://gitcms.dev)

@@ -1,0 +1,28 @@
+---
+title: 'Edge rendering'
+category: rendering
+definition: 'Edge rendering runs server-side rendering on servers distributed close to visitors, such as CDN edge locations, instead of in one central region.'
+description: 'What edge rendering is, how it differs from regular SSR, and when it helps a website.'
+related:
+  - server-side-rendering
+  - static-site-generation
+lastReviewed: '2026-10-10'
+---
+
+## How it works
+
+Platforms like Cloudflare Workers, Vercel, and Netlify run your rendering code in many locations worldwide. A visitor in Mumbai hits a nearby location instead of a server in Virginia, which cuts latency for dynamic pages.
+
+## When it helps
+
+- Personalized or request-dependent pages for a global audience
+- Redirects, A/B tests, and geolocation logic
+- APIs that should respond fast everywhere
+
+## Limits
+
+Edge runtimes often restrict which Node.js APIs and libraries you can use, and a page that queries a database in one region can lose the latency benefit.
+
+## For content sites
+
+Static pages are already served from the edge by a CDN. Edge rendering matters for the dynamic parts, not for the blog.

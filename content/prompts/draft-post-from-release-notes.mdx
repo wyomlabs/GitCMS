@@ -1,0 +1,34 @@
+---
+title: 'Draft a blog post from release notes'
+description: 'Turn changelog entries or release notes into a customer-facing blog post that follows your site’s structure and voice.'
+category: content
+agents:
+  - 'ChatGPT'
+  - 'Claude'
+  - 'Claude Code'
+  - 'OpenClaw'
+  - 'Hermes'
+order: 5
+lastReviewed: '2026-10-10'
+---
+
+## The prompt
+
+```text
+Write a blog post for [site name] announcing [feature or release].
+
+Source material:
+[paste release notes, PR descriptions, or changelog entry]
+
+Follow the blog collection's fields and our CONTENT.md voice. Lead with what
+changed for the customer, then how to use it. Include one example.
+Draft it in a new content task and submit it for review.
+```
+
+## How it runs
+
+Run this in an agent connected to GitCMS through MCP (see [AI agents](/agents)). On sites that use review before publish, the agent drafts inside a content task and submits it for review; a person publishes. On sites that publish directly, there's no draft step and saves go live on the next deploy, so ask the agent to show you the changes before it saves.
+
+## Tips
+
+- Keep your site's `CONTENT.md` up to date; GitCMS passes it to the agent as writing instructions. See [CONTENT.md](/docs/ai-mcp/content-instructions).

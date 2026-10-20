@@ -1,0 +1,32 @@
+---
+title: 'Content approval workflow'
+category: operations
+definition: 'A content approval workflow is the set of stages and rules a website change passes through, such as draft, review, and approval, before it is published.'
+description: 'What a content approval workflow is, when a website needs one, and how it applies to changes made by AI agents.'
+related:
+  - day-two
+  - preview-deployment
+  - personal-ai-agent
+lastReviewed: '2026-10-10'
+---
+
+## Typical stages
+
+Most workflows follow the same path: **idea → draft → review → published**. Each stage has an owner. Writers draft, reviewers comment and approve, and someone with publish rights makes it live.
+
+## When you need one
+
+- More than one person edits the site
+- Clients or marketers make changes a developer is accountable for
+- AI agents edit content, especially in bulk
+- You need a record of who approved what
+
+A solo editor can skip it and publish directly. Everyone else benefits from one.
+
+## Why it matters for code-first websites
+
+Developers already have an approval workflow for code: branches and pull requests. Marketers and clients don't use it, so content changes on a code-first site often skip review entirely. A content approval workflow gives non-developers the same safety in their own vocabulary.
+
+## In GitCMS
+
+Sites can use **review before publish**: changes become drafts in a content task, reviewers see inline changes and comments, approvals are tied to a version, and agents can draft and submit for review but not publish. Sites that don't need approval can publish directly. See the [editorial workflow docs](/docs/features/editorial-workflow).

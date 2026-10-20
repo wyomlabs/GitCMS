@@ -1,0 +1,18 @@
+---
+import { appUrl } from '@/lib/start-login'
+
+interface Props {
+  tool: string
+  title: string
+}
+
+// Tools render inside the app at a versioned path, so this repository stays
+// free of editor code. Never rename a `v1` slug the app serves.
+const { tool, title } = Astro.props
+---
+<iframe
+  src={appUrl(`/embed/v1/tools/${tool}`)}
+  title={title}
+  allow="clipboard-write"
+  class="block h-[min(82vh,900px)] min-h-[620px] w-full rounded-xl border border-neutral-200 bg-white shadow-sm"
+></iframe>

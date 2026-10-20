@@ -1,0 +1,25 @@
+---
+title: 'CDN (content delivery network)'
+category: deploy
+definition: 'A CDN (content delivery network) stores copies of a website’s files on servers around the world and serves each visitor from a nearby location.'
+description: 'What a CDN does, why static sites are fast on one, and what caching means for content updates.'
+related:
+  - static-hosting
+  - edge-rendering
+  - deployment
+lastReviewed: '2026-10-10'
+---
+
+## Why it's fast
+
+A visitor in Sydney gets files from a server in Sydney instead of one in Virginia. Fewer network hops means faster pages, which helps both visitors and search rankings.
+
+## Static sites and CDNs
+
+Pre-rendered pages are just files, so the whole site can live on the CDN. That's why static sites are fast and cheap: there's no origin server doing work per request.
+
+## Caching and updates
+
+CDNs cache files. When you deploy, modern hosts invalidate or version the cache automatically, so new content appears within seconds of the deploy finishing. If an old version lingers, it's almost always a cache setting.
+
+Common CDNs include Cloudflare, Fastly, and Amazon CloudFront, and hosts like Vercel and Netlify include one.

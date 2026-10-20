@@ -1,0 +1,112 @@
+---
+title: "How to Review AI Agent Changes Before They Go Live on Your Website"
+description: |
+  AI agents can rewrite twenty pages in a minute. Here's how to make every agent change to your website a reviewable draft that a person approves before it publishes.
+date: "2026-10-10"
+category: guides
+authors:
+  - Waishnav
+tags:
+  - ai-agents
+  - mcp
+  - editorial-workflow
+  - review
+---
+
+To review AI agent changes before they go live, route agents through a workflow where their edits become drafts, not commits to your live site, and require a person to approve each draft before publishing. GitCMS is the CMS for code-first and AI-built websites: people and agents work through the same draft, review, and publish flow.
+
+A year ago, the risky change to a website was a person with too much access. Now it's an agent with too much access. Ask Claude to "update our pricing language everywhere" and it will happily touch twenty pages. Most of those edits will be fine. The problem is that nobody knows which ones aren't until a customer notices.
+
+You don't need to stop agents from editing. You need every agent change to land somewhere a person can see it, discuss it, and approve it.
+
+## Two kinds of agent changes
+
+Separate these first, because they need different review paths:
+
+| Change | Example | Where to review it |
+|---|---|---|
+| **Code changes** | New component, layout fix, dependency update | Pull requests and branch protection in GitHub |
+| **Content changes** | Rewriting copy, publishing a post, updating prices | An editorial workflow your non-developers can use |
+
+Coding agents like Claude Code, Codex, and Cursor already fit the first row: they open a pull request and a developer reviews it. The gap is the second row. Content changes need review from marketing, the client, or the founder, and those people don't review pull requests.
+
+## Prerequisites
+
+- A website in a **GitHub repository** that reads its content from Markdown or MDX.
+- The site connected to [GitCMS](https://gitcms.dev) with a site license (agent access through MCP requires one).
+- ChatGPT, Claude, or another MCP-compatible agent.
+
+## Step 1: Turn on review before publish
+
+In your site's **Settings**, set **Publishing mode** to **Review before publish**. This is the default for new sites.
+
+In this mode, nothing an agent or a person writes touches the live site directly. Work happens inside a **content task** that moves through **Ideas → Draft → Review → Published** on the content board. Each task's changes stay isolated from your live content until someone publishes them.
+
+## Step 2: Require approval
+
+Still in **Settings → General**, turn on **Require approval before publishing**. Now a task can't be published until a reviewer approves its latest version.
+
+Two rules make this hold up in practice:
+
+- **Approvals are tied to a version.** If the agent (or anyone) changes the draft after approval, the task shows **Approval out of date** until someone approves again.
+- **Requested changes win.** A request for changes outweighs earlier approvals until someone approves again.
+
+Owners and admins can still **Publish anyway** in an emergency, and the task's activity records that it went out without approval.
+
+## Step 3: Decide who can publish
+
+Publishing is a separate permission from editing. In **Workspace Settings → Members**:
+
+- Give writers and client editors the **Editor** role, without publish access.
+- Give the people who approve content the **Reviewer** role.
+- Grant **publish access** only to the people who should make things live.
+
+Agents don't need publish access at all. In review-before-publish mode, the GitCMS MCP tools let an agent create tasks, draft, and submit for review. There is no publish action for agents; a person always makes the final call.
+
+## Step 4: Connect your agent
+
+Connect ChatGPT or Claude through MCP using the [ChatGPT setup](/docs/ai-mcp/chatgpt-setup) or [Claude setup](/docs/ai-mcp/claude-setup) guide. Other MCP clients can connect with a [personal access token](/docs/ai-mcp/personal-access-tokens).
+
+Once connected, prompts can stay in plain language: "draft a post about our new opening hours" or "tighten the copy on the pricing page." With review before publish on, the agent creates or resumes a content task, drafts inside it, and submits it for review. It works from your site's collections, fields, and [CONTENT.md](/docs/ai-mcp/content-instructions) writing instructions, so drafts follow your structure and voice.
+
+## Step 5: Review the agent's work
+
+When a task reaches **Review**, open it from the content board. Reviewers see:
+
+- **What changed.** The published version with the draft's edits marked inline, and changed fields such as title, tags, and dates highlighted.
+- **Every entry the task touched.** If the agent edited twenty pages, the task lists all twenty, with open comment counts on each.
+- **A thread per comment.** Select any text and comment on it. Threads track whether they're open, resolved, or outdated because the text changed.
+
+Then **Approve**, or **Request changes** to send the task back to **Draft**. Agents can't read GitCMS review comments through MCP, so copy the feedback into your agent conversation, ask it to make those changes, and have it submit the task for review again.
+
+## Step 6: Publish
+
+Someone with publish access publishes the approved task. GitCMS commits it to your default branch, and your host deploys it as usual. The task moves to **Published**, and its history records who drafted, who approved, and who published.
+
+## Where this falls short
+
+- **It covers content, not code.** If an agent changes components or configuration, review that through pull requests and GitHub branch protection.
+- **Direct publish skips all of this.** Sites in **Publish right away** mode commit saves straight to the default branch, for agents too. Use direct publish only where that's what you want.
+- **Review takes discipline.** An approval queue nobody checks just delays mistakes. Agree on a turnaround with your team.
+
+## FAQ
+
+### Can an AI agent publish to my site without approval?
+
+Not when the site uses review before publish. Agents can draft and submit tasks for review, but publishing is a human action in GitCMS. Turn on required approval and a reviewer has to approve the latest version first.
+
+### Does the reviewer need to understand Git?
+
+No. Reviewers work on the content board and in the editor. Behind the scenes each task is a pull request, and GitHub approvals count when they come from a reviewer's own GitHub account, but nobody has to open GitHub.
+
+### Which agents work with GitCMS?
+
+ChatGPT and Claude have guided setup. Other MCP clients, such as OpenClaw and Hermes, connect with a personal access token. See [AI agents](/agents) for the current list.
+
+### Isn't pull request review enough?
+
+For developers, yes. But the people who should approve website copy (marketing, founders, clients) rarely review pull requests. Content review has to happen where they already work.
+
+## Next step
+
+If agents already touch your site, start with Steps 1 and 2: turn on review before publish and required approval. Then [connect your first agent](/docs/ai-mcp/ai-overview) and review its first draft yourself.

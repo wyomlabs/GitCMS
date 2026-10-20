@@ -1,0 +1,36 @@
+---
+title: 'Vibe coding'
+category: building
+definition: 'Vibe coding is building software, often a website, by describing what you want to an AI agent and accepting its code with little line-by-line review.'
+description: 'What vibe coding is, why it took off for websites, and how to keep a vibe-coded site maintainable after launch.'
+related:
+  - ai-built-website
+  - coding-agent
+  - code-first-website
+  - day-two
+lastReviewed: '2026-10-10'
+---
+
+## Where the term came from
+
+The phrase spread in 2025 to describe a new way of working: you steer an AI coding agent in plain language, run the result, and iterate on what you see rather than reading every line. For marketing sites and landing pages, it made the first version nearly free.
+
+## The catch
+
+Vibe coding optimizes for Day One. The problems show up later:
+
+- Copy ends up hardcoded inside components
+- Nobody reviews what the agent changed in later edits
+- The client or marketing team can't change anything without the person who prompted it
+
+As one developer put it on Hacker News: vibe coding is fun until you need vibe maintaining.
+
+## Making a vibe-coded site maintainable
+
+1. Keep it in Git so every change is reviewable and reversible.
+2. Move editable copy out of components into content files.
+3. Give non-developers an editor and give agent changes a review step.
+
+## In GitCMS
+
+GitCMS adds the editor and review step to a vibe-coded site that lives in Git. See the [make a site client-editable](/prompts/make-site-client-editable) prompt.

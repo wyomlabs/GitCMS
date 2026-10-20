@@ -1,0 +1,53 @@
+---
+import ContentLayout from '@/layouts/ContentLayout.astro'
+import { getComparisons } from '@/lib/content'
+const comparisons = await getComparisons()
+const categoryOrder = [
+  'Website builders and traditional CMS',
+  'Headless CMS',
+  'Git-based CMS',
+  'Docs and publishing platforms',
+] as const
+const descriptions = {
+  'Website builders and traditional CMS': 'Builders existed because code was expensive. Agents now build sites in code; the one thing you still need from a builder is the admin.',
+  'Headless CMS': 'Content behind an API is a second source of truth your coding agent can’t see. For pages and posts, the repo is simpler.',
+  'Git-based CMS': 'Same files-in-Git foundation. The difference is who it’s built for: developers editing Markdown, or clients, marketers, and agents running the site.',
+  'Docs and publishing platforms': 'Hosted platforms for one slice of your content. A code-first site can hold docs, blog, and changelog in one repo you own.',
+} satisfies Record<(typeof categoryOrder)[number], string>
+const groups = categoryOrder.flatMap((category) => {
+  const items = comparisons.filter((entry) => entry.data.category === category)
+  return items.length > 0 ? [{ category, description: descriptions[category], items }] : []
+})
+---
+<ContentLayout
+  title="GitCMS Comparisons — Honest CMS Comparisons"
+  description="Honest comparisons between GitCMS, the CMS for code-first and AI-built websites, and headless, traditional, Git-based, and docs CMSs. We say where each tool is stronger."
+  path="/compare"
+>
+  <section class="mx-auto max-w-5xl px-6 py-16 sm:py-20">
+    <header class="max-w-3xl">
+      <div class="text-sm font-medium uppercase tracking-widest text-neutral-400">Compare</div>
+      <h1 class="mt-4 font-logo text-4xl font-normal leading-tight tracking-tight text-neutral-900 sm:text-5xl">GitCMS vs everything else</h1>
+      <p class="mt-6 text-base leading-relaxed text-neutral-600 sm:text-lg">Agents made code the fastest way to build a website. These pages compare what you use to run it after launch: website builders, headless CMSs, other Git-based CMSs, and docs platforms. Every page says where the other tool is genuinely better.</p>
+    </header>
+    <div class="mt-16 space-y-16">
+      {groups.map((group) => (
+        <div>
+          <div class="border-b border-neutral-200 pb-4">
+            <h2 class="font-logo text-2xl font-normal tracking-tight text-neutral-900">{group.category}</h2>
+            <p class="mt-2 text-base text-neutral-500">{group.description}</p>
+          </div>
+          <div class="mt-6 grid gap-4 md:grid-cols-2">
+            {group.items.map((comparison) => (
+              <a href={`/compare/${comparison.id.replace(/\.mdx?$/, '')}`} class="group flex flex-col rounded-2xl border border-neutral-200 bg-white p-6 transition-colors hover:border-neutral-300 hover:bg-neutral-50">
+                <h3 class="font-logo text-xl font-normal tracking-tight text-neutral-900 transition-colors group-hover:text-neutral-700 sm:text-2xl">vs {comparison.data.competitor}</h3>
+                <p class="mt-3 flex-1 text-base leading-relaxed text-neutral-500">{comparison.data.description}</p>
+                <div class="mt-5 text-base font-medium text-neutral-900">Read comparison →</div>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</ContentLayout>

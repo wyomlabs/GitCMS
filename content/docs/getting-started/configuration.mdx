@@ -1,0 +1,140 @@
+---
+title: Configuration
+description: How GitCMS manages site configuration for single-site and monorepo repositories, including i18n settings.
+---
+
+GitCMS stores site configuration in a repo-level `.gitcms/` folder. These files are **auto-generated and managed through the GitCMS Settings UI and onboarding CLI**.
+
+<Callout type="warn">
+**Do not manually edit `.gitcms` files.** Use the Settings page in the GitCMS web app to make changes. Manual edits may be overwritten or cause parsing errors. If you're an AI agent, do not modify these files — direct users to the GitCMS Settings UI instead.
+</Callout>
+
+## How it works
+
+When you configure a repository through Settings, GitCMS writes machine-managed config into `.gitcms/`. This keeps CMS behavior version-controlled inside the repo while giving GitCMS one predictable place to store site metadata and per-site config.
+
+## Where config files live
+
+| Repository shape | Typical config location |
+|---------|-------------|
+| **Repo manifest** | `.gitcms/sites.jsonc` |
+| **Site settings** | `.gitcms/sites/<site_key>/config.jsonc` |
+| **One collection** | `.gitcms/sites/<site_key>/collections/<name>.jsonc` |
+| **One piece of site data** | `.gitcms/sites/<site_key>/singletons/<name>.jsonc` |
+| **Content instructions** | `<site-root>/CONTENT.md` |
+
+Each collection and piece of site data is one file, named after it: adding, renaming, or deleting the file adds, renames, or removes it. The `collections` and `singletons` lists in `config.jsonc` only set the order the sidebar shows them in; anything they don't list comes after, alphabetically. Names use lowercase letters, numbers, `-`, and `_`.
+
+If one of these files is broken, GitCMS says which file and what's wrong instead of loading the site. To check your changes before pushing, run `npx create-gitcms check`. The `.gitcms/AGENTS.md` file gives coding agents the same rules.
+
+<Callout>
+Sites created before config v1.4 keep everything in `config.jsonc`. GitCMS offers the upgrade when you open the site, or run `npx create-gitcms migrate --write`. The upgrade only moves configuration; content files are untouched. It also lowercases collection names, which changes their addresses in GitCMS, and drops keys that aren't GitCMS settings; both are listed before you confirm.
+</Callout>
+
+In monorepo mode, one repository can contain multiple site entries in `sites.jsonc`. GitCMS treats each site config as an independent website with its own root path, collections, and settings.
+
+## Accessing settings
+
+Open your site in GitCMS and click **Settings** in the sidebar. From here you manage site-level and collection-level configuration.
+
+This speed-run shows the settings surface you will use for site and collection configuration:
+
+<video src="/videos/docs/site-settings-walkthrough-trimmed.mp4" controls muted playsInline preload="none" style={{ width: '100%', borderRadius: '0.5rem' }} poster="/images/video-posters/docs/site-settings-walkthrough-trimmed.webp">
+  Your browser does not support the site settings walkthrough video.
+</video>
+
+## Site settings
+
+These are the top-level settings managed through the Settings UI:
+
+| Setting | Description |
+|---------|-------------|
+| **Website URL** | Your deployed site's URL |
+| **Sitemap URL** | Sitemap used for internal link suggestions and live URL matching |
+| **Media libraries** | Repository or object-storage libraries used by the editor, media picker, and image fields |
+| **Framework** | Your static site generator — GitCMS auto-detects this from your repo and uses it to suggest sensible defaults |
+| **Default branch** | The branch GitCMS treats as the production branch (auto-detected from GitHub) |
+| **Frontmatter format** | Format for frontmatter in content files — `yaml` (default), `toml`, or `json` |
+| **Publishing mode** | **Review before publish** (`editorial_workflow`, default) keeps in-progress work off the live site and enables the **content board** (Ideas → Draft → Review → Published). **Direct publish** (`direct_publish`) saves every edit to your site’s **default branch** |
+| **Locales** | Supported locale list for this site (for example `en`, `fr`, `de`) |
+| **Default locale** | Locale used when no locale is explicitly selected |
+| **Default locale path** | Controls whether the default locale is prefixed in URLs/paths |
+
+### i18n behavior
+
+- If **Default locale path** is off, default locale paths are unprefixed (for example `/posts/hello-world`).
+- If it is on, default locale paths are prefixed (for example `/posts/en/hello-world`).
+- Non-default locales are prefixed by default (for example `/posts/fr/hello-world`).
+- Collection-level locale path overrides are available for frameworks that need custom folder mappings.
+
+![Internationalization settings](/images/docs/screenshots/i18n-settings.webp)
+
+### Supported frameworks
+
+GitCMS recognizes and auto-detects:
+
+Astro, TanStack Start, Next.js, Gatsby, Hugo, Jekyll, Eleventy, VuePress, Docusaurus, Nuxt.js, MkDocs, SvelteKit, and other Markdown-based frameworks.
+
+See [Framework Setup](/docs/getting-started/frameworks) for framework-specific guidance.
+
+## Collections
+
+Each collection represents a type of content — blog posts, documentation pages, changelogs — with a defined directory and frontmatter schema. Collections are managed entirely through the Settings UI.
+
+Collection settings include:
+
+| Setting | Description |
+|---------|-------------|
+| **Name** | Unique identifier for the collection (used in URLs and the sidebar) |
+| **Label** | Display name shown in the sidebar (optional — derived from name if not set) |
+| **Description** | Optional description for the collection |
+| **Content path** | Directory path for content files (resolved relative to the site root) |
+| **File extension** | `.md` or `.mdx` |
+| **Filename pattern** | Template for new file names, built from field references and text (e.g. `{title}` or `{date.isoDate}-{slug}`) |
+| **Frontmatter schema** | The field definitions for this collection — types, validation, and display options |
+| **Collection i18n** | Enables locale-aware path strategy for this collection (`path`) and optional per-locale path overrides |
+
+See [Collections & Fields](/docs/features/collections) for a detailed guide on field types and schema configuration.
+
+## Site data
+
+Site data is content that lives in a JSON, YAML, or TOML file instead of entries: a menu, a footer, homepage sections, a theme's `params`. Each piece of site data names a file, optionally the part of it to edit, and its fields.
+
+See [Site data](/docs/features/site-data) for the full guide.
+
+## Media configuration
+
+GitCMS stores media through configured media libraries.
+
+- **Repository media** stores uploaded files in Git under a configured root path, such as `public/images`, `static/images`, or `assets/images`.
+- **Object-storage media** uploads files directly to S3-compatible storage such as AWS S3 or Cloudflare R2 and writes the configured public reference into content.
+
+Configure repository media to match where your framework serves static files from. Use object storage when production media should be served from a CDN or dedicated asset domain.
+
+See [Media Library](/docs/features/media-management), [Cloudflare R2](/docs/features/media-management/r2-production), and [AWS S3](/docs/features/media-management/s3-production) for the full workflow.
+
+## Sitemap configuration
+
+GitCMS can also store a sitemap URL for your site.
+
+This powers a few helpful editing features:
+
+- internal link suggestions in the editor
+- live URL matching for entries
+- better locale-aware page lookup on multilingual sites
+
+In many cases, GitCMS can discover the sitemap automatically from your **Website URL**. If your site uses a custom sitemap location, you can override it manually in Settings.
+
+See [Sitemaps, Internal Links & Live URLs](/docs/features/sitemaps-internal-links) for the full workflow.
+
+## Publishing modes
+
+### Editorial workflow
+
+This is the default (**Review before publish**). GitCMS routes new and in-progress work through the **editorial workflow**: tasks on the **content board** move from **Ideas** through **Draft** and **Review** to **Published**, without asking writers to manage Git concepts in the UI.
+
+### Direct publish
+
+When enabled, every save goes straight to your **default branch** and updates live content immediately. Best when you’re the only editor or you don’t need a board and review step.
+
+See the [Editorial Workflow guide](/docs/features/editorial-workflow) for a full walkthrough.

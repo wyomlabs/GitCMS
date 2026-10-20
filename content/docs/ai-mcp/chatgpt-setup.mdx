@@ -1,0 +1,157 @@
+---
+title: ChatGPT Setup
+description: Connect GitCMS to ChatGPT and edit site content through GitCMS MCP.
+---
+
+This guide shows how to connect GitCMS to ChatGPT and use it for content work. GitCMS follows each site's configured publishing mode.
+
+Once connected, GitCMS can open the editor inside ChatGPT so you can draft, revise, and review content alongside the conversation.
+
+You can speak naturally. You do not need to mention internal terms like collection, markdown file, or Git branch unless you want that precision.
+
+## Prerequisites
+
+- A GitCMS account with access to at least one repository or site.
+- A ChatGPT Plus, Team, or Enterprise subscription.
+- A **licensed** GitCMS site. MCP is not available in preview mode.
+
+Before connecting ChatGPT, make sure:
+
+- `.gitcms` is initialized for the repository
+- your site configuration is in place
+- [`CONTENT.md`](/docs/ai-mcp/content-instructions) exists if you want reusable voice and audience guidance
+
+If you still need to initialize the repo, use [CLI Onboarding](/docs/getting-started/cli-onboarding) first.
+
+## Setup
+
+1. Open **ChatGPT** (web app or desktop app).
+2. Go to **Settings** and turn on **Developer Mode**.
+3. Go to **Settings → Apps** and click **Create**.
+4. Paste the following GitCMS connector URL:
+
+```
+https://mcp.gitcms.dev
+```
+
+5. Click **Connect**, sign in to GitCMS with Google or GitHub, and allow access.
+6. Start a new chat and choose **GitCMS** from your tools.
+
+That&apos;s it. The GitCMS visual editor will open inside ChatGPT when you use the tool.
+
+<video src="/videos/guides/chatgpt-setup.mp4" controls muted playsInline preload="none" style={{ width: '100%', borderRadius: '0.5rem' }} poster="/images/video-posters/guides/chatgpt-setup.webp">
+  ChatGPT setup walkthrough
+</video>
+
+## First workflow to try
+
+The best starting pattern is:
+
+1. brainstorm
+2. create a content task
+3. draft the first version
+4. revise
+5. submit for review
+
+Example:
+
+```text
+Help me brainstorm three blog post ideas for technical buyers evaluating
+Git-based CMS tools. Do not create content yet.
+```
+
+```text
+Create a content task for the strongest idea and include notes about
+audience, angle, and CTA.
+```
+
+```text
+Draft the first version for that content task in the posts collection.
+Keep it in draft and add the frontmatter fields we need.
+```
+
+```text
+I want to edit this blog post:
+https://gitcms.dev/blog/content-is-just-code
+
+Please read it first and then tighten the opening section.
+```
+
+See [Task-First AI Workflows](/docs/ai-mcp/task-first-workflows) for more prompt patterns.
+
+## Working with ChatGPT in GitCMS
+
+### Create a task after brainstorming
+
+```text
+Create a content task titled "2025 Product Roadmap".
+Include notes about target audience, product themes, and desired CTA.
+```
+
+### Draft from a task
+
+```text
+Draft the first version for content task #<task-id> in the posts collection.
+Set the date to today, tag it with "roadmap" and "product",
+and keep it ready for review.
+```
+
+### Continue an existing draft
+
+```text
+Open content task #<task-id> and rewrite the introduction to be more concise.
+Keep the rest of the draft intact.
+```
+
+### Edit from a live URL
+
+```text
+I want to edit this page:
+https://docs.example.com/getting-started/
+
+Read it first, then rewrite the first two sections to be clearer for beginners.
+```
+
+### Read before editing
+
+```text
+Read the current draft in content task #<task-id> and summarize what should
+change before editing it.
+```
+
+### Submit for review
+
+```text
+Submit content task #<task-id> for review and include a short summary
+of the major changes.
+```
+
+## Prompting tips
+
+- **Brainstorm before you draft.** Let ChatGPT help with angles and structure before it creates a task.
+- **Match the site's publishing mode.** Review-before-publish sites use content tasks; direct-publish sites write directly to the publishing branch.
+- **Be specific about collections.** Say "in the posts collection" instead of "create a post".
+- **Use plain language when that is easier.** "Edit this blog post" or "rewrite this live URL" works fine.
+- **Specify frontmatter values you care about.** Dates, tags, categories, authors, and draft status are worth naming.
+- **Mention locale explicitly.** For multilingual sites, say `use locale fr` or similar.
+- **Keep CONTENT.md current.** GitCMS loads those site instructions as part of site context during writing flows, so you do not need to ask ChatGPT to use them explicitly.
+- **Keep drafts in review flow.** Ask ChatGPT to leave work ready for review instead of assuming it should be published.
+
+## Troubleshooting
+
+### "MCP server not responding"
+
+- Check that the connector URL is correct: `https://mcp.gitcms.dev`
+- Ensure your internet connection is stable.
+- Try disconnecting and reconnecting the MCP server in ChatGPT settings.
+
+### "Authentication failed"
+
+- Disconnect GitCMS from ChatGPT settings and reconnect.
+- Make sure you completed the GitCMS sign-in flow.
+
+### ChatGPT doesn't show GitCMS tools
+
+- Make sure Developer Mode is enabled in ChatGPT settings.
+- Start a new conversation. Existing conversations may not pick up newly added tools.
+- Be explicit: say "Use GitCMS to..." to prompt ChatGPT to use the integration.

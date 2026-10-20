@@ -1,0 +1,30 @@
+---
+title: 'Static site generation (SSG)'
+category: rendering
+definition: 'Static site generation (SSG) renders pages to HTML at build time, so the server only has to send pre-built files when someone visits.'
+description: 'What static site generation means, how it works in frameworks like Astro and Next.js, and when to use it.'
+related:
+  - static-site-generator
+  - server-side-rendering
+  - ssg-vs-ssr
+  - incremental-static-regeneration
+lastReviewed: '2026-10-10'
+---
+
+## How it works
+
+During the build, the framework runs your page code once per page, fetches content (often from Markdown files), and writes HTML files. Deploying publishes those files to a CDN.
+
+## Where you'll see it
+
+- **Astro** pre-renders pages by default
+- **Next.js** statically renders pages that don't use request-time data
+- **Hugo, Eleventy, Jekyll** are built entirely around it
+
+## Strengths and limits
+
+SSG gives the fastest page loads and the simplest hosting. Its limit is freshness: content changes need a rebuild, and very large sites can take a while to build.
+
+## SSG and a CMS
+
+With content in the repository, publishing a change means committing it. Your host sees the commit, rebuilds, and the new page is live a minute or two later. Compare [SSG vs SSR](/glossary/ssg-vs-ssr).

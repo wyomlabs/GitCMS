@@ -1,0 +1,29 @@
+---
+import ContentLayout from '@/layouts/ContentLayout.astro'
+import { FrameworkPage } from '@/components/landing/framework-page'
+import {
+  frameworkList,
+  getFrameworkFaqs,
+  getFrameworkLandingDescription,
+  getFrameworkLandingTitle,
+} from '@/lib/framework-data'
+import { faqStructuredData } from '@/lib/structured-data'
+
+export function getStaticPaths() {
+  return frameworkList.map((framework) => ({
+    params: { framework: framework.slug },
+    props: { framework },
+  }))
+}
+
+const { framework } = Astro.props
+const structuredData = faqStructuredData(getFrameworkFaqs(framework))
+---
+<ContentLayout
+  title={`${getFrameworkLandingTitle(framework)} — GitCMS`}
+  description={getFrameworkLandingDescription(framework)}
+  path={`/git-based-cms-for-${framework.slug}`}
+  structuredData={structuredData}
+>
+  <FrameworkPage framework={framework} client:load />
+</ContentLayout>

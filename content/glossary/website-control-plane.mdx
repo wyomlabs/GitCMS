@@ -1,0 +1,26 @@
+---
+title: 'Website control plane'
+category: operations
+definition: 'A website control plane is the layer between a code-owned website and everyone who changes it, people and AI agents, that governs how changes are drafted, reviewed, and published.'
+description: 'What a website control plane is and why code-first, agent-maintained websites need one.'
+related:
+  - day-two
+  - content-approval-workflow
+  - mcp-server
+lastReviewed: '2026-10-10'
+---
+
+## Why the term
+
+In infrastructure, a control plane decides what happens and the data plane does the work. For websites, the repository and your host do the work. Something still has to decide who can change what, which changes are ready, and what goes live.
+
+## What it covers
+
+- Access: who can edit which site
+- Workflow: draft, review, and publish stages
+- Agents: structured access instead of raw repository credentials
+- History: an audit trail of every change
+
+## In GitCMS
+
+GitCMS is the control plane for code-first websites. Developers still change code in the repo; everyone else, people and agents, changes the website through GitCMS.

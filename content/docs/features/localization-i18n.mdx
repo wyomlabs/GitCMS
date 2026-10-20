@@ -1,0 +1,81 @@
+---
+title: Localization (i18n)
+description: Configure multilingual content in GitCMS with locale-aware collection paths, default locale behavior, and per-locale overrides.
+---
+
+GitCMS supports locale-aware content workflows for multilingual sites.
+
+You can:
+
+- define site locales (for example `en`, `fr`, `de`)
+- choose a default locale
+- control whether the default locale is prefixed in paths
+- configure per-collection locale path overrides
+
+## Site-level i18n settings
+
+In **Settings → General**, enable i18n and configure:
+
+| Setting | Purpose |
+|---------|---------|
+| **Locales** | Allowed locale codes for the site |
+| **Default locale** | Fallback locale when none is selected |
+| **Default locale path** | Whether default locale should be prefixed in paths |
+
+![Global i18n settings](/images/docs/screenshots/i18n-settings.webp)
+
+## Default locale path behavior
+
+Assume collection path is `/posts/`, default locale is `en`, and secondary locale is `fr`.
+
+| Option | `en` path | `fr` path |
+|--------|-----------|-----------|
+| Default locale path **off** | `/posts/hello-world` | `/posts/fr/hello-world` |
+| Default locale path **on** | `/posts/en/hello-world` | `/posts/fr/hello-world` |
+
+## Collection-level i18n
+
+In each collection, enable i18n when that collection should be localized.
+
+- Strategy is path-based (`path`).
+- You can add `locale_paths` overrides for framework-specific folder structures.
+
+Example:
+
+```yaml
+i18n:
+  enabled: true
+  locales:
+    - en
+    - fr
+  default_locale: en
+  prefix_default_locale: false
+collections:
+  - name: docs
+    git_path: /content/docs/
+    i18n:
+      enabled: true
+      strategy: path
+      locale_paths:
+        fr: /content/fr/docs/
+```
+
+## Editor behavior
+
+- Web app locale switcher keeps you in the same context (entry, history panel, or collection) while switching locale.
+- New-entry drafts are locale-scoped, so drafts for `en` and `fr` do not collide.
+- Production link and collection listing respect the selected locale context.
+
+![Locale switcher in the editor](/images/docs/screenshots/locale-switcher.webp)
+
+## MCP and AI behavior
+
+GitCMS MCP tools are locale-aware.
+
+For multilingual workflows, explicitly mention target locale in your prompt (for example: "use locale `fr`"). This helps AI read and write the intended locale path.
+
+## Detection during onboarding
+
+Onboarding can detect locale-folder patterns and suggest i18n setup.
+
+If default locale cannot be safely inferred, GitCMS keeps i18n conservative and asks you to confirm defaults in Settings.

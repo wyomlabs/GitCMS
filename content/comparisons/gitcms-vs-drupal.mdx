@@ -1,0 +1,272 @@
+---
+title: 'GitCMS vs Drupal'
+description: 'Drupal is a powerful enterprise CMS used by governments and universities. GitCMS is for code-first websites whose content lives in a Git repository, not a PHP application. Here''s when each fits.'
+competitor: 'Drupal'
+category: 'Website builders and traditional CMS'
+lastReviewed: '2026-04-16'
+order: 9
+---
+
+Drupal is a serious content management system. It powers government sites, major universities, media organizations like the BBC, and large-scale enterprise web properties. It is open-source, highly configurable, and battle-tested across two decades.
+
+But Drupal is also a **PHP application backed by a database**, with a significant learning curve and operational overhead. For teams publishing text-heavy content — docs, blogs, changelogs, marketing pages — the question is whether Drupal's power is worth the complexity.
+
+GitCMS is the CMS for code-first and AI-built websites: content stays as files in your repository, and clients, marketers, and AI agents edit, review, and publish through one workflow.
+
+## What changed in 2026
+
+For two decades, choosing Drupal made sense for one reason: building a custom website in code was slow and expensive, and Drupal gave non-developers a way to run the site.
+
+That trade has flipped. Coding agents like Claude Code, Codex, and Cursor now build custom sites in hours, and designers, growth teams, and agencies iterate on pages directly in code. The result is faster, fully owned, and keeps improving because an agent can keep working on it. Even WordPress's share of the web is shrinking: [W3Techs](https://w3techs.com/technologies/details/cm-wordpress) measured it falling from 43.4% to 40.7% of all websites between September 2025 and September 2026.
+
+What a code-first site doesn't come with is **the admin**: a safe place for clients and marketers to change copy, publish posts, and review what agents changed. That's Day Two, and for most teams it's the main thing they still need Drupal for. GitCMS gives a code-first site that admin, so you can keep the code and still hand the website to the people who run it.
+
+## The short verdict
+
+<Verdict>
+  <VerdictCompetitor title="Drupal">
+    - You need a highly configurable enterprise CMS with complex content models
+    - Your organization requires granular permissions, workflows, and audit trails
+    - You need multi-site, multi-language capabilities at enterprise scale
+    - Your team has Drupal expertise or needs the ecosystem of modules and distributions
+  </VerdictCompetitor>
+  <VerdictGitCMS>
+    - You build the site in code, often with Claude Code, Codex, or Cursor
+    - Clients and marketers need to edit copy and publish posts without Git
+    - You want AI agents' changes reviewed before they go live
+    - You want to avoid running a PHP/database stack for what is fundamentally a website
+  </VerdictGitCMS>
+</Verdict>
+
+## Why this choice matters more than it looks
+
+Drupal runs a PHP application backed by a database (typically MySQL or PostgreSQL). Every page request executes PHP logic, queries the database, and assembles HTML — unless fronted by aggressive caching. That means:
+
+- **Significant infrastructure** — Drupal needs a PHP hosting environment, a database, and usually a caching layer (Varnish, Redis, or a CDN). Enterprise Drupal deployments often require dedicated infrastructure teams.
+- **Operational complexity** — Drupal core updates, module updates, security patches, and database migrations are ongoing work. The upgrade path between major Drupal versions has historically been a major undertaking.
+- **Learning curve** — Drupal is powerful but not simple. Configuring content types, views, permissions, and workflows requires real expertise.
+- **Database-bound content** — content lives in the database in Drupal's internal format. Extracting it means migration tooling or custom exports.
+
+With markdown files in the repo, content is already on disk. No server. No database. No module stack. Pre-rendered pages are static HTML — fast, secure, and deployable anywhere.
+
+For text-heavy content sites that are readonly for end users, Drupal is enterprise infrastructure solving a problem that markdown files handle natively.
+
+<CaseStudy
+  title="When Cursor moved from CMS to markdown-in-code"
+  logo={{ src: '/ai-logos/cursor.svg', alt: 'Cursor' }}
+  source="Lee Robinson — Coding Agents & Complexity Budgets"
+  sourceUrl="https://leerob.com/agents"
+  stats={[
+    { label: 'Migration cost', value: '$260' },
+    { label: 'Build speed improvement', value: '2x faster' },
+    { label: 'CDN savings (prior spend)', value: '$56,848' },
+    { label: 'Commits in one weekend', value: '67' },
+  ]}
+>
+  <p>
+    Cursor's engineering team migrated their content site — engineering blog, product changelog, and docs — from an API-based CMS back to markdown files in their codebase. The migration took one weekend using AI agents, cost $260 in tokens, and resulted in 2x faster builds.
+  </p>
+  <p>
+    The abstraction layer was adding real cost: separate user management, draft preview plumbing, CDN bills that reached $56,848, and dependency bloat that made the codebase harder to reason about.
+  </p>
+  <p>
+    For organizations running Drupal for content sites, the same pattern applies at an even larger scale. The infrastructure, module stack, and operational overhead exist to serve content that could be static files.
+  </p>
+</CaseStudy>
+
+## Content as code
+
+When content lives in markdown files inside a Git repository:
+
+- **`grep` works.** Search your entire content library with standard dev tools.
+- **`git log` works.** Every content change has a commit, an author, a timestamp, and a diff.
+- **`git blame` works.** Trace any sentence to the person or agent that wrote it.
+- **Code review works.** Content changes go through the same PR process as code changes.
+- **Deploys are atomic.** Content and code ship together. No database state to sync.
+
+Drupal stores content in its database in a proprietary format. Content and code live in separate systems. You cannot meaningfully diff a Drupal content change in a pull request, and migrating content out of Drupal requires specialized tooling.
+
+## AI agents and markdown
+
+AI coding agents — Claude Code, Cursor, Windsurf, GitHub Copilot — work natively with files in a repository. When your content is markdown:
+
+- Agents can **read, write, search, and diff** content with zero special tooling
+- No Drupal API, no database queries, no module abstractions to navigate
+- Content is **inspectable** — an agent can open the file and understand the structure immediately
+- Every agent edit lands in a Git commit, reviewable by humans before it ships
+
+Drupal has a JSON:API and REST modules, but they were designed for application integration, not for AI agent workflows. The complexity of Drupal's content model makes it harder for agents to reason about compared to flat markdown files.
+
+GitCMS takes this further with its **MCP app** — a structured interface that turns AI assistants like ChatGPT, Claude, and other MCP-compatible agents into content agents. Agents can create drafts, edit posts, manage collections, and submit changes for review through MCP. GitCMS handles the git workflow underneath.
+
+This shift is accelerating. AI coding agents like **v0**, **Lovable**, **Bolt**, and **Cursor** now let teams build and maintain sites without the enterprise infrastructure that Drupal requires. When both the site and the content live in a repo as inspectable files, the entire stack is AI-native — no PHP, no database, no module ecosystem to maintain.
+
+## Feature comparison
+
+<FeatureTable
+  competitor="Drupal"
+  rows={[
+    {
+      category: 'Content storage',
+      gitcms: 'Markdown files in Git',
+      competitor: 'Database (MySQL/PostgreSQL)',
+      note: 'Where does your content actually live?',
+    },
+    {
+      category: 'Version control',
+      gitcms: 'native',
+      competitor: 'Content revisions',
+      note: 'Git history vs Drupal revision system',
+    },
+    {
+      category: 'Branching and drafts',
+      gitcms: 'native',
+      competitor: 'Content moderation workflows',
+      note: 'GitCMS uses Git branches. Drupal has moderation states.',
+    },
+    {
+      category: 'Content modeling',
+      gitcms: 'Frontmatter + collections',
+      competitor: 'Content types + fields (very flexible)',
+      note: 'Drupal has one of the most powerful content modeling systems',
+    },
+    {
+      category: 'Markdown / MDX support',
+      gitcms: 'native',
+      competitor: 'via-plugin',
+      note: 'Drupal uses its own CKEditor-based rich text by default',
+    },
+    {
+      category: 'Visual editing',
+      gitcms: 'Notion-like editor',
+      competitor: 'Layout Builder + CKEditor',
+    },
+    {
+      category: 'Content delivery',
+      gitcms: 'Pre-rendered static files',
+      competitor: 'Dynamic PHP (unless decoupled)',
+    },
+    {
+      category: 'Build performance',
+      gitcms: 'Fast (local file reads)',
+      competitor: 'Depends on hosting, caching, and decoupled setup',
+    },
+    {
+      category: 'Security',
+      gitcms: 'Static output (minimal attack surface)',
+      competitor: 'Requires active maintenance',
+      note: 'Drupal has a dedicated security team but modules need vetting',
+    },
+    {
+      category: 'Multi-site / multi-language',
+      gitcms: 'File-based (separate collections)',
+      competitor: 'native',
+      note: 'Drupal has strong multi-site and i18n capabilities',
+    },
+    {
+      category: 'Infrastructure required',
+      gitcms: 'None (files in repo)',
+      competitor: 'PHP hosting + database + caching layer',
+    },
+    {
+      category: 'Enterprise permissions',
+      gitcms: 'Git-based (PRs, branches, review)',
+      competitor: 'Granular roles and permissions',
+      note: 'Drupal has enterprise-grade access control',
+    },
+    {
+      category: 'AI agent workflow',
+      gitcms: 'Native + MCP app for ChatGPT/Claude',
+      competitor: 'Via JSON:API / REST modules',
+      note: 'GitCMS turns AI assistants into content agents via MCP',
+    },
+    {
+      category: 'Vendor lock-in',
+      gitcms: 'Low (markdown files are portable)',
+      competitor: 'Medium (content in database, Drupal-specific format)',
+    },
+    {
+      category: 'Migration complexity',
+      gitcms: 'Low (content is already files)',
+      competitor: 'High (Drupal migration requires specialized tooling)',
+    },
+  ]}
+/>
+
+## Pricing
+
+<PricingCompare
+  competitorName="Drupal"
+  gitcms={{
+    note: 'No server to host. No database to maintain. Content lives in your repo.',
+  }}
+  competitor={{
+    free: 'Software is free forever (open-source)',
+    paid: 'Hosting: $50-500+/mo depending on scale',
+    note: 'Managed Drupal hosting (Acquia, Pantheon, Platform.sh) ranges from $50/mo to thousands. Self-hosting requires PHP, database, and ops expertise.',
+  }}
+/>
+
+Drupal the software is free. Running it at scale is not. Managed Drupal hosting from providers like Acquia or Pantheon ranges from tens to thousands of dollars per month. Self-hosting means your team manages servers, databases, caching, security patches, and Drupal updates.
+
+GitCMS does not require a server. Content lives in your repo and deploys as static files.
+
+## Where Drupal is genuinely better
+
+Drupal is the stronger choice when you need **enterprise-grade content management at scale**.
+
+If your organization needs:
+
+- Complex content types with rich field configurations and relationships
+- Granular role-based permissions and content moderation workflows
+- Multi-site management from a single installation
+- Enterprise-scale multi-language content management
+- Compliance, accessibility, and audit trail requirements
+- A 20-year-old ecosystem with a massive community of developers and agencies
+- Integration with enterprise systems (LDAP, SSO, CRM, marketing automation)
+
+Then Drupal is built for problems that GitCMS does not try to solve. Government sites, universities, and large media organizations choose Drupal for a reason.
+
+## Where GitCMS is better
+
+GitCMS is better when Drupal is **enterprise infrastructure for a non-enterprise problem**.
+
+Many teams running Drupal today are publishing text content — blog posts, docs, marketing pages, changelogs — that does not require complex content types, granular permissions, or a PHP application server.
+
+GitCMS removes the entire stack:
+
+- No PHP, no database, no caching layer
+- No module updates or security patches
+- No major-version migration projects
+- Content ships with the code in the same deploy
+
+For a startup or small team publishing content-heavy sites, Drupal's power is overhead. GitCMS gives you a simpler system that works equally well for humans and AI agents.
+
+<Tradeoffs>
+  <p>Choosing markdown-in-git over Drupal is a real tradeoff:</p>
+  <ul>
+    <li>Drupal's content modeling is one of the most powerful in any CMS. Frontmatter cannot match it.</li>
+    <li>Drupal has enterprise-grade permissions, moderation workflows, and audit trails that GitCMS does not replicate.</li>
+    <li>Multi-site and multi-language support is mature and battle-tested in Drupal.</li>
+    <li>Organizations with Drupal expertise have a large ecosystem of modules, themes, and agencies to draw from.</li>
+  </ul>
+  <p>For text-heavy content sites that are fundamentally readonly for end users, these tradeoffs are usually worth it. You trade Drupal's enterprise depth for simpler architecture, faster performance, better security posture, lower costs, and a workflow built for humans and AI agents.</p>
+</Tradeoffs>
+
+## Decision by use case
+
+**Enterprise content platform with complex permissions and multi-site:** Drupal is the better fit.
+
+**Docs, blog, changelog, and marketing pages in one repo:** GitCMS is the better fit.
+
+**Government, education, or large media organization with compliance requirements:** Drupal is the better fit.
+
+**Developer-led team that wants content as portable markdown files:** GitCMS is the better fit.
+
+**Multi-language content management at enterprise scale:** Drupal is the better fit.
+
+**Startup or small team that wants AI agents and humans collaborating in Git:** GitCMS is the better fit.
+
+<CompareCTA
+  description="The admin for a code-first website. No PHP, no database, no module stack."
+/>

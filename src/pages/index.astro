@@ -1,0 +1,47 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { LandingPage } from '@/components/landing/landing-page'
+import { homepageFaqs } from '@/components/landing/faq-section'
+import {
+  DEFAULT_SEO_DESCRIPTION,
+  LICENSE_PRICING,
+  PRODUCT_NAME,
+  SITE_URL,
+} from '@/lib/positioning'
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      name: PRODUCT_NAME,
+      url: SITE_URL,
+      applicationCategory: 'BusinessApplication',
+      applicationSubCategory: 'Content management system',
+      operatingSystem: 'Web',
+      description: DEFAULT_SEO_DESCRIPTION,
+      publisher: { '@id': `${SITE_URL}/#organization` },
+      offers: {
+        '@type': 'Offer',
+        price: LICENSE_PRICING.sitePrice,
+        priceCurrency: 'USD',
+        description: 'One-time site license',
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: homepageFaqs.map((faq) => ({
+        '@type': 'Question',
+        name: faq.question,
+        acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+      })),
+    },
+  ],
+}
+---
+<BaseLayout
+  path="/"
+  structuredData={structuredData}
+>
+  <LandingPage client:idle />
+</BaseLayout>

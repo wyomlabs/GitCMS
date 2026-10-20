@@ -1,0 +1,31 @@
+---
+title: 'Serverless functions'
+category: deploy
+definition: 'Serverless functions are small pieces of backend code that run on demand in the cloud, so a mostly static site can handle forms, APIs, and dynamic pages without managing servers.'
+description: 'What serverless functions are, what websites use them for, and their tradeoffs.'
+related:
+  - static-hosting
+  - edge-rendering
+  - server-side-rendering
+lastReviewed: '2026-10-10'
+---
+
+## What websites use them for
+
+- Contact and lead forms
+- Newsletter sign-ups
+- Search and API proxies
+- Server-rendered or personalized routes
+- Webhooks from other services
+
+Examples include Vercel Functions, Netlify Functions, Cloudflare Workers, and AWS Lambda.
+
+## Tradeoffs
+
+- **Pay per use**: cheap at low traffic, but costs grow with requests
+- **Cold starts**: some platforms add latency to the first request
+- **Limits**: execution time, memory, and available APIs vary by platform
+
+## The pattern
+
+Most code-first marketing sites are static pages plus a handful of functions. You get static speed and cost for content, and server code only where it's needed.

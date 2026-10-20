@@ -1,0 +1,79 @@
+---
+title: The GitCMS Manifesto
+description: Drag-and-drop builders were a workaround for expensive code. AI agents made code the fastest way to build a website. What's missing is the admin for Day Two, and it belongs on top of your repository.
+---
+
+# Drag-and-drop was a workaround
+
+Website builders never existed because dragging boxes around is a good way to make a website. They existed because writing code was slow and expensive, and the people who needed to change the website couldn't write it.
+
+So we made a trade. We gave up ownership, performance, and flexibility, and in return we got an editor anyone could use. WordPress, Webflow, Wix, Squarespace: different products, same trade.
+
+That trade made sense for twenty years. It doesn't anymore.
+
+## Agents made code the fastest way to build
+
+In 2026, a designer can describe a landing page to Claude Code and have it running in an afternoon. A growth engineer can ship ten variants of a pricing page before lunch. Agencies that used to quote a week for a client site now ship it in a day or two.
+
+The site that comes out isn't a theme or a template. It's code: fast, owned, versioned, and hosted anywhere. And the same agent that built it can keep improving it next week.
+
+The market is noticing. WordPress still runs a huge share of the web, but [W3Techs](https://w3techs.com/technologies/details/cm-wordpress) shows its share falling from 43.4% to 40.7% of all websites between September 2025 and September 2026. Over the same year, coding agents went from a developer curiosity to everyday tools for professional developers.
+
+The teams behind the tools you use already keep their docs, blogs, and changelogs in Git:
+
+<CodeFirstTeamsList />
+
+For a new website, the reason to choose a builder is gone.
+
+## The one thing builders got right
+
+Builders did give us one thing that code never did: **the admin**.
+
+The week after launch, the client emails: "Can you change our opening hours?" Marketing needs to publish a case study before the launch. An agent rewrote twenty pages overnight, and someone has to check them before customers do.
+
+This is **Day Two**. Building is Day One, and agents have nearly solved it. Running the website after it ships is everything that comes after, and code alone doesn't solve it. Without an admin, the fastest website you ever built turns its developer into a permanent content operator.
+
+Going back to a builder to get that admin would mean giving up everything we just won.
+
+## The admin belongs on top of Git, not in a database
+
+The usual fix is a headless CMS: move the content into someone else's database and fetch it through an API. That creates a second source of truth that your coding agent can't see, your Git history doesn't record, and your developers have to keep in sync.
+
+We think the answer is simpler. The repository already is the source of truth. Git already solves version history, review, rollback, and audit trails. What's missing is a safe interface on top of it for everyone who isn't a developer.
+
+That's GitCMS: **the CMS for code-first and AI-built websites**. Clients and marketers edit visually. Every save is a real commit. No sync layer, no webhook glue, no shadow database.
+
+We're not the only ones who think the repository is the right home for content:
+
+![Sahil Lavingia on X: "GitHub is the world's best CMS"](/tweets/sahil-tweet.webp)
+
+![Shayan on X: "Markdown is the best CMS."](/tweets/shayan-tweet.webp)
+
+GitHub and Markdown are the right foundation. GitCMS is the part they don't include: an admin that clients, marketers, and agents can use safely.
+
+## Humans and agents change the same website, so they should follow the same rules
+
+Agents won't stop at building the site. They'll keep editing it: rewriting copy, publishing posts, updating prices across every page. That's good. It's also how mistakes reach production.
+
+The answer isn't keeping agents out. It's giving them the same path everyone else takes: draft, review, publish. An agent's twenty-page rewrite should arrive as a content task a person can read, comment on, and approve, not as a surprise on the live site.
+
+AI gets the speed. People keep the final say.
+
+## What we believe
+
+- **Build with anything.** Claude Code, Codex, Cursor, a human developer. The way a site gets built is changing every few months; the CMS shouldn't care.
+- **Your website, your repo.** Content lives as plain files in your repository. `git clone` is your export button.
+- **Git-native, not Git-adjacent.** Every save is a real commit, not a sync job.
+- **Config lives with code.** GitCMS keeps its configuration in `.gitcms/`, next to your code and content.
+- **Editing should be visual.** Markdown is a storage format, not an editing interface. Clients deserve a good editor and should never need Git.
+- **Bring your own agent.** Use the agents you already pay for. No AI credits, no lock-in.
+- **Nothing ships unreviewed.** People and agents draft, review, and publish through the same workflow.
+- **Simplicity is a feature.** Every abstraction we don't add is a dependency you don't inherit.
+
+## The bet
+
+We're betting that the next generation of websites won't be built in builders. They'll be built by agents, in code, and owned by the people who paid for them.
+
+Those websites still need an admin. It just shouldn't be another database.
+
+If that resonates, [connect your site to GitCMS](https://app.gitcms.dev/login).

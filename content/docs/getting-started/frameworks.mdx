@@ -1,0 +1,109 @@
+---
+title: Framework Setup
+description: How GitCMS works with Astro, TanStack Start, Next.js, Hugo, Jekyll, Gatsby, Eleventy, and other static site generators.
+---
+
+GitCMS works with any static site generator that reads Markdown or MDX files from a directory. GitCMS auto-detects your framework when you connect a repository and suggests appropriate defaults for repository media roots and content directories.
+
+The core idea is the same everywhere: point GitCMS at the folder where your framework expects content files, match the frontmatter fields your framework uses, and you're done — all through the Settings UI.
+
+## Supported frameworks
+
+GitCMS recognizes and provides optimized defaults for:
+
+| Framework | Typical content path | Typical repository media root | File extension |
+|-----------|--------------------|--------------------|----------------|
+| Astro | `src/content/blog` | `public/images` | `.mdx` |
+| TanStack Start | `content/posts` | `public/images` | `.mdx` |
+| Next.js | `content/posts` | `public/images` | `.mdx` |
+| Hugo | `content/posts` | `static/images` | `.md` |
+| Jekyll | `_posts` | `assets/images` | `.md` |
+| Gatsby | `content/blog` | `static/images` | `.md` |
+| Eleventy | `src/posts` | `src/images` | `.md` |
+| VuePress | `docs` | `docs/.vuepress/public/images` | `.md` |
+| Docusaurus | `docs` | `static/img` | `.mdx` |
+| Nuxt.js | `content` | `public/images` | `.md` |
+| MkDocs | `docs` | `docs/images` | `.md` |
+| SvelteKit | `src/content` | `static/images` | `.md` |
+
+These are starting suggestions — you can adjust all paths and media libraries through the Settings UI to match your project's structure.
+
+## Astro
+
+Astro's [Content Collections](https://docs.astro.build/en/guides/content-collections/) are a natural fit for GitCMS. Each Astro content collection maps to a GitCMS collection.
+
+### Key notes
+
+- Match your field names in the frontmatter schema to what's defined in `src/content/config.ts`. If Astro expects `pubDate`, name your field `pubDate` — not `date`.
+- Use `.mdx` file extension if your Astro site uses the MDX integration.
+- Media files typically go in `public/` so Astro serves them at build time.
+
+## TanStack Start
+
+TanStack Start works well with GitCMS for Markdown/MDX-driven content sections.
+
+### Key notes
+
+- A common setup is storing content under `content/` and loading it in route loaders.
+- Use `.md` or `.mdx` based on your content pipeline and renderer.
+- Media typically lives in `public/` for static serving.
+
+## Next.js
+
+Next.js doesn't have a built-in content layer, but popular patterns include [Contentlayer](https://contentlayer.dev/), [next-mdx-remote](https://github.com/hashicorp/next-mdx-remote), or a custom loader reading from a `content/` directory.
+
+### Key notes
+
+- Place content outside `app/` to keep routing and content separate.
+- If using Contentlayer, your field names should match the `defineDocumentType` schema.
+- Media goes in `public/` for static serving via Next.js.
+
+## Hugo
+
+Hugo uses a well-defined `content/` directory structure with front matter in YAML, TOML, or JSON. Set your **frontmatter format** in Settings to match your Hugo configuration.
+
+### Key notes
+
+- Hugo expects content in `content/` by default. Section names map to subdirectories.
+- Use `static/` for media files — Hugo copies them to the output root at build time.
+- Hugo supports `draft: true` natively. Combine with GitCMS's editorial workflow for a full review process.
+
+## Jekyll
+
+Jekyll reads posts from `_posts/` with a strict filename convention (`YYYY-MM-DD-title.md`).
+
+### Key notes
+
+- Use the **filename pattern** builder in Settings to match Jekyll's expected `{date.isoDate}-{slug}` naming convention.
+- Jekyll uses `_` prefixed directories. GitCMS handles these normally.
+- Media goes in `assets/` which Jekyll copies to the build output.
+
+## Gatsby
+
+Gatsby typically uses `gatsby-source-filesystem` to read Markdown files and `gatsby-transformer-remark` to process them.
+
+### Key notes
+
+- Gatsby often uses folder-based content (each post is a directory with an `index.md`). GitCMS supports this pattern.
+- If using `gatsby-plugin-image`, ensure your repository media root matches the path configured in `gatsby-source-filesystem`.
+
+## Eleventy (11ty)
+
+Eleventy is flexible about content location. It processes any Markdown files it finds based on your `.eleventy.js` configuration.
+
+### Key notes
+
+- Eleventy uses `tags` in front matter for its own collection system. Make sure your GitCMS multiselect field matches what your templates expect.
+- The input directory depends on your Eleventy config — adjust content paths accordingly in Settings.
+
+## Other frameworks
+
+GitCMS works with any framework that reads Markdown files from disk, including VuePress, Docusaurus, Nuxt.js, MkDocs, and Svelte-based frameworks. The general approach:
+
+1. **Identify where your framework expects content files** — check the docs or existing content directory.
+2. **Check what frontmatter fields your templates use** — look at existing files or template code.
+3. **Set the content path** in the collection settings to that directory.
+4. **Match field names exactly** to what your framework expects when defining your frontmatter schema.
+5. **Set the repository media root** to wherever your framework serves static files from, or add an object-storage media library if production media should live outside Git.
+
+If your framework isn't listed here and you run into issues, the setup is almost certainly just about getting the paths and field names right — all manageable through the Settings UI.

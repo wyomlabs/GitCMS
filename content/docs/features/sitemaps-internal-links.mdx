@@ -1,0 +1,108 @@
+---
+title: Sitemaps, Internal Links & Live URLs
+description: Use your site's sitemap to help writers add internal links faster and jump from GitCMS to the live page with less guesswork.
+---
+
+GitCMS can use your site's sitemap to make everyday editing faster.
+
+When your site is configured with a **website URL** and a working **sitemap**, GitCMS can:
+
+- suggest internal pages while you add a link
+- help match an entry to its live URL
+- respect locale-aware paths on multilingual sites
+
+This is especially useful for docs, blogs, and marketing sites where writers often need to cross-link existing pages.
+
+## Why GitCMS uses your sitemap
+
+GitCMS does not invent internal URLs. Instead, it reads the pages your site already publishes in its sitemap.
+
+That means link suggestions stay grounded in your real site structure:
+
+- published docs pages
+- blog posts
+- landing pages
+- localized routes
+
+If a page is not in your sitemap yet, GitCMS usually cannot suggest it as an internal link or match it as a live URL.
+
+## Set it up in Settings
+
+Open **Settings** for your site and make sure these values are configured:
+
+- **Website URL**: your deployed site URL
+- **Sitemap**: your sitemap URL, usually something like `https://your-site.com/sitemap.xml`
+
+GitCMS will try to discover the sitemap automatically after you enter the website URL. You can also paste or edit the sitemap URL manually if your setup uses a custom location.
+
+If discovery succeeds, GitCMS also shows how many pages were found. That gives you a quick sanity check before writers rely on link suggestions.
+
+## Add internal links faster in the editor
+
+When you add or edit a link in the editor, GitCMS can show internal page suggestions from your sitemap.
+
+Instead of copying a URL from another browser tab, writers can:
+
+- search by page title
+- search by path
+- pick the right page from a short list
+- still paste a manual URL when needed
+
+This keeps internal linking fast without asking writers to remember route structures.
+
+Here is the feature in motion:
+
+<video src="/videos/docs/internal-link-suggestions-trimmed.mp4" controls muted playsInline preload="none" style={{ width: '100%', borderRadius: '0.5rem' }} poster="/images/video-posters/docs/internal-link-suggestions-trimmed.webp">
+  Your browser does not support the internal link suggestions demo video.
+</video>
+
+## Live URL matching
+
+GitCMS can also use the sitemap to help connect an entry in the CMS with the matching page on the live site.
+
+When GitCMS can confidently match the current file to a published URL, it can show a quick way to open the live page. This is helpful for:
+
+- checking that the published page looks right
+- confirming the correct route
+- reviewing the live version of an entry after publishing
+
+Matching is based on the file name, collection context, and sitemap paths, so it works best when your published URLs stay reasonably close to your content structure.
+
+This speed-run shows GitCMS jumping from an entry to its matched live page:
+
+<video src="/videos/docs/live-url-matching-trimmed.mp4" controls muted playsInline preload="none" style={{ width: '100%', borderRadius: '0.5rem' }} poster="/images/video-posters/docs/live-url-matching-trimmed.webp">
+  Your browser does not support the live URL matching demo video.
+</video>
+
+## Multilingual sites
+
+On multilingual sites, sitemap-powered features are still useful, but they do not all behave the same way yet.
+
+- **Live URL matching** can use locale-aware path logic when GitCMS is matching an entry to the published page.
+- **Internal link suggestions** still search across the sitemap pages GitCMS has loaded, so writers should confirm they are choosing the right locale variant when multiple versions of a page exist.
+
+If your default locale is unprefixed, GitCMS still tries to do the right thing for live URL matching between the default locale and prefixed secondary locales.
+
+## When to use a manual link instead
+
+Use a manual URL when:
+
+- the target page is not published yet
+- the page is intentionally excluded from the sitemap
+- the target is external
+- your route is generated in a way that does not map cleanly from the content file
+
+GitCMS treats sitemap suggestions as a helper, not a restriction.
+
+## Troubleshooting
+
+If internal link suggestions or live URLs are missing:
+
+- confirm your **Website URL** is correct
+- confirm the **Sitemap** URL is correct and reachable
+- make sure the target page actually appears in the sitemap
+- re-run sitemap discovery in **Settings**
+- check locale settings if the site is multilingual
+- double-check that you picked the correct locale variant when similar pages exist in more than one language
+
+If your site uses a non-standard sitemap location or publishes only part of the site into the sitemap, set the sitemap URL manually and verify the expected pages are included.

@@ -1,0 +1,88 @@
+---
+import { render } from 'astro:content'
+import defaultMdxComponents from 'fumadocs-ui/mdx'
+import { Callout } from 'fumadocs-ui/components/callout'
+import { DocsBody, DocsDescription, DocsTitle } from 'fumadocs-ui/layouts/docs/page'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import { DocsShell } from '@/components/docs-shell/docs'
+import ImageZoom from '@/components/docs/image-zoom.astro'
+import { LLMCopyButton, ViewOptions } from '@/components/docs/page-actions'
+import { source } from '@/lib/source'
+
+export async function getStaticPaths() {
+  return source.getPages().map((page) => ({
+    params: { slug: page.slugs.length > 0 ? page.slugs.join('/') : undefined },
+    props: { page: page.data._raw },
+  }))
+}
+
+const { page } = Astro.props
+const { Content, headings } = await render(page)
+const slugs = Astro.params.slug?.split('/') ?? []
+const docsPage = source.getPage(slugs)!
+const toc = headings.map((heading) => ({ depth: heading.depth, title: heading.text, url: `#${heading.slug}` }))
+const markdownUrl = docsPage.url === '/docs' ? '/docs.md' : `${docsPage.url}.md`
+const canonicalUrl = `https://gitcms.dev${docsPage.url}`
+const breadcrumbItems = [
+  {
+    '@type': 'ListItem',
+    position: 1,
+    name: 'Documentation',
+    item: 'https://gitcms.dev/docs',
+  },
+]
+if (docsPage.url !== '/docs') {
+  breadcrumbItems.push({
+    '@type': 'ListItem',
+    position: 2,
+    name: page.data.title,
+    item: canonicalUrl,
+  })
+}
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'TechArticle',
+      headline: page.data.title,
+      description: page.data.description,
+      url: canonicalUrl,
+      mainEntityOfPage: canonicalUrl,
+      publisher: {
+        '@type': 'Organization',
+        name: 'GitCMS',
+        url: 'https://gitcms.dev',
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbItems,
+    },
+  ],
+}
+---
+<BaseLayout
+  title={`${page.data.title} — GitCMS Docs`}
+  description={page.data.description}
+  path={docsPage.url}
+  ogImage={`${docsPage.url}/og.png`}
+  structuredData={structuredData}
+>
+  <DocsShell
+    tree={source.getPageTree()}
+    pathname={Astro.url.pathname}
+    params={Astro.params}
+    page={{ toc, tableOfContent: { style: 'clerk' } }}
+    client:idle
+  >
+    <DocsTitle className="font-logo">{page.data.title}</DocsTitle>
+    {page.data.description && <DocsDescription>{page.data.description}</DocsDescription>}
+    <div class="-mt-2 flex flex-row items-center gap-2 border-b pb-6">
+      <LLMCopyButton markdownUrl={markdownUrl} client:idle />
+      <ViewOptions markdownUrl={markdownUrl} client:idle />
+    </div>
+    <DocsBody className="dark:prose-invert">
+      <Content components={{ ...defaultMdxComponents, Callout, img: ImageZoom }} />
+    </DocsBody>
+  </DocsShell>
+</BaseLayout>

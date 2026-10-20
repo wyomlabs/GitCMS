@@ -1,0 +1,38 @@
+---
+title: 'TOML'
+category: content
+definition: 'TOML is a configuration file format designed to be easy to read, using key = value pairs grouped into [sections].'
+description: 'What TOML is, where Hugo, Zola, and other tools use it, and how it compares to YAML and JSON.'
+related:
+  - yaml
+  - json
+  - frontmatter
+lastReviewed: '2026-10-10'
+---
+
+## Example
+
+```toml
+title = "Emergency plumbing in Austin"
+draft = false
+
+[hours]
+weekdays = "8am-6pm"
+weekends = "closed"
+```
+
+TOML stands for Tom's Obvious, Minimal Language.
+
+## Where you'll see it
+
+- **Hugo** and **Zola** configuration, and frontmatter between `+++` fences
+- Rust's `Cargo.toml`, Python's `pyproject.toml`
+- Many CLI tool configs
+
+## Why people like it
+
+TOML avoids YAML's indentation traps and JSON's quoting and comma rules. Types are explicit, and comments are allowed.
+
+## In GitCMS
+
+GitCMS supports YAML, TOML, and JSON frontmatter. Set the format to match your site so edits keep the same style.

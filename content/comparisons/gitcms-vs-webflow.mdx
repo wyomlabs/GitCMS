@@ -1,0 +1,173 @@
+---
+title: 'GitCMS vs Webflow'
+description: 'Webflow is a visual website platform with hosting, a CMS, and AI features. GitCMS is the CMS for code-first and AI-built websites you own in Git. Here''s when each fits.'
+competitor: 'Webflow'
+category: 'Website builders and traditional CMS'
+lastReviewed: '2026-10-10'
+order: 1
+---
+
+Webflow is the best visual website builder on the market. Designers build responsive sites on a canvas, marketing teams publish through a built-in CMS, and Webflow hosts everything. In 2026 it also calls itself an AI-native website platform, with agents and an MCP integration that lets tools like Claude and Cursor work on Webflow sites.
+
+GitCMS starts from a different place. It assumes the website is **code** — built by a developer or a coding agent, living in a Git repository, and deployed wherever you like — and gives everyone who runs that site an admin: a visual editor, review before publish, and AI agents that draft through the same workflow.
+
+So the real question isn't "which CMS is better." It's whether your website should be a Webflow project or a codebase you own.
+
+## What changed in 2026
+
+For years, choosing Webflow over a custom site was an easy call: building in code was slow and expensive, and Webflow gave designers and marketers a site they could run without developers.
+
+That trade has flipped. Coding agents like Claude Code, Codex, and Cursor now build custom sites in hours, and designers and growth teams iterate on pages directly in code. The result is fast, fully owned, portable across hosts, and keeps improving because an agent can keep working on it.
+
+What a code-first site doesn't come with is **the admin**: the place where marketing changes copy, publishes a case study, and reviews what an agent changed. That's Day Two, and for many teams it's the main reason they still pay for a builder. GitCMS gives a code-first site that admin, so you can keep the code and still hand the website to the people who run it.
+
+## The short verdict
+
+<Verdict>
+  <VerdictCompetitor title="Webflow">
+    - Designers want to build and restyle layouts visually, without code
+    - You want hosting, forms, CMS, and design in one platform
+    - Marketing needs to create new page layouts, not just edit content
+    - Your team doesn't want to own a codebase at all
+  </VerdictCompetitor>
+  <VerdictGitCMS>
+    - You build the site in code, often with Claude Code, Codex, or Cursor
+    - Clients and marketers need to edit copy and publish posts without Git
+    - You want AI agents' changes reviewed before they go live
+    - You want to own the code and host it anywhere
+  </VerdictGitCMS>
+</Verdict>
+
+## Platform vs codebase
+
+### Webflow: the site lives in the platform
+
+A Webflow site is built in Webflow's designer, stored in Webflow, and served by Webflow's hosting. That's what makes it pleasant: one place for design, content, and publishing. It's also the constraint. Your layouts, interactions, and CMS collections are Webflow concepts. You can export static code, but the CMS and the editing experience stay with the platform.
+
+### GitCMS: the site lives in your repo
+
+With GitCMS, the website is an ordinary Astro, Next.js, or similar project in your Git repository. Developers and coding agents change the code. Clients and marketers change the content through GitCMS. Every save is a commit, and publishing puts it on the live branch for your existing host to deploy. If you stop using GitCMS, nothing moves: the site and its content are already yours.
+
+## The agent question
+
+Both products now talk about AI agents, from opposite directions.
+
+Webflow brings agents **into its platform**: AI features in the designer and an MCP integration so external agents can work on Webflow sites under Webflow's model.
+
+GitCMS assumes agents already **build the site in code** and keep working on it. Coding agents edit components in the repo, where developers review pull requests. Content agents like ChatGPT and Claude connect to GitCMS through MCP, draft inside content tasks, and submit for review, and a person publishes. Neither kind of agent needs a proprietary site format to work with.
+
+If your team wants agents to do serious work on the website, a codebase is the format they're best at.
+
+## Feature comparison
+
+<FeatureTable
+  competitor="Webflow"
+  rows={[
+    {
+      category: 'Where the site lives',
+      gitcms: 'Your Git repository',
+      competitor: 'Webflow platform',
+      note: 'Own the code, or rent the platform',
+    },
+    {
+      category: 'Who builds the site',
+      gitcms: 'Developers and coding agents, in code',
+      competitor: 'Designers, in the visual designer',
+    },
+    {
+      category: 'Visual layout editing',
+      gitcms: 'not-core',
+      competitor: 'native',
+      note: 'Webflow is a visual designer. GitCMS edits content, not layout.',
+    },
+    {
+      category: 'Content editing for marketers and clients',
+      gitcms: 'native',
+      competitor: 'native',
+    },
+    {
+      category: 'Review before publish',
+      gitcms: 'native',
+      competitor: 'Plan-dependent',
+    },
+    {
+      category: 'Hosting',
+      gitcms: 'Your existing host (Vercel, Netlify, Cloudflare, …)',
+      competitor: 'Included (Webflow hosting)',
+    },
+    {
+      category: 'AI agents',
+      gitcms: 'Bring your own (ChatGPT, Claude, MCP clients); coding agents work in the repo',
+      competitor: 'Built-in AI features and an MCP integration',
+    },
+    {
+      category: 'Version history',
+      gitcms: 'Full Git history',
+      competitor: 'Platform backups and versions',
+    },
+    {
+      category: 'Portability',
+      gitcms: 'High (plain code and files)',
+      competitor: 'Limited (platform-specific CMS and interactions)',
+    },
+  ]}
+/>
+
+## Pricing
+
+<PricingCompare
+  competitorName="Webflow"
+  gitcms={{
+    note: 'Unlimited content edits. Host the site wherever you already host.',
+  }}
+  competitor={{
+    free: 'Free starter site on a webflow.io domain',
+    paid: 'Site plans plus workspace seats; full and limited editor seats are billed separately',
+    note: 'Editors and collaborators are billed as workspace seats on top of the site plan.',
+  }}
+/>
+
+Webflow prices a site plan for hosting and CMS, and workspace seats for the people who build and edit. That makes sense for a platform that hosts your site. With GitCMS, hosting stays with your existing provider, and the license covers the admin for the site.
+
+## Where Webflow is genuinely better
+
+- **Visual design.** If designers need to create and restyle layouts without code, nothing on this page beats Webflow's designer.
+- **One platform.** Design, hosting, forms, and CMS in one product, with no repository to manage.
+- **Marketing autonomy over layout.** Marketers can build new landing pages from components, not just edit existing ones.
+- **Mature ecosystem.** Templates, agencies, and a large community.
+
+If your team doesn't want to own a codebase, Webflow is a strong choice.
+
+## Where GitCMS is better
+
+GitCMS is better when the site is **already code**, or when you'd rather it be.
+
+- **You own everything.** Code, content, and history live in your repository, on your host.
+- **Agents do their best work.** Coding agents build and improve the site in code; content agents draft through GitCMS with review.
+- **Clients edit without touching design.** Clients change content, not components, which is exactly the boundary most agencies want.
+
+<Tradeoffs>
+  <p>Choosing a code-first site with GitCMS over Webflow is a real tradeoff:</p>
+  <ul>
+    <li>Nobody gets a visual layout designer. New layouts are built in code, by a developer or a coding agent.</li>
+    <li>You run your own hosting and deployment (usually a few clicks on Vercel, Netlify, or Cloudflare).</li>
+    <li>Editable content has to live in Markdown or MDX content files, so hardcoded copy needs to move into collections first.</li>
+  </ul>
+  <p>For teams that build with coding agents, these are usually the right trades: faster iteration, full ownership, and an admin for the people who run the site.</p>
+</Tradeoffs>
+
+## Decision by use case
+
+**Designers building and restyling pages visually:** Webflow is the better fit.
+
+**Agency building client sites with Claude Code and handing them off:** GitCMS is the better fit.
+
+**Marketing team that needs new layouts every week without engineering:** Webflow is the better fit.
+
+**Startup whose site is a Next.js or Astro codebase and marketing needs to edit it:** GitCMS is the better fit.
+
+**AI agents drafting website changes with human review before publishing:** GitCMS is the better fit.
+
+<CompareCTA
+  description="Keep the code. Give your team the admin Webflow gave you."
+/>

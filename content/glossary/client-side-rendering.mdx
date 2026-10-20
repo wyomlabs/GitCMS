@@ -1,0 +1,25 @@
+---
+title: 'Client-side rendering (CSR)'
+category: rendering
+definition: 'Client-side rendering (CSR) sends a mostly empty HTML page plus JavaScript, and the browser builds the page content after the JavaScript runs.'
+description: 'What client-side rendering is, its SEO and performance tradeoffs, and when it still makes sense.'
+related:
+  - server-side-rendering
+  - static-site-generation
+  - hydration
+lastReviewed: '2026-10-10'
+---
+
+## How it works
+
+The server returns a small HTML shell and a JavaScript bundle. The browser downloads and runs the JavaScript, fetches data, and renders the page. Classic single-page apps built with React and Vite work this way.
+
+## Tradeoffs
+
+- **Slower first view**: nothing meaningful shows until JavaScript loads and runs
+- **SEO and AI crawlers**: many crawlers, including some AI answer engines, read little or nothing from a page that needs JavaScript to render content
+- **Great for apps**: once loaded, navigation and interactions feel instant
+
+## For websites
+
+Content pages, such as marketing pages, blogs, and docs, should be pre-rendered or server-rendered so search engines and answer engines can read them. Keep CSR for app-like areas behind a login.

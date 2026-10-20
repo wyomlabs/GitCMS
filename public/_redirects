@@ -1,0 +1,27 @@
+# Product routes moved to the TanStack Start app. 307 preserves methods for
+# auth/API compatibility while browser-only pages can move permanently.
+/app https://app.gitcms.dev/ 308
+/app/invite/* https://app.gitcms.dev/invite/:splat 308
+/app/* https://app.gitcms.dev/sites/:splat 308
+/sites/* https://app.gitcms.dev/sites/:splat 308
+/invite/* https://app.gitcms.dev/invite/:splat 308
+/login https://app.gitcms.dev/login 308
+/welcome https://app.gitcms.dev/welcome 308
+/auth/* https://app.gitcms.dev/auth/:splat 307
+/oauth/* https://app.gitcms.dev/oauth/:splat 307
+/.well-known/* https://app.gitcms.dev/.well-known/:splat 307
+/api/auth/* https://app.gitcms.dev/api/auth/:splat 307
+/api/oauth/* https://app.gitcms.dev/api/oauth/:splat 307
+/api/github/* https://app.gitcms.dev/api/github/:splat 307
+/api/public/* https://app.gitcms.dev/api/public/:splat 307
+/api/trpc/* https://app.gitcms.dev/api/trpc/:splat 307
+/api/dodo/* https://app.gitcms.dev/api/dodo/:splat 307
+# Old repo-viewer deep links from the GitHub Markdown Editor tool.
+/tools/github-markdown-editor/:owner/:repo https://app.gitcms.dev/:owner/:repo 308
+/for/indie-hackers /for-solo-builders 308
+/for/startups /for-startups 308
+/for/agencies /for-agencies 308
+/for/freelancers /for-freelancers 308
+/mcp /agents 308
+
+/for-indie-hackers /for-solo-builders 308

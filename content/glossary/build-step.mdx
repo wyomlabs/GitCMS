@@ -1,0 +1,29 @@
+---
+title: 'Build step'
+category: deploy
+definition: 'A build step turns a website’s source code and content into the final files that get deployed, such as HTML, CSS, JavaScript, and optimized images.'
+description: 'What happens during a website build, why it matters for code-first sites, and what makes builds slow or fail.'
+related:
+  - deployment
+  - ci-cd
+  - static-site-generation
+lastReviewed: '2026-10-10'
+---
+
+## What a build does
+
+- Compiles components and TypeScript
+- Renders pages to HTML (for statically generated pages)
+- Reads Markdown and MDX content and validates frontmatter
+- Optimizes images and bundles assets
+- Generates the sitemap and other files
+
+Commands look like `npm run build` or `astro build`, and output a folder such as `dist/` or `.next/`.
+
+## Why content can break a build
+
+On a code-first site, content is input to the build. A missing required field, an invalid date, or a broken MDX tag can fail it, and then nothing deploys. That's why editors need structured fields and validation rather than raw files.
+
+## Build time
+
+Builds usually take seconds to a few minutes. Very large sites use caching or incremental rendering to stay fast.

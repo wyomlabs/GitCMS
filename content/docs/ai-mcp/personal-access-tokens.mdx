@@ -1,0 +1,118 @@
+---
+title: MCP Personal Access Tokens
+description: Connect static-token MCP clients to GitCMS with scoped personal access tokens.
+---
+
+GitCMS supports OAuth for clients like ChatGPT and Claude. Some MCP clients do not support OAuth yet, or are easier to configure with a static bearer token. For those clients, use an MCP personal access token.
+
+Personal access tokens are useful for:
+
+- OpenClaw
+- Hermes
+- Manus
+- OpenHarness and Harness
+- custom MCP clients that accept a static bearer token
+- local scripts or agent runtimes where OAuth is not practical
+
+Use OAuth when your client supports it well. Use a personal access token when the client asks for a bearer token, static token, API token, or authorization header.
+
+## Requirements
+
+Before creating a token:
+
+- sign in to GitCMS
+- make sure you have access to a paid licensed workspace
+- make sure the site you want to use with MCP is licensed
+
+MCP is not available for preview-only sites.
+
+## Create a token
+
+1. Open GitCMS.
+2. Open your account menu.
+3. Go to **Account Settings -> MCP Tokens**.
+4. Enter a label, such as `OpenClaw's token` or `Hermes's token`.
+5. Choose an access level.
+6. Choose an expiration.
+7. Click **Create token**.
+8. Copy the token immediately.
+
+GitCMS shows the raw token only once. If you close the dialog before copying it, revoke that token and create a new one.
+
+## Use the token in a client
+
+Use the GitCMS MCP connector URL:
+
+```text
+https://mcp.gitcms.dev
+```
+
+Configure your client to send the token as a bearer token:
+
+```text
+Authorization: Bearer <your-token>
+```
+
+The exact field name varies by client. Look for settings named **Bearer token**, **Authorization header**, **API token**, **MCP token**, or **Static token**.
+
+## Access levels
+
+GitCMS personal access tokens use the same content scopes as MCP OAuth clients:
+
+- **Read** grants `content:read`
+- **Read and write** grants `content:read` and `content:write`
+
+Use **Read** when the client only needs to inspect sites, collections, tasks, and content. Use **Read and write** when the client should draft, edit, or submit content for review.
+
+## Expiration and revocation
+
+Tokens can expire after:
+
+- 7 days
+- 30 days
+- 90 days
+- no expiration
+
+No-expiration tokens stay active until you revoke them.
+
+To revoke a token:
+
+1. Open **Account Settings -> MCP Tokens**.
+2. Find the token by label or token prefix.
+3. Click **Revoke**.
+
+If a client loses access after revocation or expiration, create a new token and update the client configuration.
+
+## Security notes
+
+Treat MCP personal access tokens like passwords.
+
+- GitCMS stores token hashes, not raw tokens.
+- Raw tokens are shown only once at creation time.
+- Prefer short expirations for testing and shared machines.
+- Revoke tokens you no longer use.
+- Use read-only tokens unless the client needs to write content.
+
+## Troubleshooting
+
+### "Not authenticated"
+
+Check that your client is sending the token as:
+
+```text
+Authorization: Bearer <your-token>
+```
+
+Also check that the token was copied completely, including the `gitcms_pat_` prefix.
+
+### "Missing required scope"
+
+The token does not have the access level needed for the action. Create a new token with **Read and write** if the client needs to draft, edit, or submit content.
+
+### "MCP is not available"
+
+Make sure the site is licensed. Preview-only sites cannot use MCP.
+
+### The token disappeared after creation
+
+That is expected. GitCMS only shows the raw token once. Revoke the old token and create a new one.

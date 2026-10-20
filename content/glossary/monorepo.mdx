@@ -1,0 +1,33 @@
+---
+title: 'Monorepo'
+category: git
+definition: 'A monorepo is a single repository that holds several projects, such as a marketing site, a docs site, and an app, side by side.'
+description: 'What a monorepo is, why companies keep multiple websites in one repository, and what that means for content editing.'
+related:
+  - repository
+  - git
+  - code-first-website
+lastReviewed: '2026-10-10'
+---
+
+## Example
+
+```text
+company/
+├── apps/web/        the product
+├── sites/marketing/ marketing website
+├── sites/docs/      documentation site
+└── packages/ui/     shared components
+```
+
+## Why teams use them
+
+Shared components, one place for dependencies, and atomic changes across projects. A design system change can update the app and the marketing site in one commit.
+
+## The content challenge
+
+With several sites in one repository, editors need to work on their site only, with the right collections and permissions, without seeing the rest of the codebase.
+
+## In GitCMS
+
+A repository can hold several sites, each set up as its own GitCMS site with its own configuration, collections, and access. Editors see the site they're invited to, not the monorepo.

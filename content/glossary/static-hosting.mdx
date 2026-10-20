@@ -1,0 +1,31 @@
+---
+title: 'Static hosting'
+category: deploy
+definition: 'Static hosting serves a website’s pre-built files directly, without running application servers, often for free or very low cost.'
+description: 'What static hosting is, popular providers, and when a site needs more than static hosting.'
+related:
+  - cdn
+  - deployment
+  - static-website
+  - serverless-functions
+lastReviewed: '2026-10-10'
+---
+
+## Providers
+
+Cloudflare Pages, Netlify, Vercel, GitHub Pages, and Amazon S3 with CloudFront all host static files, most with free tiers that cover typical marketing sites.
+
+## What you get
+
+- Global CDN delivery
+- Automatic HTTPS
+- Deploys from Git on every commit
+- Preview URLs for branches (on most providers)
+
+## When you need more
+
+Forms, search, logins, and personalization need some server-side code. Most static hosts add [serverless functions](/glossary/serverless-functions) for that, so you rarely need to leave static hosting entirely.
+
+## Compared to WordPress hosting
+
+There's no PHP, database, or plugin stack to patch, and hosting costs drop from monthly server fees to often nothing.

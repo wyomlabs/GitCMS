@@ -1,0 +1,38 @@
+---
+title: 'YAML'
+category: content
+definition: 'YAML is a human-readable data format that uses indentation and key: value pairs, widely used for frontmatter and configuration files.'
+description: 'What YAML is, where websites use it, and the common mistakes that break builds.'
+related:
+  - frontmatter
+  - json
+  - toml
+  - data-files
+lastReviewed: '2026-10-10'
+---
+
+## Example
+
+```yaml
+title: Emergency plumbing in Austin
+tags:
+  - plumbing
+  - emergency
+hours:
+  weekdays: 8am-6pm
+  weekends: closed
+```
+
+## Where websites use it
+
+- Frontmatter at the top of Markdown files
+- Data files for navigation, team members, or pricing tables
+- Configuration for frameworks, CI, and tools
+
+## Common mistakes
+
+- **Indentation**: spaces matter, and tabs aren't allowed
+- **Colons in text**: `title: Note: read this` needs quotes
+- **Surprise types**: `no`, `on`, and dates can be parsed as booleans or dates
+
+These mistakes are exactly why non-developers shouldn't edit YAML by hand. A CMS should show fields and write valid YAML for them.

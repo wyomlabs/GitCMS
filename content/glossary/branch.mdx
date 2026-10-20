@@ -1,0 +1,26 @@
+---
+title: 'Branch'
+category: git
+definition: 'A branch is a separate line of work in a Git repository, letting changes be made and reviewed without affecting the main version of the site.'
+description: 'What a branch is, how websites use branches for drafts and previews, and how a CMS can hide them from editors.'
+related:
+  - git
+  - commit
+  - preview-deployment
+  - content-approval-workflow
+lastReviewed: '2026-10-10'
+---
+
+## How it works
+
+The main branch holds the live website. A new branch starts as a copy; commits on it don't affect main until the branch is merged. Many branches can exist at once.
+
+## How websites use branches
+
+- **Drafts**: work on a redesign or a new section without touching the live site
+- **Previews**: hosts build a [preview deployment](/glossary/preview-deployment) for each branch
+- **Review**: changes are reviewed before merging into main
+
+## Branches for content
+
+Branches are a natural fit for content drafts, but naming, switching, and merging them is developer work. In GitCMS, each content task in review-before-publish mode gets its own isolated line of work that GitCMS manages, so editors never name or merge a branch.

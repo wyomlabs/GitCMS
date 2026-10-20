@@ -1,0 +1,29 @@
+---
+title: 'Write meta descriptions'
+description: 'Fill in missing or weak meta descriptions across a collection, matched to each page’s search intent.'
+category: seo
+agents:
+  - 'ChatGPT'
+  - 'Claude'
+  - 'Claude Code'
+  - 'OpenClaw'
+  - 'Hermes'
+order: 9
+lastReviewed: '2026-10-10'
+---
+
+## The prompt
+
+```text
+For every entry in the [collection] collection on [site name], check the
+description field. Where it's missing, longer than 160 characters, or doesn't
+say what the reader gets, write a new one: 140-160 characters, include the main
+topic naturally, and state the value plainly.
+
+Put all changes in one content task and submit it for review with a table of
+old vs new descriptions.
+```
+
+## How it runs
+
+Run this in an agent connected to GitCMS through MCP (see [AI agents](/agents)). On sites that use review before publish, the agent drafts inside a content task and submits it for review; a person publishes. On sites that publish directly, there's no draft step and saves go live on the next deploy, so ask the agent to show you the changes before it saves.

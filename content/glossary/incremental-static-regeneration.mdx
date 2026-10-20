@@ -1,0 +1,25 @@
+---
+title: 'Incremental static regeneration (ISR)'
+category: rendering
+definition: 'Incremental static regeneration (ISR) serves statically generated pages but rebuilds individual pages in the background after a set time or on demand.'
+description: 'What incremental static regeneration is, how it differs from full rebuilds, and when it helps.'
+related:
+  - static-site-generation
+  - server-side-rendering
+  - ssg-vs-ssr
+lastReviewed: '2026-10-10'
+---
+
+## How it works
+
+Next.js popularized ISR. A page is generated statically, then marked to revalidate, for example every 60 seconds or when your code calls a revalidation function. Visitors get the cached page while a fresh version is built in the background.
+
+## When it helps
+
+- Large sites where a full rebuild takes too long
+- Content that changes often but doesn't need to be live to the second
+- Pages that fetch content from an API rather than from the repository
+
+## When you don't need it
+
+If content lives in the repository and changes a few times a week, a normal rebuild on each commit is simpler and fast enough. ISR mostly matters when content comes from an external API.

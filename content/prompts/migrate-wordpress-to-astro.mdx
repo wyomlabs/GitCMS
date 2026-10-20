@@ -1,0 +1,36 @@
+---
+title: 'Migrate a WordPress site to Astro'
+description: 'Rebuild a WordPress site as a code-first Astro site with your coding agent, keeping URLs and content, and ready for client editing.'
+category: migration
+agents:
+  - 'Claude Code'
+  - 'Codex'
+  - 'Cursor'
+order: 12
+lastReviewed: '2026-10-10'
+---
+
+## The prompt
+
+```text
+Migrate the WordPress site at [URL] to a new Astro project in this repository.
+
+- Recreate the design and every page template in Astro components.
+- Convert posts and pages from the WordPress export ([path to WXR file]) into
+  Markdown in content collections, keeping titles, dates, slugs, categories,
+  featured images, and meta descriptions in frontmatter.
+- Keep every existing URL. Generate redirects for any that must change.
+- Download media into public/images and rewrite image links.
+- Put all client-editable page copy in content collections, not components.
+- Generate a sitemap, and keep existing SEO titles and descriptions.
+- When done, report pages migrated, posts migrated, redirects, and anything
+  you couldn't convert.
+```
+
+## What it does
+
+Agents can rebuild a typical small-business WordPress site in hours. The parts that matter for search (URLs, redirects, metadata) are spelled out so nothing is lost.
+
+## After you run it
+
+Check every template and a sample of posts, then deploy. To give the client back the admin they had in WordPress, [set up GitCMS](/prompts/set-up-gitcms).

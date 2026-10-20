@@ -1,0 +1,287 @@
+---
+title: 'GitCMS vs Decap CMS'
+description: 'Decap CMS proved that Git-based content editing works. GitCMS builds on the same idea for code-first and AI-built websites, with review before publish and AI agents. Here''s when each fits.'
+competitor: 'Decap CMS'
+category: 'Git-based CMS'
+lastReviewed: '2026-04-16'
+order: 11
+---
+
+Decap CMS — originally Netlify CMS — deserves real credit. It was one of the first tools to prove that you could manage content as markdown files in a Git repo with a real editing UI on top. Before Decap, "git-based CMS" was not a category. After Decap, it was.
+
+GitCMS was directly inspired by this approach. Content as markdown files. Git as the backend. No database. No API. The thesis is the same.
+
+The difference is execution. Decap's editor feels like a 2018 admin panel — form fields, widget pickers, YAML config. It works. But in 2026, the people editing content expect a modern visual editor, not a form with labels and text inputs. And with AI agents becoming a core part of content workflows, the tool needs to meet writers where they are now.
+
+## What changed in 2026
+
+Git-based CMSs started as tools for developers who already preferred static sites and Markdown. That audience still exists. But a much larger group now arrives at the same architecture by a different road: they had Claude Code, Codex, or Cursor build the site, and the site naturally lives in Git.
+
+That group doesn't mainly need a nicer way for developers to edit Markdown. They need **Day Two**: a way for clients and marketers to run the site without Git, and a way to review what AI agents change before it goes live. Decap CMS is a free, proven open-source Git CMS configured in YAML. GitCMS is built around that Day Two workflow: a hosted admin you connect to an existing repo, review before publish, and bring-your-own agents through MCP.
+
+## The short verdict
+
+<Verdict>
+  <VerdictCompetitor title="Decap CMS">
+    - You want a free, open-source Git-based CMS with zero vendor dependency
+    - Your team is comfortable with Decap's widget-based editor and YAML config
+    - You need a simple, self-hosted CMS for a static site generator
+    - Community-maintained open-source tooling is a priority
+  </VerdictCompetitor>
+  <VerdictGitCMS>
+    - Your site was built with code or a coding agent and already deploys
+    - Clients and marketers edit without Git, and changes are reviewed before publishing
+    - You want ChatGPT, Claude, or other MCP agents drafting through the same workflow
+    - You want a hosted admin with active development instead of maintaining an admin page and auth setup
+  </VerdictGitCMS>
+</Verdict>
+
+## Same thesis, different execution
+
+GitCMS and Decap CMS agree on the fundamentals:
+
+- Content belongs in **markdown files**, not a database
+- **Git** is the version control layer — branches for drafts, commits for history, PRs for review
+- The site and its content should **deploy together**
+- No API layer between your content and your build
+
+Where they diverge is everything that sits on top of those files.
+
+### The editor gap
+
+Decap's editor is widget-based. You define fields in a YAML config, and the editor renders form inputs — text fields, select dropdowns, image widgets, markdown textareas. It is functional and predictable. But writing a blog post in Decap feels like filling out a form, not writing prose.
+
+GitCMS gives you a **Notion-like block editor**. Rich text, inline formatting, drag-and-drop blocks, slash commands. The writing surface feels like a modern tool — closer to Notion or Linear than to a CMS admin panel.
+
+For teams where the content *is* the product — docs, blog posts, changelogs — the editor is not a nice-to-have. It is where writers spend their time. A better editor means better content.
+
+### The config gap
+
+Decap requires a `config.yml` file that defines collections, fields, and widget types. Adding a new content type means editing YAML. Changing a field means editing YAML. The config is powerful but manual, and mistakes in YAML can break the CMS.
+
+GitCMS handles collection configuration through its own config layer, with type-safe schemas and a UI that does not require hand-editing config files.
+
+### The development gap
+
+After Netlify stepped back from active development, Decap CMS became community-maintained. The project is still alive — volunteers fix bugs and review PRs — but the pace of new features has slowed significantly. Major UX improvements, new integrations, and architectural changes are not landing at the rate they once did.
+
+GitCMS is actively developed with a clear product roadmap. New features, editor improvements, and integrations ship regularly.
+
+## The markdown-in-git approach works
+
+Both GitCMS and Decap CMS bet on the same model — and it is the right bet. The evidence is mounting that markdown-in-git scales better than API-based CMSs for text-heavy content sites.
+
+<CaseStudy
+  title="Markdown-in-git scales: the Cursor migration"
+  logo={{ src: '/ai-logos/cursor.svg', alt: 'Cursor' }}
+  source="Lee Robinson — Coding Agents & Complexity Budgets"
+  sourceUrl="https://leerob.com/agents"
+  stats={[
+    { label: 'Migration cost', value: '$260' },
+    { label: 'Build speed improvement', value: '2x faster' },
+    { label: 'CDN savings (prior spend)', value: '$56,848' },
+    { label: 'Commits in one weekend', value: '67' },
+  ]}
+>
+  <p>
+    Cursor's engineering team migrated their content site — engineering blog, product changelog, and docs — from an API-based CMS back to markdown files in their codebase. The migration took one weekend using AI agents, cost $260 in tokens, and resulted in 2x faster builds.
+  </p>
+  <p>
+    This validates the core thesis that both Decap CMS and GitCMS share: for text-heavy content, markdown in the repo is a simpler and more durable operating model than an API-based CMS backed by a database.
+  </p>
+  <p>
+    The approach is proven. The question is which tool gives you the best experience on top of it.
+  </p>
+</CaseStudy>
+
+## Content as code
+
+Both GitCMS and Decap CMS deliver the "content as code" benefits:
+
+- **`grep` works.** Search your entire content library with standard dev tools.
+- **`git log` works.** Every content change has a commit, an author, a timestamp, and a diff.
+- **`git blame` works.** Trace any sentence to the person or agent that wrote it.
+- **Code review works.** Content changes go through the same PR process as code changes.
+- **Deploys are atomic.** Content and code ship together.
+
+This is where both tools are fundamentally better than any API-based or database-backed CMS. The content-as-code model is shared ground.
+
+## AI agents and the MCP gap
+
+This is where the paths diverge sharply.
+
+AI coding agents — Claude Code, Cursor, Windsurf, GitHub Copilot — work natively with markdown files in a repository. Both GitCMS and Decap CMS benefit from this. An agent can edit a markdown file regardless of which CMS sits on top.
+
+But content workflows go beyond file editing. Writers use AI for:
+
+- **SEO optimization** — analyzing keywords, suggesting title improvements, checking meta descriptions
+- **Content drafting** — outlines, first drafts, rewrites in different tones
+- **Content operations** — creating posts across collections, managing frontmatter, batch updates
+- **Review assistance** — grammar, clarity, consistency checks before publishing
+
+GitCMS's **MCP app** turns AI assistants like ChatGPT, Claude, and other MCP-compatible agents into full content agents. They can create drafts, edit posts, manage collections, and submit changes for review — all through a structured interface. GitCMS handles the git workflow underneath.
+
+Decap CMS has no MCP support and no AI integration layer. The gap is not just "nice to have" — in 2026, content writers use AI assistants daily. A CMS that does not integrate with them is leaving significant value on the table.
+
+## Feature comparison
+
+<FeatureTable
+  competitor="Decap CMS"
+  rows={[
+    {
+      category: 'Content storage',
+      gitcms: 'Markdown files in Git',
+      competitor: 'Markdown files in Git',
+      note: 'Same model — both store content as files in a repo',
+    },
+    {
+      category: 'Version control',
+      gitcms: 'native',
+      competitor: 'native',
+      note: 'Both use Git for version history',
+    },
+    {
+      category: 'Branching and drafts',
+      gitcms: 'native',
+      competitor: 'Editorial workflow (branch-based)',
+      note: 'Both use Git branches. GitCMS makes branches a first-class UI concept.',
+    },
+    {
+      category: 'Editor experience',
+      gitcms: 'Notion-like block editor',
+      competitor: 'Widget-based form editor',
+      note: 'The core UX difference between the two tools',
+    },
+    {
+      category: 'Markdown / MDX support',
+      gitcms: 'native',
+      competitor: 'native',
+    },
+    {
+      category: 'Configuration',
+      gitcms: 'Type-safe config with UI',
+      competitor: 'YAML config file (config.yml)',
+    },
+    {
+      category: 'Content delivery',
+      gitcms: 'Local files (no network hop)',
+      competitor: 'Local files (no network hop)',
+      note: 'Both serve content from the repo — no API layer',
+    },
+    {
+      category: 'Active development',
+      gitcms: 'Active (product company)',
+      competitor: 'Community-maintained (slower pace)',
+      note: 'Decap is maintained by volunteers after Netlify stepped back',
+    },
+    {
+      category: 'AI agent workflow',
+      gitcms: 'Native + MCP app for ChatGPT/Claude',
+      competitor: 'not-core',
+      note: 'GitCMS turns AI assistants into content agents via MCP',
+    },
+    {
+      category: 'Modern UI',
+      gitcms: 'yes',
+      competitor: 'Dated (form-based)',
+      note: 'Decap has not had a significant UI refresh',
+    },
+    {
+      category: 'Self-hosting',
+      gitcms: 'yes',
+      competitor: 'yes',
+    },
+    {
+      category: 'Open source',
+      gitcms: 'yes',
+      competitor: 'yes',
+    },
+    {
+      category: 'Vendor lock-in',
+      gitcms: 'Low (markdown files are portable)',
+      competitor: 'Low (markdown files are portable)',
+      note: 'Both have minimal lock-in — content is just files',
+    },
+    {
+      category: 'Migration between the two',
+      gitcms: 'Low effort',
+      competitor: 'Low effort',
+      note: 'Same underlying format — switching is straightforward',
+    },
+  ]}
+/>
+
+## Pricing
+
+<PricingCompare
+  competitorName="Decap CMS"
+  gitcms={{
+    note: 'Hosted product with Notion-like editor, MCP app, and active development.',
+  }}
+  competitor={{
+    free: 'Free forever (open-source)',
+    paid: 'No paid tier',
+    note: 'Completely free. You host it yourself alongside your static site. No vendor cost.',
+  }}
+/>
+
+Decap CMS is free. That is a real advantage, and we will not pretend otherwise. If your team is comfortable with Decap's editor and does not need AI integrations or a modern writing surface, the price is unbeatable.
+
+GitCMS costs money because it is a product — actively developed, with a team behind it, shipping new features on a regular cadence. You are paying for the editor experience, the MCP integration, and the product direction.
+
+## Where Decap CMS is genuinely better
+
+Decap CMS is the stronger choice when **cost and open-source independence matter most**.
+
+If your team:
+
+- Wants a completely free, community-maintained Git CMS with zero vendor dependency
+- Is comfortable with widget-based editing and YAML configuration
+- Needs a simple CMS layer on top of a static site generator (Hugo, Jekyll, Gatsby, Eleventy)
+- Values the ability to self-host and modify the CMS code without any vendor relationship
+- Does not need AI-assisted content workflows
+
+Then Decap CMS is a proven, honest tool that solves a real problem. It showed the entire ecosystem the way.
+
+## Where GitCMS is better
+
+GitCMS is better when **the writing experience and modern workflows matter**.
+
+Decap proved the thesis. GitCMS executes on it with:
+
+- A **Notion-like editor** that writers actually enjoy using — not a form with text inputs
+- **MCP integration** that turns AI assistants into content agents for drafting, SEO, and operations
+- **Active product development** with a team shipping features, not volunteers maintaining legacy code
+- A **modern UI** that feels like a 2026 tool, not a 2018 admin panel
+- **Type-safe configuration** instead of hand-edited YAML
+
+If your team believes in markdown-in-git but wants the experience to match the best modern tools, GitCMS is the evolution of what Decap started.
+
+<Tradeoffs>
+  <p>Choosing GitCMS over Decap CMS is a real tradeoff:</p>
+  <ul>
+    <li>Decap CMS is completely free. GitCMS is a paid product. For teams with zero budget, Decap is the obvious choice.</li>
+    <li>Decap is fully open-source with no vendor relationship. GitCMS is a product from a company — you are depending on that company's continued development.</li>
+    <li>Decap has years of community knowledge, tutorials, and static-site-generator integrations. GitCMS is newer.</li>
+    <li>If your team is happy with Decap's editor and does not need AI workflows, switching adds cost without solving a problem you have.</li>
+  </ul>
+  <p>For teams where the writing experience matters — where content quality depends on the editor being a place writers want to spend time — and where AI-assisted workflows are part of how the team operates, these tradeoffs are usually worth it. You get a modern editor, AI-native content operations, and active product development on top of the same git-native foundation.</p>
+</Tradeoffs>
+
+## Decision by use case
+
+**Free, open-source Git CMS for a static site:** Decap CMS is a solid choice.
+
+**Docs, blog, changelog with a Notion-like writing experience:** GitCMS is the better fit.
+
+**Team comfortable with YAML config and widget-based editing:** Decap CMS works fine.
+
+**Team that wants AI agents helping with content drafting and SEO:** GitCMS is the better fit.
+
+**Zero-budget project that needs a Git CMS today:** Decap CMS is the right answer.
+
+**Startup or content team that wants the markdown-in-git thesis with modern execution:** GitCMS is the better fit.
+
+<CompareCTA
+  description="Same Git foundation, built for Day Two: clients, marketers, and agents."
+/>

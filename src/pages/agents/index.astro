@@ -1,0 +1,11 @@
+---
+import ContentLayout from '@/layouts/ContentLayout.astro'
+import { AgentsPage } from '@/components/landing/agents-page'
+---
+<ContentLayout
+  title="GitCMS for AI Agents — Draft, Review, and Publish Safely"
+  description="Connect ChatGPT, Claude, and personal agents like OpenClaw and Hermes to your website. Agents draft changes; people review and publish."
+  path="/agents"
+>
+  <AgentsPage client:load />
+</ContentLayout>

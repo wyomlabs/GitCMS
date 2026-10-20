@@ -1,0 +1,41 @@
+---
+title: 'Make a site client-editable'
+description: 'Move hardcoded copy out of components and into content collections, so clients and marketers can edit the site without touching code.'
+category: handoff
+agents:
+  - 'Claude Code'
+  - 'Codex'
+  - 'Cursor'
+order: 1
+lastReviewed: '2026-10-10'
+---
+
+## The prompt
+
+```text
+Move all client-editable copy on this site into content files.
+
+- Create a content collection for pages (one Markdown file per page) with
+  frontmatter fields for each editable piece of copy: headlines, subheadings,
+  button labels, opening hours, prices, contact details.
+- Keep blog posts, news, or case studies in their own collections.
+- Update pages and components to read from these collections.
+- Don't change the design or layout. The rendered site must look identical.
+- Use field names a non-developer understands (heroHeadline, not h1Text).
+- When you're done, list every file you created and every component you changed.
+```
+
+## What it does
+
+Coding agents tend to write copy directly into components. That's fine for building, but a CMS can't safely edit text inside a component. This prompt creates a clean boundary: content in files, design in code.
+
+## Before you run it
+
+- Commit or stash your work so the diff is easy to review.
+- If you use Astro, say so: the agent should use content collections in `src/content.config.ts`.
+
+## After you run it
+
+Run the site locally and compare pages side by side. Then [set up GitCMS](/prompts/set-up-gitcms) and the collections appear in the editor.
+
+Related: [how to hand off a Claude Code website](/blog/hand-off-claude-code-website-to-client), [content collections](/glossary/content-collections).

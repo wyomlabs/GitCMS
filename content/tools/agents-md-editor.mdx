@@ -1,0 +1,30 @@
+---
+title: Free AGENTS.md Editor
+description: Create an AGENTS.md file for Codex, OpenCode, Aider, Goose, Cursor, and other coding agents. Start from a template, edit visually, then copy or download it.
+tool: agents-md-editor
+order: 2
+---
+
+## What AGENTS.md is
+
+`AGENTS.md` is a plain Markdown file at the root of a repository that tells coding agents how to work in it: how to install and test the project, which conventions to follow, and what to avoid. Many agents read it automatically, including OpenAI Codex, OpenCode, Aider, Goose, Cursor, and Gemini CLI. See [agents.md](https://agents.md/) for the format.
+
+## How to use the editor
+
+1. Replace each template section with details from your project. Delete sections that don't apply.
+2. Keep instructions short and specific. Agents follow concrete commands, such as "run `pnpm test`", more reliably than general advice.
+3. Download `AGENTS.md` and commit it to the root of your repository.
+
+## Frequently asked questions
+
+### Do I need both AGENTS.md and CLAUDE.md?
+
+Claude Code reads `CLAUDE.md`. Most other agents read `AGENTS.md`. Many teams keep the instructions in `AGENTS.md` and point `CLAUDE.md` at it. Use the [CLAUDE.md editor](/tools/claude-md-editor) if you want a separate file.
+
+### Can AGENTS.md files be nested?
+
+Yes. Agents that support it read the nearest `AGENTS.md` to the file they are changing, so a subfolder can add rules for its own code.
+
+### Is my file stored anywhere?
+
+No. The editor runs in your browser and nothing is saved to a server.

@@ -1,0 +1,101 @@
+---
+title: Coding Agents Setup
+description: Set up GitCMS with Claude Code, Codex, or Cursor, and connect them to GitCMS MCP for reviewed content changes.
+---
+
+Coding agents like Claude Code, Codex, and Cursor work with GitCMS in two ways:
+
+1. **Set up GitCMS on a repository.** The agent runs the setup CLI and pushes the `.gitcms` configuration.
+2. **Work on content through MCP.** The agent connects to the GitCMS MCP server and drafts content changes inside content tasks, the same way people do.
+
+Code changes still go through your normal pull requests. GitCMS covers content.
+
+Agent guides: [Claude Code](/agents/claude-code), [Codex](/agents/codex), [Cursor](/agents/cursor).
+
+## Prerequisites
+
+- A GitCMS account with access to the repository.
+- A **licensed** GitCMS site for MCP. MCP is not available in preview mode.
+
+## Set up GitCMS with your coding agent
+
+In GitCMS, choose **Add site**, pick the repository, and choose **Set up with your coding agent**. Paste the prompt into your agent and keep the dialog open; each site is ticked off as soon as the setup is pushed.
+
+The agent runs the onboarding CLI:
+
+```bash
+npx create-gitcms@latest --yes
+```
+
+See [CLI Onboarding](/docs/getting-started/cli-onboarding) for flags, and the [prompt library](/prompts/set-up-gitcms) for the full prompt.
+
+If copy is hardcoded in components, ask the agent to move it into content collections first. See [Make a site client-editable](/prompts/make-site-client-editable).
+
+## Connect over MCP
+
+All three clients use the GitCMS connector URL and sign in to GitCMS with OAuth:
+
+```text
+https://mcp.gitcms.dev
+```
+
+### Claude Code
+
+```bash
+claude mcp add --transport http --scope user gitcms https://mcp.gitcms.dev
+```
+
+Start Claude Code, run `/mcp`, choose **gitcms**, and authenticate in the browser.
+
+### Codex
+
+```bash
+codex mcp add gitcms --url https://mcp.gitcms.dev
+codex mcp login gitcms
+```
+
+Or add the server to your Codex `config.toml`:
+
+```toml
+[mcp_servers.gitcms]
+url = "https://mcp.gitcms.dev"
+```
+
+### Cursor
+
+Add the server in Cursor Settings under MCP, or in `~/.cursor/mcp.json` (all projects) or `.cursor/mcp.json` (one repository):
+
+```json
+{
+  "mcpServers": {
+    "gitcms": { "url": "https://mcp.gitcms.dev" }
+  }
+}
+```
+
+Cursor shows that the server needs authentication. Sign in to GitCMS when prompted.
+
+## Check the connection
+
+Ask the agent to list your GitCMS sites. If it can, the connection works. On a site that uses review before publish, try a small reviewed change:
+
+```text
+Using GitCMS, update the intro of the [entry] entry on [site] to mention
+[feature], and submit it for review.
+```
+
+The agent creates or resumes a content task, drafts inside it, and submits it for review. Publishing stays a human action. On direct-publish sites there are no content tasks: saves commit straight to the live branch, so start with read-only requests.
+
+## Troubleshooting
+
+### The agent doesn't see GitCMS tools
+
+Restart the agent after adding the server, and confirm the server is listed and authenticated (`/mcp` in Claude Code, `codex mcp list` in Codex, the MCP settings in Cursor).
+
+### "MCP is not available"
+
+Make sure the site is licensed. Preview-only sites cannot use MCP.
+
+### The agent edits files directly instead of using GitCMS
+
+Say "using GitCMS" in the prompt when you want a content change to go through review. Coding agents default to editing the repository they're working in.

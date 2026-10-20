@@ -1,0 +1,57 @@
+---
+import { getCollection, render } from 'astro:content'
+import ContentLayout from '@/layouts/ContentLayout.astro'
+import { LaunchCtaSection } from '@/components/landing/launch-cta-section'
+import {
+  GLOSSARY_CATEGORY_LABELS,
+  proseClassName,
+  resourceMdxComponents,
+} from '@/components/resources/resource-mdx-components'
+
+export async function getStaticPaths() {
+  return (await getCollection('glossary')).map((term) => ({
+    params: { slug: term.id.replace(/\.mdx?$/, '') },
+    props: { term },
+  }))
+}
+
+const { term } = Astro.props
+const { Content } = await render(term)
+const slug = term.id.replace(/\.mdx?$/, '')
+const allTerms = await getCollection('glossary')
+const related = (term.data.related ?? []).flatMap((relatedSlug) => {
+  const found = allTerms.find((candidate) => candidate.id.replace(/\.mdx?$/, '') === relatedSlug)
+  return found ? [{ title: found.data.title, slug: relatedSlug }] : []
+})
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'DefinedTerm',
+  name: term.data.title,
+  description: term.data.definition,
+  url: `https://gitcms.dev/glossary/${slug}/`,
+  inDefinedTermSet: 'https://gitcms.dev/glossary/',
+}
+const title = term.data.title.includes(' vs ')
+  ? `${term.data.title}: Differences Explained — GitCMS Glossary`
+  : `What Is ${term.data.title}? — GitCMS Glossary`
+---
+<ContentLayout title={title} description={term.data.description} path={`/glossary/${slug}`} structuredData={structuredData}>
+  <article class="mx-auto max-w-3xl px-6 py-16">
+    <a href="/glossary" class="text-sm text-neutral-600 transition-colors hover:text-neutral-900">← Glossary</a>
+    <header class="mb-10 mt-8">
+      <span class="rounded-full bg-neutral-900 px-3 py-1 text-xs font-medium uppercase tracking-wider text-white">{GLOSSARY_CATEGORY_LABELS[term.data.category]}</span>
+      <h1 class="mt-5 font-logo text-3xl font-normal leading-tight tracking-tight text-neutral-900 sm:text-4xl md:text-[42px]">{term.data.title}</h1>
+      <p class="mt-5 border-l-2 border-violet-400 pl-4 text-lg leading-relaxed text-neutral-800 sm:text-xl">{term.data.definition}</p>
+    </header>
+    <div class={proseClassName}><Content components={resourceMdxComponents} /></div>
+    {related.length > 0 && (
+      <aside class="mt-14 border-t border-neutral-200 pt-8">
+        <h2 class="text-sm font-medium uppercase tracking-widest text-neutral-500">Related terms</h2>
+        <div class="mt-4 flex flex-wrap gap-2">
+          {related.map((item) => <a href={`/glossary/${item.slug}`} class="rounded-full border border-neutral-200 px-4 py-1.5 text-sm text-neutral-700 transition-colors hover:border-neutral-400 hover:text-neutral-900">{item.title}</a>)}
+        </div>
+      </aside>
+    )}
+  </article>
+  <LaunchCtaSection heading="Your AI built the website." highlightedHeading="Give your team a way to run it." body="Connect your repository and explore GitCMS on your real site in preview mode." landingPath="/glossary" landingVariant="glossary" />
+</ContentLayout>

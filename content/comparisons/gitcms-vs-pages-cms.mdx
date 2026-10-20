@@ -1,0 +1,238 @@
+---
+title: 'GitCMS vs Pages CMS'
+description: 'Pages CMS is a free, lightweight GitHub-based CMS. GitCMS adds review before publish, roles, and AI agents for teams and clients running code-first websites. Here''s when each fits.'
+competitor: 'Pages CMS'
+category: 'Git-based CMS'
+lastReviewed: '2026-04-16'
+order: 13
+---
+
+Pages CMS has an honest pitch: edit content and media directly in your GitHub repo, no database, no backend, no complexity. It is free, MIT-licensed, and works with any static site generator. For personal sites and simple projects, it is a genuinely good answer.
+
+GitCMS is solving a bigger problem. It adds a visual editor, structured collections, branch-based drafts, review workflows, and AI agent integration via MCP — all on top of the same git-native foundation. That extra surface area has a cost (both in price and complexity), and for some teams it is unnecessary. For others, it is exactly what turns "markdown files in a repo" into a real content workflow.
+
+## What changed in 2026
+
+Git-based CMSs started as tools for developers who already preferred static sites and Markdown. That audience still exists. But a much larger group now arrives at the same architecture by a different road: they had Claude Code, Codex, or Cursor build the site, and the site naturally lives in Git.
+
+That group doesn't mainly need a nicer way for developers to edit Markdown. They need **Day Two**: a way for clients and marketers to run the site without Git, and a way to review what AI agents change before it goes live. Pages CMS is a free, lightweight editor for GitHub repositories. GitCMS is built around that Day Two workflow: a hosted admin you connect to an existing repo, review before publish, and bring-your-own agents through MCP.
+
+## The short verdict
+
+<Verdict>
+  <VerdictCompetitor title="Pages CMS">
+    - You want a free, zero-cost CMS that edits files directly in GitHub
+    - Your site is a personal blog, docs, or simple static site
+    - You do not need editorial workflows, branching, or AI integrations
+    - Radical simplicity matters more than feature depth
+  </VerdictCompetitor>
+  <VerdictGitCMS>
+    - Your site was built with code or a coding agent and already deploys
+    - Clients and marketers edit without Git, and changes are reviewed before publishing
+    - You want ChatGPT, Claude, or other MCP agents drafting through the same workflow
+    - Your site is run by a team or a client, not just by you
+  </VerdictGitCMS>
+</Verdict>
+
+## Where the approaches diverge
+
+Both Pages CMS and GitCMS work directly with files in a Git repo. No database, no API, no hosted backend. That shared foundation is the right one.
+
+The difference is how much workflow sits on top.
+
+### Pages CMS: keep it minimal
+
+Pages CMS gives you a visual editor that commits directly to your GitHub repo. You configure collections, edit content, manage media — and it all maps to files in the repo. No branching, no draft states, no review flow (these are on the roadmap but not shipped yet). The tool stays deliberately thin.
+
+This is the right model when the content workflow is simple: one person edits, the change goes live. Personal sites, simple docs, hobby projects.
+
+### GitCMS: add structure where it helps
+
+GitCMS adds layers that matter for teams:
+
+- **Branches as drafts** — work in progress lives on a branch, not in the main content
+- **PRs as review** — content goes through the same review process as code
+- **Structured collections** with typed schemas — not just "edit this file" but "this is a blog post with these fields"
+- **A Notion-like editor** — richer writing experience than a basic textarea or markdown editor
+- **MCP integration** — AI assistants can draft, edit, and manage content through a structured protocol
+
+That additional structure is unnecessary for a personal blog. It is essential for a startup publishing docs, blog, changelog, and marketing content as a team.
+
+## Content as code
+
+Both tools deliver the same content-as-code benefits:
+
+- **`grep` works.** Search your entire content library with standard dev tools.
+- **`git log` works.** Every content change has a commit, an author, a timestamp, and a diff.
+- **`git blame` works.** Trace any sentence to the person or agent that wrote it.
+- **Deploys are atomic.** Content and code ship together.
+
+This is the advantage both tools share over any database-backed or API-based CMS. Content is files. The workflow is Git. Neither tool locks you in.
+
+## AI agents and the workflow gap
+
+AI coding agents work natively with markdown files in a repository. Both Pages CMS and GitCMS benefit from this — an agent can edit a markdown file regardless of which CMS sits on top.
+
+The difference is what happens after the edit.
+
+With Pages CMS, there is no structured content workflow. An agent edits a file and commits it. There is no draft state, no review step, no way to route that edit through a team process.
+
+GitCMS's **MCP app** turns AI assistants like ChatGPT, Claude, and other MCP-compatible agents into content agents. They can create drafts on branches, edit posts, manage collections, check SEO, and submit changes for review — all through a structured interface. The content lands in the right place, in the right format, ready for human review before it goes live.
+
+For solo projects, the simple commit-and-publish model works. For teams, the structured workflow prevents AI-generated content from going live without review.
+
+## Feature comparison
+
+<FeatureTable
+  competitor="Pages CMS"
+  rows={[
+    {
+      category: 'Content storage',
+      gitcms: 'Markdown files in Git',
+      competitor: 'Files in GitHub',
+      note: 'Same model — both work directly with repo files',
+    },
+    {
+      category: 'Version control',
+      gitcms: 'native',
+      competitor: 'native',
+      note: 'Both use Git for version history',
+    },
+    {
+      category: 'Branching and drafts',
+      gitcms: 'native',
+      competitor: 'not-core',
+      note: 'Pages CMS commits directly. GitCMS uses branches for drafts.',
+    },
+    {
+      category: 'Review workflow',
+      gitcms: 'PR-based review',
+      competitor: 'not-core',
+      note: 'Pages CMS has no built-in review step',
+    },
+    {
+      category: 'Editor experience',
+      gitcms: 'Notion-like block editor',
+      competitor: 'Visual editor with rich text',
+      note: 'GitCMS has a richer writing surface with slash commands and block editing',
+    },
+    {
+      category: 'Markdown / MDX support',
+      gitcms: 'native',
+      competitor: 'native',
+    },
+    {
+      category: 'Content collections',
+      gitcms: 'Structured with typed schemas',
+      competitor: 'Config-based',
+    },
+    {
+      category: 'Git provider support',
+      gitcms: 'GitHub, GitLab, Bitbucket',
+      competitor: 'GitHub only',
+      note: 'Pages CMS only supports GitHub currently',
+    },
+    {
+      category: 'Media management',
+      gitcms: 'yes',
+      competitor: 'yes',
+      note: 'Both handle media/images in the repo',
+    },
+    {
+      category: 'AI agent workflow',
+      gitcms: 'Native + MCP app for ChatGPT/Claude',
+      competitor: 'not-core',
+      note: 'GitCMS turns AI assistants into content agents via MCP',
+    },
+    {
+      category: 'Self-hosting',
+      gitcms: 'yes',
+      competitor: 'yes',
+    },
+    {
+      category: 'Open source',
+      gitcms: 'yes',
+      competitor: 'yes',
+    },
+    {
+      category: 'Vendor lock-in',
+      gitcms: 'Low (markdown files are portable)',
+      competitor: 'Low (markdown files are portable)',
+      note: 'Both have minimal lock-in — content is just files',
+    },
+  ]}
+/>
+
+## Pricing
+
+<PricingCompare
+  competitorName="Pages CMS"
+  gitcms={{
+    note: 'Includes the editor, MCP app, and branch workflows.',
+  }}
+  competitor={{
+    free: 'Free forever (MIT licensed)',
+    paid: 'No paid tier',
+    note: 'Completely free. Self-host or use the hosted version at no cost.',
+  }}
+/>
+
+Pages CMS is free. Full stop. If your project has zero budget and your content workflow is simple, this is a real advantage that GitCMS cannot match.
+
+GitCMS costs money because it is a product with a team behind it — a richer editor, MCP integration, structured workflows, and active development. You are paying for the workflow layer, not the content storage (both store content the same way).
+
+## Where Pages CMS is genuinely better
+
+Pages CMS is the stronger choice when **simplicity and zero cost are the priorities**.
+
+If your project:
+
+- Is a personal site, portfolio, or small documentation site
+- Has one or two editors who do not need a review workflow
+- Does not need AI-assisted content workflows
+- Needs a CMS today with zero budget
+- Values being as thin a layer as possible over GitHub
+
+Then Pages CMS is not a compromise — it is the right tool for the job. Its simplicity is its feature.
+
+## Where GitCMS is better
+
+GitCMS is better when **the content workflow needs structure**.
+
+Once you have a team — even a small one — the questions change:
+
+- Who reviewed this post before it went live?
+- Where are the drafts that are in progress?
+- Can an AI agent draft content without it going live immediately?
+- How do we manage docs, blog, and changelog as separate collections with different schemas?
+
+These are workflow questions, not storage questions. Pages CMS stores content the same way GitCMS does. GitCMS adds the workflow layer that turns files-in-a-repo into a content system.
+
+<Tradeoffs>
+  <p>Choosing GitCMS over Pages CMS is a real tradeoff:</p>
+  <ul>
+    <li>Pages CMS is completely free. GitCMS requires a paid site license. For zero-budget projects, Pages CMS has the advantage.</li>
+    <li>Pages CMS is simpler — less to learn, less to configure, less that can go wrong.</li>
+    <li>If your content workflow is "edit and publish" with no review step needed, Pages CMS does exactly that with less overhead.</li>
+    <li>Pages CMS has no vendor dependency beyond GitHub itself. GitCMS is a product from a company.</li>
+  </ul>
+  <p>For teams that need editorial workflow, AI-assisted content operations, and a writing experience that matches modern tools, these tradeoffs are usually worth it. You get a richer editor, structured review, MCP integration, and a product that evolves with the team's needs.</p>
+</Tradeoffs>
+
+## Decision by use case
+
+**Personal site, portfolio, or simple documentation:** Pages CMS is a great choice.
+
+**Team publishing docs, blog, changelog, and marketing content:** GitCMS is the better fit.
+
+**Zero budget, simple editing needs:** Pages CMS is the right answer.
+
+**AI-assisted content drafting with human review before publishing:** GitCMS is the better fit.
+
+**One editor, no review workflow needed:** Pages CMS is plenty.
+
+**Startup or content team that needs structure as it grows:** GitCMS is the better fit.
+
+<CompareCTA
+  description="Same files in GitHub. Add review, roles, and AI agents when the site has more than one editor."
+/>

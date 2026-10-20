@@ -1,0 +1,64 @@
+---
+title: GitCMS v1.2
+version: v1.2.0
+date: 2026-05-26
+description: GitCMS v1.2 adds production-ready media libraries, managed timestamp fields, and cover image configuration for visual editing.
+---
+
+## v1.2.0
+
+GitCMS v1.2 makes media and frontmatter workflows feel more complete. You can connect production object storage, let GitCMS manage created/updated timestamps, and choose which image field becomes the visual cover image in the editor.
+
+## What's new
+
+**Production media libraries**
+
+Media can now live in Git, Cloudflare R2, AWS S3, or another S3-compatible service. Add a media integration once at the workspace level, connect it to a site media library, then upload, browse, preview, and select files from the editor or media library.
+
+You can also switch between configured libraries and choose how inserted links should look, whether your site needs a full CDN URL, a website-relative path, a folder-relative path, or a custom media URI.
+
+<video
+  controls
+  preload="metadata"
+  playsInline
+  aria-label="Media libraries demo"
+>
+  <source src="/videos/changelog/v1-2-0-media-libraries.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+
+**Managed timestamps for frontmatter**
+
+Datetime fields can now be managed by GitCMS. Mark a field as **Set on create** for created-at timestamps, or **Update on save** for last-updated timestamps.
+
+GitCMS keeps those fields current when content is created or saved, while preserving existing values when a created timestamp should not change.
+
+<video
+  controls
+  preload="metadata"
+  playsInline
+  aria-label="Managed timestamps demo"
+>
+  <source src="/videos/changelog/v1-2-0-managed-timestamps.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+
+**Cover image fields in the editor**
+
+Image fields can now be marked as the entry's cover image. When configured, GitCMS renders that image above the frontmatter fields so editors can see the visual identity of a post or page while they work.
+
+Only one image field can be used as the cover image for a collection, keeping the editor predictable.
+
+<video
+  controls
+  preload="metadata"
+  playsInline
+  aria-label="Cover image field demo"
+>
+  <source src="/videos/changelog/v1-2-0-cover-image-field.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+
+---
+
+[Try GitCMS →](https://gitcms.dev)

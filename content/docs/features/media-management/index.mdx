@@ -1,0 +1,181 @@
+---
+title: Media Library
+description: How to upload, organize, and manage media files through GitCMS.
+---
+
+GitCMS includes a media library for images, videos, downloads, and other static files used by your content. You can store media in your Git repository, or connect object storage such as Cloudflare R2 or AWS S3 when files should live outside Git.
+
+For most blogs, docs sites, and small marketing sites, repository media is the simplest option. Files are version-controlled, appear in review with the content change, and deploy through the same pipeline as the rest of your site.
+
+Use object storage when media is large, served from a CDN, or already managed through an asset domain such as `https://assets.example.com`.
+
+## Choose a media setup
+
+Start with one default media library. Add more only when different files need different storage or delivery behavior.
+
+| Use case | Recommended setup |
+|----------|-------------------|
+| Blog images, docs screenshots, author avatars | Repository media |
+| Small teams that want every content change reviewed in Git | Repository media |
+| Videos, large downloads, campaign assets | Cloudflare R2 or AWS S3 |
+| Sites that already serve media from an asset CDN | Cloudflare R2 or AWS S3 |
+| Custom build pipelines that rewrite media references | Advanced custom link format |
+
+The default media library is what GitCMS uses first in the editor, image fields, and media picker. Editors can still switch libraries when a site has more than one.
+
+## How uploads work
+
+When you upload to a repository media library, GitCMS commits the file into the configured media folder.
+
+For example, if your media folder is `public/images` and you upload `photo.jpg`, GitCMS adds:
+
+```txt
+public/images/photo.jpg
+```
+
+If you upload while editing a post, GitCMS can place the file under a path related to that entry, such as:
+
+```txt
+public/images/posts/hello-world/photo.jpg
+```
+
+When you upload to R2 or S3, your browser uploads the file directly to object storage through a short-lived upload URL. GitCMS handles permissions, file naming, previews, deletion, and the link inserted into Markdown or frontmatter.
+
+File names are cleaned automatically. Spaces become hyphens, special characters are removed, and names are lowercased. For example, `My Image (1).png` becomes `my-image-1.png`.
+
+## Repository media
+
+Repository media stores uploads in the same Git repository as your content. The media folder should match where your framework serves static files from.
+
+GitCMS suggests a default folder during onboarding based on your framework:
+
+| Framework | Suggested media folder |
+|-----------|------------------------|
+| Astro | `public` |
+| TanStack Start | `public` |
+| Next.js | `public` |
+| Nuxt.js | `public` |
+| Eleventy | `public` |
+| Hugo | `static` |
+| Gatsby | `static` |
+| SvelteKit | `static` |
+| Jekyll | `assets/images` |
+| Docusaurus | `static/img` |
+| VuePress | `docs/.vuepress/public` |
+| MkDocs | `docs/assets` |
+
+You can change this in **Settings** → **Media**. In a monorepo, the folder is resolved from the selected site root.
+
+<Callout type="warn">
+**Git LFS is not compatible with GitCMS uploads.** GitCMS writes files through the GitHub API, so uploaded files are stored as regular Git blobs even if the repository has Git LFS tracking rules. If repository size is a concern, use R2 or S3 for large media.
+</Callout>
+
+## Object storage media
+
+Object storage keeps media files outside the Git repository while content remains in Git. This is a good fit for larger sites, asset-heavy marketing pages, videos, and teams that already use a CDN-backed asset domain.
+
+The production shape is usually:
+
+1. Connect a workspace media integration for R2 or S3.
+2. Add a site media library that uses that integration.
+3. Choose the bucket and optional folder prefix where uploads should go.
+4. Set the public asset URL GitCMS should use for previews and inserted links.
+5. Choose how links should look in Markdown and frontmatter.
+
+For provider-specific setup, see [Cloudflare R2](/docs/features/media-management/r2-production) or [AWS S3](/docs/features/media-management/s3-production).
+
+## How links should look
+
+This setting controls what GitCMS inserts after someone chooses or uploads media. Pick the format your website already understands.
+
+| Option | Example inserted into content | Use when |
+|--------|-------------------------------|----------|
+| **Full CDN URL** | `https://assets.example.com/blog/hero.webp` | Media is served from a public asset domain or CDN |
+| **Website-relative URL** | `/assets/blog/hero.webp` | Your site or CDN serves that path from the same website domain |
+| **Folder-relative path** | `blog/hero.webp` | Your renderer adds the media base path later |
+| **Custom media URI** | `media://blog/hero.webp` | Your build pipeline transforms custom media references |
+
+Most sites should use **Website-relative URL** for repository media and **Full CDN URL** for R2 or S3 media.
+
+Use **Custom media URI** only when your website build already knows how to transform those references. If it does not, images may appear broken on the published site.
+
+## Accessing the media library
+
+### From the sidebar
+
+Open a site and click **Media** in the sidebar. From there you can:
+
+- Browse files in a grid or list view.
+- Switch between media libraries.
+- Navigate through folders.
+- Upload files by dragging and dropping or using the upload button.
+- Preview images.
+- Delete files you no longer need.
+
+When you upload inside a folder, the file is placed in that folder.
+
+### From the editor
+
+While editing content, you can insert images without leaving the editor:
+
+- Use `/image` to insert an image block.
+- Click the image placeholder to open the media picker.
+- Upload a new image or choose an existing file.
+- Paste an image from your clipboard and let GitCMS upload it.
+
+Image fields in the frontmatter form also open the media picker.
+
+## Automatic image optimization
+
+GitCMS optimizes supported image uploads before saving them.
+
+- PNG, JPEG, BMP, and TIFF uploads can be converted to **WebP**.
+- Very large images are resized to a more web-friendly width.
+- SVG and GIF stay in their original format.
+- Existing **WebP** and **AVIF** files are usually kept as-is.
+- If optimization does not reduce file size, GitCMS keeps the original file.
+
+This keeps media smaller without changing the editing workflow. In the media picker, GitCMS shows the original size, uploaded size, and percentage saved before upload continues.
+
+## File organization
+
+GitCMS does not require a fixed folder structure. Organize media in the way your team expects to find it.
+
+Common patterns:
+
+- `blog/` for post images
+- `docs/` for screenshots and diagrams
+- `authors/` for author avatars
+- `changelog/` for release images and videos
+
+To upload into a folder, navigate there first in the media library. For object storage, GitCMS can also create new paths as files are uploaded.
+
+## Troubleshooting
+
+### Images upload but do not appear on the website
+
+Check that the media folder matches your framework's public/static asset folder. For example, Next.js, Astro, and Nuxt usually serve files from `public`, while Hugo and SvelteKit commonly use `static`.
+
+Also check the selected link format. If your site expects `/images/photo.webp` but GitCMS inserts `images/photo.webp`, update **How links should look** in media settings.
+
+### Object storage uploads fail
+
+Check the provider setup:
+
+- The bucket exists.
+- The integration credentials can read, write, list, and delete objects.
+- CORS allows requests from the GitCMS app origin.
+- The endpoint is the provider API endpoint, not the public CDN URL.
+- The public asset URL opens uploaded files in a browser.
+
+### The repository is getting too large
+
+Keep small images in Git, but move large assets, videos, and downloads to R2 or S3. Repository media is convenient, but object storage is better when media bytes become a meaningful part of repository size.
+
+## Tips
+
+- **Use the simplest setup that works.** One repository media library is enough for many sites.
+- **Set a default library.** This keeps editor uploads predictable.
+- **Use descriptive names.** GitCMS cleans filenames, but names like `pricing-page-hero.webp` are easier to manage than `image-1.webp`.
+- **Group files by content type.** Folders such as `blog/`, `docs/`, and `authors/` keep large libraries readable.
+- **Use R2 or S3 for heavy files.** Videos, downloads, and campaign assets should usually live outside Git.

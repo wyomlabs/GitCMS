@@ -1,0 +1,28 @@
+---
+title: 'Deployment'
+category: deploy
+definition: 'A deployment publishes a built version of a website to hosting so visitors can reach it, usually triggered automatically by a commit.'
+description: 'What a deployment is on a code-first website, how Git-triggered deploys work, and how rollbacks fit in.'
+related:
+  - build-step
+  - ci-cd
+  - preview-deployment
+  - static-hosting
+lastReviewed: '2026-10-10'
+---
+
+## How it works on code-first sites
+
+1. Someone (or a CMS, or an agent) commits to the main branch
+2. The host sees the commit and runs the [build step](/glossary/build-step)
+3. The output is uploaded and switched live, usually with no downtime
+
+Hosts like Vercel, Netlify, and Cloudflare Pages do this automatically once connected to a repository.
+
+## Production vs preview
+
+Commits to the main branch create **production** deployments. Commits to other branches can create [preview deployments](/glossary/preview-deployment) with their own URLs.
+
+## Rollbacks
+
+Every deployment is tied to a commit, so rolling back means redeploying an earlier one, or reverting the commit. That's one reason Git-backed content is safer than editing a live database.

@@ -1,0 +1,35 @@
+---
+title: 'Sitemap'
+category: seo
+definition: 'A sitemap is a file, usually sitemap.xml, that lists a website’s pages so search engines can discover and crawl them.'
+description: 'What a sitemap is, what it should include, and how code-first sites generate one automatically.'
+related:
+  - robots-txt
+  - canonical-url
+  - seo
+  - llms-txt
+lastReviewed: '2026-10-10'
+---
+
+## Example
+
+```xml
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://example.com/blog/opening-hours/</loc>
+    <lastmod>2026-10-10</lastmod>
+  </url>
+</urlset>
+```
+
+## What belongs in it
+
+Only canonical, indexable pages: no redirects, no `noindex` pages, no duplicate URLs with and without trailing slashes. Point to it from `robots.txt` and submit it in Google Search Console and Bing Webmaster Tools.
+
+## On code-first sites
+
+Frameworks generate sitemaps at build time (for example `@astrojs/sitemap` or `next-sitemap`), so every new page appears on the next deploy.
+
+## In GitCMS
+
+GitCMS can use your sitemap for internal link suggestions and to match live URLs to entries. See [sitemaps and internal links](/docs/features/sitemaps-internal-links).

@@ -1,0 +1,75 @@
+---
+import { getCollection, render } from 'astro:content'
+import ContentLayout from '@/layouts/ContentLayout.astro'
+import { comparisonMdxComponents } from '@/components/comparison/mdx-components'
+
+export async function getStaticPaths() {
+  return (await getCollection('comparisons')).map((comparison) => ({
+    params: { slug: comparison.id.replace(/\.mdx?$/, '') },
+    props: { comparison },
+  }))
+}
+const { comparison } = Astro.props
+const { Content } = await render(comparison)
+const slug = comparison.id.replace(/\.mdx?$/, '')
+const canonicalUrl = `https://gitcms.dev/compare/${slug}`
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: comparison.data.title,
+      description: comparison.data.description,
+      dateModified: comparison.data.lastReviewed,
+      url: canonicalUrl,
+      mainEntityOfPage: canonicalUrl,
+      publisher: {
+        '@type': 'Organization',
+        name: 'GitCMS',
+        url: 'https://gitcms.dev',
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Comparisons',
+          item: 'https://gitcms.dev/compare',
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: comparison.data.title,
+          item: canonicalUrl,
+        },
+      ],
+    },
+  ],
+}
+function formatDate(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })
+}
+---
+<ContentLayout
+  title={`${comparison.data.title} — GitCMS`}
+  description={comparison.data.description}
+  path={`/compare/${slug}`}
+  structuredData={structuredData}
+>
+  <article class="mx-auto max-w-3xl px-6 py-16">
+    <a href="/compare" class="text-sm text-neutral-500 transition-colors hover:text-neutral-900">← Back to comparisons</a>
+    <header class="mt-8 mb-12">
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="rounded-full bg-neutral-900 px-3 py-1 text-xs font-medium uppercase tracking-wider text-white">{comparison.data.category}</span>
+        <span class="text-sm text-neutral-500">Last reviewed {formatDate(comparison.data.lastReviewed)}</span>
+      </div>
+      <h1 class="mt-5 font-logo text-3xl font-normal leading-tight tracking-tight text-neutral-900 sm:text-4xl md:text-[42px]">{comparison.data.title}</h1>
+      <p class="mt-4 text-base leading-relaxed text-neutral-600 sm:text-lg">{comparison.data.description}</p>
+    </header>
+    <div class="prose prose-neutral prose-lg max-w-none prose-headings:font-logo prose-headings:font-medium prose-headings:tracking-tight prose-a:text-neutral-900 prose-a:underline-offset-2">
+      <Content components={comparisonMdxComponents} />
+    </div>
+  </article>
+</ContentLayout>

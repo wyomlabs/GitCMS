@@ -1,0 +1,30 @@
+---
+title: 'robots.txt'
+category: seo
+definition: 'robots.txt is a text file at the root of a website that tells crawlers which paths they may or may not crawl.'
+description: 'What robots.txt does, what it doesn’t do, and how to handle AI crawlers.'
+related:
+  - sitemap
+  - llms-txt
+  - seo
+lastReviewed: '2026-10-10'
+---
+
+## Example
+
+```text
+User-agent: *
+Disallow: /app/
+Disallow: /api/
+
+Sitemap: https://example.com/sitemap.xml
+```
+
+## What it doesn't do
+
+- It doesn't hide pages from search results. A blocked page can still be indexed from links. Use a `noindex` robots meta tag for that.
+- It isn't security. Well-behaved crawlers follow it; others ignore it.
+
+## AI crawlers
+
+AI companies publish their own user agents (for example GPTBot, ClaudeBot, and PerplexityBot). You can allow or block them individually. Blocking them keeps your content out of some AI systems, but it can also keep you out of their answers. Decide per crawler, deliberately.

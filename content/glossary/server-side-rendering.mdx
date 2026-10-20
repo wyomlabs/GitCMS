@@ -1,0 +1,31 @@
+---
+title: 'Server-side rendering (SSR)'
+category: rendering
+definition: 'Server-side rendering (SSR) builds a page’s HTML on the server for each request, so the visitor receives a fully rendered page with fresh data.'
+description: 'What server-side rendering means, when to use it, and how it compares to static generation and client-side rendering.'
+related:
+  - static-site-generation
+  - client-side-rendering
+  - ssg-vs-ssr
+  - hydration
+  - edge-rendering
+lastReviewed: '2026-10-10'
+---
+
+## How it works
+
+A request hits a server (or an edge function). The framework runs the page code, fetches data, renders HTML, and sends it. The browser shows content immediately, then [hydrates](/glossary/hydration) any interactive parts.
+
+## When to use it
+
+- Pages depend on the request: logged-in users, cookies, location
+- Data must be fresh on every view
+- There are too many pages to pre-build
+
+## Costs
+
+Every view runs code, so you pay for compute and need to care about response times and caching.
+
+## For marketing sites
+
+Most marketing pages don't need SSR. They change a few times a week, so static generation is faster and cheaper. Frameworks let you use SSR only for the routes that need it.

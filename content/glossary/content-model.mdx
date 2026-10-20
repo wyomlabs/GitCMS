@@ -1,0 +1,31 @@
+---
+title: 'Content model'
+category: content
+definition: 'A content model defines the types of content on a website and the fields each type has, such as a blog post with a title, date, author, and body.'
+description: 'What a content model is, why it matters before you build a site, and how it maps to files on a code-first website.'
+related:
+  - structured-content
+  - content-collections
+  - frontmatter
+lastReviewed: '2026-10-10'
+---
+
+## Example
+
+| Type | Fields |
+|---|---|
+| Blog post | title, description, date, author, tags, body |
+| Case study | client, industry, results, quote, body |
+| Location page | city, phone, hours, services, body |
+
+## Why it matters
+
+A good content model lets the same content render in many places (cards, pages, feeds) and keeps editors from breaking layouts. A bad one forces copy into the wrong fields or into components.
+
+## On a code-first website
+
+The content model lives in code: a collection schema in Astro, or the frontmatter fields your templates read. Each content type is a folder of files, and each field is a frontmatter key.
+
+## In GitCMS
+
+GitCMS reads your collections and fields and shows them as structured forms, so editors fill in fields instead of editing raw frontmatter.

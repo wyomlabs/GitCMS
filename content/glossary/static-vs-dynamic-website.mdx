@@ -1,0 +1,34 @@
+---
+title: 'Static vs dynamic website'
+category: rendering
+definition: 'A static website serves pre-built pages that are the same for everyone; a dynamic website builds pages on a server per request, so they can change per visitor or instantly.'
+description: 'Static vs dynamic websites compared: speed, cost, security, editing, and which to choose for marketing sites, blogs, and apps.'
+related:
+  - static-website
+  - dynamic-website
+  - ssg-vs-ssr
+lastReviewed: '2026-10-10'
+---
+
+## Side by side
+
+| | Static website | Dynamic website |
+|---|---|---|
+| Pages built | Ahead of time, at build | On each request |
+| Served from | CDN or static host | Application server |
+| Speed | Very fast by default | Depends on server and caching |
+| Hosting cost | Low, often free | Server and database costs |
+| Security surface | Minimal | Server, database, plugins |
+| Content updates | Rebuild on change | Instant |
+| Personalization | Via JavaScript and APIs | Native |
+
+## Which to choose
+
+- **Marketing sites, blogs, docs, portfolios:** static. Content changes a few times a week, and speed matters for search.
+- **Apps, stores with live inventory, member areas:** dynamic, at least for those parts.
+
+Modern frameworks let you mix both: static marketing pages and a few server-rendered routes in the same project.
+
+## Editing a static site
+
+The usual objection to static sites was editing: no admin panel. A [Git-based CMS](/glossary/git-based-cms) solves that by editing the content files and committing them, which triggers a rebuild.

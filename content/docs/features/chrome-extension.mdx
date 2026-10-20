@@ -1,0 +1,44 @@
+---
+title: Browser Extension
+description: Open GitHub repositories, Markdown files, and folders in GitCMS with browser shortcuts for Chrome and Firefox.
+---
+
+**GitCMS — Open GitHub Content** connects GitHub repositories, Markdown/MDX files, and folders to [GitCMS](https://gitcms.dev), the visual CMS for code-first websites. The extension is a free companion: editing, site configuration, reviews, and publishing happen in the web app.
+
+## Install
+
+- **Chrome:** [GitCMS on the Chrome Web Store](https://chromewebstore.google.com/detail/gitcms-headless-cms-for-y/pemglpclheejlbobifgdbjjofdhmiafm). The updated listing will reflect the new name after marketplace review.
+- **Firefox:** A compatible Firefox package is prepared for submission to Mozilla Add-ons. The listing link will be added after approval.
+
+The extension is free to use. Some GitCMS web-app capabilities require an account or paid access.
+
+## Open content from GitHub
+
+Use any of these shortcuts:
+
+- Right-click a GitHub repository page and choose **Open in GitCMS**.
+- Right-click a GitHub repository or content link, including links on other websites, and choose **Open in GitCMS**.
+- Click the extension's toolbar icon while viewing a GitHub repository, Markdown/MDX file, or folder.
+- Type `gitcms` in the browser address bar, trigger the keyword, then enter `owner/repo` or paste a GitHub URL and press Enter.
+
+Repository links open the repository. For Markdown/MDX files and folders, the extension includes the selected GitHub content location in the URL it opens on GitCMS. Other repository pages, such as discussions or issues, open the repository. On other websites, clicking the toolbar icon opens the GitCMS homepage.
+
+## Configured sites and public repositories
+
+GitCMS detects a repository's `.gitcms` configuration in the web app. You can select the configured site and use its collections and editor. This companion release opens a repository or passes along the selected content URL; automatically opening the exact collection entry is not yet supported for every file link.
+
+Any public repository opens in the GitCMS editor without signing in, using its `.gitcms` configuration or, when it has none, the configuration GitCMS would set up from its files. You can browse its collections, media, and site data and try the editor; saving asks you to set the site up first. Repositories GitCMS finds no website in open in the Markdown browser instead. Private content requires signing in and access to the relevant site. For a specific file or pinned version that GitCMS does not resolve automatically, use the repository browser or GitHub to navigate to it.
+
+This release supports GitHub.com. Raw-file URLs, GitHub Enterprise, and other providers are not supported.
+
+## Permissions and privacy
+
+The extension requests permission to add context-menu shortcuts and to read the active tab's URL after you click its toolbar icon. It processes the selected URL locally and opens the corresponding GitCMS location only when you invoke a shortcut.
+
+It does not inject buttons or editor code into GitHub, request permanent access to websites, store credentials or repository configuration, or send extension analytics. The selected repository and content location are included in the GitCMS destination URL. Once the web app opens, its normal sign-in and privacy practices apply.
+
+## Moving from the previous Chrome extension
+
+The previous GitHub-embedded editor has moved to the web app. The updated extension provides shortcuts to that experience. It does not read, transfer, or delete configuration or license data stored by the previous extension.
+
+Refresh GitHub tabs that were open during the update to remove the previous injected editor.

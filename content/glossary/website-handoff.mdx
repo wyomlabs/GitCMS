@@ -1,0 +1,27 @@
+---
+title: 'Website handoff'
+category: operations
+definition: 'A website handoff is the point where the team that built a site gives the client or another team the ability to run it, including access, editing, and publishing.'
+description: 'What a good website handoff includes, especially for sites built with coding agents, and how to avoid becoming the client’s content operator.'
+related:
+  - day-two
+  - ai-built-website
+  - content-approval-workflow
+lastReviewed: '2026-10-10'
+---
+
+## Why handoffs fail
+
+Most handoffs hand over a login and a hope. With builder sites, the client got an admin. With code-first sites built by agents, there's often nothing to hand over except the repository, so every small change comes back to the builder.
+
+## What a good handoff includes
+
+- Editable content separated from code (content files, not hardcoded copy)
+- An editor the client can use without Git
+- Access scoped to the client's site only
+- A clear split: the client owns copy and posts, the builder owns design and features
+- A review step when the builder needs to approve changes
+
+## In GitCMS
+
+Connect the client's repository, invite the client with access to their site, and choose whether their changes publish directly or wait for review. See the full [handoff guide](/blog/hand-off-claude-code-website-to-client).

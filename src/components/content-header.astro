@@ -1,0 +1,59 @@
+---
+import { GitCMSLogo } from '@/components/gitcms-logo'
+import { loginUrl } from '@/lib/start-login'
+
+const getStartedUrl = loginUrl()
+---
+<header class="border-b border-neutral-100">
+  <div class="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 sm:py-5">
+    <div class="flex items-center justify-between gap-3">
+      <a href="/" class="flex items-center gap-2.5">
+        <GitCMSLogo className="size-8" />
+        <span class="font-logo text-2xl font-medium tracking-tight sm:text-3xl">GitCMS</span>
+      </a>
+
+      <div class="hidden items-center gap-8 md:flex">
+        <nav aria-label="Primary" class="flex items-center gap-6 text-base text-neutral-500">
+          <a href="/for" class="transition-colors hover:text-neutral-900">Who It's For</a>
+          <a href="/agents" class="transition-colors hover:text-neutral-900">Agents</a>
+          <a href="/#pricing" class="transition-colors hover:text-neutral-900">Pricing</a>
+          <a href="/docs" class="transition-colors hover:text-neutral-900">Docs</a>
+          <a href="/blog" class="transition-colors hover:text-neutral-900">Blog</a>
+          <a href="/changelog" class="transition-colors hover:text-neutral-900">Changelog</a>
+          <a href="/manifesto" class="transition-colors hover:text-neutral-900">Manifesto</a>
+        </nav>
+        <a
+          href={getStartedUrl}
+          class="shrink-0 rounded-lg bg-neutral-900 px-4 py-1.5 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
+        >
+          Get Started
+        </a>
+      </div>
+
+      <details class="group relative md:hidden">
+        <summary
+          class="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-700 transition-colors hover:bg-neutral-100 [&::-webkit-details-marker]:hidden"
+          aria-label="Open menu"
+        >
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-5">
+            <path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"></path>
+          </svg>
+        </summary>
+        <nav
+          aria-label="Mobile primary"
+          class="absolute right-0 z-50 mt-2 w-56 rounded-xl border border-neutral-200 bg-white p-2 text-sm shadow-xl"
+        >
+          <a href="/for" class="block rounded-lg px-3 py-2 hover:bg-neutral-100">Who It's For</a>
+          <a href="/agents" class="block rounded-lg px-3 py-2 hover:bg-neutral-100">Agents</a>
+          <a href="/#pricing" class="block rounded-lg px-3 py-2 hover:bg-neutral-100">Pricing</a>
+          <a href="/docs" class="block rounded-lg px-3 py-2 hover:bg-neutral-100">Docs</a>
+          <a href="/blog" class="block rounded-lg px-3 py-2 hover:bg-neutral-100">Blog</a>
+          <a href="/changelog" class="block rounded-lg px-3 py-2 hover:bg-neutral-100">Changelog</a>
+          <a href="/manifesto" class="block rounded-lg px-3 py-2 hover:bg-neutral-100">Manifesto</a>
+          <div class="my-1 border-t border-neutral-100"></div>
+          <a href={getStartedUrl} class="block rounded-lg px-3 py-2 font-medium hover:bg-neutral-100">Get Started</a>
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>

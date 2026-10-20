@@ -1,0 +1,33 @@
+---
+title: 'Repository'
+category: git
+definition: 'A repository (repo) is a project folder tracked by Git, containing a website’s code, content, and configuration along with their full change history.'
+description: 'What a repository is, what a website repository usually contains, and why it is the source of truth for a code-first site.'
+related:
+  - git
+  - commit
+  - monorepo
+  - code-first-website
+lastReviewed: '2026-10-10'
+---
+
+## What's inside a website repository
+
+```text
+my-site/
+├── src/            pages, components, layouts
+├── src/content/    blog posts, pages, case studies (Markdown/MDX)
+├── public/         images and static files
+├── package.json    dependencies and scripts
+└── .gitcms/        GitCMS configuration
+```
+
+Repositories are usually hosted on GitHub, GitLab, or Bitbucket, where hosts connect to them for deployment.
+
+## The source of truth
+
+On a code-first website, the repository is the website. Whatever is in the main branch is what gets deployed. That's why a CMS for a code-first site should write to the repository instead of keeping its own database.
+
+## In GitCMS
+
+GitCMS connects to GitHub repositories, reads the sites and content in them, and commits changes back. A repository can contain more than one site.

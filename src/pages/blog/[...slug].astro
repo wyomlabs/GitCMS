@@ -1,0 +1,99 @@
+---
+import { render } from 'astro:content'
+import defaultMdxComponents from 'fumadocs-ui/mdx'
+import { Callout } from 'fumadocs-ui/components/callout'
+import { Steps, Step } from 'fumadocs-ui/components/steps'
+import { Card, Cards } from 'fumadocs-ui/components/card'
+import { InlineTOC } from 'fumadocs-ui/components/inline-toc'
+import ContentLayout from '@/layouts/ContentLayout.astro'
+import { BlogPostHeader } from '@/components/blog/blog-post-header'
+import { BlogTOCSidebar } from '@/components/blog/blog-toc'
+import { BlogPostFooter } from '@/components/blog/blog-post-footer'
+import ImageZoom from '@/components/docs/image-zoom.astro'
+import { getPublishedPosts, getRelatedPosts, readingTimeFromStructuredData } from '@/lib/content'
+import { structure } from 'fumadocs-core/mdx-plugins'
+
+export async function getStaticPaths() {
+  const paths = []
+  for (const post of await getPublishedPosts()) {
+    const slug = post.id.replace(/\.mdx?$/, '')
+    paths.push({ params: { slug }, props: { post } })
+    for (const redirect of post.data.redirects ?? []) {
+      paths.push({ params: { slug: redirect.replace(/^\/+|\/+$/g, '') }, props: { redirectTo: `/blog/${slug}` } })
+    }
+  }
+  return paths
+}
+
+const { post, redirectTo } = Astro.props
+if (redirectTo) return Astro.redirect(redirectTo, 301)
+if (!post) throw new Error('Blog post route is missing its post')
+
+const { Content, headings } = await render(post)
+const slug = post.id.replace(/\.mdx?$/, '')
+const toc = headings
+  .filter((heading) => heading.depth >= 2 && heading.depth <= 3)
+  .map((heading) => ({ title: heading.text, url: `#${heading.slug}`, depth: heading.depth }))
+const readingTime = readingTimeFromStructuredData(structure(post.body ?? ''))
+const relatedPosts = await getRelatedPosts(slug, post.data.tags, post.data.category, 3)
+const postPath = `/blog/${slug}`
+const ogImage = `${postPath}/og.png`
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.date,
+  dateModified: post.data.updatedDate ?? post.data.date,
+  author: { '@type': 'Person', name: post.data.authors[0], url: 'https://gitcms.dev' },
+  publisher: { '@type': 'Organization', name: 'GitCMS', url: 'https://gitcms.dev' },
+  url: `https://gitcms.dev${postPath}`,
+  image: `https://gitcms.dev${ogImage}`,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': `https://gitcms.dev${postPath}` },
+}
+const mdxComponents = { ...defaultMdxComponents, Callout, Steps, Step, Card, Cards, img: ImageZoom }
+---
+<ContentLayout
+  title={`${post.data.title} — GitCMS Blog`}
+  description={post.data.description}
+  path={postPath}
+  ogImage={ogImage}
+  type="article"
+  publishedTime={post.data.date}
+  authors={post.data.authors}
+  structuredData={structuredData}
+>
+  <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
+    <BlogPostHeader
+      title={post.data.title}
+      description={post.data.description}
+      date={post.data.date}
+      updatedDate={post.data.updatedDate}
+      authors={post.data.authors}
+      readingTime={readingTime}
+      category={post.data.category}
+      tags={post.data.tags}
+    />
+
+    {toc.length > 0 && (
+      <div class="mt-8 lg:hidden">
+        <InlineTOC items={toc} client:load>On this page</InlineTOC>
+      </div>
+    )}
+
+    <div class="mt-10 grid grid-cols-1 gap-16 lg:grid-cols-[1fr_260px]">
+      <article class="min-w-0">
+        <div class="prose prose-neutral prose-lg max-w-none prose-headings:font-logo prose-headings:font-medium prose-headings:tracking-tight prose-a:text-neutral-900 prose-a:underline-offset-2 [&_:is(h1,h2,h3,h4,h5,h6)_a]:no-underline">
+          <Content components={mdxComponents} />
+        </div>
+      </article>
+      {toc.length > 0 && (
+        <aside class="hidden lg:block lg:-mt-20">
+          <BlogTOCSidebar toc={toc} shareTitle={post.data.title} client:load />
+        </aside>
+      )}
+    </div>
+
+    <BlogPostFooter relatedPosts={relatedPosts} />
+  </div>
+</ContentLayout>

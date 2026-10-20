@@ -1,0 +1,152 @@
+---
+title: CLI Onboarding
+description: Use create-gitcms to detect site structure, generate .gitcms config, and bootstrap single-site or monorepo repositories.
+---
+
+GitCMS includes an onboarding CLI (`create-gitcms`) that scans your repository and generates `.gitcms` configuration automatically.
+
+It is useful when:
+
+- You are setting up GitCMS for the first time.
+- You have a monorepo with multiple sites.
+- You want a repeatable, scriptable setup flow.
+
+## Quick start
+
+Run from your repository root:
+
+```bash
+npm init gitcms@latest
+```
+
+For non-interactive setup (accept inferred defaults):
+
+```bash
+npx create-gitcms@latest --yes
+```
+
+![CLI onboarding output for a single-site repository](/images/docs/screenshots/cli-onboarding-single.webp)
+
+## What the CLI infers
+
+The CLI inspects your repository and infers:
+
+- Site roots (single-site or monorepo)
+- Each site's website address, from the site's own config (Astro `site`, Hugo `baseURL`, Jekyll `url`, Docusaurus `url`, Gatsby `siteUrl`, `next-sitemap` `siteUrl`, or `package.json` `homepage`)
+- Framework defaults (repository media root, frontmatter format)
+- Collections and content paths
+- i18n hints from locale-folder patterns
+
+## Mode selection
+
+`--mode` controls how site roots are resolved:
+
+| Mode | Behavior |
+|------|----------|
+| `auto` (default) | Detects whether your repo looks like single-site or monorepo |
+| `single` | Forces a single site at repository root |
+| `monorepo` | Detects or uses explicit site roots |
+
+Examples:
+
+```bash
+# Auto mode (default)
+npm init gitcms@latest
+
+# Force monorepo mode with explicit site roots
+npx create-gitcms@latest --mode monorepo --site-root apps/docs --site-root apps/blog
+```
+
+## Website URL mapping
+
+Every site needs its own website address. The CLI reads it from each site's config; use `--website-url` only for sites where it can't (starter placeholders like `example.org` are ignored), or to override what it found.
+
+Supported forms:
+
+- Site-root mapping: `--website-url apps/docs=https://docs.example.com`
+- One URL, for a repository with a single site: `--website-url https://example.com`
+- Ordered URLs for the sites without a mapping: repeat `--website-url`
+
+With `--yes`, a site without an address stops the run and names the site to map.
+
+Example:
+
+```bash
+npx create-gitcms@latest --mode monorepo \
+  --site-root apps/docs \
+  --site-root apps/blog \
+  --website-url apps/docs=https://docs.example.com \
+  --website-url apps/blog=https://blog.example.com
+```
+
+![CLI onboarding output for a monorepo with URL mapping](/images/docs/screenshots/cli-onboarding-monorepo.webp)
+
+## Adding sites to a repository
+
+Run the CLI again after adding a site to the repository. Sites already listed in `.gitcms/sites.jsonc` are left unchanged and reported as already set up; only new sites are added to the manifest. Use `--force` to regenerate the config of sites that are already set up; other sites in the manifest are still kept.
+
+## Finishing in GitCMS
+
+The CLI ends with the next steps: commit and push the `.gitcms` folder, then open the link it prints. GitCMS reads `.gitcms` from the repository and opens every site listed there; nothing needs to be set up again in the web app.
+
+## Agentic onboarding
+
+Use this prompt with a coding agent:
+
+```text
+You are onboarding GitCMS for repository <owner>/<repo>.
+
+Use create-gitcms to generate `.gitcms` configuration for each real content site in this repo.
+Inspect the repo first, then prefer the CLI over hand-writing config.
+
+Preferred commands from repo root:
+- Interactive: npm init gitcms@latest
+- Agentic: npx create-gitcms@latest --yes [--mode ...] [--site-root ...] [--website-url ...] [--dry-run] [--force]
+
+Flag guidance:
+- Prefer auto detection first.
+- Use --mode single or --mode monorepo only when the repo structure is clear and you want to lock it in.
+- Use repeatable --site-root only to override or narrow monorepo site detection.
+- Each site needs its own website_url. The CLI reads it from each site's framework config; pass --website-url <siteRoot>=<url> only for sites it reports as missing.
+- Use --dry-run to verify detected output paths before writing.
+- Re-running is safe: sites already in `.gitcms/sites.jsonc` are left unchanged and new sites are added.
+- Use --force only when regenerating config for sites that are already set up is intended.
+
+Ask the user only if:
+- multiple site-root choices are plausible and inspection cannot resolve them safely
+- website_url is unclear or cannot be inferred safely
+
+After running the CLI, report the created or updated `.gitcms` paths and any warnings, then commit and push `.gitcms`.
+```
+
+## Safety flags
+
+- `--dry-run`: preview inferred config paths without writing files
+- `--force`: regenerate config for sites that are already set up (other sites in the manifest are kept)
+
+Example:
+
+```bash
+npx create-gitcms@latest --mode monorepo --dry-run
+```
+
+## i18n notes
+
+The CLI can detect locale-folder patterns and suggest i18n setup.
+
+If it cannot safely infer a default locale for unprefixed layouts, it warns and leaves site-level i18n default for manual confirmation in Settings.
+
+## Checking and upgrading configuration
+
+- `npx create-gitcms check` reads each site's configuration the way GitCMS does and names any broken file. Run it after editing `.gitcms` by hand or with an agent; it exits with an error when something needs fixing.
+- `npx create-gitcms migrate` previews upgrading older configuration; add `--write` to apply it.
+
+## Output locations
+
+- Repository manifest: `.gitcms/sites.jsonc`
+- Per-site settings: `.gitcms/sites/<site_key>/config.jsonc`
+- Collections and site data: `.gitcms/sites/<site_key>/collections/<name>.jsonc` and `singletons/<name>.jsonc`
+- Guides: `.gitcms/README.md`, and `.gitcms/AGENTS.md` for coding agents
+- Site instructions: `<site-root>/CONTENT.md`
+
+After onboarding, push `.gitcms` and open the link the CLI prints. Review framework, collection, and i18n details later in each site's settings.

@@ -1,0 +1,35 @@
+---
+title: 'MDX'
+category: content
+definition: 'MDX is Markdown that can also include JSX components, letting content files embed interactive or custom elements like callouts, tabs, or charts.'
+description: 'What MDX is, how it differs from Markdown, and how to keep MDX content editable for non-developers.'
+related:
+  - markdown
+  - frontmatter
+  - content-collections
+lastReviewed: '2026-10-10'
+---
+
+## Example
+
+```mdx
+import { Callout } from '../components/Callout'
+
+# Pricing update
+
+Our Pro plan now includes unlimited projects.
+
+<Callout type="info">Existing customers keep their current price.</Callout>
+```
+
+## Where it's used
+
+Docs sites (Docusaurus, Nextra, Fumadocs), Astro and Next.js blogs, and changelogs use MDX when plain Markdown isn't enough.
+
+## The tradeoff
+
+Components make content richer but more fragile. A missing closing tag or a wrong prop can break the build, and non-developers rarely know which components exist.
+
+## Keeping it editable
+
+Use a small set of well-named components, and edit them through a CMS that understands them instead of raw text. GitCMS edits MDX entries and has beta support for custom components.

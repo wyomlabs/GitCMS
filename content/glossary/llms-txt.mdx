@@ -1,0 +1,37 @@
+---
+title: 'llms.txt'
+category: seo
+definition: 'llms.txt is a proposed convention for a Markdown file at a website’s root that gives AI systems a concise overview of the site and links to its most useful content.'
+description: 'What llms.txt is, what to put in it, and how much it matters for AI visibility.'
+related:
+  - aeo
+  - geo
+  - robots-txt
+  - markdown
+lastReviewed: '2026-10-10'
+---
+
+## Example
+
+```md
+# Example Co.
+
+> Example Co. is a plumbing company serving Austin, Texas, with 24/7 emergency call-outs.
+
+## Services
+- [Emergency plumbing](https://example.com/emergency/): Response in under an hour
+- [Water heaters](https://example.com/water-heaters/): Repair and installation
+
+## Docs
+- [Pricing](https://example.com/pricing.md)
+```
+
+The proposal is at [llmstxt.org](https://llmstxt.org). Some sites also publish `llms-full.txt` with full content, and Markdown versions of pages.
+
+## Does it matter?
+
+Support varies across AI systems, and it's not a ranking signal. It's cheap to generate from data you already have, and it gives agents and tools a clean map of your site. Treat it as a nice-to-have, not a strategy.
+
+## On code-first sites
+
+Generate it at build time from your pages and content collections, with the same one-sentence description you use everywhere else.

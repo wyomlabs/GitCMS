@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" fill="none">
+  <rect width="1280" height="720" fill="#F8FAFC"/>
+  <rect x="80" y="80" width="1120" height="560" rx="16" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="2"/>
+  <rect x="120" y="140" width="1040" height="64" rx="10" fill="#E2E8F0"/>
+  <rect x="120" y="236" width="680" height="28" rx="8" fill="#E2E8F0"/>
+  <rect x="120" y="282" width="420" height="28" rx="8" fill="#E2E8F0"/>
+  <rect x="120" y="360" width="1040" height="220" rx="12" fill="#F1F5F9" stroke="#E2E8F0"/>
+  <text x="640" y="400" text-anchor="middle" fill="#0F172A" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-size="34" font-weight="600">Screenshot Placeholder</text>
+  <text x="640" y="444" text-anchor="middle" fill="#475569" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" font-size="22">Replace this image with an actual UI screenshot.</text>
+</svg>

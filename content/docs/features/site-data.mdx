@@ -1,0 +1,52 @@
+---
+title: Site data
+description: Let editors change menus, footers, homepage sections, and theme settings kept in JSON, YAML, or TOML files.
+---
+
+Not all of a site's content is entries. Menus, footers, team lists, homepage sections, and a theme's settings usually live in data files: `data/team.yaml`, `src/data/navigation.json`, or a Hugo site's `config.toml`. **Site data** gives these a form, so editors can change them without learning the file's syntax.
+
+## How it works
+
+Each piece of site data points at:
+
+| Setting | Description |
+|---------|-------------|
+| **Label** | What editors see in the sidebar, e.g. "Footer" |
+| **Name** | Used in the address and the config file name |
+| **Data file** | A `.json`, `.jsonc`, `.yaml`, `.yml`, or `.toml` file, from the site root |
+| **Part of the file** | Optional. Edit only one section, like `params` in a Hugo config, so build settings in the same file stay out of reach |
+| **Fields** | What editors can change. Use [Groups and Lists](/docs/features/collections#group) for nested data |
+
+Add it in **Configure → Site data**: choose the file, pick the part of it, and select **Auto-detect** to fill in the fields from what the file holds. Refine labels and types afterwards.
+
+One file can back several pieces of site data. A Hugo `config.toml`, for example, can give editors a **Navigation** page for `menu` and a **Theme settings** page for `params`, while `baseURL` and `[markup]` stay hidden.
+
+## Editing
+
+Site data appears in the sidebar under **Site data**. Saving follows the site's publishing mode, exactly like entries: with review before publishing, changes go through a draft.
+
+GitCMS writes only what changed. Comments, key order, quoting, and indentation stay as they were, so a theme's documented config keeps its documentation, and the change shows as a small diff in your repository.
+
+When you add or remove items in a TOML list, the items that stay keep their dates, times, and number formatting, and new items are written like the ones around them.
+
+Before saving, every field is checked against its rules, including fields inside groups and list items, from the editor and from AI agents alike.
+
+If someone else saves the same file while you have unsaved changes, your changes stay and the page says a newer version exists. Saving then won't overwrite their work: reload to see the latest version first.
+
+A few things in hand-written files have limits:
+
+- **Reordering list items** moves the items, but a comment written beside an item stays at its position, so it can end up next to a different item.
+- **YAML anchors and aliases** (`&base`, `*base`, `<<: *base`) share one value between places. A part of the file that uses them can't be edited in GitCMS; point the site data at a section without them.
+
+## How the form is laid out
+
+- Each top-level group or list is a tab, and plain values share a **General** tab. Tabs that don't fit go under **+N more**.
+- Plain values come first, then groups and lists.
+- Groups and lists are cards. A card shows one level at a time: anything nested inside it is a one-line summary that opens in place, and the card's title becomes the path back.
+- Lists show by what their items hold: a list of single words, like tags, is a set of chips; items with a few short fields, like social links, are an editable table you can reorder by dragging; richer items open one at a time.
+
+## Tips
+
+- **Point at the narrowest part of the file.** Editors only see the fields you list, and keys you leave out are never changed.
+- **Name list items.** Set a list's item label, like `{name}`, so editors find the item they want at a glance.
+- **Prefer choices for technical values.** An icon class like `fa-brands fa-github` is easier to pick from a Select field's options than to type.

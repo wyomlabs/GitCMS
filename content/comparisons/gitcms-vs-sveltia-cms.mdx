@@ -1,0 +1,249 @@
+---
+title: 'GitCMS vs Sveltia CMS'
+description: 'Sveltia CMS is a modern, free replacement for Decap CMS. GitCMS is a hosted CMS for code-first websites, with review before publish, roles, and AI agents. Here''s when each fits.'
+competitor: 'Sveltia CMS'
+category: 'Git-based CMS'
+lastReviewed: '2026-04-16'
+order: 15
+---
+
+Sveltia CMS is what Decap CMS should have become. It is a drop-in replacement — same config format, same API compatibility — but with a modernized UI, better performance, stronger i18n support, and fixes for hundreds of longstanding issues that Decap never addressed. Built with Svelte, it runs entirely in the browser as a lightweight JavaScript bundle.
+
+If you are currently using Decap CMS and want a better experience without changing your setup, Sveltia CMS is probably the shortest path to an upgrade.
+
+GitCMS is solving a different problem. It does not try to be a better Decap — it rethinks the editing experience entirely with a visual editor for clients and marketers, review workflows, and AI agent integration through MCP. The content model is the same (markdown files in Git), but the tool built on top of it is different.
+
+## What changed in 2026
+
+Git-based CMSs started as tools for developers who already preferred static sites and Markdown. That audience still exists. But a much larger group now arrives at the same architecture by a different road: they had Claude Code, Codex, or Cursor build the site, and the site naturally lives in Git.
+
+That group doesn't mainly need a nicer way for developers to edit Markdown. They need **Day Two**: a way for clients and marketers to run the site without Git, and a way to review what AI agents change before it goes live. Sveltia CMS is a fast, free, modern replacement for Decap. GitCMS is built around that Day Two workflow: a hosted admin you connect to an existing repo, review before publish, and bring-your-own agents through MCP.
+
+## The short verdict
+
+<Verdict>
+  <VerdictCompetitor title="Sveltia CMS">
+    - You are migrating from Decap CMS and want a drop-in replacement with better UX
+    - You want a free, open-source, browser-based CMS with no server dependency
+    - Your team is comfortable with the Decap/Netlify CMS config format
+    - You need strong i18n support for multi-language content
+  </VerdictCompetitor>
+  <VerdictGitCMS>
+    - Your site was built with code or a coding agent and already deploys
+    - Clients and marketers edit without Git, and changes are reviewed before publishing
+    - You want ChatGPT, Claude, or other MCP agents drafting through the same workflow
+    - You want review before publish and roles, not just a better admin panel
+  </VerdictGitCMS>
+</Verdict>
+
+## Two approaches to improving on Decap
+
+Decap CMS proved that markdown-in-git works as a CMS. But its editor aged, development stalled, and the tool fell behind modern expectations. Sveltia CMS and GitCMS both respond to that gap — but in very different ways.
+
+### Sveltia CMS: polish the same model
+
+Sveltia CMS keeps Decap's architecture and improves the execution. Same YAML config format. Same widget-based editing model. Same browser-based admin panel. But the UI is cleaner, the performance is better, the i18n support is stronger, and hundreds of Decap's bugs are fixed.
+
+This is the right approach when you are already on Decap. Migration is nearly zero-effort — swap the script tag, keep your config, get a better tool. For teams with existing Decap setups, Sveltia is the pragmatic upgrade.
+
+### GitCMS: rethink the model
+
+GitCMS does not start from Decap's architecture. The editor is a Notion-like writing surface, not a widget-based form. The workflow uses Git branches as first-class drafts and PRs as review. AI assistants connect through MCP to draft, edit, and manage content.
+
+This is a bigger change. You cannot drop GitCMS into an existing Decap setup. But for teams building a content workflow from scratch — or teams that outgrew Decap's widget model — GitCMS offers a fundamentally different editing experience.
+
+## The editor gap
+
+This is the core difference.
+
+Sveltia CMS modernizes Decap's widget-based editor. Fields are cleaner, the UI is more polished, interactions are smoother. But the model is still form-based — you fill in fields, each mapped to a frontmatter key or content area.
+
+GitCMS gives you a **Notion-like block editor**. Rich text, slash commands, drag-and-drop blocks, inline formatting. Writing a blog post feels like writing in Notion, not filling out a form.
+
+For short content with structured fields (product entries, data-heavy pages), a form-based editor can be more natural. For long-form content (blog posts, docs, guides), a writing-focused editor is usually better.
+
+## The markdown-in-git approach works
+
+Both tools agree on this. And it is the right bet.
+
+<CaseStudy
+  title="Markdown-in-git scales: the Cursor migration"
+  logo={{ src: '/ai-logos/cursor.svg', alt: 'Cursor' }}
+  source="Lee Robinson — Coding Agents & Complexity Budgets"
+  sourceUrl="https://leerob.com/agents"
+  stats={[
+    { label: 'Migration cost', value: '$260' },
+    { label: 'Build speed improvement', value: '2x faster' },
+    { label: 'CDN savings (prior spend)', value: '$56,848' },
+    { label: 'Commits in one weekend', value: '67' },
+  ]}
+>
+  <p>
+    Cursor's engineering team migrated their content site — engineering blog, product changelog, and docs — from an API-based CMS back to markdown files in their codebase. The migration took one weekend using AI agents, cost $260 in tokens, and resulted in 2x faster builds.
+  </p>
+  <p>
+    This validates the thesis that all git-based CMSs share. The real question is not whether files-in-git work — they do. The question is what editing and workflow experience sits on top.
+  </p>
+</CaseStudy>
+
+## AI agents and MCP
+
+AI coding agents work natively with markdown files. Both tools benefit from this shared foundation.
+
+The gap is in structured workflows. Writers in 2026 use AI assistants daily — for outlines, first drafts, SEO checks, rewrites, and tone adjustments. A CMS that integrates with those assistants makes AI a natural part of the content workflow.
+
+GitCMS's **MCP app** turns AI assistants like ChatGPT, Claude, and other MCP-compatible agents into content agents. They can create drafts on branches, edit posts, manage collections, and submit changes for review. GitCMS handles the git workflow underneath.
+
+Sveltia CMS does not have MCP support or an AI integration layer. It inherits Decap's model, which predates the AI-assisted content workflow era.
+
+## Feature comparison
+
+<FeatureTable
+  competitor="Sveltia CMS"
+  rows={[
+    {
+      category: 'Content storage',
+      gitcms: 'Markdown files in Git',
+      competitor: 'Markdown files in Git',
+      note: 'Same model — both store content as files in a repo',
+    },
+    {
+      category: 'Version control',
+      gitcms: 'native',
+      competitor: 'native',
+    },
+    {
+      category: 'Branching and drafts',
+      gitcms: 'native',
+      competitor: 'Editorial workflow (Decap-compatible)',
+      note: 'GitCMS uses branches as first-class UI. Sveltia inherits Decap editorial workflow.',
+    },
+    {
+      category: 'Editor experience',
+      gitcms: 'Notion-like block editor',
+      competitor: 'Modernized widget-based editor',
+      note: 'Sveltia polishes Decap widgets. GitCMS offers a different editing model.',
+    },
+    {
+      category: 'Markdown / MDX support',
+      gitcms: 'native',
+      competitor: 'native',
+    },
+    {
+      category: 'Configuration',
+      gitcms: 'Type-safe config',
+      competitor: 'YAML config (Decap-compatible)',
+      note: 'Sveltia keeps Decap config format for easy migration',
+    },
+    {
+      category: 'Internationalization',
+      gitcms: 'File-based (i18n folders)',
+      competitor: 'First-class i18n support',
+      note: 'Sveltia has stronger built-in i18n than most git-based CMSs',
+    },
+    {
+      category: 'Decap CMS migration',
+      gitcms: 'Requires setup change',
+      competitor: 'Drop-in replacement',
+      note: 'Sveltia is the easiest path from Decap — same config, same API',
+    },
+    {
+      category: 'Infrastructure',
+      gitcms: 'Hosted or self-hosted',
+      competitor: 'Browser-based (no server)',
+      note: 'Sveltia runs entirely in the browser as a JS bundle',
+    },
+    {
+      category: 'AI agent workflow',
+      gitcms: 'Native + MCP app for ChatGPT/Claude',
+      competitor: 'not-core',
+      note: 'GitCMS turns AI assistants into content agents via MCP',
+    },
+    {
+      category: 'Open source',
+      gitcms: 'yes',
+      competitor: 'yes',
+    },
+    {
+      category: 'Vendor lock-in',
+      gitcms: 'Low (markdown files are portable)',
+      competitor: 'Low (markdown files are portable)',
+    },
+  ]}
+/>
+
+## Pricing
+
+<PricingCompare
+  competitorName="Sveltia CMS"
+  gitcms={{
+    note: 'Includes the editor, MCP app, and branch workflows.',
+  }}
+  competitor={{
+    free: 'Free forever (MIT licensed)',
+    paid: 'No paid tier',
+    note: 'Completely free and open-source. No hosted dependency.',
+  }}
+/>
+
+Sveltia CMS is free. Like Decap before it, the browser-based model means zero hosting cost for the CMS itself. If your budget is zero and Sveltia's editor meets your needs, the price cannot be beat.
+
+GitCMS costs money because you are paying for a different class of editing experience, AI integration, and structured editorial workflow.
+
+## Where Sveltia CMS is genuinely better
+
+Sveltia CMS is the stronger choice when you are **upgrading from Decap CMS** or when **free and simple matters most**.
+
+If your team:
+
+- Is currently on Decap CMS and wants a better version of the same thing
+- Wants a free, open-source CMS with zero hosting dependency
+- Needs strong i18n support for multi-language content
+- Is comfortable with widget-based editing and YAML configuration
+- Wants the easiest possible migration path from Netlify CMS / Decap CMS
+
+Then Sveltia CMS is the pragmatic choice. It fixes Decap's problems without changing the model.
+
+## Where GitCMS is better
+
+GitCMS is better when **you want a different editing experience, not just a better version of Decap's**.
+
+The widget-based editor model — even polished — is still filling out forms. If your content is docs, blog posts, changelogs, and marketing pages, a Notion-like editor is a more natural writing surface.
+
+GitCMS also adds:
+
+- **Branch-based drafts** and **PR review** as first-class workflow
+- **MCP integration** for AI-assisted drafting, SEO, and content operations
+- **Active product development** with a dedicated team and roadmap
+- A **modern writing experience** that non-technical editors adopt without training
+
+For teams building a content workflow from scratch — or outgrowing the widget-based model — GitCMS is the larger step forward.
+
+<Tradeoffs>
+  <p>Choosing GitCMS over Sveltia CMS is a real tradeoff:</p>
+  <ul>
+    <li>Sveltia CMS is completely free. GitCMS requires a paid site license. For zero-budget projects, Sveltia has the advantage.</li>
+    <li>Sveltia is a drop-in Decap replacement. If you are on Decap, the migration is nearly zero effort. Moving to GitCMS requires a real setup change.</li>
+    <li>Sveltia has stronger built-in i18n support than GitCMS.</li>
+    <li>Sveltia runs entirely in the browser with no server dependency. The operational model is as simple as it gets.</li>
+  </ul>
+  <p>For teams where the writing experience matters — where a Notion-like editor and AI-assisted workflows change how content gets created — these tradeoffs are usually worth it. You get a fundamentally better editing experience and a workflow designed for how teams work in 2026.</p>
+</Tradeoffs>
+
+## Decision by use case
+
+**Upgrading from Decap CMS with minimal effort:** Sveltia CMS is the obvious choice.
+
+**Building a content workflow from scratch with a modern editor:** GitCMS is the better fit.
+
+**Zero budget, simple content site:** Sveltia CMS is the right answer.
+
+**Team publishing docs, blog, changelog with AI-assisted workflows:** GitCMS is the better fit.
+
+**Multi-language content with strong i18n needs:** Sveltia CMS has an edge.
+
+**Non-technical writers who need a Notion-like editing experience:** GitCMS is the better fit.
+
+<CompareCTA
+  description="Same Git foundation, built for clients, marketers, and agents."
+/>

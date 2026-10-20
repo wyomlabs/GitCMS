@@ -1,0 +1,141 @@
+---
+title: "Best CMS for AI-Built Websites in 2026"
+description: |
+  Built your site with Claude Code, Codex, or Cursor? An honest comparison of CMS options for AI-built websites, and how to choose by who edits, who reviews, and where content lives.
+date: "2026-10-10"
+category: guides
+authors:
+  - Waishnav
+tags:
+  - cms
+  - ai-agents
+  - claude-code
+  - comparison
+---
+
+The best CMS for an AI-built website is one that edits the site you already have instead of making you rebuild it. For most sites built with Claude Code, Codex, or Cursor, that means a Git-based CMS that works on the repository directly. GitCMS is the CMS for code-first and AI-built websites; CloudCannon, TinaCMS, Decap, Keystatic, and Pages CMS are the main alternatives.
+
+A disclosure before the list: I build GitCMS. I've tried to say where each tool is stronger, including where it beats GitCMS. Weigh this accordingly, and check pricing on each vendor's site, because it changes often.
+
+## Why AI-built websites need a different kind of CMS
+
+Coding agents changed what a website is made of. A site generated with Claude Code is not a WordPress theme or a Webflow project. It's a repository: Astro or Next.js components, a few Markdown files, and a deploy on Vercel or Cloudflare.
+
+That changes the CMS question in three ways:
+
+1. **The site already exists.** You need a CMS that adopts the repository, not one that asks you to rebuild the site on its platform.
+2. **Content lives in files.** A CMS that moves content into its own database creates a second source of truth your coding agent can't see.
+3. **Agents keep editing.** The same agents that built the site will keep changing it. Someone needs to review those changes, and that someone is often not a developer.
+
+## How to choose
+
+Ask these questions before comparing features:
+
+| Question | Why it matters |
+|---|---|
+| **Who edits after launch?** | Developers can live in an admin panel or the repo. Clients and marketers need a visual editor with no Git. |
+| **Does the CMS need code in your app?** | Some CMSs add packages, schemas, or routes to your codebase. Others connect to the repository from outside. |
+| **Where does content live?** | In your repository as files, or in the vendor's database behind an API. |
+| **How do AI agents participate?** | Platform AI features, bring-your-own agents over MCP, or not at all. |
+| **Is there review before publish?** | Matters most when clients or agents make changes. |
+| **Who hosts the site?** | Some CMSs include hosting; others work with the host you already use. |
+
+## The options
+
+### GitCMS
+
+**Best for:** agencies handing AI-built sites to clients, and companies whose marketing team needs to edit a code-first site without engineering.
+
+GitCMS connects to an existing GitHub repository and gives your team, clients, and AI agents one place to edit, review, and publish. Content stays as Markdown and MDX files; every save is a commit. Clients and marketers use a visual editor and can sign in with Google. Review before publish is the default, with approvals, inline comments, and a content board. ChatGPT, Claude, and other MCP agents draft through the same workflow, and only people publish.
+
+**Where it's weaker:** it edits content, not layout. There's no visual page builder or on-page editing. It doesn't host your site. It connects to GitHub repositories only, and it's a paid product after the preview.
+
+### CloudCannon
+
+**Best for:** teams that want one platform for visual editing, builds, and hosting.
+
+CloudCannon is the most established commercial Git-based CMS. It supports many static site generators, offers visual editing on the rendered page, and can build and host your site. It now markets itself as visual editing on the stack AI already knows, and its Git workflow suits AI-written code.
+
+**Where it's weaker for this use case:** it's a platform you build around, and it's at its best when it also handles builds and hosting. If your site already deploys on Vercel or Cloudflare and you mainly need client editing and agent review, you'll use a fraction of it.
+
+### TinaCMS
+
+**Best for:** developers who want visual editing with live preview and are happy to integrate a CMS into the codebase.
+
+TinaCMS is open source and Git-backed, with strong visual editing and a GraphQL data layer. You define a schema in your project and add Tina to the site; Tina Cloud handles authentication and hosted features.
+
+**Where it's weaker for this use case:** it's an integration, not an add-on. Retrofitting it into an existing agent-built site is real work, and you maintain that integration as the site evolves.
+
+### Decap CMS and Sveltia CMS
+
+**Best for:** zero-budget projects with a developer who's comfortable with configuration files.
+
+Decap (formerly Netlify CMS) is free and open source, and proved that Git-based content editing works. You add an admin page and describe collections in a YAML config. Sveltia CMS is a modern, faster drop-in replacement with a much better interface.
+
+**Where they're weaker for this use case:** form-based editing is functional but feels dated to clients. Authentication and setup take some work, and there's no built-in path for AI agents.
+
+### Keystatic
+
+**Best for:** developer-only teams on Astro or Next.js who want schema-as-code.
+
+Keystatic, from Thinkmill, stores content as Markdown, JSON, or YAML in your repository, with a TypeScript schema and an admin UI you mount in your app. It's free and open source, with an optional Keystatic Cloud.
+
+**Where it's weaker for this use case:** it's built for developers to configure. Client-friendly review workflows and agent access aren't its focus.
+
+### Pages CMS
+
+**Best for:** small sites that need simple GitHub-based editing for free.
+
+Pages CMS is a free, open-source, lightweight editor for content in GitHub repositories, configured with a single file. It's quick to set up.
+
+**Where it's weaker for this use case:** it's intentionally minimal. Expect less around review workflows, roles, and AI agents.
+
+### Newer tools built for AI-built sites
+
+A wave of 2026 products targets the same problem. Some, like OpalSite, focus on clicking to edit elements on the rendered site and committing changes to Git. Others, like VibeMS, attach a self-hosted editor to the generated site and give agents scoped access over MCP. They're young and moving fast. If on-page editing matters more to you than review workflows, they're worth a look.
+
+### Or: move the site back to a platform
+
+**Webflow, Framer, and WordPress** remain good answers when the client wants to change layouts and design themselves, or needs plugins for e-commerce and memberships. The cost is giving up the code-first stack: performance, ownership, and the ability to keep improving the site with coding agents.
+
+## Quick comparison
+
+| | Content stays in your repo | Edits existing repo without code changes | Visual editing for clients | Review before publish | Bring-your-own AI agents | Hosting included |
+|---|---|---|---|---|---|---|
+| **GitCMS** | Yes | Yes | Yes | Yes (default) | Yes (MCP) | No |
+| **CloudCannon** | Yes | Mostly | Yes (on-page) | Yes | Via the Git workflow | Optional |
+| **TinaCMS** | Yes | No (integration) | Yes (live preview) | Paid plans | Limited | No |
+| **Decap / Sveltia** | Yes | Admin page + config | Forms | Decap: yes | Not built in | No |
+| **Keystatic** | Yes | No (integration) | Admin UI | Limited | Not built in | No |
+| **Pages CMS** | Yes | Config file | Forms | Limited | Not built in | No |
+| **Webflow / WordPress** | No | No (rebuild) | Yes | Plan-dependent | Platform AI | Yes |
+
+"Mostly" and "Limited" are judgment calls based on each product's own documentation and positioning at the time of writing.
+
+## My recommendation
+
+- **You hand client sites off:** pick a CMS that connects to the repo without code changes and lets you invite clients per site. That's the GitCMS sweet spot. See [how to hand off a Claude Code website](/blog/hand-off-claude-code-website-to-client).
+- **You want visual on-page editing and hosting in one place:** CloudCannon.
+- **You're a developer who wants deep integration and live preview:** TinaCMS or Keystatic.
+- **You have no budget and a developer on hand:** Sveltia CMS or Pages CMS.
+- **The client wants to redesign pages:** a platform like Webflow, and accept the trade.
+
+Whichever you choose, do the same first step: move the copy clients will edit out of components and into content files. Every Git-based CMS on this list depends on it.
+
+## FAQ
+
+### What is the best CMS for a website built with Claude Code?
+
+One that works with the repository Claude Code created. If non-developers will edit the site and you want their changes and your agents' changes reviewed before publishing, GitCMS is built for that. If you also want on-page editing and hosting, look at CloudCannon.
+
+### Do I need a headless CMS for an AI-built website?
+
+Usually not. A headless CMS moves content into a database behind an API, which adds a second source of truth. For most marketing sites, a Git-based CMS that edits the files your site already builds from is simpler.
+
+### Can AI agents use a CMS directly?
+
+Some CMSs expose content to agents over MCP. In GitCMS, agents like ChatGPT and Claude draft changes inside content tasks and submit them for review, and people publish. More in [how to review AI agent changes before they go live](/blog/review-ai-agent-website-changes).
+
+### Is WordPress still a good option?
+
+Yes, when the client needs plugins, themes, or full design control. It's a worse fit when the site was built as code and you want to keep improving it with coding agents.

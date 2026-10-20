@@ -1,0 +1,60 @@
+---
+title: GitCMS v1.3
+version: v1.3.0
+date: 2026-06-04
+description: GitCMS v1.3 adds Google login for invited editors, stronger invite onboarding, and broader MCP client support with OAuth and personal access tokens.
+---
+
+## v1.3.0
+
+GitCMS v1.3 makes collaboration and AI setup easier for real teams. Invited editors can join with Google, MCP OAuth now runs through the same auth system as the app, and clients that do not support OAuth can connect with scoped personal access tokens.
+
+## What's new
+
+**Google login for invited editors**
+
+Team members no longer need a GitHub account just to edit content. Invited editors, marketers, reviewers, and clients can sign in with Google and land in the workspace or site they were invited to.
+
+GitHub is still the setup path for repository owners and admins who need to install the GitCMS GitHub App or manage repository connections. Google is for collaborators who need GitCMS access without repository ownership.
+
+**Better invite signup behavior**
+
+Invite links now survive the sign-in flow more reliably. If a collaborator opens an invite while signed out, GitCMS keeps the invite context through authentication and brings them back to the right workspace with the assigned role and site access.
+
+This makes onboarding smoother for non-technical collaborators and external reviewers.
+
+**MCP OAuth moved to Better Auth**
+
+GitCMS MCP OAuth is now backed by Better Auth's OAuth provider. This gives MCP clients a cleaner authorization flow, shared session handling, dynamic client registration, and first-class support for GitCMS content scopes.
+
+The production MCP connector URL is:
+
+```text
+https://mcp.gitcms.dev
+```
+
+Use this URL when connecting ChatGPT, Claude, or another OAuth-capable MCP client.
+
+<Callout type="warn" title="Reconnect existing MCP clients">
+  If you previously connected GitCMS in ChatGPT, Claude, or another OAuth MCP
+  client, remove the existing GitCMS connector/app from that client first. Then
+  add GitCMS again from the beginning using the production connector URL above.
+</Callout>
+
+**MCP personal access tokens**
+
+Some MCP clients do not support OAuth yet. GitCMS now supports personal access tokens for static-token clients such as OpenClaw, Hermes, Manus, OpenHarness, Harness, and custom MCP clients.
+
+Tokens can be created from **Account Settings -> MCP Tokens**. Choose read-only or read-write access, set an expiration, copy the token once, and revoke it when it is no longer needed.
+
+GitCMS stores token hashes, not raw token values.
+
+**Broader agent and client compatibility**
+
+With OAuth and personal access tokens available side by side, GitCMS can support more MCP clients without forcing every tool into the same authentication model.
+
+Use OAuth for clients with a good connector flow. Use a personal access token for clients that ask for a bearer token, static token, API token, or authorization header.
+
+---
+
+[Try GitCMS ->](https://gitcms.dev)

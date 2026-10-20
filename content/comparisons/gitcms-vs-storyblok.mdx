@@ -1,0 +1,290 @@
+---
+title: 'GitCMS vs Storyblok'
+description: 'Storyblok is a visual, component-driven headless CMS. GitCMS keeps website content as files in your repo, editable by your team, clients, and AI agents. Here''s when each fits.'
+competitor: 'Storyblok'
+category: 'Headless CMS'
+lastReviewed: '2026-04-16'
+order: 6
+---
+
+Storyblok is built around a visual editing experience. If your team wants to build pages from components, preview changes in real time, and manage content through a drag-and-drop interface, Storyblok does that well.
+
+GitCMS is solving a different problem entirely.
+
+It is for teams whose content is fundamentally **text** — docs, blog posts, changelogs, marketing pages — stored as markdown files in a Git repo. The editing experience is a visual editor for content, not a page builder; the components stay in code, where your developers and agents build them.
+
+If your content is component-heavy, Storyblok is likely the better fit. If your content is text-heavy, keep reading.
+
+## What changed in 2026
+
+Headless CMSs solved a real problem: structured content for developers through an API, and a dashboard for editors. But in 2026, more and more websites are built and maintained by coding agents working directly in a repository.
+
+That changes the math on a visual, component-based headless CMS. Content in Storyblok is a second source of truth: your coding agent can't see it in the repo, your Git history doesn't record it, and every page has to fetch it. When an agent builds or changes a page, it has to work across two systems.
+
+For sites whose content is mostly pages and posts, keeping content as files in the repo is simpler. The agent sees everything, every change is a commit, and GitCMS gives clients and marketers the editor and review workflow the headless dashboard used to provide. That's Day Two: running the site after it ships.
+
+## The short verdict
+
+<Verdict>
+  <VerdictCompetitor title="Storyblok">
+    - Your content is component-based and needs a visual page builder
+    - Your team wants real-time visual preview while editing
+    - Marketing teams need to build and rearrange page layouts without code
+    - You need localization and multi-language content management
+  </VerdictCompetitor>
+  <VerdictGitCMS>
+    - Your site lives in a repo, often built or maintained with coding agents
+    - Content and code should share one source of truth and ship together
+    - Clients and marketers need a visual editor and review before publish
+    - You want your site's components to stay in code, built and changed by developers and agents
+  </VerdictGitCMS>
+</Verdict>
+
+## Why this choice matters more than it looks
+
+Storyblok, like other headless CMSs, stores content in a hosted backend and delivers it via API. Every page build or server render fetches content over the network:
+
+- **Build-time network I/O** — every page generation makes API calls to Storyblok. Builds scale linearly with content volume and API round-trips.
+- **Runtime latency** — for server-rendered pages, content fetching adds network hops before HTML arrives.
+- **Traffic-based costs** — Storyblok charges per API request and per GB of traffic. The Growth plan starts at $99/mo and overages add up: $75 per 250GB of extra traffic, $10 per million extra API requests.
+
+With markdown files in the repo, content is already on disk. No network hop. No API metering. Pre-rendering is pure CPU, no I/O wait.
+
+For text-heavy content sites that are readonly for end users, the visual editing layer and API delivery model solve problems that do not exist.
+
+<CaseStudy
+  title="When Cursor moved from CMS to markdown-in-code"
+  logo={{ src: '/ai-logos/cursor.svg', alt: 'Cursor' }}
+  source="Lee Robinson — Coding Agents & Complexity Budgets"
+  sourceUrl="https://leerob.com/agents"
+  stats={[
+    { label: 'Migration cost', value: '$260' },
+    { label: 'Build speed improvement', value: '2x faster' },
+    { label: 'CDN savings (prior spend)', value: '$56,848' },
+    { label: 'Commits in one weekend', value: '67' },
+  ]}
+>
+  <p>
+    Cursor's engineering team migrated their content site — engineering blog, product changelog, and docs — from an API-based CMS back to markdown files in their codebase. The migration took one weekend using AI agents, cost $260 in tokens, and resulted in 2x faster builds.
+  </p>
+  <p>
+    The abstraction layer was adding real cost: separate user management, draft preview plumbing, CDN bills that reached $56,848, and dependency bloat that made the codebase harder to reason about.
+  </p>
+  <p>
+    Their conclusion: for content-heavy sites, markdown in the repo is a simpler and more durable operating model — especially when AI agents are part of the workflow.
+  </p>
+</CaseStudy>
+
+## Content as code
+
+When content lives in markdown files inside a Git repository:
+
+- **`grep` works.** Search your entire content library with standard dev tools.
+- **`git log` works.** Every content change has a commit, an author, a timestamp, and a diff.
+- **`git blame` works.** Trace any sentence to the person or agent that wrote it.
+- **Code review works.** Content changes go through the same PR process as code changes.
+- **Deploys are atomic.** Content and code ship together. No stale cache, no API version mismatch.
+
+Storyblok's visual editor is powerful — but the content it produces lives in Storyblok's hosted backend in a proprietary component format. You cannot grep it, diff it meaningfully, or review it in a pull request. If you leave Storyblok, your content needs to be exported and transformed.
+
+## AI agents and markdown
+
+AI coding agents — Claude Code, Cursor, Windsurf, GitHub Copilot — work natively with files in a repository. When your content is markdown:
+
+- Agents can **read, write, search, and diff** content with zero special tooling
+- No API authentication, no component schema to navigate, no visual builder abstraction
+- Content is **inspectable** — an agent can open the file and understand the structure immediately
+- Every agent edit lands in a Git commit, reviewable by humans before it ships
+
+Storyblok's component-based content model is powerful for visual page building, but it is opaque to agents. An AI assistant cannot easily reason about nested component trees the way it can reason about a markdown file.
+
+GitCMS takes this further with its **MCP app** — a structured interface that turns AI assistants like ChatGPT, Claude, and other MCP-compatible agents into content agents. Agents can create drafts, edit posts, manage collections, and submit changes for review through MCP. GitCMS handles the git workflow underneath.
+
+## The shift: why visual builders matter less than they used to
+
+Visual page builders like Storyblok exist because non-technical people could not build and manage site pages without them. Drag-and-drop was the interface that bridged the gap between "I have an idea for a page" and "the page exists."
+
+That gap is closing — fast.
+
+In 2026, non-technical marketers and founders have access to **v0**, **Lovable**, **Bolt**, **Cursor**, **Claude Code**, and **Codex**. These tools let anyone describe what they want and get real, shipping code. A marketer can say "build me a pricing page with a comparison table and a CTA" and get an Astro component in minutes — not a proprietary component tree locked inside a visual builder, but actual code in a real repo that they own.
+
+This is a fundamental shift. The value proposition of visual builders was "you do not need to write code." The new reality is "AI writes the code for you, and the output is better." Real components in a real framework are more portable, more customizable, and more performant than anything a drag-and-drop builder produces.
+
+**What this means for content sites:**
+
+- The marketing site can be an **Astro site** (or Next.js, or any framework) managed with AI assistance
+- The page layouts and components live in the repo as real code — inspectable, reviewable, diffable
+- The **content** (blog posts, docs, changelogs) lives as markdown files in the same repo
+- **GitCMS** handles the content workflow — editing, review, publishing, AI-assisted drafting via MCP
+- Both the site and the content are managed through the same Git-native system
+
+This is a cleaner architecture than splitting your workflow between a visual CMS for page building and a separate tool for content. The AI agent *is* the page builder. GitCMS is the content layer.
+
+For non-technical teams, the path is no longer "learn a visual builder platform." It is "use AI agents to build your site, use GitCMS to manage your content." Both work through the same repo. Both produce portable, reviewable artifacts. No platform lock-in on either side.
+
+## Feature comparison
+
+<FeatureTable
+  competitor="Storyblok"
+  rows={[
+    {
+      category: 'Content storage',
+      gitcms: 'Markdown files in Git',
+      competitor: 'Hosted backend (component-based)',
+      note: 'Where does your content actually live?',
+    },
+    {
+      category: 'Version control',
+      gitcms: 'native',
+      competitor: 'Platform versioning',
+      note: 'Git history vs CMS-managed versions',
+    },
+    {
+      category: 'Branching and drafts',
+      gitcms: 'native',
+      competitor: 'Workflow stages + spaces',
+      note: 'GitCMS uses Git branches. Storyblok has its own staging system.',
+    },
+    {
+      category: 'Editing experience',
+      gitcms: 'Notion-like editor for text content',
+      competitor: 'Visual page builder (drag-and-drop)',
+      note: 'Different tools for different content types',
+    },
+    {
+      category: 'Markdown / MDX support',
+      gitcms: 'native',
+      competitor: 'partial',
+      note: 'Storyblok uses its own component format, not markdown',
+    },
+    {
+      category: 'Visual preview',
+      gitcms: 'Editor preview',
+      competitor: 'Real-time visual editor',
+      note: 'Storyblok has stronger visual preview for component pages',
+    },
+    {
+      category: 'Content delivery',
+      gitcms: 'Local files (no network hop)',
+      competitor: 'API + CDN',
+    },
+    {
+      category: 'Build performance',
+      gitcms: 'Fast (local file reads)',
+      competitor: 'Slower (network-bound API fetches)',
+      note: 'Impact grows with content volume',
+    },
+    {
+      category: 'Localization',
+      gitcms: 'File-based (i18n folders)',
+      competitor: 'Built-in multi-language',
+      note: 'Storyblok has stronger built-in i18n management',
+    },
+    {
+      category: 'Multi-channel delivery',
+      gitcms: 'not-core',
+      competitor: 'native',
+    },
+    {
+      category: 'Collaboration model',
+      gitcms: 'Git-based (PRs, branches, review)',
+      competitor: 'Platform-based (roles, workflows)',
+    },
+    {
+      category: 'AI agent workflow',
+      gitcms: 'Native + MCP app for ChatGPT/Claude',
+      competitor: 'AI credits for platform features',
+      note: 'GitCMS turns AI assistants into content agents via MCP',
+    },
+    {
+      category: 'Vendor lock-in',
+      gitcms: 'Low (markdown files are portable)',
+      competitor: 'Higher (proprietary component format)',
+    },
+    {
+      category: 'Self-hosting option',
+      gitcms: 'yes',
+      competitor: 'no',
+    },
+    {
+      category: 'Migration complexity',
+      gitcms: 'Low (content is already files)',
+      competitor: 'Higher (component tree export + format conversion)',
+    },
+  ]}
+/>
+
+## Pricing
+
+<PricingCompare
+  competitorName="Storyblok"
+  gitcms={{
+    note: 'No API call metering. No traffic-based charges. Content lives in your repo.',
+  }}
+  competitor={{
+    free: 'Free: 1 user, 100K API requests/mo',
+    paid: 'Growth starts at $99/mo (5 seats included)',
+    note: 'Traffic overages: $75/250GB. API overages: $10/1M requests. Extra seats: $15/mo each.',
+  }}
+/>
+
+Storyblok's pricing scales with traffic, API usage, and locales. For high-traffic content sites, overages can add up significantly. GitCMS does not meter your content delivery — it lives in your repo and deploys with your site.
+
+## Where Storyblok is genuinely better
+
+Storyblok is the stronger choice when content is **visual and component-driven**.
+
+If your team needs:
+
+- A drag-and-drop visual page builder for marketing teams
+- Real-time visual preview while editing component layouts
+- Built-in localization and multi-language content workflows
+- Component-based content architecture for flexible page layouts
+- A no-code editing experience for non-technical content creators
+
+Then Storyblok is solving a problem GitCMS is not trying to solve. Visual page building is Storyblok's core strength.
+
+## Where GitCMS is better
+
+GitCMS is better when the content is fundamentally **text, not components**.
+
+Docs, blog posts, changelogs, technical marketing pages — these are text content. They do not need a visual page builder. They need a good writing experience, a review workflow, and a system that keeps content close to the codebase.
+
+If your real setup is:
+
+- Marketing site in a repo
+- Docs in markdown
+- Changelog in markdown
+- Blog posts in markdown
+- Deployment already tied to Git
+
+Then a visual component CMS adds complexity without adding value. GitCMS gives you a Notion-like editor, Git-native review, and a workflow that works for both humans and AI agents.
+
+<Tradeoffs>
+  <p>Choosing markdown-in-git over a visual headless CMS is a real tradeoff:</p>
+  <ul>
+    <li>Content changes require a build and deploy step. Storyblok's visual editor shows changes in real time.</li>
+    <li>If your content is component-heavy (landing pages, campaign pages with custom layouts), markdown is not the right format.</li>
+    <li>Storyblok's built-in localization is stronger than file-based i18n approaches.</li>
+    <li>Non-technical editors who want drag-and-drop will find Storyblok's visual editor more intuitive than a markdown workflow.</li>
+  </ul>
+  <p>For text-heavy content sites that are readonly for end users, these tradeoffs are usually worth it. You get simpler architecture, faster builds, lower costs, full portability, and a workflow that works equally well for humans and AI agents.</p>
+</Tradeoffs>
+
+## Decision by use case
+
+**Component-driven marketing pages with visual editing:** Storyblok is the better fit.
+
+**Docs, blog, changelog, and marketing pages in one repo:** GitCMS is the better fit.
+
+**Team wants drag-and-drop page building with real-time preview:** Storyblok is the better fit.
+
+**Team wants content as portable markdown files with a better editing and review workflow:** GitCMS is the better fit.
+
+**Multi-language content with built-in localization management:** Storyblok is the better fit.
+
+**Startup or small team that wants AI agents and humans collaborating in Git:** GitCMS is the better fit.
+
+<CompareCTA
+  description="Components stay in code. Content stays in your repo. Everyone else gets an admin."
+/>

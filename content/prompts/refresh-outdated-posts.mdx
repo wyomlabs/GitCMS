@@ -1,0 +1,33 @@
+---
+title: 'Refresh outdated posts'
+description: 'Find posts with stale facts, prices, or instructions and propose updates in one reviewable task.'
+category: content
+agents:
+  - 'ChatGPT'
+  - 'Claude'
+  - 'Claude Code'
+  - 'OpenClaw'
+  - 'Hermes'
+order: 6
+lastReviewed: '2026-10-10'
+---
+
+## The prompt
+
+```text
+Review the posts in the [collection] collection on [site name] that were
+published before [date]. For each one, flag outdated facts, product names,
+prices, or instructions, and propose updated text.
+
+Only change what's outdated; keep the author's voice. Put all updates in one
+content task called "Content refresh [month]" and submit it for review with a
+summary of what changed in each post.
+```
+
+## How it runs
+
+Run this in an agent connected to GitCMS through MCP (see [AI agents](/agents)). On sites that use review before publish, the agent drafts inside a content task and submits it for review; a person publishes. On sites that publish directly, there's no draft step and saves go live on the next deploy, so ask the agent to show you the changes before it saves.
+
+## Why it's worth doing
+
+Search engines and answer engines favor current content. A monthly refresh task keeps old posts earning traffic.

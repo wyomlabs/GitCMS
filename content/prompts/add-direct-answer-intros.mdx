@@ -1,0 +1,32 @@
+---
+title: 'Add direct-answer intros for answer engines'
+description: 'Rewrite the opening of guides and posts so they answer the reader’s question in the first 40-60 words, the passage AI answer engines tend to quote.'
+category: seo
+agents:
+  - 'ChatGPT'
+  - 'Claude'
+  - 'Claude Code'
+  - 'OpenClaw'
+  - 'Hermes'
+order: 11
+lastReviewed: '2026-10-10'
+---
+
+## The prompt
+
+```text
+For each guide in the [collection] collection on [site name], rewrite only the
+first paragraph so it directly answers the question in the title in 40-60
+words. Name the thing, give the answer, then one sentence of context.
+
+Don't change the rest of the post. Put all changes in one content task and
+submit it for review.
+```
+
+## How it runs
+
+Run this in an agent connected to GitCMS through MCP (see [AI agents](/agents)). On sites that use review before publish, the agent drafts inside a content task and submits it for review; a person publishes. On sites that publish directly, there's no draft step and saves go live on the next deploy, so ask the agent to show you the changes before it saves.
+
+## Why it matters
+
+Answer engines retrieve short passages. An opening that answers the question plainly is more likely to be quoted than one that warms up for three paragraphs.

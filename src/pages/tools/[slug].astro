@@ -1,0 +1,48 @@
+---
+import { getCollection, render } from 'astro:content'
+import ContentLayout from '@/layouts/ContentLayout.astro'
+import { LaunchCtaSection } from '@/components/landing/launch-cta-section'
+import { proseClassName, resourceMdxComponents } from '@/components/resources/resource-mdx-components'
+import GitHubRepoForm from '@/components/tools/github-repo-form.astro'
+import ToolEmbed from '@/components/tools/tool-embed.astro'
+import { PRODUCT_NAME } from '@/lib/positioning'
+
+export async function getStaticPaths() {
+  return (await getCollection('tools')).map((tool) => ({
+    params: { slug: tool.id.replace(/\.mdx?$/, '') },
+    props: { tool },
+  }))
+}
+
+const { tool } = Astro.props
+const { Content } = await render(tool)
+const slug = tool.id.replace(/\.mdx?$/, '')
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: tool.data.title,
+  description: tool.data.description,
+  url: `https://gitcms.dev/tools/${slug}`,
+  applicationCategory: 'DeveloperApplication',
+  operatingSystem: 'Any',
+  browserRequirements: 'Requires JavaScript',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  publisher: { '@type': 'Organization', name: PRODUCT_NAME },
+}
+---
+<ContentLayout title={`${tool.data.title} | GitCMS Tools`} description={tool.data.description} path={`/tools/${slug}`} structuredData={structuredData}>
+  <section class="mx-auto max-w-6xl px-6 pb-12 pt-16">
+    <a href="/tools" class="text-sm text-neutral-600 transition-colors hover:text-neutral-900">← Free tools</a>
+    <header class="mb-8 mt-6 max-w-3xl">
+      <h1 class="font-logo text-3xl font-normal leading-tight tracking-tight text-neutral-900 sm:text-4xl md:text-[42px]">{tool.data.title}</h1>
+      <p class="mt-4 text-base leading-relaxed text-neutral-600 sm:text-lg">{tool.data.description}</p>
+    </header>
+    {tool.data.tool === 'github-repo'
+      ? <div class="max-w-3xl"><GitHubRepoForm /></div>
+      : <ToolEmbed tool={tool.data.tool} title={tool.data.title} />}
+  </section>
+  <article class="mx-auto max-w-6xl px-6 pb-16">
+    <div class="max-w-3xl"><div class={proseClassName}><Content components={resourceMdxComponents} /></div></div>
+  </article>
+  <LaunchCtaSection heading="Edit your whole site" highlightedHeading="the same way." body="GitCMS opens the Markdown in your GitHub repository in this editor, so writers and AI agents can update content while every save stays a commit." landingPath={`/tools/${slug}`} landingVariant="tools" />
+</ContentLayout>

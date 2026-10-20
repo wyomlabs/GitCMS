@@ -1,0 +1,34 @@
+---
+title: 'Data files'
+category: content
+definition: 'Data files are structured files, usually JSON, YAML, or TOML, that hold site-wide data such as navigation, pricing, team members, or testimonials.'
+description: 'What data files are on a code-first website, what usually lives in them, and who edits them.'
+related:
+  - json
+  - yaml
+  - toml
+  - content-model
+  - structured-content
+lastReviewed: '2026-10-10'
+---
+
+## What lives in them
+
+- Navigation menus and footer links
+- Pricing plans and feature lists
+- Team members, testimonials, locations
+- Site settings like phone numbers and opening hours
+
+Frameworks read them at build time: Hugo has a `data/` directory, Eleventy has global data files, and Astro and Next.js can import JSON or YAML directly.
+
+## Why they matter
+
+On many marketing sites, the copy people most want to change lives in data files, not in blog posts. A pricing change is a data file edit.
+
+## The editing problem
+
+Data files are easy for developers and coding agents and risky for everyone else: one missing comma or wrong indent breaks the build. That's why they're often edited only by developers, which turns every pricing tweak into a ticket.
+
+## In GitCMS
+
+GitCMS edits Markdown and MDX content entries today. Keep structured copy that clients should edit in frontmatter fields of content entries so it's editable in the visual editor.

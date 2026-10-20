@@ -1,0 +1,27 @@
+---
+title: 'Hydration'
+category: rendering
+definition: 'Hydration is the step where JavaScript attaches to server-rendered or pre-rendered HTML in the browser, making the page interactive.'
+description: 'What hydration means, why it can slow pages down, and how partial hydration and islands reduce it.'
+related:
+  - server-side-rendering
+  - islands-architecture
+  - client-side-rendering
+lastReviewed: '2026-10-10'
+---
+
+## How it works
+
+The browser first shows HTML that was rendered on the server or at build time. Then the framework loads JavaScript, rebuilds its view of the page, and attaches event handlers. Until hydration finishes, buttons and menus may not respond.
+
+## The cost
+
+Hydrating a whole page means shipping JavaScript for every component, even ones that never change, like a footer or a block of text. On slow devices, that delay shows up in interaction metrics.
+
+## Doing less of it
+
+- **Partial hydration**: only hydrate interactive components
+- **[Islands architecture](/glossary/islands-architecture)**: static HTML by default, with small interactive islands
+- **Server components**: render on the server and ship no JavaScript for static parts
+
+Content-heavy marketing sites benefit most, since most of their page is static text.

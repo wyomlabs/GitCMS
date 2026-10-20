@@ -1,0 +1,34 @@
+---
+title: 'SSG vs SSR'
+category: rendering
+definition: 'SSG renders pages once at build time and serves the same files to everyone; SSR renders each page on the server per request, trading speed and cost for fresh, request-specific data.'
+description: 'Static site generation vs server-side rendering compared: speed, cost, freshness, SEO, and which to use for each kind of page.'
+related:
+  - static-site-generation
+  - server-side-rendering
+  - incremental-static-regeneration
+  - static-vs-dynamic-website
+lastReviewed: '2026-10-10'
+---
+
+## Side by side
+
+| | SSG | SSR |
+|---|---|---|
+| When HTML is built | At build time | On every request |
+| First-load speed | Fastest (served from CDN) | Fast, depends on server |
+| Hosting cost | Very low | Pay per request |
+| Data freshness | As of the last build | Live |
+| Per-visitor content | No (add via JavaScript) | Yes |
+| SEO | Excellent | Excellent |
+| Content updates | Rebuild on change | Instant |
+
+## Which to use
+
+- **SSG:** marketing pages, blogs, docs, changelogs, landing pages
+- **SSR:** dashboards, account pages, search results, anything personalized
+- **Both:** most real sites. Frameworks like Astro and Next.js let you choose per route.
+
+## With content in Git
+
+For SSG pages, the publishing flow is simple: edit, commit, rebuild. That's the flow a [Git-based CMS](/glossary/git-based-cms) automates for non-developers.

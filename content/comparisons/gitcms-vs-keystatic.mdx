@@ -1,0 +1,258 @@
+---
+title: 'GitCMS vs Keystatic'
+description: 'Keystatic is a file-based CMS by Thinkmill with a TypeScript schema API. GitCMS is a hosted CMS for code-first and AI-built websites, with review before publish and AI agents. Here''s when each fits.'
+competitor: 'Keystatic'
+category: 'Git-based CMS'
+lastReviewed: '2026-04-16'
+order: 14
+---
+
+Keystatic is one of the best new entrants in the git-based CMS space. Built by Thinkmill (the team behind KeystoneJS), it stores content as Markdown, JSON, or YAML files in your codebase, with a TypeScript schema API and a clean admin UI. It works locally during development and syncs with GitHub for production. No database, no API layer.
+
+GitCMS is the CMS for code-first and AI-built websites. It shares Keystatic's foundation — content as files in a repo, Git as the backend — but it is built for the people who run the site after it ships. Keystatic is developer-first: schema-as-code, a Reader API, and an admin panel you configure in TypeScript and add to your app. GitCMS is a hosted admin layer you connect to an existing repository: a visual editor for clients and marketers, review before publish, and AI agents that draft through the same workflow.
+
+Both are honest tools. The question is whether you want a CMS library inside your codebase, or an admin layer your team, clients, and agents use without touching it.
+
+## What changed in 2026
+
+Git-based CMSs started as tools for developers who already preferred static sites and Markdown. That audience still exists. But a much larger group now arrives at the same architecture by a different road: they had Claude Code, Codex, or Cursor build the site, and the site naturally lives in Git.
+
+That group doesn't mainly need a nicer way for developers to edit Markdown. They need **Day Two**: a way for clients and marketers to run the site without Git, and a way to review what AI agents change before it goes live. Keystatic is an excellent developer-configured CMS you add to your app. GitCMS is built around that Day Two workflow: a hosted admin you connect to an existing repo, review before publish, and bring-your-own agents through MCP.
+
+## The short verdict
+
+<Verdict>
+  <VerdictCompetitor title="Keystatic">
+    - You want a developer-configurable CMS with a TypeScript schema API
+    - You prefer local-first development with a clean admin UI
+    - Your team is comfortable configuring content models in code
+    - You want a lightweight CMS that integrates with Next.js, Astro, or Remix
+  </VerdictCompetitor>
+  <VerdictGitCMS>
+    - You want to connect an existing site's repo without adding a CMS package to the codebase
+    - Clients or marketers need to edit, and changes should be reviewed before they publish
+    - You want ChatGPT, Claude, or other MCP agents drafting changes people approve
+    - You hand sites off to clients and need per-site access
+  </VerdictGitCMS>
+</Verdict>
+
+## Same foundation, different audience
+
+Both Keystatic and GitCMS store content as files in a Git repo. Both use Git for version control. Both avoid databases and APIs. The content is portable in both cases — plain files you can move anywhere.
+
+Where they diverge is who they are built for.
+
+### Keystatic: built for developers
+
+Keystatic gives developers a TypeScript API to define content schemas (Collections and Singletons), a Reader API to query content programmatically, and an admin panel that renders based on those schema definitions. The developer configures the CMS in code, and the admin UI reflects that configuration.
+
+This is a good model for teams where developers own the content architecture and want full control over how the editing experience is assembled. Keystatic also has a strong local-first story — during development, content changes happen on your local filesystem without needing GitHub integration.
+
+### GitCMS: built for writers
+
+GitCMS gives writers a Notion-like block editor — rich text, slash commands, drag-and-drop blocks, inline formatting. The editing experience is closer to Notion or Linear than to a CMS admin panel. Content collections are structured with typed schemas, but the writer's day-to-day experience is a writing surface, not a form.
+
+This matters when content editors are not developers. A Notion-like editor has a shorter learning curve than an admin panel with configured field types. And for teams where the content *is* the product — docs, blog, changelog — the writing experience is not a secondary concern.
+
+## The markdown-in-git approach works
+
+Both tools bet on this — and it is the right bet.
+
+<CaseStudy
+  title="Markdown-in-git scales: the Cursor migration"
+  logo={{ src: '/ai-logos/cursor.svg', alt: 'Cursor' }}
+  source="Lee Robinson — Coding Agents & Complexity Budgets"
+  sourceUrl="https://leerob.com/agents"
+  stats={[
+    { label: 'Migration cost', value: '$260' },
+    { label: 'Build speed improvement', value: '2x faster' },
+    { label: 'CDN savings (prior spend)', value: '$56,848' },
+    { label: 'Commits in one weekend', value: '67' },
+  ]}
+>
+  <p>
+    Cursor's engineering team migrated their content site — engineering blog, product changelog, and docs — from an API-based CMS back to markdown files in their codebase. The migration took one weekend using AI agents, cost $260 in tokens, and resulted in 2x faster builds.
+  </p>
+  <p>
+    This validates the thesis that both Keystatic and GitCMS share: for text-heavy content, files in the repo beat a hosted CMS backed by a database. The debate is about what sits on top of the files.
+  </p>
+</CaseStudy>
+
+## Content as code
+
+Both tools deliver the core content-as-code benefits:
+
+- **`grep` works.** Search your entire content library with standard dev tools.
+- **`git log` works.** Every content change has a commit, an author, a timestamp, and a diff.
+- **`git blame` works.** Trace any sentence to the person or agent that wrote it.
+- **Code review works.** Content changes go through the same PR process as code changes.
+- **Deploys are atomic.** Content and code ship together.
+
+This is shared ground. Both tools are fundamentally better than any database-backed CMS for content portability and developer workflow.
+
+## AI agents and the MCP gap
+
+AI coding agents work natively with markdown files in a repository. Both Keystatic and GitCMS benefit from this.
+
+The gap is in structured content workflows. Writers use AI assistants daily — for drafting, SEO optimization, rewrites, and content operations. A CMS that integrates with those assistants turns AI from a side tool into part of the content workflow.
+
+GitCMS's **MCP app** turns AI assistants like ChatGPT, Claude, and other MCP-compatible agents into content agents. They can create drafts, edit posts, manage collections, check SEO, and submit changes for review — all through a structured interface. GitCMS handles the git workflow underneath.
+
+Keystatic does not have MCP support or an AI integration layer. Agents can still edit the underlying files, but there is no structured workflow to route those edits through drafts and review.
+
+## Feature comparison
+
+<FeatureTable
+  competitor="Keystatic"
+  rows={[
+    {
+      category: 'Content storage',
+      gitcms: 'Markdown files in Git',
+      competitor: 'Markdown/JSON/YAML files in Git',
+      note: 'Same model — both store content as files in a repo',
+    },
+    {
+      category: 'Version control',
+      gitcms: 'native',
+      competitor: 'native',
+    },
+    {
+      category: 'Branching and drafts',
+      gitcms: 'native',
+      competitor: 'GitHub mode (commits to repo)',
+      note: 'GitCMS uses branches as first-class drafts. Keystatic commits directly.',
+    },
+    {
+      category: 'Editor experience',
+      gitcms: 'Notion-like block editor',
+      competitor: 'Admin panel with configured fields',
+      note: 'GitCMS is writer-focused. Keystatic is developer-configured.',
+    },
+    {
+      category: 'Markdown / MDX support',
+      gitcms: 'native',
+      competitor: 'Markdoc + MDX',
+    },
+    {
+      category: 'Schema definition',
+      gitcms: 'Type-safe config',
+      competitor: 'TypeScript schema API (Collections + Singletons)',
+      note: 'Keystatic has a richer programmatic schema API',
+    },
+    {
+      category: 'Content querying',
+      gitcms: 'File reads',
+      competitor: 'Reader API',
+      note: 'Keystatic provides a typed Reader API for content access',
+    },
+    {
+      category: 'Local development',
+      gitcms: 'yes',
+      competitor: 'Local-first (strong)',
+      note: 'Keystatic has a particularly good local development experience',
+    },
+    {
+      category: 'Framework support',
+      gitcms: 'Framework-agnostic',
+      competitor: 'Next.js, Astro, Remix',
+    },
+    {
+      category: 'AI agent workflow',
+      gitcms: 'Native + MCP app for ChatGPT/Claude',
+      competitor: 'not-core',
+      note: 'GitCMS turns AI assistants into content agents via MCP',
+    },
+    {
+      category: 'Hosted backend',
+      gitcms: 'Optional',
+      competitor: 'Keystatic Cloud (GitHub auth + image optimization)',
+    },
+    {
+      category: 'Open source',
+      gitcms: 'yes',
+      competitor: 'yes',
+    },
+    {
+      category: 'Vendor lock-in',
+      gitcms: 'Low (markdown files are portable)',
+      competitor: 'Low (files are portable)',
+    },
+  ]}
+/>
+
+## Pricing
+
+<PricingCompare
+  competitorName="Keystatic"
+  gitcms={{
+    note: 'Includes the editor, MCP app, and branch workflows.',
+  }}
+  competitor={{
+    free: 'Free and open-source (self-hosted)',
+    paid: 'Keystatic Cloud: pricing not publicly listed',
+    note: 'Core CMS is free. Keystatic Cloud adds GitHub authentication and image optimization.',
+  }}
+/>
+
+Keystatic's core is free and open-source. For developer-led teams that are comfortable self-hosting and configuring the CMS in TypeScript, the cost is essentially zero. Keystatic Cloud adds convenience features (GitHub auth, image optimization) but is not required.
+
+GitCMS costs money because you are paying for the writing experience, MCP integration, and editorial workflow — features that matter when the team includes non-technical content editors.
+
+## Where Keystatic is genuinely better
+
+Keystatic is the stronger choice when **developers want full control over the CMS**.
+
+If your team:
+
+- Wants to define content schemas entirely in TypeScript with a rich API
+- Prefers a local-first development experience where content changes happen on the filesystem
+- Needs a Reader API for programmatic content access during builds
+- Is comfortable with a developer-configured admin panel as the editing interface
+- Wants a free, open-source CMS with a strong Thinkmill pedigree
+
+Then Keystatic is a well-built tool that gives developers exactly the control they want. Its TypeScript API and local-first model are genuine strengths.
+
+## Where GitCMS is better
+
+GitCMS is better when **the writing experience matters as much as the developer experience**.
+
+Keystatic is built for developers to configure. GitCMS is built for writers to use. If your team includes non-technical content editors — people who write blog posts, docs, and marketing pages — the Notion-like editor is a shorter path to adoption than a developer-configured admin panel.
+
+GitCMS also adds workflow structure that Keystatic does not:
+
+- **Branch-based drafts** — work in progress lives on a branch, isolated from published content
+- **PR-based review** — content goes through review before publishing
+- **MCP integration** — AI assistants can draft, edit, and manage content through a structured protocol
+
+For teams where content is a collaborative effort — not just a developer maintaining files — GitCMS adds the workflow that turns files-in-a-repo into a content system.
+
+<Tradeoffs>
+  <p>Choosing GitCMS over Keystatic is a real tradeoff:</p>
+  <ul>
+    <li>Keystatic's TypeScript schema API is more programmable and gives developers deeper control over the CMS configuration.</li>
+    <li>Keystatic's local-first development experience is excellent — content changes happen instantly on your filesystem.</li>
+    <li>Keystatic is free and open-source with no mandatory hosted dependency. GitCMS is a paid product.</li>
+    <li>If your team is entirely developers who are comfortable with an admin panel, Keystatic's model may be all you need.</li>
+  </ul>
+  <p>For teams where the writing experience matters — where non-technical editors need a polished, Notion-like surface — and where AI-assisted content workflows are part of how the team operates, these tradeoffs are usually worth it.</p>
+</Tradeoffs>
+
+## Decision by use case
+
+**Developer-configured CMS with TypeScript schema API:** Keystatic is the better fit.
+
+**Non-technical editors running a code-first website:** GitCMS is the better fit.
+
+**Local-first development with programmatic content access:** Keystatic is the better fit.
+
+**AI agents drafting website changes with human review before publishing:** GitCMS is the better fit.
+
+**Agency handing a code-first site to a client:** GitCMS is the better fit.
+
+**Developer-only team comfortable with admin panel editing:** Keystatic works great.
+
+**Team with non-technical writers who need a polished editor:** GitCMS is the better fit.
+
+<CompareCTA
+  description="Same files-in-Git foundation. A hosted admin layer for your team, clients, and agents."
+/>

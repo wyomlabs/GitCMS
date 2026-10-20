@@ -1,0 +1,23 @@
+---
+import ContentLayout from '@/layouts/ContentLayout.astro'
+import { BlogIndexPage } from '@/components/blog/blog-index-page'
+import { getAllCategories, getPublishedPostSummaries } from '@/lib/content'
+
+const posts = await getPublishedPostSummaries()
+const categories = await getAllCategories()
+---
+<ContentLayout
+  title="Blog — GitCMS"
+  description="Guides, workflows, and deep dives on content management for developers, marketers, and writers."
+  path="/blog"
+  structuredData={{
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'GitCMS Blog',
+    description: 'Guides, workflows, and deep dives on content management for developers, marketers, and writers.',
+    url: 'https://gitcms.dev/blog',
+    publisher: { '@type': 'Organization', name: 'GitCMS', url: 'https://gitcms.dev' },
+  }}
+>
+  <BlogIndexPage posts={posts} categories={categories} client:load />
+</ContentLayout>

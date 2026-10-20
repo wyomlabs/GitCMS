@@ -1,0 +1,29 @@
+---
+title: 'Convert WordPress posts to Markdown'
+description: 'Turn a WordPress export into clean Markdown files with frontmatter, ready for any static site generator.'
+category: migration
+agents:
+  - 'Claude Code'
+  - 'Codex'
+  - 'Cursor'
+order: 13
+lastReviewed: '2026-10-10'
+---
+
+## The prompt
+
+```text
+Convert the WordPress export at [path to WXR XML] into Markdown files in
+[content directory].
+
+- One file per published post, named [slug].md
+- Frontmatter: title, description (from the excerpt or SEO meta), pubDate,
+  updatedDate, categories, tags, heroImage
+- Convert HTML to clean Markdown; keep headings, lists, links, and code blocks
+- Download images into [media directory] and rewrite their links
+- Skip drafts and trashed posts; report anything you couldn't convert
+```
+
+## Tips
+
+Match the frontmatter field names to your framework's schema before running it. If your schema says `pubDate`, the files must say `pubDate`.

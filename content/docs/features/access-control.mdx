@@ -1,0 +1,145 @@
+---
+title: Roles & Site Access
+description: Understand roles, site-scoped access, publishing rights, and how GitCMS fits solo builders, startup teams, and agencies.
+---
+
+GitCMS keeps team access simple on purpose. Instead of a heavy enterprise RBAC system, it uses a small set of static roles, site-scoped access, and one workflow capability for publishing.
+
+That gives you enough control for real-world content workflows without turning setup into an admin project.
+
+## The model
+
+Every workspace member in GitCMS has three access decisions:
+
+- **Role** — what kind of work they can do
+- **Site access** — whether they can access all sites or only selected sites
+- **Publish access** — whether they can publish approved content to the live site
+
+This is the foundation for both team members and invited collaborators.
+
+## Roles
+
+GitCMS currently ships with five built-in roles:
+
+| Role | Best for | What they can do |
+|------|----------|------------------|
+| **Owner** | Workspace creator, business owner | Full control over billing, membership, settings, and content operations |
+| **Admin** | Team lead, ops lead, agency lead | Manage members, invites, settings, and content across the workspace |
+| **Editor** | Content writer, marketer, developer updating content | Create and edit content, work with drafts, and submit work for review |
+| **Reviewer** | Client reviewer, marketing lead, approver | Review work, approve changes, and participate in the editorial workflow |
+| **Viewer** | Stakeholder, client observer, read-only collaborator | Read content and browse the workspace without editing |
+
+## Site access
+
+Access is site-first.
+
+Each member is assigned one of these scope modes:
+
+- **All sites** — access to every site in the workspace
+- **Selected sites** — access only to the sites chosen by an owner or admin
+
+This matters most for:
+
+- monorepos with multiple sites
+- startup teams with separate docs, blog, and marketing sites
+- agencies managing several client sites in one workspace
+- developers who should only touch a subset of sites
+
+GitCMS does not currently assign a different role per site. A member has one workspace role, and site access controls where that role applies.
+
+## Publish access
+
+Publishing is modeled as a separate capability.
+
+Owners and admins can publish by default. Editors and reviewers can also be granted publish access when your workflow needs it.
+
+This is useful when:
+
+- a solo founder wants full control without setting up extra steps
+- a startup wants one editor to also publish
+- an agency wants internal operators to publish while clients only review
+
+## Common setups
+
+### Solo founder or indie builder
+
+For a solo workspace, GitCMS stays out of the way:
+
+- you are usually the **Owner**
+- you typically have **All sites**
+- you can publish directly, or use the editorial workflow when working with AI-generated drafts
+
+This works well for personal blogs, product sites, and founder-led content operations.
+
+### Startup team
+
+A small startup can usually keep things simple:
+
+- founders or leads as **Owner** or **Admin**
+- marketers and content operators as **Editor**
+- approvers as **Reviewer**
+- optional publish rights for the person who ships content
+
+This works especially well when the team uses the content board for ideas, drafts, and review before publish.
+
+### Developer managing client content
+
+If a developer or small consultancy manages content on behalf of a client:
+
+- the internal operator can be **Editor** with publish access
+- the client can be **Reviewer** on only the relevant site
+- stakeholders can be added as **Viewer**
+
+This keeps clients involved in approvals without exposing unrelated sites.
+
+### Agency managing multiple client sites
+
+GitCMS was designed to support this cleanly without adding enterprise admin overhead:
+
+- agency leads can be **Admin**
+- writers and operators can be **Editor**
+- client contacts can be **Reviewer** or **Viewer**
+- members can be limited to **Selected sites**
+
+That means one workspace can support multiple client sites while keeping access boundaries understandable.
+
+## Invites and member management
+
+Invites in GitCMS carry the same access model as members:
+
+- role
+- site access
+- publish access
+
+When the invite is accepted, those settings become the member's assigned access.
+
+This keeps onboarding simple for teams and external collaborators.
+
+Invited collaborators can sign in with Google or GitHub. Google is usually the easier path for editors, marketers, clients, and reviewers who do not need to install the GitCMS GitHub App. GitHub is still the right choice for owners and admins who manage repository connections.
+
+## Editorial workflow and permissions
+
+The editorial workflow works well with this model:
+
+- **Editors** create and update drafts
+- **Reviewers** review and approve
+- members with **publish access** can publish approved work live
+
+You can read more in the [Editorial Workflow guide](/docs/features/editorial-workflow).
+
+## Current scope of the system
+
+GitCMS keeps the current permissions system intentionally minimal:
+
+- one role per member
+- one publish flag per member
+- site-scoped access at the member level
+
+This covers most real-world use cases for:
+
+- solo builders
+- startup content teams
+- developers managing content for clients
+- agencies managing multiple sites
+
+More advanced patterns can be added later, but the current model is designed to be simple in the product and extensible in the codebase.

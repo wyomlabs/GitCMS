@@ -1,0 +1,31 @@
+---
+title: 'AI website builder'
+category: building
+definition: 'An AI website builder generates a website from a text prompt, either inside its own hosted platform or as code you can export and own.'
+description: 'The two kinds of AI website builders, how they differ from coding agents, and what happens after the site is generated.'
+related:
+  - ai-built-website
+  - coding-agent
+  - vibe-coding
+  - website-builder
+lastReviewed: '2026-10-10'
+---
+
+## Two kinds
+
+| Kind | Examples | Where the site lives |
+|---|---|---|
+| Platform builders with AI | Webflow, Framer, Wix | In the platform |
+| App and site generators | Lovable, Bolt, v0 | As code, often synced to GitHub |
+
+Coding agents like Claude Code, Codex, and Cursor are a third route: they work in a repository you already own.
+
+## What to check before choosing
+
+- Can you export or sync the code to your own repository?
+- Where does editable content live: in components, or in content files?
+- How will non-developers edit the site after launch?
+
+## After generation
+
+Generated sites tend to hardcode copy in components. If the site lives in Git, move editable text into content files and connect a CMS so the people who run the site don't need the builder, or the prompt, for every change.

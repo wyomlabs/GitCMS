@@ -1,0 +1,30 @@
+---
+title: 'Set up GitCMS with your coding agent'
+description: 'The exact prompt GitCMS gives you to configure a repository: your coding agent runs the setup CLI, detects your sites and collections, and pushes the configuration.'
+category: handoff
+agents:
+  - 'Claude Code'
+  - 'Codex'
+  - 'Cursor'
+order: 2
+lastReviewed: '2026-10-10'
+---
+
+## The prompt
+
+This is the same prompt GitCMS shows under **Set up with your coding agent**:
+
+<GitCMSSetupPrompt />
+
+## What it does
+
+The agent runs `create-gitcms`, which finds every website in the repository, reads each site's address from its framework config, and writes the `.gitcms/` configuration. The agent checks the content and media folders, then commits and pushes the config. Keep the GitCMS setup dialog open: each site is ticked off as soon as the setup is pushed.
+
+## Before you run it
+
+- Connect the repository in GitCMS with **Add site**.
+- If copy is hardcoded in components, run [make a site client-editable](/prompts/make-site-client-editable) first.
+
+## After you run it
+
+Open the site in GitCMS, check the collections, and invite your team or client.

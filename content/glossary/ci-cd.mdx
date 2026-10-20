@@ -1,0 +1,26 @@
+---
+title: 'CI/CD'
+category: deploy
+definition: 'CI/CD (continuous integration and continuous delivery or deployment) automatically tests, builds, and ships code changes each time they are pushed.'
+description: 'What CI/CD means for websites, what a typical pipeline checks, and how content changes flow through it.'
+related:
+  - build-step
+  - deployment
+  - preview-deployment
+lastReviewed: '2026-10-10'
+---
+
+## A typical website pipeline
+
+| Stage | Example checks |
+|---|---|
+| Integration | Type-check, lint, unit tests |
+| Build | Render pages, validate content |
+| Checks | Broken links, accessibility, bundle size |
+| Delivery | Deploy a preview, then production on merge |
+
+Tools include GitHub Actions, GitLab CI, and the built-in pipelines of hosts like Vercel and Netlify.
+
+## Content goes through it too
+
+On a code-first site, a content commit runs the same pipeline as a code commit. That's a feature: broken content is caught before it ships. It also means content edits need to produce valid files every time, which a structured editor helps guarantee.

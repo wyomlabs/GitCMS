@@ -1,0 +1,32 @@
+---
+title: 'Add internal links between posts'
+description: 'Suggest and add relevant internal links so readers, search engines, and answer engines can follow related content.'
+category: seo
+agents:
+  - 'ChatGPT'
+  - 'Claude'
+  - 'Claude Code'
+  - 'OpenClaw'
+  - 'Hermes'
+order: 10
+lastReviewed: '2026-10-10'
+---
+
+## The prompt
+
+```text
+On [site name], read [entry] and find 3-5 places where linking to another page
+on the site would genuinely help the reader. Use the site's live URLs, use
+descriptive anchor text, and don't link the same page twice.
+
+Add the links in a content task and submit it for review with the list of links
+you added and why.
+```
+
+## How it runs
+
+Run this in an agent connected to GitCMS through MCP (see [AI agents](/agents)). On sites that use review before publish, the agent drafts inside a content task and submits it for review; a person publishes. On sites that publish directly, there's no draft step and saves go live on the next deploy, so ask the agent to show you the changes before it saves.
+
+## Tips
+
+GitCMS uses your sitemap for internal link suggestions and live URL matching. See [sitemaps and internal links](/docs/features/sitemaps-internal-links).

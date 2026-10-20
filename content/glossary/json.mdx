@@ -1,0 +1,32 @@
+---
+title: 'JSON'
+category: content
+definition: 'JSON (JavaScript Object Notation) is a strict, widely supported data format of objects, arrays, strings, numbers, and booleans.'
+description: 'What JSON is, how websites use JSON data files, and how it compares to YAML and TOML.'
+related:
+  - yaml
+  - toml
+  - data-files
+lastReviewed: '2026-10-10'
+---
+
+## Example
+
+```json
+{
+  "plans": [
+    { "name": "Starter", "price": 19, "features": ["1 site", "Email support"] },
+    { "name": "Pro", "price": 49, "features": ["5 sites", "Priority support"] }
+  ]
+}
+```
+
+## Where websites use it
+
+- Data files for pricing tables, navigation, or testimonials
+- Configuration (`package.json`, `tsconfig.json`)
+- API responses
+
+## JSON vs YAML vs TOML
+
+JSON is strict: every string is quoted, there are no comments, and a single missing comma breaks it. That makes it reliable for machines and unforgiving for people. YAML and TOML are friendlier to edit by hand. See [YAML](/glossary/yaml) and [TOML](/glossary/toml).

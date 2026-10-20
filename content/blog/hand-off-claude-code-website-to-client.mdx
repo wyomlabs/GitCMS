@@ -1,0 +1,150 @@
+---
+title: "How to Hand Off a Claude Code Website to a Client"
+description: |
+  Built a client site with Claude Code? Here's how to hand it off so the client can edit copy, images, and posts themselves, without Git, WordPress, or you in the loop.
+date: "2026-10-10"
+category: guides
+authors:
+  - Waishnav
+tags:
+  - claude-code
+  - client-handoff
+  - agencies
+  - astro
+---
+
+To hand off a Claude Code website to a client, move the copy they'll edit into Markdown or MDX content files, connect the repository to a Git-based CMS, and invite the client with access to their site only. GitCMS is the CMS for code-first and AI-built websites: it gives your client a visual editor while every change stays in their repository.
+
+The build used to be the expensive part. With Claude Code, a five-page site for a plumber or a dentist ships in an afternoon. What hasn't changed is the week after launch, when the client emails: "Can you change the opening hours on the contact page?"
+
+If every one of those emails comes back to you, you've built a fast site and signed up to be its permanent content operator. This guide sets up a handoff where routine changes stop coming back.
+
+## What a good handoff looks like
+
+Before the steps, agree on the split. A handoff works when both sides know who owns what:
+
+| The client owns | You (and your coding agent) own |
+|---|---|
+| Copy on existing pages | New pages and sections |
+| Images and photos | Layout, design, and components |
+| Blog posts, news, case studies | Integrations, forms, and features |
+| Opening hours, prices, team bios | Framework and dependency updates |
+
+Write this down in your handoff email. It sets expectations and turns "can you add a booking widget?" into a paid project instead of a favor.
+
+## Prerequisites
+
+- The site's code is in a **GitHub repository** (Claude Code usually pushes there already).
+- The site is built with a framework that reads Markdown or MDX, such as Astro, Next.js, Hugo, or Eleventy.
+- The site deploys from the repository, for example on Vercel, Netlify, or Cloudflare Pages.
+- Your client's email address.
+- A **GitCMS site license** for the site. Without one, the site opens in preview mode: you can browse it, but saving and publishing are locked.
+
+## Step 1: Move client-editable copy into content files
+
+This is the step most handoffs skip. Coding agents tend to write copy straight into components, like a headline inside `Hero.astro`. A CMS can't safely edit text that lives inside a component, and you don't want a client anywhere near your components.
+
+So before you connect anything, ask Claude Code to move the editable copy into content collections. A prompt like this works well:
+
+```text
+Move all client-editable copy on this site into content files.
+
+- Create a content collection for pages (one Markdown file per page) with
+  frontmatter fields for each editable piece of copy: headlines, subheadings,
+  button labels, opening hours, prices.
+- Keep blog posts or news in their own collection.
+- Update the pages and components to read from these collections.
+- Don't change the design or layout. The rendered site should look identical.
+- Use field names a non-developer would understand (heroHeadline, not h1Text).
+```
+
+Review the diff, run the site locally, and confirm nothing changed visually. You now have a clean boundary: content in files, design in code.
+
+## Step 2: Connect the repository to GitCMS
+
+Sign in to [GitCMS](https://gitcms.dev) with GitHub and choose **Add site**. Install the GitCMS GitHub App on the client's repository and select it.
+
+GitCMS reads the repository and shows what it found: the site's address, the content collections from Step 1 with how many entries each has, and where uploaded images will go. Uncheck any collection the client shouldn't touch.
+
+If you'd rather stay in your terminal, choose **Set up with your coding agent** and paste the prompt into Claude Code. It runs the GitCMS setup CLI, commits the `.gitcms` configuration, and pushes it:
+
+```bash
+npx create-gitcms@latest --yes
+```
+
+The CLI reads the site's address from its framework config (for example Astro's `site` option). If the site doesn't declare one, pass it explicitly or the non-interactive run stops before writing anything:
+
+```bash
+npx create-gitcms@latest --yes --website-url https://client-site.com
+```
+
+Either way, the configuration lives in a `.gitcms/` folder in the client's repository, next to the code.
+
+If you manage several clients, create a workspace per agency (or per client when they need full separation) from the workspace switcher in the sidebar.
+
+## Step 3: Choose how the client's changes go live
+
+GitCMS gives every site one of two publishing modes:
+
+- **Review before publish** (the default). Client changes become drafts on a content board, and someone with publish access publishes them.
+- **Publish right away**. Every save commits to the default branch and goes live on the next deploy.
+
+For a new client, start with **review before publish** and give the client publish access themselves. Each change still moves from draft to published deliberately instead of going live on every save, and you can see everything they've changed on the content board. Once they're comfortable, you can switch to direct publishing in **Settings**.
+
+Review before publish doesn't require approval by default: anyone with publish access can publish a draft. If you want to approve client changes yourself:
+
+- Keep publish access for your team only, so client drafts wait for you to publish them.
+- Or turn on **Require approval before publishing** in **Settings → General**. Then a Reviewer, Admin, or Owner has to approve the latest version before anyone can publish it.
+
+## Step 4: Invite the client
+
+Open **Workspace Settings → Members** and invite the client:
+
+- **Role:** Editor (or Reviewer if they should only approve your team's work)
+- **Site access:** Selected sites, so they only see their own site
+- **Publish access:** on or off, depending on Step 3
+
+Your client can sign in with **Google**. They don't need a GitHub account, and they never see branches, pull requests, or your codebase.
+
+## Step 5: Walk them through one real edit
+
+Don't send a manual. Book 15 minutes, share your screen, and have the client make one real change: update their opening hours, swap a photo, or publish a short news post. Watching their own change go live does more for adoption than any documentation.
+
+Then send the handoff email with the ownership table from the top of this guide.
+
+## Optional: let the client's AI do the drafting
+
+If your client already uses ChatGPT or Claude, they can connect it to GitCMS through MCP and ask it to draft a blog post or update a page. The agent works inside the same workflow: with review before publish turned on, its changes become drafts, and a person decides when to publish them. See [Using AI with GitCMS](/docs/ai-mcp/ai-overview).
+
+This is different from giving the client Claude Code. They get an assistant that drafts content for review, not one with write access to the codebase.
+
+## When GitCMS isn't the right fit
+
+Be honest with yourself about these before you commit to the handoff:
+
+- **The client wants to redesign pages themselves.** GitCMS edits content, not layout. If the client expects drag-and-drop page building, a platform like Webflow or Framer is a better match.
+- **You won't restructure the copy.** If the copy stays hardcoded in components, a CMS can't reach it. Step 1 is required.
+- **The repository isn't on GitHub.** GitCMS connects to GitHub repositories today.
+- **The client needs features WordPress plugins provide**, such as e-commerce or memberships. Those belong in your code (or a dedicated service), not in the CMS.
+
+## FAQ
+
+### Do clients need to know Markdown or Git?
+
+No. Clients edit in a visual editor and fill in labeled fields. Markdown and Git stay underneath, and every save is a commit in their repository.
+
+### Can the client break the site?
+
+They can change the content you exposed in Step 1: copy, images, and posts. They can't change components, layout, or configuration. With review before publish, changes stay as drafts until someone publishes them, and with required approval turned on, they also need a reviewer's approval.
+
+### What happens if the client leaves or hires another developer?
+
+Their content is already in their repository as plain files, with full history. There is no CMS database to export from, and the next developer can keep using GitCMS or not.
+
+### Does this work for sites built with Codex or Cursor?
+
+Yes. Nothing here depends on Claude Code. What matters is that the site lives in a Git repository and reads its editable content from Markdown or MDX files.
+
+## Next step
+
+Pick your most recent client site and do Step 1 with Claude Code today. Once the copy lives in content files, the rest of the handoff takes about ten minutes: [connect the repository](/docs/getting-started/quick-start) and invite your client.

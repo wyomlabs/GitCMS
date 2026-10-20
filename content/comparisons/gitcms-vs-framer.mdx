@@ -1,0 +1,155 @@
+---
+title: 'GitCMS vs Framer'
+description: 'Framer is a design-first website builder with hosting, a CMS, and AI. GitCMS is the CMS for code-first and AI-built websites you own in Git. Here''s when each fits.'
+competitor: 'Framer'
+category: 'Website builders and traditional CMS'
+lastReviewed: '2026-10-10'
+order: 2
+---
+
+Framer is the fastest way for a designer to ship a beautiful marketing site without writing code. You design on a canvas that feels like a design tool, publish to Framer's hosting, and manage posts and pages in its built-in CMS. In 2026 it also leans hard into AI, with agents that generate and edit pages inside Framer.
+
+GitCMS is built for the other way sites get made now: **in code**, by developers and coding agents like Claude Code, Codex, and Cursor. The site lives in your Git repository and deploys wherever you like. GitCMS gives everyone who runs it an admin: a visual editor for content, review before publish, and bring-your-own AI agents.
+
+The question is less "which CMS" and more "should your website be a Framer project or a codebase you own?"
+
+## What changed in 2026
+
+Framer won designers because the alternative, waiting on developers to build a custom site, was slow. That's no longer true. A designer can now describe a page to a coding agent and get real, shippable code in an afternoon, then keep iterating on it in plain language.
+
+That code-first site is faster to change in the ways agents are good at: refactors, new sections, ten variants of a pricing page. What it doesn't come with is **the admin** for Day Two: the place where marketing edits copy, publishes posts, and reviews what an agent changed. GitCMS is that admin, on top of the repository.
+
+## The short verdict
+
+<Verdict>
+  <VerdictCompetitor title="Framer">
+    - Designers want pixel-level visual control on a canvas
+    - You want design, hosting, and CMS in one product
+    - The team doesn't want to own or review a codebase
+    - You want built-in AI to generate pages inside the builder
+  </VerdictCompetitor>
+  <VerdictGitCMS>
+    - You build the site in code, often with Claude Code, Codex, or Cursor
+    - Clients and marketers need to edit copy and publish posts without Git
+    - You want your own AI agents' changes reviewed before they go live
+    - You want to own the code and host it anywhere
+  </VerdictGitCMS>
+</Verdict>
+
+## Design tool vs codebase
+
+### Framer: the site is a design file
+
+A Framer site is a design document that Framer renders and hosts. That makes visual iteration wonderful: drag, tweak, publish. It also means the site's structure, components, and CMS are Framer's, and changes happen in Framer's editor or through Framer's own AI.
+
+### GitCMS: the site is code
+
+With GitCMS, the site is a normal framework project. Coding agents and developers change components and layouts in the repo. Clients and marketers change content through GitCMS. Every save is a commit, and publishing puts it on the live branch for your host to deploy. Nothing is tied to a proprietary format.
+
+## AI: built-in credits vs your own agents
+
+Framer's AI runs inside Framer and is metered by the platform.
+
+GitCMS takes the opposite bet: **bring your own agent**. Coding agents you already pay for build and improve the site in the repo. ChatGPT, Claude, and other MCP agents connect to GitCMS, draft inside content tasks, and submit for review. You don't buy AI credits from your CMS.
+
+## Feature comparison
+
+<FeatureTable
+  competitor="Framer"
+  rows={[
+    {
+      category: 'Where the site lives',
+      gitcms: 'Your Git repository',
+      competitor: 'Framer platform',
+    },
+    {
+      category: 'Who builds the site',
+      gitcms: 'Developers and coding agents, in code',
+      competitor: 'Designers, on the Framer canvas',
+    },
+    {
+      category: 'Visual layout design',
+      gitcms: 'not-core',
+      competitor: 'native',
+      note: 'Framer is a design tool. GitCMS edits content, not layout.',
+    },
+    {
+      category: 'Content editing for marketers and clients',
+      gitcms: 'native',
+      competitor: 'native',
+    },
+    {
+      category: 'Review before publish',
+      gitcms: 'native',
+      competitor: 'Limited',
+    },
+    {
+      category: 'Hosting',
+      gitcms: 'Your existing host',
+      competitor: 'Included (Framer hosting)',
+    },
+    {
+      category: 'AI',
+      gitcms: 'Bring your own agents; no AI credits',
+      competitor: 'Built-in AI, metered by the platform',
+    },
+    {
+      category: 'Portability',
+      gitcms: 'High (plain code and files)',
+      competitor: 'Low (site lives in Framer)',
+    },
+  ]}
+/>
+
+## Pricing
+
+<PricingCompare
+  competitorName="Framer"
+  gitcms={{
+    note: 'Unlimited content edits. No AI credits. Host the site wherever you already host.',
+  }}
+  competitor={{
+    free: 'Free plan on a framer.website domain',
+    paid: 'Paid site plans, plus paid editor seats for collaborators',
+    note: 'AI usage draws on platform credits, so costs grow with how much the built-in AI does.',
+  }}
+/>
+
+## Where Framer is genuinely better
+
+- **Design quality and speed for designers.** Framer's canvas is a joy, and the output looks great.
+- **No codebase to own.** Hosting, CMS, and design in one product.
+- **Visual autonomy.** Designers and marketers can change layouts, not only content.
+
+If your team never wants to touch code or review a pull request, Framer is a great home.
+
+## Where GitCMS is better
+
+- **Ownership.** The site is your code, in your repo, on your host.
+- **Agent-friendly.** Coding agents are at their best in a codebase, and they can keep improving the site over time.
+- **Review for every change.** Content changes from people and agents go through draft, review, and publish.
+- **Clean client handoff.** Clients edit content without access to design or components.
+
+<Tradeoffs>
+  <p>Choosing a code-first site with GitCMS over Framer is a real tradeoff:</p>
+  <ul>
+    <li>No visual canvas. Layout changes happen in code, by a developer or a coding agent.</li>
+    <li>You manage hosting and deployment yourself.</li>
+    <li>Editable content needs to live in Markdown or MDX content files.</li>
+  </ul>
+  <p>For teams already building with coding agents, these trades buy speed, ownership, and a site that keeps getting better.</p>
+</Tradeoffs>
+
+## Decision by use case
+
+**Designer shipping a visually distinctive site without code:** Framer is the better fit.
+
+**Agency building client sites with Claude Code and handing them off:** GitCMS is the better fit.
+
+**Startup with a code-first site where marketing needs to edit and publish:** GitCMS is the better fit.
+
+**Team that wants its own AI agents working on the site, with review:** GitCMS is the better fit.
+
+<CompareCTA
+  description="Build it in code. Run it with GitCMS."
+/>

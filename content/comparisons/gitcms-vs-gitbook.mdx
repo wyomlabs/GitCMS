@@ -1,0 +1,267 @@
+---
+title: 'GitCMS vs GitBook'
+description: 'GitBook is a polished docs and knowledge platform. GitCMS runs your own code-first site, docs included, with content in your repo and your own design. Here''s when each fits.'
+competitor: 'GitBook'
+category: 'Docs and publishing platforms'
+lastReviewed: '2026-04-16'
+order: 18
+---
+
+GitBook is a polished documentation and knowledge management platform. It has a clean block editor, built-in Git sync, AI-powered search, analytics, and a design that looks professional out of the box. For teams that want a dedicated docs portal — internal or external — GitBook is a well-built option.
+
+But there is a fundamental architectural question: **where does the content actually live?**
+
+GitBook stores content in GitBook's platform. It offers GitHub and GitLab sync, but GitBook is the source of truth — the sync is a convenience feature, not the foundation. If GitBook goes down, your editing stops. If you leave GitBook, you need to export and migrate.
+
+GitCMS inverts this. The Git repo is the source of truth. The content is markdown files. GitCMS is the editing and workflow layer on top — if you leave GitCMS, your content is still right there in the repo, untouched.
+
+## What changed in 2026
+
+GitBook is a hosted platform for documentation and knowledge bases. That made sense when building your own site was the expensive part. Now coding agents build a custom site, with marketing pages, docs, blog, and changelog on your own design, in a day, in a repository you own.
+
+What that site still needs is **the admin**: an editor for the people who write, review before publish, and a safe way for AI agents to draft. GitCMS adds that to the site you already have, instead of moving one slice of your content onto a separate platform. That's Day Two: running the website after it ships.
+
+## The short verdict
+
+<Verdict>
+  <VerdictCompetitor title="GitBook">
+    - You want a dedicated docs and knowledge platform with a polished block editor
+    - Docs-specific features matter: AI search, analytics, feedback, API playgrounds
+    - You want a managed platform that handles hosting, design, and collaboration
+    - Docs are a standalone product surface, separate from the rest of your site
+  </VerdictCompetitor>
+  <VerdictGitCMS>
+    - You want docs, blog, changelog, and marketing pages on one site you own
+    - Your site is built in code, often with a coding agent
+    - Writers and reviewers need an editor and review before publish
+    - Your repo should be the source of truth, not a platform
+  </VerdictGitCMS>
+</Verdict>
+
+## Platform-first vs repo-first
+
+This is the core architectural difference and it matters more than features.
+
+### GitBook: platform-first with git sync
+
+GitBook's block editor is genuinely good — Notion-like, clean, and intuitive. But the content you create lives in GitBook. The GitHub/GitLab sync feature mirrors content to a repo, but GitBook's platform is where the content is authored, stored, and served.
+
+This means:
+
+- **GitBook is the source of truth.** If there is a sync conflict, GitBook's version wins.
+- **Editing depends on the platform.** If GitBook is down, your team cannot edit content.
+- **Content is in GitBook's format.** Git sync exports to markdown, but the canonical format is GitBook's internal structure.
+- **Hosting is GitBook's.** Your docs are served from GitBook's infrastructure.
+
+### GitCMS: repo-first, always
+
+GitCMS starts and ends with the repo. The content is markdown files. The editing experience is a Notion-like editor that writes directly to those files. Git branches are drafts. PRs are review. If GitCMS disappeared tomorrow, your content is still in your repo, still markdown, still deployable.
+
+The Git integration is not a sync feature — it is the architecture.
+
+## The "docs-only" problem
+
+GitBook handles docs and knowledge bases. It does not handle:
+
+- Blog posts
+- Changelogs
+- Marketing pages
+- Legal content
+- Tutorials outside the docs structure
+
+For teams with broader content needs, this means running GitBook for docs and separate tools for everything else. That creates fragmented workflows — different editors, different review processes, different publishing pipelines.
+
+GitCMS manages all content types in one system. A docs update and a blog post go through the same branch-based drafts and PR review. An AI agent can work on both through the same MCP interface.
+
+<CaseStudy
+  title="When Cursor moved from CMS to markdown-in-code"
+  logo={{ src: '/ai-logos/cursor.svg', alt: 'Cursor' }}
+  source="Lee Robinson — Coding Agents & Complexity Budgets"
+  sourceUrl="https://leerob.com/agents"
+  stats={[
+    { label: 'Migration cost', value: '$260' },
+    { label: 'Build speed improvement', value: '2x faster' },
+    { label: 'CDN savings (prior spend)', value: '$56,848' },
+    { label: 'Commits in one weekend', value: '67' },
+  ]}
+>
+  <p>
+    Cursor's engineering team migrated their content — engineering blog, product changelog, and docs — from a platform-hosted CMS back to markdown files in their codebase. The migration took one weekend, cost $260 in tokens, and resulted in 2x faster builds.
+  </p>
+  <p>
+    The pattern is the same: platform-stored content adds complexity when the content could live as files in the repo. GitBook's platform model is cleaner than a database-backed CMS, but the content still lives on someone else's infrastructure.
+  </p>
+</CaseStudy>
+
+## Own your design
+
+GitBook docs look professional. But they look like GitBook docs. The customization options — colors, logos, fonts (custom fonts only on Ultimate at $249/mo) — let you brand within GitBook's design system, but the underlying structure is GitBook's.
+
+With GitCMS, your docs site is entirely yours. Build it with Astro, Next.js, Fumadocs, Starlight, or any framework. Use your own design system. Match your product's visual identity exactly. The content is markdown files managed through GitCMS — the presentation is in your hands.
+
+AI coding agents like **v0**, **Lovable**, **Bolt**, and **Cursor** make building a custom docs site faster than ever. Describe what you want, get a working site with your branding in minutes. The "it takes too long to build our own" argument gets weaker every month.
+
+## AI agents and content workflows
+
+GitBook has AI features: an AI assistant that answers questions from your docs (200 answers on Ultimate, more with the $149/mo add-on) and LLM optimizations for search. These are docs-specific AI tools.
+
+GitCMS approaches AI differently. Its **MCP app** turns AI assistants like ChatGPT, Claude, and other MCP-compatible agents into content agents. They can create drafts, edit posts across all collections (docs, blog, changelog), check SEO, and submit changes for review. The AI workflow spans all content types, not just docs.
+
+GitBook's AI answers questions about your docs. GitCMS's AI helps create and manage your content. Different tools for different parts of the content lifecycle.
+
+## Feature comparison
+
+<FeatureTable
+  competitor="GitBook"
+  rows={[
+    {
+      category: 'Content storage',
+      gitcms: 'Markdown files in Git (repo is source of truth)',
+      competitor: 'GitBook platform (git sync available)',
+      note: 'GitCMS is repo-first. GitBook is platform-first with sync.',
+    },
+    {
+      category: 'Content scope',
+      gitcms: 'Docs, blog, changelog, marketing — unified',
+      competitor: 'Docs and knowledge bases',
+      note: 'GitBook is docs-specific. GitCMS handles all content types.',
+    },
+    {
+      category: 'Design and branding',
+      gitcms: 'Bring your own site and design',
+      competitor: 'GitBook templates (customizable)',
+      note: 'GitCMS lets teams own their visual identity entirely',
+    },
+    {
+      category: 'Hosting',
+      gitcms: 'Deploy anywhere',
+      competitor: 'GitBook-hosted',
+    },
+    {
+      category: 'Editor experience',
+      gitcms: 'Notion-like block editor',
+      competitor: 'Block editor (polished)',
+      note: 'Both have good block editors. GitBook has been refining theirs longer.',
+    },
+    {
+      category: 'AI search / assistant',
+      gitcms: 'not-core',
+      competitor: 'native',
+      note: 'GitBook has AI-powered search that answers questions from docs',
+    },
+    {
+      category: 'API playgrounds',
+      gitcms: 'not-core',
+      competitor: 'native',
+    },
+    {
+      category: 'Analytics and feedback',
+      gitcms: 'not-core',
+      competitor: 'Premium+',
+      note: 'GitBook includes analytics and feedback on paid plans',
+    },
+    {
+      category: 'Git sync',
+      gitcms: 'Core architecture (repo is source of truth)',
+      competitor: 'Sync feature (GitBook is source of truth)',
+    },
+    {
+      category: 'Branching and drafts',
+      gitcms: 'native',
+      competitor: 'Change requests',
+    },
+    {
+      category: 'AI agent workflow',
+      gitcms: 'Native + MCP app for ChatGPT/Claude',
+      competitor: 'AI assistant (docs Q&A)',
+      note: 'GitCMS MCP works across all content. GitBook AI answers docs questions.',
+    },
+    {
+      category: 'Self-hosting',
+      gitcms: 'yes',
+      competitor: 'no',
+    },
+    {
+      category: 'Vendor lock-in',
+      gitcms: 'Low (content is files in your repo)',
+      competitor: 'Medium (content lives in GitBook, exportable)',
+    },
+  ]}
+/>
+
+## Pricing
+
+<PricingCompare
+  competitorName="GitBook"
+  gitcms={{
+    note: 'Content workflow for docs, blog, changelog, and more. You bring your own hosting.',
+  }}
+  competitor={{
+    free: 'Free: 1 user, basic features',
+    paid: 'Premium $65/site/mo + $12/user/mo, Ultimate $249/site/mo + $12/user/mo',
+    note: 'Custom fonts require Ultimate ($249/mo). AI assistant: 200 answers on Ultimate, advanced AI add-on $149/mo extra.',
+  }}
+/>
+
+GitBook's pricing adds up. A 5-person team on Premium is $65 + (5 x $12) = $125/mo — for docs only. On Ultimate (for custom fonts, AI assistant, cross-doc search), it is $249 + (5 x $12) = $309/mo. Add the advanced AI add-on and you are at $458/mo.
+
+GitCMS prices per site rather than per docs seat, and one license covers docs, blog, changelog, and marketing content in one system. GitBook charges recurring per-user fees on top of its plan price.
+
+## Where GitBook is genuinely better
+
+GitBook is the stronger choice when **docs are a standalone product and you want a managed platform**.
+
+If your team:
+
+- Wants a dedicated docs and knowledge platform with a polished out-of-box experience
+- Needs docs-specific features: AI-powered search, API playgrounds, analytics
+- Values a managed platform that handles hosting, design, and scaling
+- Treats docs as separate from the rest of the site content
+- Wants internal knowledge bases alongside public docs
+
+Then GitBook is a well-built product that does this job well. Its block editor is genuinely good, and the managed experience reduces operational overhead.
+
+## Where GitCMS is better
+
+GitCMS is better when **the repo should be the source of truth and you want to own the full experience**.
+
+The fundamental question: should your content live in a platform, or in your repo?
+
+If you believe the repo is the right home for content — portable, inspectable, diffable, reviewable — then GitCMS gives you:
+
+- **Repo-first architecture** — the Git repo is the source of truth, not a platform
+- **Your own design** — bring your own site with your own branding
+- **One workflow** for docs, blog, changelog, and marketing
+- **MCP integration** for AI-assisted content across all collections
+- **Lower cost** for teams with broader content needs
+- **Zero platform dependency** — content survives any tool change
+
+<Tradeoffs>
+  <p>Choosing GitCMS over GitBook is a real tradeoff:</p>
+  <ul>
+    <li>GitBook gives you polished docs fast. With GitCMS, you need to build or choose your own docs site.</li>
+    <li>GitBook has docs-specific features (AI search, API playgrounds, analytics) that GitCMS does not include.</li>
+    <li>GitBook's block editor has been refined over years and is very polished for docs-specific work.</li>
+    <li>GitBook handles hosting and scaling. With GitCMS, you manage your own deployment.</li>
+    <li>For teams that only need docs, GitBook's managed experience reduces operational overhead.</li>
+  </ul>
+  <p>For teams that want repo-first content ownership, their own design and branding, and a unified workflow across all content types — these tradeoffs are usually worth it. You get true portability, full design control, and a system built for how content teams work in 2026.</p>
+</Tradeoffs>
+
+## Decision by use case
+
+**Standalone docs portal with AI search and managed hosting:** GitBook is the better fit.
+
+**Docs, blog, changelog, and marketing in one repo with your own design:** GitCMS is the better fit.
+
+**Internal knowledge base alongside public docs:** GitBook is the better fit.
+
+**Team that wants the repo as the source of truth, not a platform:** GitCMS is the better fit.
+
+**Docs-specific analytics and API playgrounds are important:** GitBook is the better fit.
+
+**Team that wants to own the design, branding, and hosting of their docs:** GitCMS is the better fit.
+
+<CompareCTA
+  description="Your repo. Your design. Docs, blog, and changelog in one admin."
+/>

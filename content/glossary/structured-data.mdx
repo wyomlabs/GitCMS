@@ -1,0 +1,44 @@
+---
+title: 'Structured data (JSON-LD)'
+category: seo
+definition: 'Structured data is machine-readable information about a page, usually written as JSON-LD using schema.org types, that tells search and answer engines what the page describes.'
+description: 'What structured data and JSON-LD are, which schema.org types matter for marketing sites, and how to add them.'
+related:
+  - seo
+  - aeo
+  - meta-description
+lastReviewed: '2026-10-10'
+---
+
+## Example
+
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Austin Plumbing Co.",
+  "url": "https://example.com",
+  "logo": "https://example.com/logo.png"
+}
+</script>
+```
+
+## Types worth using on marketing sites
+
+| Type | Use it for |
+|---|---|
+| `Organization` | Your company, on every page |
+| `SoftwareApplication` / `Product` | What you sell, with offers |
+| `Article` / `BlogPosting` | Blog posts and guides |
+| `FAQPage` | Question-and-answer sections |
+| `LocalBusiness` | Local service businesses |
+| `DefinedTerm` | Glossary entries |
+
+## Why it matters
+
+Structured data can enable rich results in Google and gives answer engines unambiguous facts about your entity. It doesn't replace good content, but it removes guesswork.
+
+## On code-first sites
+
+Generate JSON-LD from the same data your page renders (frontmatter fields, FAQ lists), so the two can't drift apart.

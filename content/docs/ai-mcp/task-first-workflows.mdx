@@ -1,0 +1,208 @@
+---
+title: Task-First AI Workflows
+description: Prompt patterns and workflow guidance for using GitCMS MCP through content tasks instead of ad hoc copy-paste writing.
+---
+
+GitCMS MCP works best when you treat AI as part of the editorial workflow, not as a detached writing box.
+
+This page applies to sites using **Review before publish**. If your site uses **Direct publish**, GitCMS skips content tasks and writes directly to the publishing branch.
+
+You can prompt in plain language. You do not need to say things like collection, entry, markdown file, branch, or repository unless you want that level of control.
+
+For most writing tasks, the best pattern is:
+
+1. brainstorm in conversation
+2. choose an angle
+3. create a content task
+4. draft against that task
+5. revise
+6. submit for review
+
+## Why task-first matters
+
+For sites using Review before publish, the GitCMS MCP writing flow is built around content tasks.
+
+That gives you:
+
+- clearer scope for the model
+- a visible task on the content board
+- attached notes, references, and review context
+- a clean path from draft to review
+- less confusion about what content is “the current one”
+
+If you skip the task and jump straight to “write something,” the conversation is usually less grounded and the output is harder to track.
+
+## Recommended prompt sequence
+
+### 1. Brainstorm first
+
+Start with strategy, not generation:
+
+```text
+Help me brainstorm three article ideas for our audience of engineering managers
+who are moving from a traditional CMS to a markdown-based content workflow.
+
+Keep the ideas specific and differentiated.
+Do not create content yet.
+```
+
+This keeps the early conversation cheap and flexible.
+
+### 2. Turn the chosen idea into a content task
+
+Once you have a direction, ask the model to create a task:
+
+```text
+Create a content task for the strongest idea.
+
+Title: Migrating from a traditional CMS to a markdown-based docs workflow
+
+In the notes, capture:
+- target audience: engineering managers
+- intent: evaluation and migration planning
+- desired CTA: book a demo
+- angle: editorial workflow plus Git-backed control
+```
+
+At this stage, you are creating the work item, not the final content.
+
+### 3. Draft the first version against the task
+
+After the task exists, ask the model to draft:
+
+```text
+Draft the first version for that content task in the posts collection.
+
+Keep the tone practical and direct.
+Set the entry path to cms-to-markdown-migration.md
+Add frontmatter for title, description, date, and tags.
+Leave it ready for review.
+```
+
+Be explicit about:
+
+- collection
+- entry path
+- locale, when relevant
+- frontmatter fields that matter
+- whether the result should stay in draft or move to review later
+
+If you do not want to think about those details, you can also start with the page or post itself:
+
+```text
+I want to edit this blog post:
+https://gitcms.dev/blog/content-is-just-code
+
+Read it first and then make the tone more direct.
+```
+
+### 4. Revise in conversation
+
+Once the draft exists, use follow-up prompts to improve it:
+
+```text
+Open the current draft for the content task and tighten the introduction.
+Cut generic claims and make the first section more concrete.
+```
+
+```text
+Add a section comparing workflow, review, and ownership versus WordPress.
+Keep the tone calm and opinionated.
+```
+
+```text
+Check the draft for anything that still sounds off-brand before changing it.
+```
+
+### 5. Submit for review when it is ready
+
+When you want the team to see it:
+
+```text
+Submit this content task for review with a short summary of what changed
+and what feedback we want from reviewers.
+```
+
+## Working with existing tasks
+
+You do not always need to start fresh.
+
+Good examples:
+
+```text
+Show me the current draft tasks for our docs site.
+```
+
+```text
+Open content task #142 and summarize what has already been written.
+```
+
+```text
+Continue drafting content task #142 and expand the implementation section.
+```
+
+## Working with existing content
+
+For edits to existing entries, ask the model to inspect the current content first:
+
+```text
+Read the getting-started guide in the docs collection and summarize what needs
+to change before making edits.
+```
+
+On Review before publish sites, move to a task-based rewrite or revision flow if the change is substantial. On Direct publish sites, the model can edit the entry directly.
+
+You can also point at the live page directly:
+
+```text
+I want to edit this page:
+https://docs.example.com/getting-started/
+
+Summarize what should change before you rewrite it.
+```
+
+## Locale-aware prompting
+
+For multilingual sites, always specify the locale:
+
+```text
+Create a content task for the French docs locale and draft the first version in locale fr.
+```
+
+```text
+Read the entry in locale de and update only that locale.
+```
+
+## CONTENT.md improves output quality
+
+GitCMS loads `CONTENT.md` into the site context during AI-assisted writing flows.
+
+Use [`CONTENT.md`](/docs/ai-mcp/content-instructions) for:
+
+- audience
+- brand voice
+- structure preferences
+- terminology
+- do and do not rules
+
+Do not use it for one-off campaign notes or temporary instructions.
+
+You do not need to add prompt text like `Use CONTENT.md guidance.` The better approach is to keep `CONTENT.md` current and then prompt for the actual task, page, or post at hand.
+
+## CLI onboarding prompt
+
+If `.gitcms` is missing or incomplete, fix that first. The AI workflow depends on GitCMS understanding your site structure.
+
+Use the [CLI onboarding prompt](/docs/getting-started/cli-onboarding#agentic-onboarding) to bootstrap configuration before relying on MCP for content work.
+
+## What to avoid
+
+Avoid prompts like:
+
+- “Write me a post about X” with no site, task, or collection context
+- “Publish this now” before anyone has reviewed it
+- “Just figure out the fields” when frontmatter requirements matter
+- “Use whatever tone you want” when your brand voice is important
+- raw Git instructions that your editor or content team would not normally use
+
+For Review before publish sites, the more your prompt matches the editorial workflow, the easier the work is to track and review.

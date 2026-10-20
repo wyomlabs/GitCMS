@@ -1,0 +1,31 @@
+---
+title: 'Static website'
+category: rendering
+definition: 'A static website serves pre-built HTML files that are the same for every visitor, instead of generating pages on a server for each request.'
+description: 'What a static website is, its strengths and limits, and how modern static sites still handle dynamic features.'
+related:
+  - dynamic-website
+  - static-vs-dynamic-website
+  - static-site-generation
+  - static-site-generator
+lastReviewed: '2026-10-10'
+---
+
+## How it works
+
+A build step turns templates and content into HTML, CSS, and JavaScript files. A host or CDN serves those files as-is. There's no application server or database involved in serving a page.
+
+## Strengths
+
+- **Fast**: files are served from a CDN close to the visitor
+- **Cheap**: static hosting is often free or nearly free
+- **Secure**: no server-side code or database to attack
+- **Simple**: the site is a folder of files
+
+## Limits
+
+Content changes require a rebuild, and per-visitor content (dashboards, carts) needs JavaScript and APIs on top.
+
+## Static doesn't mean basic
+
+Most marketing sites, blogs, and docs are static. Forms, search, and analytics are added through APIs. "Static" describes how pages are served, not how they look.

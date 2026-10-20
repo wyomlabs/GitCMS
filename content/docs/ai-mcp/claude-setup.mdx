@@ -1,0 +1,153 @@
+---
+title: Claude Setup
+description: Connect GitCMS to Claude and edit site content through GitCMS MCP.
+---
+
+This guide shows how to connect GitCMS to Claude and use it in the current GitCMS MCP workflow.
+
+Once connected, GitCMS can open the editor inside Claude so you can draft, revise, and review content alongside the conversation.
+
+You can speak naturally. You do not need to use GitCMS internals like collection names, markdown file paths, or Git terminology unless you want that precision.
+
+## Prerequisites
+
+- A GitCMS account with access to at least one repository or site.
+- A Claude Pro, Team, or Enterprise subscription.
+- A **licensed** GitCMS site. MCP is not available in preview mode.
+
+Before connecting Claude, make sure:
+
+- `.gitcms` is initialized for the repository
+- your site configuration is in place
+- [`CONTENT.md`](/docs/ai-mcp/content-instructions) contains reusable writing guidance if you care about voice and audience consistency
+
+If onboarding is not finished yet, start with [CLI Onboarding](/docs/getting-started/cli-onboarding).
+
+## Setup
+
+1. Open **Claude** (web app or desktop app).
+2. Go to **Settings → Connectors** and click **Add custom connector**.
+3. Paste the following GitCMS connector URL:
+
+```
+https://mcp.gitcms.dev
+```
+
+4. Click **Add**, then **Connect**, and sign in to GitCMS with Google or GitHub.
+5. Start a new chat and pick **GitCMS** under Connectors.
+
+That&apos;s it. The GitCMS visual editor will open inside Claude when you use the connector.
+
+<video src="/videos/guides/claude-setup.mp4" controls muted playsInline preload="none" style={{ width: '100%', borderRadius: '0.5rem' }} poster="/images/video-posters/guides/claude-setup.webp">
+  Claude setup walkthrough
+</video>
+
+## First workflow to try
+
+The best starting pattern is:
+
+1. brainstorm
+2. create a content task
+3. draft the first version
+4. revise
+5. submit for review
+
+Example:
+
+```text
+Help me brainstorm three docs articles for teams adopting Git-based content workflows.
+Do not create content yet.
+```
+
+```text
+Create a content task for the strongest idea and capture the audience,
+problem, and desired CTA in the notes.
+```
+
+```text
+Draft the first version for that content task in the docs collection.
+Leave it ready for review.
+```
+
+```text
+I want to edit this blog post:
+https://gitcms.dev/blog/content-is-just-code
+
+Read it first and then make the introduction more concise.
+```
+
+See [Task-First AI Workflows](/docs/ai-mcp/task-first-workflows) for more examples.
+
+## Working with Claude in GitCMS
+
+### Create a task after planning
+
+```text
+Create a content task titled "Shipping Faster with AI-Assisted Content".
+Include notes about audience, tone, and the points we want the article to cover.
+```
+
+### Draft from a content task
+
+```text
+Draft the first version for content task #<task-id> in the posts collection.
+Set the date to today, tag it with ai, productivity, and workflow,
+and keep it in draft.
+```
+
+### Review the current draft before rewriting
+
+```text
+Open content task #<task-id> and summarize what needs fixing before you edit it.
+```
+
+### Improve an existing task
+
+```text
+Open content task #<task-id> and rewrite the introduction to be more concise.
+Keep the rest of the structure intact.
+```
+
+### Edit from a live URL
+
+```text
+I want to edit this page:
+https://docs.example.com/getting-started/
+
+Summarize what needs fixing before you rewrite it.
+```
+
+### Submit for review
+
+```text
+Submit content task #<task-id> for review and summarize what changed.
+```
+
+## Prompting tips
+
+- **Let Claude read first.** Before making edits, ask Claude to read the existing content. This gives it context and leads to better edits.
+- **Match the site's publishing mode.** Review-before-publish sites use content tasks; direct-publish sites write directly to the publishing branch.
+- **Use plain language when that is easier.** Prompts like "edit this blog post" or "rewrite this live URL" are valid.
+- **Specify locale for multilingual sites.** Say `use locale de` or your target locale.
+- **Keep CONTENT.md current.** GitCMS loads those site instructions as part of site context during writing flows, so you do not need to tell Claude to use them explicitly.
+- **Keep work in review flow.** Ask Claude to leave drafts ready for review instead of trying to skip approval.
+- **Iterate in conversation.** Claude remembers context within a conversation. You can say "change the title to..." or "add another section about..." without re-specifying everything.
+- **Be specific about formatting.** If you want a specific heading structure, bullet points, or code examples, mention it in your prompt.
+
+## Troubleshooting
+
+### GitCMS connector not showing
+
+- Make sure you completed the setup steps and the connector status shows as connected.
+- Start a new conversation if the connector was added mid-session.
+
+### "Authentication failed"
+
+- Disconnect GitCMS from Claude&apos;s Connectors settings and reconnect.
+- Make sure you completed the GitCMS sign-in flow.
+
+### Claude doesn't use GitCMS
+
+- Be explicit: say "Use GitCMS to..." so Claude knows you want the connector.
+- Start a fresh conversation if the connector was added mid-session.
+- Check that GitCMS is selected under Connectors for the current conversation.

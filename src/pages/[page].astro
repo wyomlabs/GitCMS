@@ -1,0 +1,23 @@
+---
+import { getCollection, render } from 'astro:content'
+import defaultMdxComponents from 'fumadocs-ui/mdx'
+import ContentLayout from '@/layouts/ContentLayout.astro'
+import { CodeFirstTeamsList } from '@/components/landing/code-first-teams'
+
+export async function getStaticPaths() {
+  return (await getCollection('pages')).map((page) => ({
+    params: { page: page.id.replace(/\.mdx?$/, '') },
+    props: { page },
+  }))
+}
+const { page } = Astro.props
+const { Content } = await render(page)
+const slug = page.id.replace(/\.mdx?$/, '')
+---
+<ContentLayout title={`${page.data.title} — GitCMS`} description={page.data.description} path={`/${slug}`}>
+  <article class="mx-auto max-w-3xl px-6 py-16">
+    <div class="prose prose-neutral prose-lg max-w-none prose-headings:font-logo prose-headings:font-medium prose-headings:tracking-tight prose-h1:text-3xl prose-h1:sm:text-4xl prose-a:text-neutral-900 prose-a:underline-offset-2">
+      <Content components={{ ...defaultMdxComponents, CodeFirstTeamsList }} />
+    </div>
+  </article>
+</ContentLayout>

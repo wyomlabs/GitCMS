@@ -1,0 +1,184 @@
+---
+title: Markdown Editor
+description: How the GitCMS editor works — Notion-like editing, slash commands, frontmatter forms, media, and beta custom SSG component support.
+---
+
+GitCMS gives you a visual Markdown editor that feels closer to a modern doc tool than a raw text area, while still saving back to real files in your repository.
+
+The goal is simple:
+
+- writers and marketers should not need to think in raw Markdown syntax
+- developers should still keep plain Markdown or MDX files in Git
+- frontmatter should feel like a structured form, not YAML hand-editing
+
+## What the editing experience feels like
+
+When you open an entry in GitCMS, you work in a Notion-like editing surface:
+
+- a visual body editor for the main content
+- structured frontmatter fields above the document
+- slash commands for inserting blocks quickly
+- drag-and-drop block reordering
+- media selection without leaving the editor
+- internal link suggestions from your sitemap when available
+
+This speed-run shows a real long-form writing session in GitCMS, from draft setup and frontmatter to rich content, code-heavy sections, and the final output:
+
+<video src="/videos/docs/editor-writing-speedrun-v4-10x.mp4" controls muted playsInline preload="none" style={{ width: '100%', borderRadius: '0.5rem' }} poster="/images/video-posters/docs/editor-writing-speedrun-v4-10x.webp">
+  Your browser does not support the editor writing speed-run video.
+</video>
+
+GitCMS still writes back to your repository, so the editor is a better surface for Markdown content, not a separate proprietary format.
+
+## Body editing
+
+The main document editor is built for everyday blog, docs, and changelog work.
+
+You can insert and edit common blocks such as:
+
+- headings
+- bulleted, numbered, and to-do lists
+- code blocks
+- blockquotes
+- callouts
+- dividers
+- tables
+- images
+- table of contents blocks
+- equations
+
+Use `/` to open slash commands and insert blocks without remembering Markdown syntax.
+
+Blocks can also be moved with drag-and-drop, which makes it easier to restructure long content without cutting and pasting raw Markdown.
+
+## Frontmatter without YAML editing
+
+Above the document body, GitCMS renders your frontmatter as a structured editor instead of forcing you to edit raw YAML, TOML, or JSON by hand.
+
+Depending on your collection schema, GitCMS can render frontmatter fields such as:
+
+- title
+- text
+- rich text
+- boolean
+- number
+- datetime
+- select
+- multiselect
+- URL
+- email
+- slug
+- image
+- groups and lists of fields (raw JSON until their fields are described)
+
+That means fields like `title`, `description`, `publishDate`, `tags`, `author`, `featured`, or `coverImage` can be edited through purpose-built controls instead of plain frontmatter text.
+
+For example:
+
+- tags can behave like selectable chips
+- image fields can open the media picker
+- slug fields can be generated from patterns
+- datetime fields can use date or date-time controls
+
+For a full breakdown of schema and validation options, see [Collections & Fields](/docs/features/collections).
+
+## Works with your frontmatter format
+
+GitCMS preserves the frontmatter format your site already uses:
+
+- YAML
+- TOML
+- JSON
+
+You configure that at the site level, and the editor keeps working against that format. GitCMS does not force you to migrate your content model just to get a better editing experience.
+
+## Media inside the editor
+
+Image fields and body content can use GitCMS media workflows directly from the editor.
+
+That means teams can:
+
+- upload images into repository or object-storage media libraries
+- pick existing media from the configured media libraries
+- keep image references in Git-backed content files
+
+See [Media Library](/docs/features/media-management) for media-specific behavior.
+
+## Internal links without leaving the editor
+
+If your site has a configured sitemap, GitCMS can help writers add internal links faster.
+
+When you insert or edit a link, the editor can suggest published pages from your site so you can search instead of pasting URLs by hand.
+
+This works especially well for:
+
+- docs sites with lots of cross-links
+- blogs that frequently link to older posts
+- marketing sites with many landing pages
+
+See [Sitemaps, Internal Links & Live URLs](/docs/features/sitemaps-internal-links) for setup and behavior.
+
+## Draft recovery
+
+GitCMS also helps protect in-progress writing in the browser.
+
+If your editing session is interrupted, GitCMS can offer to restore your local draft the next time you open that entry. This is useful after:
+
+- an accidental tab close
+- a browser refresh
+- a connection hiccup
+- navigating away before saving
+
+If the file changed in the meantime, GitCMS still lets you know that your saved draft may no longer match the latest version, so you can choose whether to restore it or continue from the current content.
+
+Here is a short speed-run of restoring an interrupted draft:
+
+<video src="/videos/docs/draft-recovery-trimmed.mp4" controls muted playsInline preload="none" style={{ width: '100%', borderRadius: '0.5rem' }} poster="/images/video-posters/docs/draft-recovery-trimmed.webp">
+  Your browser does not support the draft recovery demo video.
+</video>
+
+## Custom SSG components in beta
+
+GitCMS also includes beta support for editing custom SSG syntax inside Markdown and MDX content.
+
+This is useful when your content includes framework-specific components or templating syntax that should be preserved instead of flattened into plain text.
+
+Examples GitCMS can work with include:
+
+- Hugo shortcodes like `{{< youtube id="..." >}}`
+- Jekyll includes like `{% include component.html %}`
+- Eleventy shortcodes
+- JSX or MDX components used by Astro, Next.js, Gatsby, Docusaurus, and TanStack Start
+- VuePress component syntax
+- Nuxt MDC component syntax
+- MkDocs or Jinja-style macros
+- Svelte component syntax
+
+<Callout type="info">
+**Beta:** Custom SSG component editing works today, but it may still have rough edges while parsing or editing framework-specific syntax.
+</Callout>
+
+## Schema-aware, not generic
+
+The editor is aware of your GitCMS site configuration.
+
+That means it can use:
+
+- your configured collections
+- your frontmatter schema
+- your file extension choice (`.md` or `.mdx`)
+- your SSG framework
+- your configured media libraries
+
+If you have not defined a full frontmatter schema yet, GitCMS can also infer sensible field types from existing content and then let you refine the schema later in Settings.
+
+## What stays true underneath
+
+Even though the editor feels visual, the underlying model stays developer-friendly:
+
+- content remains Markdown or MDX in your repo
+- frontmatter remains plain frontmatter
+- framework-specific syntax is preserved where possible
+- Git remains the source of truth
+
+GitCMS is not trying to replace your content files. It is trying to make those files much easier to work with.

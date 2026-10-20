@@ -1,0 +1,282 @@
+---
+title: 'GitCMS vs CloudCannon'
+description: 'CloudCannon is an established Git-based CMS with visual editing and hosting. GitCMS is the CMS for code-first and AI-built websites, built around review and bring-your-own agents. Here''s when each fits.'
+competitor: 'CloudCannon'
+category: 'Git-based CMS'
+lastReviewed: '2026-04-16'
+order: 16
+---
+
+CloudCannon is the most established commercial Git-based CMS. It has been around for years, supports a wide range of static site generators (Hugo, Jekyll, Eleventy, Astro, Next.js, Nuxt, SvelteKit), and offers visual editing with live preview, hosting, and team collaboration. It is a full platform — Git-backed content management with built-in builds, hosting, and publishing workflows.
+
+GitCMS is the CMS for code-first and AI-built websites. It does not host your site or run your builds. It connects to the repository behind a site you or your coding agent already built, and gives your team, your clients, and AI agents one safe place to edit, review, and publish changes. The content stays in your repo and deploys wherever you already deploy.
+
+Both store content in Git, and both now talk about AI. The question is whether you want a full CMS platform with hosting, or an admin layer you add to the website you already have.
+
+## The short verdict
+
+<Verdict>
+  <VerdictCompetitor title="CloudCannon">
+    - You want a full CMS platform with built-in hosting, builds, and publishing
+    - You need visual editing with live preview directly on your rendered site
+    - Your team uses Hugo, Jekyll, or Eleventy and wants a mature, established CMS
+    - You need enterprise features like custom permissions, branching workflows, and scheduling
+  </VerdictCompetitor>
+  <VerdictGitCMS>
+    - Your site was built with code or a coding agent and already deploys on Vercel, Netlify, or Cloudflare
+    - You want clients and marketers editing without Git, and AI agents drafting through the same review flow
+    - You want to bring your own agents (ChatGPT, Claude, other MCP clients) instead of a platform AI feature
+    - You need an admin layer, not a hosting platform
+  </VerdictGitCMS>
+</Verdict>
+
+## Platform vs workflow tool
+
+This is the fundamental difference.
+
+### CloudCannon: a CMS platform
+
+CloudCannon is a full stack. You connect your Git repo, CloudCannon builds your site, hosts it, and gives editors a visual interface to update content. It handles:
+
+- **Builds and hosting** — CloudCannon builds your static site and serves it
+- **Visual editing** — editors see the rendered site and edit content in place
+- **Team collaboration** — role-based access, custom permission groups, content scheduling
+- **Branching workflows** — staging environments for content changes before they go live
+
+This is convenient. One platform handles everything from editing to deployment. For teams that want a single vendor for their content workflow and hosting, CloudCannon simplifies the operational model.
+
+The tradeoff: you are coupling your content management to a hosting platform. Your deployment pipeline, your build process, and your content editing all run through one vendor.
+
+### GitCMS: the content layer
+
+GitCMS does one thing: make content in your repo easy to write, review, and publish. It does not build your site. It does not host your site. Your existing deployment pipeline — Vercel, Netlify, Cloudflare Pages, whatever — stays exactly as it is.
+
+This means more setup (you need your own deployment), but also more flexibility. The CMS is decoupled from hosting. You can change either independently.
+
+## The editor question
+
+CloudCannon's visual editor lets you edit content directly on your rendered site. You see the page as it will look, click on elements, and edit in place. This is powerful for pages where visual layout matters — marketing landing pages, complex layouts, component-heavy pages.
+
+GitCMS gives you a **Notion-like block editor**. It is optimized for writing prose — docs, blog posts, changelogs, marketing copy. Rich text, slash commands, drag-and-drop blocks, inline formatting.
+
+For text-heavy content, a dedicated writing editor is often better than editing on the rendered page. For layout-heavy content, CloudCannon's visual editing has the edge.
+
+## Both are AI-ready. The difference is what sits at the center.
+
+CloudCannon now markets itself as visual editing "on the stack AI already knows," and points out that plain files in Git are easy for coding agents to work with. That is true, and it applies to GitCMS too.
+
+The difference is emphasis. CloudCannon is a CMS and hosting platform that works well with AI-written code. GitCMS is built for what happens after the site exists: the client who needs to change a sentence, the marketer who needs to publish a case study, and the agent whose changes someone needs to review. People and agents work through the same content tasks, and in review-before-publish mode nothing goes live until a person approves it.
+
+## The markdown-in-git approach works
+
+Both tools agree on this foundation.
+
+<CaseStudy
+  title="Markdown-in-git scales: the Cursor migration"
+  logo={{ src: '/ai-logos/cursor.svg', alt: 'Cursor' }}
+  source="Lee Robinson — Coding Agents & Complexity Budgets"
+  sourceUrl="https://leerob.com/agents"
+  stats={[
+    { label: 'Migration cost', value: '$260' },
+    { label: 'Build speed improvement', value: '2x faster' },
+    { label: 'CDN savings (prior spend)', value: '$56,848' },
+    { label: 'Commits in one weekend', value: '67' },
+  ]}
+>
+  <p>
+    Cursor's engineering team migrated their content site — engineering blog, product changelog, and docs — from an API-based CMS back to markdown files in their codebase. The migration took one weekend using AI agents, cost $260 in tokens, and resulted in 2x faster builds.
+  </p>
+  <p>
+    Both CloudCannon and GitCMS are on the right side of this trend. The content-in-git model scales better than API-based CMSs for text-heavy sites. The question is what sits on top.
+  </p>
+</CaseStudy>
+
+## Content as code
+
+Both tools deliver the content-as-code benefits:
+
+- **`grep` works.** Search your entire content library with standard dev tools.
+- **`git log` works.** Every content change has a commit, an author, a timestamp, and a diff.
+- **`git blame` works.** Trace any sentence to the person or agent that wrote it.
+- **Code review works.** Content changes go through the same PR process as code changes.
+- **Deploys are atomic.** Content and code ship together.
+
+This is shared ground. Both are better than database-backed CMSs for content portability and developer workflow.
+
+## AI agents and MCP
+
+AI coding agents work natively with markdown files in a repository. Both tools benefit from this.
+
+The gap is in structured content workflows. Writers use AI assistants daily — for drafting, SEO, rewrites, and content operations. A CMS that integrates with those assistants turns AI into part of the content workflow, not a side tool.
+
+GitCMS's **MCP app** turns AI assistants like ChatGPT, Claude, and other MCP-compatible agents into content agents. They can create drafts on branches, edit posts, manage collections, check SEO, and submit changes for review. GitCMS handles the git workflow underneath.
+
+CloudCannon does not have MCP support. Its editing model is visual and platform-based — you edit through CloudCannon's interface, not through an AI assistant.
+
+## Feature comparison
+
+<FeatureTable
+  competitor="CloudCannon"
+  rows={[
+    {
+      category: 'Content storage',
+      gitcms: 'Markdown files in Git',
+      competitor: 'Markdown files in Git',
+      note: 'Same model — both store content as files in a repo',
+    },
+    {
+      category: 'Version control',
+      gitcms: 'native',
+      competitor: 'native',
+    },
+    {
+      category: 'Branching and drafts',
+      gitcms: 'native',
+      competitor: 'Branching workflows (Team plan+)',
+      note: 'Both use Git branches. CloudCannon locks branching to higher tiers.',
+    },
+    {
+      category: 'Editor experience',
+      gitcms: 'Notion-like block editor',
+      competitor: 'Visual editor (edit on rendered site)',
+      note: 'CloudCannon edits in-page. GitCMS has a dedicated writing editor.',
+    },
+    {
+      category: 'Markdown / MDX support',
+      gitcms: 'native',
+      competitor: 'native',
+    },
+    {
+      category: 'Visual editing',
+      gitcms: 'Editor preview',
+      competitor: 'Live on-page editing',
+      note: 'CloudCannon has stronger visual editing for layout-heavy pages',
+    },
+    {
+      category: 'Built-in hosting',
+      gitcms: 'not-core',
+      competitor: 'native',
+      note: 'CloudCannon builds and hosts your site. GitCMS does not.',
+    },
+    {
+      category: 'Content scheduling',
+      gitcms: 'not-core',
+      competitor: 'Team plan+',
+      note: 'CloudCannon has content scheduling on higher plans',
+    },
+    {
+      category: 'Framework support',
+      gitcms: 'Framework-agnostic',
+      competitor: 'Hugo, Jekyll, Eleventy, Astro, Next.js, Nuxt, SvelteKit',
+      note: 'CloudCannon has deep integrations with specific SSGs',
+    },
+    {
+      category: 'Git provider support',
+      gitcms: 'GitHub, GitLab, Bitbucket',
+      competitor: 'GitHub, GitLab, Bitbucket',
+    },
+    {
+      category: 'AI agent workflow',
+      gitcms: 'Native + MCP app for ChatGPT/Claude',
+      competitor: 'not-core',
+      note: 'GitCMS turns AI assistants into content agents via MCP',
+    },
+    {
+      category: 'Team permissions',
+      gitcms: 'Git-based (PRs, branches, review)',
+      competitor: 'Custom permission groups (Team plan+)',
+      note: 'CloudCannon has more granular permission controls',
+    },
+    {
+      category: 'Self-hosting',
+      gitcms: 'yes',
+      competitor: 'no',
+    },
+    {
+      category: 'Vendor lock-in',
+      gitcms: 'Low (content portable, deploy anywhere)',
+      competitor: 'Low-medium (content portable, but hosting is coupled)',
+    },
+  ]}
+/>
+
+## Pricing
+
+<PricingCompare
+  competitorName="CloudCannon"
+  gitcms={{
+    note: 'Content workflow only. No hosting costs — deploy wherever you already deploy.',
+  }}
+  competitor={{
+    free: 'No free tier',
+    paid: 'Standard $55/mo (3 users), Team $350/mo (15 users), Enterprise custom',
+    note: 'Includes hosting + builds. Extra users $10/mo. Bandwidth: 110GB included on Standard, overages $15/100GB.',
+  }}
+/>
+
+CloudCannon includes hosting and builds in the price, so the comparison is not apples-to-apples. If you need a hosting platform plus a CMS, CloudCannon's $55/mo for 3 users covers both. If you already have hosting (Vercel, Netlify, Cloudflare Pages), you are paying CloudCannon for hosting you do not need.
+
+GitCMS is content workflow only. You bring your own hosting. For teams that already have a deployment pipeline, this avoids paying twice for hosting.
+
+The jump from CloudCannon Standard ($55/mo, 3 users) to Team ($350/mo, 15 users) is steep. Branching workflows and content scheduling are locked behind the Team tier.
+
+## Where CloudCannon is genuinely better
+
+CloudCannon is the stronger choice when you want a **full CMS platform with hosting and visual editing**.
+
+If your team:
+
+- Wants one platform for content editing, builds, hosting, and publishing
+- Needs visual editing where editors click on the rendered page and edit in place
+- Uses Hugo, Jekyll, or Eleventy and wants deep SSG integration
+- Needs enterprise features like custom permissions, content scheduling, and branching workflows
+- Prefers a single vendor for the full content-to-deployment pipeline
+
+Then CloudCannon is a mature, established platform that handles the full stack. It has been doing this longer than most competitors.
+
+## Where GitCMS is better
+
+GitCMS is better when **the site already exists and deploys, and what you need is a way for everyone else to run it**.
+
+Most code-first sites, especially ones built with Claude Code, Codex, or Cursor, deploy through Vercel, Netlify, Cloudflare Pages, or GitHub Actions. The build-and-host problem is solved. What's missing is a safe way for clients, marketers, and agents to change the site without a developer in the loop.
+
+GitCMS gives you:
+
+- A **visual editor** for clients and marketers, with no Git or IDE access
+- **Review before publish** for changes from people and AI agents alike
+- **Bring-your-own agents** through MCP, with no AI credits to buy
+- **Freedom to deploy anywhere** — the CMS is decoupled from hosting
+- **Lower cost** for small teams (one GitCMS site license vs $55/mo for CloudCannon's base tier)
+
+If the editing experience and AI workflows matter more than built-in hosting, GitCMS is the more focused tool.
+
+<Tradeoffs>
+  <p>Choosing GitCMS over CloudCannon is a real tradeoff:</p>
+  <ul>
+    <li>CloudCannon includes hosting and builds. With GitCMS, you need your own deployment pipeline.</li>
+    <li>CloudCannon's visual editing is stronger for layout-heavy pages where editors need to see the rendered result.</li>
+    <li>CloudCannon has deeper integrations with specific static site generators (Hugo, Jekyll, Eleventy).</li>
+    <li>CloudCannon's Team plan includes content scheduling and custom permissions that GitCMS does not offer.</li>
+  </ul>
+  <p>For teams that already deploy through Vercel, Netlify, or similar — and whose content is primarily text, not visual layouts — these tradeoffs are usually worth it. You get a better writing experience, AI-native workflows, and a content layer that is decoupled from hosting.</p>
+</Tradeoffs>
+
+## Decision by use case
+
+**Full CMS platform with hosting, builds, and visual editing:** CloudCannon is the better fit.
+
+**Docs, blog, changelog with a Notion-like writing experience:** GitCMS is the better fit.
+
+**Hugo or Jekyll site that needs a mature, integrated CMS:** CloudCannon is the better fit.
+
+**AI agents drafting website changes with human review before publishing:** GitCMS is the better fit.
+
+**Agency handing a Claude Code or Astro site to a client:** GitCMS is the better fit.
+
+**Team that wants one vendor for editing through deployment:** CloudCannon is the better fit.
+
+**Team that already deploys on Vercel/Netlify and needs the content layer:** GitCMS is the better fit.
+
+<CompareCTA
+  description="The admin layer for the website you already built. Deploy wherever you already deploy."
+/>

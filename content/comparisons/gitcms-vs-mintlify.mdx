@@ -1,0 +1,253 @@
+---
+title: 'GitCMS vs Mintlify'
+description: 'Mintlify is a polished docs platform with beautiful defaults. GitCMS runs your whole code-first website, docs included, on your own design and repo. Here''s when each fits.'
+competitor: 'Mintlify'
+category: 'Docs and publishing platforms'
+lastReviewed: '2026-04-16'
+order: 17
+---
+
+Mintlify is a beautiful docs platform. You point it at MDX files in a repo, and it gives you polished documentation with AI search, analytics, feedback widgets, and a design that looks great out of the box. For teams that want developer docs up and running fast, Mintlify delivers.
+
+But Mintlify is a **docs platform**. It hosts your docs on Mintlify's infrastructure, renders them with Mintlify's design system, and scopes to documentation only. Your blog needs another tool. Your changelog needs another tool. Your marketing pages need another tool.
+
+GitCMS takes a different approach. It does not host your site or give you a design system. It gives your team a visual editor for the content files, a Git-native review workflow, and AI agent integration through MCP. You bring your own docs site — Astro, Next.js, whatever — with your own branding, your own design, your own deployment. And you manage docs, blog, changelog, and marketing pages in one system.
+
+## What changed in 2026
+
+Mintlify is a hosted platform for developer documentation. That made sense when building your own site was the expensive part. Now coding agents build a custom site, with marketing pages, docs, blog, and changelog on your own design, in a day, in a repository you own.
+
+What that site still needs is **the admin**: an editor for the people who write, review before publish, and a safe way for AI agents to draft. GitCMS adds that to the site you already have, instead of moving one slice of your content onto a separate platform. That's Day Two: running the website after it ships.
+
+## The short verdict
+
+<Verdict>
+  <VerdictCompetitor title="Mintlify">
+    - You want beautiful developer docs with minimal setup
+    - Docs-specific features matter: AI search, API reference generation, analytics, feedback widgets
+    - You are happy with Mintlify's design templates and hosting
+    - Docs are a standalone product surface, separate from the rest of your site
+  </VerdictCompetitor>
+  <VerdictGitCMS>
+    - You want docs, blog, changelog, and marketing pages on one site you own
+    - Your site is built in code, often with a coding agent
+    - Writers and reviewers need an editor and review before publish
+    - You want AI agents drafting through MCP, not just AI-powered search
+  </VerdictGitCMS>
+</Verdict>
+
+## Platform vs content layer
+
+This is the fundamental difference.
+
+### Mintlify: a docs platform you plug into
+
+Mintlify gives you a complete package: design system, hosting, builds, AI search, analytics. You write MDX files, push to your repo, and Mintlify handles everything else. The result is polished docs with minimal engineering effort.
+
+The tradeoff: you are on Mintlify's platform. Your docs look like Mintlify docs (customizable within limits, but recognizable). Your docs are hosted on Mintlify's infrastructure. You cannot deploy them on Vercel, Cloudflare Pages, or your own CDN. And everything that is not docs — blog, changelog, marketing — lives somewhere else.
+
+### GitCMS: a content layer you own
+
+GitCMS does not give you a docs site. It gives you tools to manage the content that powers your docs site — and your blog, and your changelog, and your marketing pages. You build the site yourself (or with AI assistance) using whatever framework and design you want.
+
+This means more work upfront. You need to build or choose a docs template, set up your own deployment, handle your own design. But you own everything:
+
+- **Your design and branding** — not Mintlify's template, your visual identity
+- **Your infrastructure** — deploy wherever you already deploy
+- **Your content workflow** — docs, blog, changelog in one Git-native system
+- **Your content** — plain markdown files, no platform dependency
+
+## The "docs-only" problem
+
+Most product teams do not just have docs. They have:
+
+- Documentation
+- A blog or engineering blog
+- A changelog
+- Marketing pages
+- Sometimes legal pages, guides, or tutorials
+
+Mintlify handles docs. For everything else, you need separate tools. That means:
+
+- Multiple content workflows
+- Multiple vendor relationships
+- Content scattered across systems
+- No unified review process
+
+GitCMS manages all of it in one repo, one editor, one workflow. A blog post and a docs page go through the same branch-based drafts and PR review. An AI agent can work on both through the same MCP interface.
+
+For teams where docs are the *only* content, this does not matter. For teams with broader content needs, the fragmentation adds up.
+
+## Own your design
+
+Mintlify docs look good. But they look like Mintlify docs. The templates are customizable — colors, logos, layout tweaks — but the underlying design system is Mintlify's. Your docs site shares a visual language with every other Mintlify-powered docs site.
+
+With GitCMS, your docs site is yours. Build it with Astro, Next.js, or any framework. Use your own design system. Match your brand exactly. The content is markdown files managed through GitCMS — the presentation layer is entirely in your hands.
+
+In 2026, AI coding agents like **v0**, **Lovable**, **Bolt**, and **Cursor** make building a custom docs site faster than ever. You can describe your ideal docs design and get a working site in minutes — with your branding, your layout, your components. The "it is too much work to build our own docs site" argument is weaker every month.
+
+## AI agents and content workflows
+
+Mintlify has AI features: AI-powered search that answers questions from your docs, a writing agent, and an assistant agent. These are docs-specific AI tools that add value within the docs platform.
+
+GitCMS approaches AI differently. Its **MCP app** turns AI assistants like ChatGPT, Claude, and other MCP-compatible agents into content agents. They can create drafts, edit posts across any collection (docs, blog, changelog), check SEO, and submit changes for review. The AI workflow is not limited to docs and not limited to Mintlify's platform — any MCP-compatible assistant can participate.
+
+Different approaches for different needs. Mintlify's AI is deeper within docs (search, Q&A). GitCMS's AI is broader across content workflows (drafting, editing, publishing).
+
+## Feature comparison
+
+<FeatureTable
+  competitor="Mintlify"
+  rows={[
+    {
+      category: 'Content storage',
+      gitcms: 'Markdown files in Git',
+      competitor: 'MDX files in Git (built by Mintlify)',
+      note: 'Both use files in a repo. Mintlify owns the build and hosting.',
+    },
+    {
+      category: 'Content scope',
+      gitcms: 'Docs, blog, changelog, marketing — unified',
+      competitor: 'Docs only',
+      note: 'Mintlify is docs-specific. GitCMS handles all content types.',
+    },
+    {
+      category: 'Design and branding',
+      gitcms: 'Bring your own site and design',
+      competitor: 'Mintlify templates (customizable)',
+      note: 'GitCMS lets teams own their visual identity entirely',
+    },
+    {
+      category: 'Hosting',
+      gitcms: 'Deploy anywhere (Vercel, Netlify, Cloudflare, etc.)',
+      competitor: 'Mintlify-hosted',
+      note: 'GitCMS is decoupled from hosting',
+    },
+    {
+      category: 'Editor experience',
+      gitcms: 'Notion-like block editor',
+      competitor: 'Web editor + MDX files',
+    },
+    {
+      category: 'AI search',
+      gitcms: 'not-core',
+      competitor: 'native',
+      note: 'Mintlify has built-in AI-powered search that answers questions from docs',
+    },
+    {
+      category: 'API reference generation',
+      gitcms: 'not-core',
+      competitor: 'native',
+      note: 'Mintlify generates interactive API reference from OpenAPI specs',
+    },
+    {
+      category: 'Analytics and feedback',
+      gitcms: 'not-core',
+      competitor: 'native',
+      note: 'Mintlify includes docs analytics and user feedback widgets',
+    },
+    {
+      category: 'Branching and drafts',
+      gitcms: 'native',
+      competitor: 'Preview deployments',
+    },
+    {
+      category: 'AI agent workflow',
+      gitcms: 'Native + MCP app for ChatGPT/Claude',
+      competitor: 'Writing agent + assistant agent',
+      note: 'Mintlify AI is docs-specific. GitCMS MCP works across all content.',
+    },
+    {
+      category: 'Version control',
+      gitcms: 'native',
+      competitor: 'native',
+    },
+    {
+      category: 'Self-hosting',
+      gitcms: 'yes',
+      competitor: 'no',
+    },
+    {
+      category: 'Vendor lock-in',
+      gitcms: 'Low (files portable, deploy anywhere)',
+      competitor: 'Medium (files portable, but hosting and design are Mintlify)',
+    },
+  ]}
+/>
+
+## Pricing
+
+<PricingCompare
+  competitorName="Mintlify"
+  gitcms={{
+    note: 'Content workflow for docs, blog, changelog, and more. You bring your own hosting.',
+  }}
+  competitor={{
+    free: 'Hobby: free (1 user, 250 AI credits)',
+    paid: 'Pro: $250/mo (5 users), Enterprise: custom',
+    note: 'Pro includes team collaboration, preview deployments, writing agent. AI credits: 250 included, $0.25 per overage.',
+  }}
+/>
+
+Mintlify's Hobby plan is free for solo use — genuine value for individual developers documenting a project. But the jump to Pro is $250/mo for 5 users. That is a significant step for a docs-only tool, especially when the rest of your content (blog, changelog, marketing) needs separate tooling with its own costs.
+
+A single GitCMS site license covers docs, blog, changelog, and marketing content in one system. The total cost of ownership is lower when you account for the full content workflow, not just docs.
+
+## Where Mintlify is genuinely better
+
+Mintlify is the stronger choice when **docs are a standalone product and you want them polished fast**.
+
+If your team:
+
+- Wants beautiful developer docs with minimal engineering effort
+- Needs docs-specific features: AI-powered search, API reference generation, analytics, feedback widgets
+- Is happy with Mintlify's design templates and customization options
+- Treats docs as a separate product surface from the rest of the site
+- Wants a managed platform that handles hosting, builds, and optimization
+
+Then Mintlify is purpose-built for this. Its focus is its strength. The docs will look great, the AI search will work, and you will be live fast.
+
+## Where GitCMS is better
+
+GitCMS is better when **docs are part of a broader content site and you want to own the design**.
+
+Most product teams do not just publish docs. They publish docs alongside a blog, a changelog, and marketing pages. Running docs on Mintlify and everything else on separate tools creates fragmentation — multiple workflows, multiple vendors, inconsistent review processes.
+
+GitCMS gives you:
+
+- **One workflow** for docs, blog, changelog, and marketing pages
+- **Your own design** — bring your own site, your own branding, your own components
+- **Your own hosting** — deploy wherever you already deploy
+- **MCP integration** for AI-assisted content across all collections, not just docs
+- **Branch-based drafts** and **PR review** for all content types
+
+If you want to own the full content experience — how it looks, where it is hosted, and how it is managed — GitCMS gives you that ownership.
+
+<Tradeoffs>
+  <p>Choosing GitCMS over Mintlify for docs is a real tradeoff:</p>
+  <ul>
+    <li>Mintlify gives you beautiful docs in minutes. With GitCMS, you need to build or choose your own docs site — more work upfront.</li>
+    <li>Mintlify has docs-specific features (AI search, API reference, analytics, feedback) that GitCMS does not include.</li>
+    <li>Mintlify handles hosting and optimization. With GitCMS, you manage your own deployment.</li>
+    <li>For teams that only need docs, Mintlify's focus means less configuration and faster time to value.</li>
+  </ul>
+  <p>For teams that want to own their docs design, manage all content types in one workflow, and avoid paying $250/mo for a docs-only platform when broader content needs exist, these tradeoffs are usually worth it.</p>
+</Tradeoffs>
+
+## Decision by use case
+
+**Developer docs as a standalone product with AI search and API reference:** Mintlify is the better fit.
+
+**Docs, blog, changelog, and marketing in one repo with your own design:** GitCMS is the better fit.
+
+**Team wants polished docs fast with minimal engineering:** Mintlify is the better fit.
+
+**Team wants to own the branding, design, and hosting of their docs:** GitCMS is the better fit.
+
+**Docs-specific analytics and feedback widgets are important:** Mintlify is the better fit.
+
+**AI agents helping across all content types, not just docs:** GitCMS is the better fit.
+
+<CompareCTA
+  description="Your site, your design, your repo. Docs, blog, and changelog in one admin."
+/>

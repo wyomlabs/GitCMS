@@ -1,0 +1,148 @@
+---
+title: Editorial Workflow
+description: A structured content path from idea to publish — content board, review, and roles — without managing Git concepts in the day-to-day UI.
+---
+
+GitCMS is built so **writers, marketers, and reviewers** can work in a familiar editorial model: **Ideas → Draft → Review → Published**. You use the **content board** and **tasks**, not branches, issues, or pull requests. Developers still get a real Git repository underneath; everyone else gets vocabulary they already know from docs tools and editorial calendars.
+
+## Enabling the editorial workflow
+
+Open your site’s **Settings** and set **Publishing mode** to **Review before publish** (`editorial_workflow` in config).
+
+Once enabled, the sidebar includes **Content Board** — a single place to see work moving across all collections.
+
+## How it works
+
+### 1. Ideas
+
+Start with an **idea** when you only have a title, brief, or rough notes. Ideas live in the first column on the content board so the team can see what might be written next without opening the editor yet.
+
+You can add ideas from the board, then move a card into **Draft** when someone is ready to write.
+
+### 2. Draft
+
+While a task is in **Draft**, GitCMS keeps that work **separate from your live site**. You edit in the visual editor as usual; saves stay tied to that task until you choose to move forward.
+
+You do **not** name branches, open tickets, or sync Git state — the workflow keeps each task’s changes isolated for you.
+
+### 3. Review
+
+When the copy is ready for feedback, move the task to **Review**. On any page inside a task, the task's number in the header (for example **#113 ▾**) holds its actions: open the arrow for **Request review**, **Approve**, **Publish** and the rest, with your next step first. Click the number to open the task beside the page.
+
+**Reviewing in the editor** — While a task is in Review, reviewers see what changed: the published version with the draft's edits marked inline, and changed details (title, tags, dates) highlighted in place. Writers and editors keep the normal editor, with comments shown on it; to see the changes, open the side panel and choose **History → Changes in this draft**.
+
+- **Comment on any text.** Select a word, a sentence, or several lines and choose **Comment**, or use **Comment on entry** in the **Comments** panel for feedback on the whole entry. Commented text is highlighted, and a count in the margin opens its thread.
+- **Keep track.** The **Comments** panel shows how many threads are open and resolved, filters between them, and steps through them in order. You can edit or delete your own comments.
+- **Know what's left.** Each thread shows whether it's open, resolved, **Text changed** (the text was reworded since), or **Outdated** (the text is gone). Reply and resolve right there.
+- **See the whole task.** Open the task from the board: its entries list shows every changed entry with how many comments are still open. The **In this draft** tab in the editor shows the same, so you can move between entries without leaving the editor.
+- **Edit while reviewing.** People who can edit always get the editable view; updates stay attached to the same task.
+
+Owners, admins, editors, and reviewers can comment and resolve threads while a task is in Review. Comments are stored on the task's pull request in your repository host, so developers can follow the same discussion there.
+
+**Approving** — Reviewers, admins, and owners decide on a task in Review:
+
+- **Approve** marks the latest version as approved. If you signed in with GitHub, it's also a real approval on GitHub, so it counts for your repository's branch rules.
+- **Request changes** sends the task back to **Draft** with an optional summary. The writer sees **Ready for re-review** when it's ready again.
+- Approvals are for a version. If the draft changes after someone approves, the task shows **Approval out of date** until someone approves again.
+- A request for changes outweighs approvals made before it, until someone approves again.
+- Only people who can review the site count, whether they signed in with Google or GitHub. Approvals and requests for changes made directly on the pull request count when they come from a reviewer's own GitHub account.
+
+Every approval and request for changes shows in the task's **Activity**, including ones from people who can't review the site, marked **Doesn't count**.
+
+**Require approval before publishing** — Turn this on in the site's **Settings → General** to block publishing until someone approves the latest version. It's off by default. Owners and admins can still choose **Publish anyway**; the task's activity notes that it was published without approval. In configuration, this is `require_approval: true` in the site's `.gitcms` config.
+
+### 4. Published
+
+When review is complete and someone with **publish access** publishes, the content becomes part of your **live** site. The task moves to **Published** on the board.
+
+GitCMS handles the transition; you don’t merge or reconcile Git state in the product UI.
+
+## The content board
+
+The content board is a **kanban-style** view of every editorial task:
+
+A quick speed-run of the board shows work moving across the editorial stages:
+
+<video src="/videos/docs/editorial-workflow-board-trimmed.mp4" controls muted playsInline preload="none" style={{ width: '100%', borderRadius: '0.5rem' }} poster="/images/video-posters/docs/editorial-workflow-board-trimmed.webp">
+  Your browser does not support the content board demo video.
+</video>
+
+| Column | Description |
+|--------|-------------|
+| **Ideas** | Captured titles and briefs — work not yet in active writing. |
+| **Draft** | Content being written; changes are not live yet. |
+| **Review** | Submitted for feedback and approval. |
+| **Published** | Live on the site. |
+
+Each card represents one **task** and typically shows:
+
+- Title and helpful labels (for example collection or locale).
+- Who kicked it off and when it last changed.
+- Actions to **open the editor** or **continue the draft** when relevant.
+- For tasks in Review, how many comments are still open.
+
+Drag cards through the supported workflow steps when your permissions allow, or use the same moves from inside the task. Tasks move **Ideas → Draft → Review → Published**, and a task in **Review** can return to **Draft** for more work.
+
+### Sites that share a repository
+
+Each site has its own board. When one repository holds several sites, a task belongs to the site it was created on, and the web app and AI agents only show, edit, and publish it from that site.
+
+Tasks created before tasks belonged to a site have no site yet. In a repository with one site they stay on that site's board, and GitCMS adds the site's label as they move through the workflow. In a repository with several sites they're hidden from editors, and **admins** see them in a notice above the board with **Move to this site**. Move each one to the site it belongs to.
+
+## Team collaboration
+
+The editorial workflow fits:
+
+- **Solo builders** pairing AI drafts with a clear “review before live” step.
+- **Startups** aligning marketing and product on what ships and when.
+- **Developers handing off** client content without teaching Git.
+- **Agencies** separating who writes, who approves, and who publishes per site.
+
+### Roles in GitCMS
+
+Workspace roles map to that model:
+
+- **Editors** — create and update drafts and move tasks forward.
+- **Reviewers** — comment on entries in review and approve the work.
+- **Publish access** — publish approved work to the live site.
+- **Admins** and **Owners** — manage members, sites, and workspace settings.
+
+One person can hold multiple capabilities. See [Roles & Site Access](/docs/features/access-control).
+
+### Staying in the loop
+
+When tasks move to **Review** or **Published**, participants usually get updates through the **same channels they already use** with your Git provider (for example email or inbox notifications). GitCMS doesn’t replace your host’s notification system; it keeps the **product** language on tasks and stages, not on low-level repo events.
+
+## When to use the editorial workflow
+
+**Use it when:**
+
+- More than one person touches content before it goes live.
+- You want an approval step and a shared view of what’s in flight.
+- You care about **who did what** without exposing Git mechanics to the whole team.
+- You want a single board across collections.
+
+**Use direct publish instead when:**
+
+- You’re the only editor and want every save to go live immediately (see [Configuration](/docs/getting-started/configuration#publishing-modes)).
+
+You can change publishing mode in Settings; existing files are not rewritten.
+
+## Tips
+
+- **One task, one thread of work.** Keeps review focused and publishing predictable.
+- **Review on a steady cadence.** Stale review columns lose context — agree on turnaround inside your team.
+- **Check the board daily.** Faster than hunting through folders for “where did that post go?”
+- **Use previews.** GitCMS detects deployment previews from recent GitHub reviews and deployment statuses. During site setup, it looks for available preview sources without blocking onboarding; if none exist yet, detection remains automatic. Owners and admins can change this later under **Site Settings → General → Preview deployments**, choose a specific deployment source, or disable previews. This preference does not modify the website's files. A preview must belong to the current revision and be verifiably associated with the site; in multi-site repositories, generic deployment hosts may not be safe to embed. Existing GitHub installations may need their owners to approve Deployments and Commit statuses read permissions. Protected preview deployments may require opening the host directly.
+
+**Change Requests is a public beta.** All authorized members can explore visual feedback without beta enrollment. Point to an element on your website, describe the change, and prepare a draft. Submitting, discussing, and resolving requests requires a licensed site and the appropriate workspace permissions. Previews are optional and may be unavailable on protected deployments.
+
+## If you inspect the repository
+
+You never choose **branch names** for editorial tasks in GitCMS — each task gets an **isolated line of work** in Git that the product manages for you. **Direct publish** mode is simpler: edits land on your **default branch** only.
+
+If you open the repository on GitHub:
+
+- **Tasks** are issues labeled `gitcms:board`, plus `gitcms:site:<site key>` for the site they belong to. The site key is the site's folder name under `.gitcms/sites/`, and the label's description names the site's address.
+- **Drafts** are branches named `gitcms-draft-<task number>`.
+- Each task drafts on **one branch**, whoever writes on it.

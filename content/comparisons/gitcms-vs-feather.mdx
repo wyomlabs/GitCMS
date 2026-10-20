@@ -1,0 +1,272 @@
+---
+title: 'GitCMS vs Feather'
+description: 'Feather turns Notion databases into published blogs. GitCMS gives your team a visual editor for a website you own, with content stored as files in your repo. Here''s when each fits.'
+competitor: 'Feather'
+category: 'Docs and publishing platforms'
+lastReviewed: '2026-04-16'
+order: 19
+---
+
+Feather has a clean pitch: write in Notion, publish a blog. Connect your Notion database, map your fields, pick a domain, and you have an SEO-optimized blog with analytics, newsletters, and edge delivery. For teams that already live in Notion, it is the fastest path from draft to published post.
+
+GitCMS shares some of the same goals — a great writing experience for blogs, changelogs, and content sites — but approaches them differently. Instead of publishing from Notion, GitCMS gives you a **Notion-like block editor** that writes directly to markdown files in your Git repo. You own the content, you own the design, and you deploy on platforms like Vercel, Netlify, or Cloudflare Pages.
+
+Both tools are for teams that want to publish content without heavy infrastructure. The question is whether your content should live in Notion or in your repo.
+
+## What changed in 2026
+
+Feather is a hosted platform for Notion-powered blogs. That made sense when building your own site was the expensive part. Now coding agents build a custom site, with marketing pages, docs, blog, and changelog on your own design, in a day, in a repository you own.
+
+What that site still needs is **the admin**: an editor for the people who write, review before publish, and a safe way for AI agents to draft. GitCMS adds that to the site you already have, instead of moving one slice of your content onto a separate platform. That's Day Two: running the website after it ships.
+
+## The short verdict
+
+<Verdict>
+  <VerdictCompetitor title="Feather">
+    - Your team already writes in Notion and wants the fastest path to a published blog
+    - You want built-in newsletters, analytics, and SEO without setup
+    - You do not need to own the site design or hosting
+    - Speed and simplicity matter more than content portability
+  </VerdictCompetitor>
+  <VerdictGitCMS>
+    - You want docs, blog, changelog, and marketing pages on one site you own
+    - Your site is built in code, often with a coding agent
+    - Writers and reviewers need an editor and review before publish
+    - You want content as files you own instead of a Notion database
+  </VerdictGitCMS>
+</Verdict>
+
+## The writing experience question
+
+Feather's writing experience *is* Notion. You write in Notion's editor — which is excellent — and Feather publishes it. If your team already uses Notion daily, there is zero learning curve. The editor is not just "like Notion" — it is Notion.
+
+GitCMS gives you a **Notion-like block editor** purpose-built for content publishing. Rich text, slash commands, drag-and-drop blocks, inline formatting — the same patterns Notion established, but writing directly to markdown files instead of Notion databases.
+
+The editing experience is similar. The difference is where the content ends up: in Notion's platform, or in markdown files in your repo.
+
+## Notion dependency vs content ownership
+
+This is the fundamental tradeoff.
+
+### Feather: your content lives in Notion
+
+With Feather, Notion is the source of truth. Your blog posts, your drafts, your images — everything lives in Notion databases. Feather reads from Notion and publishes to your domain.
+
+This means:
+
+- **Your content is in Notion.** If you leave Notion, you need to migrate everything.
+- **Your publishing depends on two services.** Notion for content, Feather for publishing. If either has issues, your workflow breaks.
+- **Content is not in your repo.** You cannot grep your blog posts, diff them in a PR, or review content alongside code changes.
+- **No Git history.** Content changes are tracked by Notion's version history, not Git commits.
+
+### GitCMS: your content lives in your repo
+
+With GitCMS, content is markdown files in a Git repository. You own the files. They are portable, greppable, diffable, and version-controlled with every other file in your repo.
+
+You deploy the site yourself — on **Vercel**, **Netlify**, **Cloudflare Pages**, or any static hosting platform. The content is part of the build. Deploys are atomic — content and code ship together.
+
+This means more setup than Feather. You need a site (Astro, Next.js, or similar) and a deployment pipeline. But once set up, you own everything — the content, the design, the hosting.
+
+## Own your marketing site
+
+Your blog, changelog, and docs are not just content — they are part of your marketing site. They are often the first thing a potential customer sees. The design, the branding, the navigation, the way content flows into the rest of your product site — all of it matters.
+
+Feather gives you a blog that looks good. But it is Feather's design, on Feather's subdomain or subfolder, with Feather's templates. Your blog exists as a separate surface, visually and architecturally disconnected from the rest of your site.
+
+With GitCMS, your content site is **yours**. Build it with **Astro**, **Next.js**, or any framework. Use your own design system. Match your product's visual identity exactly. Your blog, changelog, docs, and marketing pages all live in the same codebase, share the same design language, and deploy as one cohesive site.
+
+This is the difference between "we have a blog on Feather" and "our marketing site has a blog section." The latter is what you actually want.
+
+AI coding agents like **v0**, **Lovable**, **Bolt**, and **Cursor** make building a custom marketing site faster than ever. Describe what you want — "a marketing site with a blog, changelog, and docs matching our product design" — and get a working site in minutes. Deploy it on Vercel or Cloudflare Pages. Manage the content through GitCMS.
+
+## Beyond blogs
+
+Feather does blogs and newsletters. If your content needs are broader — docs, changelog, marketing pages, legal content — you need additional tools.
+
+GitCMS handles all of these in one system:
+
+- **Blog posts** in markdown
+- **Changelog entries** in markdown
+- **Documentation** in markdown
+- **Marketing pages** in MDX
+- All managed through the same editor, the same Git workflow, the same MCP interface
+
+For teams whose content is just a blog, Feather's focus is fine. For teams that will grow beyond a blog, GitCMS is the system that grows with you.
+
+## Built-in analytics? Analytics is a solved problem
+
+Feather includes built-in analytics — pageviews, referrers, click tracking. That is convenient. But analytics is not a CMS problem. It is a solved problem with dedicated, better tools:
+
+- **Plausible**, **Fathom**, **Simple Analytics** — privacy-focused, lightweight, no cookie banners
+- **Umami**, **Matomo** — open-source, self-hostable, full data ownership
+- **Vercel Analytics**, **Cloudflare Web Analytics** — integrated into the hosting platform you already use
+- **PostHog** — product analytics with session replays, funnels, and feature flags
+- **Google Analytics** — free, comprehensive, industry standard
+
+A one-line script tag on your site gives you analytics that are better than anything a CMS can bundle. Feather's built-in analytics are a convenience, not a reason to choose a content platform.
+
+## AI agents and content workflows
+
+Feather's AI story comes from Notion. If you use Notion AI, you can draft and edit content in Notion, and Feather publishes it. The AI capabilities are Notion's — Feather is the publishing bridge. This works, but the AI is scoped to what Notion offers, and it does not understand your content workflow, your collections, or your publishing process.
+
+GitCMS's AI story comes from **MCP**. Its MCP app turns AI assistants like ChatGPT, Claude, and other MCP-compatible agents into content agents. They can create drafts, edit posts, manage blog and changelog collections, check SEO, and submit changes for review — all through a structured interface that understands your content system. The content lands as markdown files in the repo, reviewable by humans before publishing.
+
+The difference: Notion AI helps you write text. GitCMS MCP helps you **operate** your content — drafting, publishing, managing collections, handling SEO — through any MCP-compatible assistant. The AI is part of the workflow, not just the writing.
+
+## Feature comparison
+
+<FeatureTable
+  competitor="Feather"
+  rows={[
+    {
+      category: 'Content storage',
+      gitcms: 'Markdown files in Git',
+      competitor: 'Notion databases',
+      note: 'GitCMS content is in your repo. Feather content is in Notion.',
+    },
+    {
+      category: 'Editor experience',
+      gitcms: 'Notion-like block editor',
+      competitor: 'Notion (the actual app)',
+      note: 'Feather uses Notion directly. GitCMS has a similar editor writing to markdown.',
+    },
+    {
+      category: 'Content scope',
+      gitcms: 'Blog, changelog, docs, marketing — unified',
+      competitor: 'Blog and newsletters',
+    },
+    {
+      category: 'Design and branding',
+      gitcms: 'Bring your own site and design',
+      competitor: 'Feather templates (customizable)',
+      note: 'GitCMS lets teams own their visual identity entirely',
+    },
+    {
+      category: 'Hosting',
+      gitcms: 'Deploy on Vercel, Netlify, Cloudflare Pages, etc.',
+      competitor: 'Feather-hosted (edge delivery)',
+    },
+    {
+      category: 'Version control',
+      gitcms: 'native',
+      competitor: 'Notion version history',
+      note: 'Git commits vs Notion page history',
+    },
+    {
+      category: 'Branching and drafts',
+      gitcms: 'native',
+      competitor: 'Notion draft status',
+    },
+    {
+      category: 'Built-in newsletters',
+      gitcms: 'not-core',
+      competitor: 'native',
+      note: 'Feather sends newsletters directly from blog posts',
+    },
+    {
+      category: 'SEO optimization',
+      gitcms: 'Via site framework',
+      competitor: 'Built-in (sitemaps, meta tags, schema markup)',
+    },
+    {
+      category: 'Analytics',
+      gitcms: 'Dedicated tools (Plausible, Umami, PostHog, etc.)',
+      competitor: 'Built-in (pageviews, referrers, clicks)',
+      note: 'Analytics is a solved problem with better dedicated tools',
+    },
+    {
+      category: 'AI agent workflow',
+      gitcms: 'Native + MCP app for ChatGPT/Claude',
+      competitor: 'Via Notion AI (writing only)',
+      note: 'Feather AI comes from Notion. GitCMS MCP handles content operations.',
+    },
+    {
+      category: 'Content portability',
+      gitcms: 'High (markdown files, deploy anywhere)',
+      competitor: 'Lower (content in Notion, published through Feather)',
+    },
+    {
+      category: 'Self-hosting',
+      gitcms: 'yes',
+      competitor: 'no',
+    },
+  ]}
+/>
+
+## Pricing
+
+<PricingCompare
+  competitorName="Feather"
+  gitcms={{
+    note: 'Flat pricing. No pageview limits. Blog, changelog, docs, and marketing in one system.',
+  }}
+  competitor={{
+    free: '7-day free trial',
+    paid: '$39/mo (10K pageviews), $79/mo (100K), $149/mo (200K), $299/mo (500K)',
+    note: 'Pageviews and newsletter sends share the same quota. Traffic-based pricing scales with growth.',
+  }}
+/>
+
+Feather's pricing is traffic-based. At low traffic ($39/mo for 10K pageviews), it is affordable. But as your blog grows, costs scale: $79/mo at 100K pageviews, $149/mo at 200K, $299/mo at 500K. Pageviews and newsletter sends share the same quota, so a popular blog with an active newsletter hits limits faster.
+
+GitCMS prices per site, regardless of traffic. Your content is markdown files deployed as static pages on Vercel, Netlify, or Cloudflare Pages. Static hosting is cheap (often free-tier eligible), and there are no pageview limits on the CMS side.
+
+For a growing blog, the total cost of ownership with GitCMS + static hosting is often lower than Feather at scale.
+
+## Where Feather is genuinely better
+
+Feather is the stronger choice when **your team lives in Notion and wants to publish fast with zero setup**.
+
+If your team:
+
+- Already writes everything in Notion and does not want to change
+- Wants a blog and newsletter live in minutes, not hours
+- Does not need to own the site design or hosting
+- Wants built-in analytics, SEO, and newsletters without configuring anything
+- Has a simple blog that does not need to live alongside docs or other content types
+
+Then Feather is genuinely convenient. The Notion-to-blog bridge works, and the setup time is measured in minutes.
+
+## Where GitCMS is better
+
+GitCMS is better when **you want to own the content, the design, and the workflow**.
+
+Feather is a bridge between Notion and a blog. GitCMS is a content system:
+
+- **Own your content** — markdown files in your repo, not locked in Notion databases
+- **Own your design** — build your site with any framework, match your brand exactly
+- **Own your hosting** — deploy on Vercel, Netlify, Cloudflare Pages, or any platform
+- **Broader scope** — blog, changelog, docs, and marketing in one system
+- **Git-native workflow** — branches for drafts, PRs for review, atomic deploys
+- **MCP integration** — AI assistants as content agents for drafting, SEO, and operations
+
+For teams that want a Notion-like writing experience without the Notion dependency — with content they truly own — GitCMS gives you that.
+
+<Tradeoffs>
+  <p>Choosing GitCMS over Feather is a real tradeoff:</p>
+  <ul>
+    <li>Feather gets you from Notion to published blog in minutes. GitCMS requires building a site and setting up deployment — more work upfront.</li>
+    <li>Feather includes newsletters, analytics, and SEO out of the box. With GitCMS, you handle these through your site framework or third-party tools.</li>
+    <li>If your team already lives in Notion, Feather has zero learning curve. GitCMS's editor is Notion-like but still a new tool.</li>
+    <li>Feather handles hosting and edge delivery. With GitCMS, you set up deployment on Vercel, Netlify, or Cloudflare Pages yourself.</li>
+  </ul>
+  <p>For teams that want content ownership, design control, and a system that scales beyond a blog — these tradeoffs are usually worth it. You get portable markdown files, your own branding, flat pricing that does not scale with traffic, and a workflow that works for both humans and AI agents.</p>
+</Tradeoffs>
+
+## Decision by use case
+
+**Notion-first team that wants a blog live in minutes:** Feather is the faster path.
+
+**Team that wants to own the design, content, and hosting:** GitCMS is the better fit.
+
+**Simple blog with built-in newsletters and analytics:** Feather handles it out of the box.
+
+**Blog, changelog, docs, and marketing in one repo:** GitCMS is the better fit.
+
+**Traffic is growing and pageview-based pricing is a concern:** GitCMS with static hosting is more predictable.
+
+**Team wants AI agents helping with content through MCP:** GitCMS is the better fit.
+
+<CompareCTA
+  description="A visual editor for the site you own. Deploy on Vercel, Netlify, or Cloudflare."
+/>

@@ -1,0 +1,23 @@
+---
+title: 'Islands architecture'
+category: rendering
+definition: 'Islands architecture renders a page as static HTML and hydrates only small, independent interactive components, called islands.'
+description: 'What islands architecture is, how Astro uses it, and why it suits content-heavy websites.'
+related:
+  - hydration
+  - static-site-generation
+  - static-website
+lastReviewed: '2026-10-10'
+---
+
+## How it works
+
+Most of the page (text, images, layout) ships as plain HTML with no JavaScript. Interactive parts, like a pricing toggle, a carousel, or a search box, are islands that load and hydrate on their own, sometimes only when visible.
+
+## Where you'll see it
+
+Astro made islands mainstream: components render to HTML by default, and you opt into interactivity per component with directives like `client:load` or `client:visible`.
+
+## Why it suits content sites
+
+Marketing pages, blogs, and docs are mostly content. Islands keep them fast because you only pay for JavaScript where something is interactive. It's one reason coding agents and agencies often pick Astro for marketing sites.

@@ -1,0 +1,36 @@
+---
+import ContentLayout from '@/layouts/ContentLayout.astro'
+import { PersonaPickerSection } from '@/components/landing/persona-picker-section'
+import { ArrowRight } from 'lucide-react'
+---
+<ContentLayout
+  title="Who GitCMS Is For — Agencies, Startups, Freelancers, and Solo Builders Running Code-First Websites"
+  description="See how agencies, startups, freelancers, and solo builders use GitCMS to let clients, teams, and AI agents edit, review, and publish code-first websites."
+  path="/for"
+>
+  <section class="relative overflow-hidden border-b border-neutral-200">
+    <div class="pointer-events-none absolute inset-x-0 top-0 h-80 bg-gradient-to-b from-violet-100/80 to-transparent"></div>
+    <div class="pointer-events-none absolute -left-24 top-24 size-72 rounded-full bg-[#DCF986]/60 blur-3xl"></div>
+    <div class="pointer-events-none absolute right-0 top-10 size-72 rounded-full bg-violet-200/50 blur-3xl"></div>
+    <div class="relative mx-auto max-w-7xl px-6 py-20 text-center sm:py-24">
+      <div class="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white/80 px-3 py-1 text-xs font-medium uppercase tracking-widest text-violet-700">
+        Who It&apos;s For
+      </div>
+      <h1 class="mx-auto mt-6 max-w-4xl font-logo text-4xl font-normal leading-tight tracking-tight text-neutral-900 sm:text-5xl md:text-[56px]">
+        Who runs your website<br />after it ships?
+      </h1>
+      <p class="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-neutral-600 sm:text-lg">
+        Whether you hand sites off to clients, need your own team to keep the website moving, or run the site yourself, start with the page that matches your setup.
+      </p>
+      <div class="mt-8 inline-flex items-center gap-2 text-sm font-medium text-neutral-900">
+        Choose the setup that looks most like yours
+        <ArrowRight className="size-4" />
+      </div>
+    </div>
+  </section>
+  <PersonaPickerSection
+    title="Choose the setup that matches yours"
+    description="Each page covers a different handoff: agency to client, engineering to marketing, freelancer to client, or you running your own site."
+    showEyebrow={false}
+  />
+</ContentLayout>

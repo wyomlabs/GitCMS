@@ -1,0 +1,11 @@
+---
+import ContentLayout from '@/layouts/ContentLayout.astro'
+import { getRequiredPersona } from '@/components/landing/persona-content'
+import { PersonaPage } from '@/components/landing/persona-page'
+import { faqStructuredData } from '@/lib/structured-data'
+const persona = getRequiredPersona('freelancers')
+const structuredData = faqStructuredData(persona.faq)
+---
+<ContentLayout title={persona.seoTitle} description={persona.seoDescription} path={persona.path} structuredData={structuredData}>
+  <PersonaPage persona={persona} client:load />
+</ContentLayout>

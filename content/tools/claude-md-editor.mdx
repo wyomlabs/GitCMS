@@ -1,0 +1,30 @@
+---
+title: Free CLAUDE.md Editor
+description: Create a CLAUDE.md file that gives Claude Code the commands, rules, and context for your repository. Start from a template, edit visually, then copy or download it.
+tool: claude-md-editor
+order: 3
+---
+
+## What CLAUDE.md is
+
+`CLAUDE.md` is the project memory file Claude Code loads when it starts in a repository. It holds the commands Claude should run, the conventions it should follow, and the context it needs to make good decisions in your codebase.
+
+## How to use the editor
+
+1. Replace each template section with details from your project.
+2. Focus on what Claude can't infer from the code: verification commands, boundaries between packages, generated files, and product vocabulary.
+3. Download `CLAUDE.md` and commit it to the root of your repository. Claude Code also reads `CLAUDE.md` files in subdirectories and in `~/.claude/` for personal preferences.
+
+## Frequently asked questions
+
+### How long should CLAUDE.md be?
+
+Short enough that every line earns its place. Claude loads it into every session, so a few focused sections usually work better than a long handbook.
+
+### Should I use AGENTS.md instead?
+
+If you use several coding agents, keep shared instructions in `AGENTS.md` and reference it from `CLAUDE.md`. Create one with the [AGENTS.md editor](/tools/agents-md-editor).
+
+### Is my file stored anywhere?
+
+No. The editor runs in your browser and nothing is saved to a server.

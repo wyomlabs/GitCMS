@@ -1,0 +1,83 @@
+---
+title: CONTENT.md
+description: Use CONTENT.md to define site-wide writing instructions for AI content agents working inside GitCMS.
+---
+
+`CONTENT.md` is the place to describe how AI should write content for your site.
+
+GitCMS reads this file before AI-assisted writing flows so the model can follow your preferred voice, structure, and editorial rules.
+
+## What belongs in CONTENT.md
+
+Use this file for site-wide writing guidance such as:
+
+- target audience
+- tone of voice
+- preferred reading level
+- terminology to use consistently
+- formatting preferences
+- examples of good phrasing
+- do and don't rules
+
+Good instructions are specific and reusable across many pages.
+
+## What should not go here
+
+Avoid putting these things in `CONTENT.md`:
+
+- secrets, tokens, or private credentials
+- one-off campaign notes
+- temporary publishing tasks
+- repository configuration
+- per-article outlines that only apply to a single page
+
+Keep those concerns elsewhere. `CONTENT.md` should stay focused on writing behavior.
+
+## A good mental model
+
+Think of `CONTENT.md` as your editorial brief for AI:
+
+- "Who are we writing for?"
+- "How should this content sound?"
+- "What should the structure usually look like?"
+- "What should the AI avoid?"
+
+If the answer helps across many future pieces of content, it probably belongs here.
+
+## Suggested structure
+
+You do not need to follow a strict schema, but this structure works well:
+
+```md
+# Writing Instructions
+
+## Audience
+- Write for frontend engineers evaluating our product.
+
+## Tone
+- Clear, calm, technical, and direct.
+- Avoid hype and vague claims.
+
+## Style
+- Prefer short paragraphs.
+- Use headings and bullets for scannability.
+- Include examples when introducing a new concept.
+
+## Avoid
+- Marketing buzzwords
+- Emojis
+- Long intros
+```
+
+## Tips
+
+- Keep instructions short enough to scan quickly.
+- Update this file when your editorial style changes.
+- Add examples if tone is hard to describe in abstract words.
+- Prefer durable guidance over temporary preferences.
+
+## In GitCMS
+
+Open the `CONTENT.md` entry from the repository sidebar to edit it directly in the visual editor.
+
+If the file does not exist yet, GitCMS lets you create it and save it to your repository like any other content file.

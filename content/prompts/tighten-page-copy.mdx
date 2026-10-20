@@ -1,0 +1,27 @@
+---
+title: 'Tighten copy on a page'
+description: 'Make a page shorter and clearer without changing its meaning, structure, or SEO-critical phrases.'
+category: content
+agents:
+  - 'ChatGPT'
+  - 'Claude'
+  - 'Claude Code'
+  - 'OpenClaw'
+  - 'Hermes'
+order: 7
+lastReviewed: '2026-10-10'
+---
+
+## The prompt
+
+```text
+Tighten the copy on [page URL or entry] on [site name]. Cut filler, shorten
+sentences, and make each section lead with its point. Keep the headings, the
+meaning, and these phrases unchanged: [keywords].
+
+Edit it in a content task and submit it for review with a before/after summary.
+```
+
+## How it runs
+
+Run this in an agent connected to GitCMS through MCP (see [AI agents](/agents)). On sites that use review before publish, the agent drafts inside a content task and submits it for review; a person publishes. On sites that publish directly, there's no draft step and saves go live on the next deploy, so ask the agent to show you the changes before it saves.

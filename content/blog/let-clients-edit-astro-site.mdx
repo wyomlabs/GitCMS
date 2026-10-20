@@ -1,0 +1,176 @@
+---
+title: "How to Let Clients Edit an Astro Site Without Git"
+description: |
+  A step-by-step guide to making an Astro site client-editable: move copy into content collections, connect a Git-based CMS, and give clients a visual editor with no Git.
+date: "2026-10-10"
+category: guides
+authors:
+  - Waishnav
+tags:
+  - astro
+  - client-handoff
+  - content-collections
+  - agencies
+---
+
+To let clients edit an Astro site without Git, keep the copy they'll change in Astro content collections, connect the repository to a Git-based CMS, and invite them to a visual editor. GitCMS is the CMS for code-first and AI-built websites: clients edit in the browser, and every change is committed to the Astro project's repository.
+
+Astro has become the default for fast client sites, especially now that agencies build them with Claude Code, Codex, or Cursor. It's also a framework with no admin panel. The moment a client wants to change a sentence, someone has to open the code.
+
+This guide fixes that without adding a database, a headless CMS API, or a WordPress install.
+
+## How it fits together
+
+```text
+Client edits in GitCMS ──commit──▶ GitHub repo ──build──▶ Vercel / Netlify / Cloudflare
+                                       ▲
+                    Astro reads src/content/** at build time
+```
+
+Astro already reads Markdown and MDX from content collections at build time. GitCMS edits those same files and commits them. Your host rebuilds the site on every commit, the same way it does when you push.
+
+## Prerequisites
+
+- An Astro project in a **GitHub repository**.
+- The site deploys from that repository.
+- A **GitCMS site license** for the site. Without one, the site opens in preview mode: you can browse it, but saving and publishing are locked.
+- Copy you want the client to edit (if it's hardcoded in `.astro` components, Step 1 fixes that).
+
+## Step 1: Put client-editable copy in content collections
+
+Blog posts are usually in a collection already. Page copy usually isn't: headlines and paragraphs get written straight into `.astro` components, where a CMS can't reach them safely.
+
+Create a `pages` collection with one Markdown file per page and a frontmatter field for each piece of copy the client should edit. In Astro 5 and later, collections live in `src/content.config.ts`:
+
+```ts title="src/content.config.ts"
+import { defineCollection } from 'astro:content'
+import { glob } from 'astro/loaders'
+import { z } from 'astro/zod'
+
+const pages = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/pages' }),
+  schema: z.object({
+    title: z.string(),
+    heroHeadline: z.string(),
+    heroSubheadline: z.string(),
+    ctaLabel: z.string(),
+  }),
+})
+
+const blog = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    pubDate: z.coerce.date(),
+  }),
+})
+
+export const collections = { pages, blog }
+```
+
+Then move the homepage copy into a content file:
+
+```md title="src/content/pages/home.md"
+---
+title: Home
+heroHeadline: Emergency plumbing in Austin, 24/7
+heroSubheadline: Licensed plumbers at your door in under an hour.
+ctaLabel: Call now
+---
+
+We've served Austin homes and businesses since 2009. Every job comes with
+a written quote before we start.
+```
+
+And read it in the page:
+
+```astro title="src/pages/index.astro"
+---
+import { getEntry, render } from 'astro:content'
+import Layout from '../layouts/Layout.astro'
+
+const home = await getEntry('pages', 'home')
+if (!home) throw new Error('Missing src/content/pages/home.md')
+const { Content } = await render(home)
+---
+
+<Layout title={home.data.title}>
+  <h1>{home.data.heroHeadline}</h1>
+  <p>{home.data.heroSubheadline}</p>
+  <a href="tel:+15125550100">{home.data.ctaLabel}</a>
+  <Content />
+</Layout>
+```
+
+On an existing site, a coding agent can do this refactor for you. Ask it to move every client-editable string into content collections without changing the rendered output, then check the diff.
+
+Two Astro details matter for the CMS:
+
+- **Field names must match your schema.** If the schema says `pubDate`, the CMS field must be `pubDate`, not `date`. GitCMS reads your existing frontmatter, so keep names consistent across entries.
+- **Use human field names.** `heroHeadline` reads well as a label in the editor. `h1Text` doesn't.
+
+## Step 2: Connect the repository
+
+Sign in to [GitCMS](https://gitcms.dev) with GitHub, choose **Add site**, and select the repository. GitCMS detects Astro and finds the `pages` and `blog` collections, with entry counts for each. It also reads the site's address from the `site` option in `astro.config.mjs`.
+
+Confirm where uploaded images should go. For Astro, `public/images` is the usual choice, since Astro serves files in `public/` as-is.
+
+Prefer the terminal? Run the setup CLI in the project root:
+
+```bash
+npx create-gitcms@latest --yes
+```
+
+If `astro.config.mjs` doesn't set `site`, add your live address so the non-interactive run can finish:
+
+```bash
+npx create-gitcms@latest --yes --website-url https://your-site.com
+```
+
+Then commit and push the generated `.gitcms/` folder.
+
+## Step 3: Pick a publishing mode
+
+- **Review before publish** keeps client edits as drafts until someone with publish access publishes them. This is the safe default for new clients.
+- **Publish right away** commits every save to your default branch, so Astro rebuilds and the change goes live on the next deploy.
+
+You can switch later in the site's **Settings**.
+
+## Step 4: Invite the client
+
+In **Workspace Settings → Members**, invite the client as an **Editor**, limit them to **Selected sites**, and decide whether they get **publish access**. They can sign in with Google. No GitHub account needed.
+
+Their view is a list of collections ("Pages", "Blog") and a visual editor with labeled fields. They never see `src/content`, frontmatter, or Git.
+
+## Step 5: Check the loop end to end
+
+Make one test edit as the client would: change the hero headline, publish it, and wait for your host's deploy. If the new headline shows up on the live site, the handoff works.
+
+## When this isn't the right approach
+
+- **The client wants to change layouts.** Content collections expose copy, not design. That's usually what you want for client sites, but visual page building needs a different tool.
+- **Content changes every few seconds.** Each change triggers a rebuild. For live inventory or prices that update constantly, use an API or a database for that data.
+- **The site isn't in Git**, or isn't on GitHub. GitCMS edits a GitHub repository.
+
+## FAQ
+
+### Is this a headless CMS?
+
+Not in the usual sense. A headless CMS stores content in its own database and serves it through an API. Here the content stays as files in the Astro repository, and Astro reads it at build time like any other content collection.
+
+### Does it work with MDX?
+
+Yes. GitCMS edits `.md` and `.mdx` entries. Use MDX when your posts need components.
+
+### Can the client upload images?
+
+Yes. Uploads go into the media folder you chose (for example `public/images`) and the editor inserts the right path.
+
+### What about Astro sites built with Claude Code?
+
+The same steps apply. Most agent-built Astro sites have copy hardcoded in components, so Step 1 matters most. See [how to hand off a Claude Code website to a client](/blog/hand-off-claude-code-website-to-client).
+
+## Next step
+
+Start with the homepage. Move its copy into `src/content/pages/home.md`, [connect the repo to GitCMS](/docs/getting-started/quick-start), and make one edit as the client would. More on Astro setup is in the [framework docs](/docs/getting-started/frameworks).

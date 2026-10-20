@@ -1,0 +1,183 @@
+---
+title: Using AI with GitCMS
+description: How GitCMS connects ChatGPT and Claude to Git-backed content editing through MCP.
+---
+
+GitCMS connects AI assistants to your content workflow through the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/).
+
+Today, GitCMS documents MCP setup for **ChatGPT**, **Claude**, coding agents (**Claude Code**, **Codex**, **Cursor**), and static-token clients. In ChatGPT and Claude, GitCMS can open the editor inside the chat, work with your site configuration, and edit content using the publishing mode your site already uses.
+
+You do not need to speak in Git or CMS implementation terms to use it well. Prompts like "edit this blog post", "tighten this page", or "rewrite this live URL" are valid starting points.
+
+The useful part is not just “AI writes content.” GitCMS gives the model:
+
+- your site scope
+- your collections, site data, and their fields
+- your editorial workflow
+- your [`CONTENT.md`](/docs/ai-mcp/content-instructions) writing instructions
+- a visual editor and review path instead of copy-paste busywork
+
+![GitCMS visual editor inside ChatGPT](/images/docs/screenshots/editor-inside-chatgpt.webp)
+
+## Before you start
+
+Before using GitCMS with AI, make sure:
+
+- your repository is connected in GitCMS
+- `.gitcms` has been initialized
+- your site uses **GitCMS configuration v1.4**. If it still uses v1.2 or earlier, open the site in GitCMS and ask a workspace owner or admin to select **Upgrade configuration**. MCP will give your assistant a link to the right site if an upgrade is needed.
+- the site is **licensed** because MCP is not available in preview mode
+- your `CONTENT.md` file is in reasonable shape if you want stronger brand-voice guidance
+
+Useful links:
+
+- [CLI Onboarding](/docs/getting-started/cli-onboarding) if `.gitcms` is not set up yet
+- [Licensing & Preview](/docs/getting-started/licensing) for MCP access rules
+- [CONTENT.md](/docs/ai-mcp/content-instructions) for site-wide writing instructions
+
+## Supported clients
+
+GitCMS documents these clients today:
+
+- **ChatGPT** — See the [ChatGPT setup guide](/docs/ai-mcp/chatgpt-setup)
+- **Claude** — See the [Claude setup guide](/docs/ai-mcp/claude-setup)
+- **Claude Code, Codex, and Cursor** — See [Coding Agents Setup](/docs/ai-mcp/coding-agents-setup)
+- **Static-token clients** — See [MCP Personal Access Tokens](/docs/ai-mcp/personal-access-tokens) for OpenClaw, Hermes, Manus, OpenHarness, Harness, and custom MCP clients.
+
+Other MCP-compatible clients may work, but setup and behavior can vary. If a client supports OAuth, use the ChatGPT or Claude setup pattern. If it asks for a static token, use a personal access token.
+
+## How GitCMS MCP works today
+
+GitCMS follows the site's publishing mode instead of forcing every AI edit through the same workflow.
+
+If your site uses **Review before publish**, MCP is task-first: create or resume a content task, draft on that task, and submit it for review.
+
+If your site uses **Direct publish**, MCP does not create content tasks. Writes and precise edits commit directly to the site's publishing branch, just like saves from the GitCMS web editor.
+
+In the fullscreen editor, Ask AI uses a precise Git-backed edit. GitCMS shows the committed change as an inline diff. **Keep** leaves that commit in place; **Undo** creates a new commit that restores the previous content.
+
+When GitCMS loads a site, the host may show a small context card confirming the site and publishing mode. The full editor is reserved for `write`; later `edit` calls stay conversational and are reflected in the already-open editor instead of opening another UI.
+
+## How the model sees your site
+
+The model works with your site the way a coding agent works with files, but it sees a small set of folders shaped by your GitCMS configuration, not your whole repository:
+
+```text
+/GITCMS.md                 a generated guide to the site (read-only)
+/CONTENT.md                your editorial rules
+/posts/hello-world.mdx     an entry: frontmatter, then the body
+/docs/fr/setup.md          translated collections start with the locale
+/posts/.schema.json        the collection's fields (read-only)
+/navigation.json           site data, shown as JSON
+```
+
+- **Entries** are the real Markdown files. GitCMS still checks their fields before saving and fills in managed fields like created and updated dates.
+- **Site data** such as navigation, footers, or theme settings shows as JSON. GitCMS writes changed values back into the original JSON, YAML, or TOML file and keeps its comments and formatting. Keys outside your configured site data never appear.
+- **Field definitions** show as JSON Schema files. They can't be changed through MCP; edit them in **Configure**.
+- **`CONTENT.md`** is loaded into `get_site_context` automatically. Site managers can ask the model to update it; changes apply site-wide right away, outside any content task. Other editors can still read the rules.
+
+## Core MCP workflow tools
+
+You do not need to call tools manually, but it helps to understand the flow the model is working through:
+
+- `list_sites` — find the GitCMS sites you can work with
+- `get_site_context` — load the site's guide: its files, publishing mode, and writing instructions
+- `create_task` — create a new task when the site uses review mode
+- `list_tasks` / `get_task` — find or reload an existing task and the files it changes
+- `ls` / `read` — list folders and read entries, site data, and field definitions
+- `write` — create a file or replace its full content; replacements require the file revision returned by `read`, so a stale draft cannot silently overwrite newer work
+- `edit` — make one or more precise `oldText` → `newText` edits to an existing file, including frontmatter and site data
+- `submit_for_review` — move a task into review
+
+Review-mode prompts that say “brainstorm first, then create a content task, then draft” work well when review is required. Direct sites can simply ask GitCMS to edit the relevant page or post.
+
+You still do not need to name tools directly. The better pattern is to express intent in plain language and let GitCMS load the right context.
+
+## Recommended workflow
+
+Here is the workflow we recommend in docs and examples:
+
+1. **Brainstorm**
+   Ask the model to help with topic angles, outlines, and audience fit before it creates anything.
+2. **Create a content task**
+   Turn the chosen idea into a task with notes, references, and desired outcome.
+3. **Draft the first version**
+   Be explicit about collection, entry path, locale, and frontmatter values you care about.
+4. **Revise**
+   Ask for structural rewrites, tighter intros, stronger CTAs, or better examples.
+5. **Submit for review**
+   Use the same review path as the rest of your team.
+
+For example:
+
+```text
+Help me brainstorm three post ideas for our developer docs audience.
+Do not create content yet.
+```
+
+```text
+Create a content task for the strongest idea.
+Title it "Migrating from WordPress to a markdown-based docs workflow"
+and include notes about target audience, angle, and CTA.
+```
+
+```text
+Now draft the first version for that content task in the posts collection.
+Keep the tone practical and leave it ready for review.
+```
+
+```text
+I want to edit this blog post:
+https://gitcms.dev/blog/content-is-just-code
+
+Please read it first, then rewrite the introduction to be sharper and less repetitive.
+```
+
+See [Task-First AI Workflows](/docs/ai-mcp/task-first-workflows) for more complete prompt patterns.
+
+## What AI is good at in GitCMS
+
+GitCMS MCP is particularly useful for:
+
+- turning brainstormed ideas into first drafts
+- revising existing docs, blog posts, and changelogs
+- adding or updating frontmatter with valid field values
+- updating site data such as menus, footers, and homepage sections
+- repetitive editorial tasks across many entries
+- locale-aware content work when you specify the target locale
+- reviewable fullscreen edit suggestions during rewrite sessions
+
+## CONTENT.md matters
+
+If you want better output, keep [`CONTENT.md`](/docs/ai-mcp/content-instructions) current.
+
+That file gives the model reusable guidance like:
+
+- who you write for
+- your brand voice
+- what to avoid
+- preferred structure
+- terminology to keep consistent
+
+Think of `CONTENT.md` as the persistent editorial brief the model can reuse across many content tasks.
+
+You do not need to tell ChatGPT or Claude to "use CONTENT.md". GitCMS loads those instructions as part of site context during writing flows.
+
+## Safety and limits
+
+GitCMS MCP follows the publishing behavior you configured for the site.
+
+- **Review before publish** keeps AI work in the editorial workflow until review and publishing
+- **Direct publish** commits AI writes directly to the publishing branch, so your deployment pipeline may make the change live immediately
+- schema validation still applies
+- your repository remains the source of truth
+- precise edits fail instead of overwriting content when the expected text or file revision no longer matches
+
+Choose Review before publish when you want human approval before AI changes can ship.
+
+## Next steps
+
+1. Connect your client: [ChatGPT setup](/docs/ai-mcp/chatgpt-setup) or [Claude setup](/docs/ai-mcp/claude-setup)
+2. Read [Task-First AI Workflows](/docs/ai-mcp/task-first-workflows)
+3. Tighten your [`CONTENT.md`](/docs/ai-mcp/content-instructions)
+4. Use the [CLI onboarding prompt](/docs/getting-started/cli-onboarding#agentic-onboarding) if your repo is not initialized yet

@@ -1,0 +1,43 @@
+---
+import ContentLayout from '@/layouts/ContentLayout.astro'
+import { getChangelogs } from '@/lib/content'
+const entries = await getChangelogs()
+function formatDate(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })
+}
+---
+<ContentLayout title="Changelog — GitCMS" description="Product updates and release notes for GitCMS." path="/changelog">
+  <div class="mx-auto max-w-5xl px-6 py-16">
+    <h1 class="font-logo text-4xl font-normal tracking-tight sm:text-5xl">Changelog</h1>
+    <p class="mt-3 text-base text-neutral-500">Product updates and release notes.</p>
+    <div class="mt-14">
+      {entries.length === 0 && <p class="text-neutral-400">No releases yet. Check back soon.</p>}
+      {entries.map((entry, i) => (
+        <div class="grid grid-cols-[160px_32px_1fr] sm:grid-cols-[200px_32px_1fr]">
+          <div class="sticky top-8 h-fit pt-1 pr-4 text-right">
+            <time datetime={entry.data.date} class="text-sm font-medium text-neutral-500">{formatDate(entry.data.date)}</time>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-blue-600"></div>
+            {i < entries.length - 1 && <div class="mt-1 w-px flex-1 bg-neutral-200"></div>}
+          </div>
+          <div class="pb-10 pl-4">
+            <a href={`/changelog/${entry.filePath!.split('/').at(-1)!.replace(/\.mdx?$/, '')}`} class="group block">
+              <div class="overflow-hidden rounded-xl border border-neutral-200 bg-white transition-all hover:border-neutral-300 hover:shadow-md">
+                <div class="p-6">
+                  <span class="inline-block rounded-full bg-neutral-900 px-3 py-1 text-xs font-medium text-white">{entry.data.version}</span>
+                  <h2 class="mt-3 font-logo text-2xl font-medium tracking-tight text-neutral-900 transition-colors group-hover:text-neutral-600">{entry.data.title}</h2>
+                  {entry.data.description && <p class="mt-2 text-sm leading-relaxed text-neutral-600">{entry.data.description}</p>}
+                  <div class="mt-4 flex items-center gap-2 text-sm font-medium text-neutral-900">
+                    Read more
+                    <span class="transition-transform group-hover:translate-x-1">→</span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</ContentLayout>

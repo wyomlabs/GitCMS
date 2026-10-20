@@ -1,0 +1,31 @@
+---
+title: 'Update a detail everywhere on the site'
+description: 'Change a price, phone number, product name, or claim across every page and post, as one reviewable change.'
+category: content
+agents:
+  - 'ChatGPT'
+  - 'Claude'
+  - 'Claude Code'
+  - 'OpenClaw'
+  - 'Hermes'
+order: 4
+lastReviewed: '2026-10-10'
+---
+
+## The prompt
+
+```text
+On my site [site name], find every entry that mentions [old value] and update
+it to [new value]. Also fix any sentences that no longer read naturally.
+
+Put all changes in one content task called "[short description]" and submit it
+for review. Then give me a list of every entry you changed.
+```
+
+## How it runs
+
+Run this in an agent connected to GitCMS through MCP (see [AI agents](/agents)). On sites that use review before publish, the agent drafts inside a content task and submits it for review; a person publishes. On sites that publish directly, there's no draft step and saves go live on the next deploy, so ask the agent to show you the changes before it saves.
+
+## Why one task
+
+Twenty separate edits are hard to review. One task lists every entry it touched, so a reviewer can check them all in one place and approve once.
