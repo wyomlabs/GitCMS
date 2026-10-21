@@ -1,8 +1,10 @@
 ---
-// An agent working through the GitCMS MCP server: it reads entries, saves a
+// An agent working through the GitCMS MCP server. The prompt is typed into
+// the composer and sent with the cursor; Claude then reads entries, saves a
 // draft, and hands the change to a person for review instead of publishing.
 import { ArrowUp, Check, Plus } from 'lucide-react'
 import { GitCMSLogo } from '@/components/gitcms-logo'
+import Cursor from './Cursor.astro'
 
 interface Props {
   class?: string
@@ -19,18 +21,18 @@ const tools = [
   { name: 'update_entry', detail: 'services/*.mdx · 5 entries' },
   { name: 'submit_for_review', detail: 'Content task #57' },
 ] as const
+// Step the message is sent; everything in the thread follows it.
+const sent = 4
 ---
-<div data-seq="10" data-ms="1100" class:list={['flex h-full flex-col bg-[#faf9f5] text-[12.5px] text-neutral-800', className]}>
+<div data-seq={sent + 9} data-final={sent + 6} data-ms="1100" class:list={['relative flex h-full flex-col bg-[#faf9f5] text-[12.5px] text-neutral-800', className]}>
   <div class="flex-1 space-y-3 overflow-hidden px-5 py-4">
-    <div class="ml-auto max-w-[78%] rounded-2xl bg-[#f0eee6] px-3.5 py-2 leading-snug" data-at="1" data-fx="fade">
-      <span data-type data-at="1" data-fx="fade" data-speed="22" data-text={prompt}></span>
-    </div>
-    <div class="space-y-1.5" data-at="3" data-fx="fade">
+    <div class="ml-auto w-fit max-w-[78%] rounded-2xl bg-[#f0eee6] px-3.5 py-2 leading-snug" data-at={sent}>{prompt}</div>
+    <div class="space-y-1.5" data-at={sent + 1} data-fx="fade">
       <div class="flex items-center gap-1.5 text-[11.5px] text-neutral-500">
         <img src="/ai-logos/claude-orange.svg" alt="" class="size-3.5" /> Working in GitCMS · acme-roofing.com
       </div>
       {tools.map((tool, index) => (
-        <div class="flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-2.5 py-1.5" data-at={3 + index}>
+        <div class="flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-2.5 py-1.5" data-at={sent + 1 + index}>
           <GitCMSLogo className="size-3.5 shrink-0" />
           <code class="text-[11px] font-medium text-neutral-900">{tool.name}</code>
           <span class="truncate text-[11px] text-neutral-500">{tool.detail}</span>
@@ -38,10 +40,10 @@ const tools = [
         </div>
       ))}
     </div>
-    <div class="leading-snug" data-at="7" data-fx="fade">
+    <div class="leading-snug" data-at={sent + 5} data-fx="fade">
       I drafted the changes on 6 pages. Nothing is live yet; Jess can review them in GitCMS.
     </div>
-    <div class="rounded-xl border border-neutral-200 bg-white p-3" data-at="8">
+    <div class="rounded-xl border border-neutral-200 bg-white p-3" data-at={sent + 6}>
       <div class="flex items-center gap-2">
         <span class="rounded border border-violet-200 bg-violet-50 px-1.5 py-0.5 text-[10.5px] font-medium text-violet-700">#57 · In review</span>
         <span class="text-[11.5px] font-medium text-neutral-900">Q4 pricing update</span>
@@ -52,13 +54,19 @@ const tools = [
       </div>
     </div>
   </div>
-  <div class="m-3 mt-0 rounded-2xl border border-neutral-200 bg-white px-3 py-2">
-    <div class="text-[12px] text-neutral-400">Reply to Claude…</div>
+  <!-- Composer: the prompt is typed here, then sent. -->
+  <div class="m-3 mt-0 rounded-2xl border border-neutral-200 bg-white px-3 py-2" data-cursor-at="0">
+    <div class="min-h-[2.6em] text-[12.5px] leading-snug text-neutral-800">
+      <span class="text-neutral-400" data-at="0" data-until="1" data-fx="collapse">How can I help you today?</span>
+      <span data-type data-at="1" data-until={sent} data-fx="collapse" data-speed="22" data-text={prompt}></span>
+      <span class="text-neutral-400" data-at={sent} data-fx="collapse">Reply to Claude…</span>
+    </div>
     <div class="mt-2 flex items-center gap-2 text-neutral-400">
       <Plus className="size-3.5" />
       <span class="inline-flex items-center gap-1 rounded-md border border-neutral-200 px-1.5 py-0.5 text-[10.5px] text-neutral-600"><GitCMSLogo className="size-3" /> GitCMS</span>
       <span class="ml-auto text-[10.5px]">Opus 5.5</span>
-      <span class="grid size-5 place-items-center rounded-full bg-[#d97757] text-white"><ArrowUp className="size-3" /></span>
+      <span data-at="1" data-until={sent} data-fx="enable" data-cursor-at={sent - 1} class="grid size-6 place-items-center rounded-full bg-[#d97757] text-white"><ArrowUp className="size-3.5" /></span>
     </div>
   </div>
+  <Cursor />
 </div>

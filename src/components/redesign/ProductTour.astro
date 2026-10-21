@@ -29,7 +29,7 @@ const tabs = [
   </AppWindow>
   <div class="mt-10 grid gap-6 sm:grid-cols-4" role="tablist">
     {tabs.map((tab, index) => (
-      <button type="button" role="tab" data-tour-tab={tab.key} data-duration={tab.key === 'board' ? 14000 : 9000} aria-selected={index === 0 ? 'true' : 'false'} class="group text-left">
+      <button type="button" role="tab" data-tour-tab={tab.key} data-duration={tab.key === 'board' || tab.key === 'agent' ? 14000 : 9000} aria-selected={index === 0 ? 'true' : 'false'} class="group text-left">
         <span class="block h-0.5 overflow-hidden rounded-full bg-neutral-200">
           <span data-tour-bar class="block h-full w-0 bg-neutral-900"></span>
         </span>

@@ -2,6 +2,7 @@
 // Drives the looping mockup demos. A `[data-seq="N"]` root steps 0..N while
 // it's on screen; children with `data-at="k"` get `.on` from step k (until
 // `data-until`), and `[data-type]` children type their `data-text` when on.
+// `data-fx="enable"` keeps an element visible but disabled-looking until then.
 // Reduced motion shows the final step and never animates.
 //
 // A `[data-cursor]` child glides to the element tagged `data-cursor-at="k"`
@@ -21,6 +22,16 @@
   }
   [data-seq] [data-at][data-fx='collapse']:not(.on) {
     display: none;
+  }
+  /* Buttons that exist from the start but only enable when they're needed. */
+  [data-seq] [data-at][data-fx='enable'] {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  [data-seq] [data-at][data-fx='enable']:not(.on) {
+    opacity: 1;
+    transform: none;
+    background-color: #ededed !important;
+    color: #a3a3a3 !important;
   }
   [data-type].typing::after {
     content: '';
