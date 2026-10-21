@@ -1,0 +1,53 @@
+---
+import { Check, Minus } from 'lucide-react'
+import { loginUrl } from '@/lib/start-login'
+import { PRICING_PLANS, PRICING_ROWS } from '../content'
+
+interface Props {
+  dark?: boolean
+  highlight?: 'team' | 'agency'
+}
+const { dark = false, highlight = 'team' } = Astro.props
+const muted = dark ? 'text-neutral-400' : 'text-neutral-500'
+const rule = dark ? 'border-white/10' : 'border-neutral-200'
+---
+<div class="overflow-x-auto">
+  <table class="w-full min-w-[720px] border-collapse text-sm">
+    <thead>
+      <tr>
+        <th class="w-[28%]"></th>
+        {PRICING_PLANS.map((plan) => (
+          <th class:list={['px-4 pb-5 pt-5 text-left align-top font-normal', plan.key === highlight && (dark ? 'rounded-t-xl bg-white/[0.06]' : 'rounded-t-xl bg-neutral-50')]}>
+            <div class:list={['text-sm font-medium', dark ? 'text-white' : 'text-neutral-900']}>{plan.name}</div>
+            <div class:list={['mt-2 text-[28px] font-semibold tracking-tight', dark ? 'text-white' : 'text-neutral-900']}>
+              {plan.monthlyPrice === 0 ? '$0' : `$${plan.monthlyPrice}`}
+              <span class:list={['text-sm font-normal', muted]}>{plan.key === 'agency' ? '/mo' : plan.monthlyPrice === 0 ? '' : '/site/mo'}</span>
+            </div>
+            <p class:list={['mt-1 min-h-10 text-[13px] leading-snug', muted]}>{plan.tagline}</p>
+            <a
+              href={loginUrl('/')}
+              class:list={[
+                'mt-3 inline-flex w-full justify-center rounded-lg px-3 py-2 text-[13px] font-medium transition-colors',
+                plan.key === highlight
+                  ? dark ? 'bg-lime-300 text-neutral-900 hover:bg-lime-200' : 'bg-neutral-900 text-white hover:bg-neutral-800'
+                  : dark ? 'border border-white/15 text-white hover:bg-white/5' : 'border border-neutral-200 text-neutral-900 hover:bg-neutral-50',
+              ]}
+            >{plan.key === 'preview' ? 'Explore free' : 'Start free trial'}</a>
+          </th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {PRICING_ROWS.map((row) => (
+        <tr class:list={['border-t', rule]}>
+          <td class:list={['py-3 pr-4', dark ? 'text-neutral-300' : 'text-neutral-700']}>{row.label}</td>
+          {row.cells.map((cell, index) => (
+            <td class:list={['px-4 py-3', PRICING_PLANS[index]?.key === highlight && (dark ? 'bg-white/[0.06]' : 'bg-neutral-50'), dark ? 'text-white' : 'text-neutral-900']}>
+              {cell === true ? <Check className="size-4 text-emerald-500" /> : cell === false ? <Minus className={`size-4 ${dark ? 'text-neutral-600' : 'text-neutral-300'}`} /> : cell}
+            </td>
+          ))}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

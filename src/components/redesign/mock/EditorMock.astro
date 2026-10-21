@@ -1,0 +1,86 @@
+---
+// Entry editor (DESIGN.md "Editor" page type): serif title, fields, body,
+// the violet task chip, and optionally the SEO panel docked on the right.
+import { AlertTriangle, CalendarDays, Check, ChevronDown, FileText, Image, ListChecks, Search, Tag } from 'lucide-react'
+import AppShell from './AppShell.astro'
+import { SEO_CHECKS } from '../content'
+
+interface Props {
+  panel?: 'none' | 'seo'
+  class?: string
+}
+const { panel = 'none', class: className = '' } = Astro.props
+const firstCheckStep = 5
+---
+<div data-seq={panel === 'seo' ? 12 : 8} data-ms="1100" class:list={['h-full', className]}>
+  <AppShell active="Services" crumbs={['Services', 'Emergency roof repair']}>
+    <Fragment slot="actions">
+      <span class="hidden items-center overflow-hidden rounded-md border border-violet-200 bg-violet-50 text-[11px] font-medium text-violet-700 md:inline-flex">
+        <span class="px-2 py-1">#42</span>
+        <span class="border-l border-violet-200 px-1 py-1"><ChevronDown className="size-3" /></span>
+      </span>
+      <span class="hidden rounded-md border border-neutral-200 px-2 py-1 text-[11px] text-neutral-500 md:inline" data-at="3" data-fx="fade">Saved to draft</span>
+      <span data-at={panel === 'seo' ? 11 : 6} data-fx="fade" class="rd-pulse rounded-md bg-neutral-900 px-2.5 py-1 text-[11px] font-medium text-white">Submit for review</span>
+    </Fragment>
+    <div class="flex h-full">
+      <div class="min-w-0 flex-1 overflow-hidden px-6 py-5 sm:px-10">
+        <h3 class="font-logo text-[26px] leading-tight tracking-tight text-neutral-900">Emergency roof repair</h3>
+        <dl class="mt-4 grid grid-cols-[96px_1fr] items-center gap-x-3 gap-y-2 text-[11.5px]">
+          <dt class="flex items-center gap-1.5 text-neutral-500"><FileText className="size-3.5" /> Description</dt>
+          <dd class="rounded-md border border-neutral-200 bg-neutral-50 px-2 py-1.5 text-neutral-700">Fast, insured roof repairs across Austin, day or night.</dd>
+          <dt class="flex items-center gap-1.5 text-neutral-500"><Tag className="size-3.5" /> Price from</dt>
+          <dd class="rounded-md border border-neutral-200 bg-neutral-50 px-2 py-1.5 text-neutral-700">$249</dd>
+          <dt class="flex items-center gap-1.5 text-neutral-500"><Image className="size-3.5" /> Hero image</dt>
+          <dd class="flex items-center gap-2 rounded-md border border-neutral-200 bg-neutral-50 px-2 py-1.5 text-neutral-500">
+            <span class="h-5 w-8 rounded-sm bg-gradient-to-br from-amber-200 via-orange-300 to-rose-300"></span> crew-on-roof.jpg
+          </dd>
+          <dt class="flex items-center gap-1.5 text-neutral-500"><ListChecks className="size-3.5" /> Areas</dt>
+          <dd class="flex flex-wrap gap-1 rounded-md border border-neutral-200 bg-neutral-50 px-1.5 py-1">
+            {['Austin', 'Round Rock', 'Cedar Park'].map((area) => (
+              <span class="rounded bg-sky-100 px-1.5 py-0.5 text-[10.5px] font-medium text-sky-800">{area} ×</span>
+            ))}
+          </dd>
+        </dl>
+        <div class="mt-4 border-t border-neutral-200 pt-4 font-logo text-[13.5px] leading-relaxed text-neutral-700">
+          <p class="font-sans text-[13px] font-semibold text-neutral-900">When to call us</p>
+          <p class="mt-1.5">A leak after a storm can’t wait for Monday.
+            <span class="rounded-sm bg-lime-100 text-neutral-900" data-type data-at="1" data-fx="fade" data-text=" Crews are on site within 90 minutes, 24/7, across Austin."></span>
+          </p>
+          <p class="mt-2 text-neutral-400">We tarp, patch and photograph the damage for your insurer…</p>
+        </div>
+      </div>
+      {panel === 'seo' && (
+        <aside class="hidden w-[250px] shrink-0 flex-col border-l border-neutral-200 bg-white md:flex">
+          <div class="flex h-9 items-center gap-1.5 border-b border-neutral-200 px-3 text-[11.5px] font-medium">
+            <Search className="size-3.5" /> SEO
+            <span class="ml-auto rounded-full bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700" data-at="10" data-fx="fade">92 · Good</span>
+          </div>
+          <div class="p-3">
+            <div class="text-[10px] font-medium uppercase tracking-wide text-neutral-400">Search preview</div>
+            <div class="mt-1.5 rounded-lg border border-neutral-200 p-2.5" data-at="4" data-fx="fade">
+              <div class="flex items-center gap-1.5 text-[10px] text-neutral-500">
+                <span class="size-3.5 rounded-full bg-amber-400"></span> acme-roofing.com › services
+              </div>
+              <div class="mt-1 text-[12.5px] leading-snug text-[#1a0dab]">Emergency Roof Repair in Austin, 24/7 | Acme Roofing</div>
+              <div class="mt-0.5 text-[10.5px] leading-snug text-neutral-600">Fast, insured roof repairs across Austin, day or night. Crews on site within 90 minutes…</div>
+            </div>
+            <div class="mt-3 text-[10px] font-medium uppercase tracking-wide text-neutral-400">Before you publish</div>
+            <ul class="mt-1.5 space-y-1.5">
+              {SEO_CHECKS.map((check, index) => (
+                <li class="flex items-start gap-1.5 text-[11px] leading-snug text-neutral-700" data-at={firstCheckStep + index}>
+                  {check.state === 'pass'
+                    ? <Check className="mt-px size-3.5 shrink-0 text-emerald-600" />
+                    : <AlertTriangle className="mt-px size-3.5 shrink-0 text-amber-500" />}
+                  {check.label}
+                </li>
+              ))}
+            </ul>
+            <div class="mt-3 flex items-center gap-1.5 rounded-md bg-neutral-50 px-2 py-1.5 text-[10.5px] text-neutral-500">
+              <CalendarDays className="size-3.5" /> Last checked just now
+            </div>
+          </div>
+        </aside>
+      )}
+    </div>
+  </AppShell>
+</div>

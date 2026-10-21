@@ -1,0 +1,39 @@
+---
+// One activity stream for humans and agents on the same content task.
+import { Check, GitCommitHorizontal, MessageSquare, Pencil, Sparkles } from 'lucide-react'
+
+interface Props {
+  class?: string
+  dark?: boolean
+}
+const { class: className = '', dark = false } = Astro.props
+const events = [
+  { who: 'Sofia', role: 'Marketing', avatar: 'S', color: 'bg-amber-500', icon: Pencil, text: 'Updated the homepage headline' },
+  { who: 'Claude', role: 'Agent', avatar: 'agent', color: '', icon: Sparkles, text: 'Proposed SEO fixes on 8 pages' },
+  { who: 'Alex', role: 'Reviewer', avatar: 'A', color: 'bg-sky-500', icon: MessageSquare, text: 'Requested changes on 2 pages' },
+  { who: 'Claude', role: 'Agent', avatar: 'agent', color: '', icon: Sparkles, text: 'Updated the proposal' },
+  { who: 'Alex', role: 'Reviewer', avatar: 'A', color: 'bg-sky-500', icon: Check, text: 'Approved' },
+  { who: 'GitCMS', role: 'Publish', avatar: 'git', color: 'bg-emerald-500', icon: GitCommitHorizontal, text: 'Published · commit 4f2a91c' },
+] as const
+---
+<div data-seq="7" data-ms="1000" class:list={['relative', className]}>
+  <div class:list={['absolute bottom-3 left-[15px] top-3 w-px', dark ? 'bg-white/10' : 'bg-neutral-200']}></div>
+  <ol class="relative space-y-2.5">
+    {events.map((event, index) => {
+      const Icon = event.icon
+      return (
+        <li class="flex items-center gap-3" data-at={index}>
+          {event.avatar === 'agent'
+            ? <span class:list={['grid size-[31px] shrink-0 place-items-center rounded-full border', dark ? 'border-white/10 bg-neutral-900' : 'border-neutral-200 bg-white']}><img src="/ai-logos/claude-orange.svg" alt="" class="size-4" /></span>
+            : <span class:list={['grid size-[31px] shrink-0 place-items-center rounded-full text-[11px] font-semibold text-white', event.color]}>{event.avatar === 'git' ? <Check className="size-4" /> : event.avatar}</span>}
+          <div class:list={['flex min-w-0 flex-1 items-center gap-2 rounded-lg border px-3 py-2 text-[12.5px]', dark ? 'border-white/10 bg-white/[0.04] text-neutral-200' : 'border-neutral-200 bg-white text-neutral-700']}>
+            <Icon className={`size-3.5 shrink-0 ${dark ? 'text-neutral-400' : 'text-neutral-400'}`} />
+            <span class:list={['font-medium', dark ? 'text-white' : 'text-neutral-900']}>{event.who}</span>
+            <span class="truncate">{event.text}</span>
+            <span class:list={['ml-auto shrink-0 text-[10.5px]', dark ? 'text-neutral-500' : 'text-neutral-400']}>{event.role}</span>
+          </div>
+        </li>
+      )
+    })}
+  </ol>
+</div>

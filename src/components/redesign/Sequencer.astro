@@ -1,0 +1,120 @@
+---
+// Drives the looping mockup demos. A `[data-seq="N"]` root steps 0..N while
+// it's on screen; children with `data-at="k"` get `.on` from step k (until
+// `data-until`), and `[data-type]` children type their `data-text` when on.
+// Reduced motion shows the final step and never animates.
+---
+<style is:global>
+  [data-seq] [data-at] {
+    transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  [data-seq] [data-at]:not(.on) {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  [data-seq] [data-at][data-fx='fade']:not(.on) {
+    transform: none;
+  }
+  [data-seq] [data-at][data-fx='collapse']:not(.on) {
+    display: none;
+  }
+  [data-type].typing::after {
+    content: '';
+    display: inline-block;
+    width: 1.5px;
+    height: 1em;
+    margin-left: 1px;
+    vertical-align: -0.15em;
+    background: currentColor;
+    animation: rd-caret 0.9s steps(1) infinite;
+  }
+  @keyframes rd-caret {
+    50% { opacity: 0; }
+  }
+  @keyframes rd-draw {
+    from { stroke-dashoffset: var(--len, 600); }
+    to { stroke-dashoffset: 0; }
+  }
+  .rd-draw.on {
+    stroke-dasharray: var(--len, 600);
+    animation: rd-draw 1.6s ease-out both;
+  }
+  @keyframes rd-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(23, 23, 23, 0.25); }
+    50% { box-shadow: 0 0 0 6px rgba(23, 23, 23, 0); }
+  }
+  .rd-pulse.on {
+    animation: rd-pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes rd-flow {
+    to { stroke-dashoffset: -24; }
+  }
+  .rd-flow {
+    stroke-dasharray: 4 8;
+    animation: rd-flow 1.2s linear infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rd-flow, .rd-pulse.on, .rd-draw.on { animation: none; }
+  }
+</style>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  function typeInto(element: HTMLElement) {
+    const text = element.dataset.text ?? ''
+    if (reduce) {
+      element.textContent = text
+      return
+    }
+    let index = 0
+    element.textContent = ''
+    element.classList.add('typing')
+    const timer = window.setInterval(() => {
+      index += 1
+      element.textContent = text.slice(0, index)
+      if (index >= text.length) {
+        window.clearInterval(timer)
+        window.setTimeout(() => element.classList.remove('typing'), 600)
+      }
+    }, Number(element.dataset.speed ?? 38))
+  }
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-seq]')) {
+    const steps = Number(root.dataset.seq)
+    const interval = Number(root.dataset.ms ?? 1200)
+    const items = [...root.querySelectorAll<HTMLElement>('[data-at]')]
+    let step = 0
+    let timer: number | undefined
+
+    const render = () => {
+      for (const item of items) {
+        const at = Number(item.dataset.at)
+        const until = item.dataset.until === undefined ? Infinity : Number(item.dataset.until)
+        const on = step >= at && step < until
+        const wasOn = item.classList.contains('on')
+        item.classList.toggle('on', on)
+        if (on && !wasOn && item.dataset.type !== undefined) typeInto(item)
+      }
+    }
+
+    if (reduce) {
+      step = Number(root.dataset.final ?? steps)
+      render()
+      continue
+    }
+
+    render()
+    new IntersectionObserver(([entry]) => {
+      if (entry?.isIntersecting && timer === undefined) {
+        timer = window.setInterval(() => {
+          step = step >= steps ? 0 : step + 1
+          render()
+        }, interval)
+      } else if (!entry?.isIntersecting && timer !== undefined) {
+        window.clearInterval(timer)
+        timer = undefined
+      }
+    }, { threshold: 0.25 }).observe(root)
+  }
+</script>

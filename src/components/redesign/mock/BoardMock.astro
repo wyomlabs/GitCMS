@@ -1,0 +1,22 @@
+---
+// Content board (DESIGN.md "Board") in the CMS frame, or bare columns.
+import { Plus } from 'lucide-react'
+import AppShell from './AppShell.astro'
+import BoardColumns from './BoardColumns.astro'
+
+interface Props {
+  class?: string
+  shell?: boolean
+}
+const { class: className = '', shell = true } = Astro.props
+---
+<div data-seq="9" data-ms="1000" data-final="6" class:list={['h-full', className]}>
+  {shell ? (
+    <AppShell active="Content board" crumbs={['Content board']}>
+      <Fragment slot="actions">
+        <span class="inline-flex items-center gap-1 rounded-md bg-neutral-900 px-2.5 py-1 text-[11px] font-medium text-white"><Plus className="size-3" /> New idea</span>
+      </Fragment>
+      <BoardColumns />
+    </AppShell>
+  ) : <BoardColumns />}
+</div>

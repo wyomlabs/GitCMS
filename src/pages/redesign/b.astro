@@ -1,0 +1,210 @@
+---
+// Variant B — "Better than WordPress". Editorial and friendly (billy): a
+// squiggle under the promise, an annotated app window, doodles, and a plain
+// "what you keep / what you leave" swap.
+import { ArrowRight, Check, X } from 'lucide-react'
+import { GitCMSLogo } from '@/components/gitcms-logo'
+import { loginUrl } from '@/lib/start-login'
+import RedesignLayout from '@/components/redesign/RedesignLayout.astro'
+import AppWindow from '@/components/redesign/mock/AppWindow.astro'
+import EditorMock from '@/components/redesign/mock/EditorMock.astro'
+import BoardMock from '@/components/redesign/mock/BoardMock.astro'
+import SearchMock from '@/components/redesign/mock/SearchMock.astro'
+import ReviewMock from '@/components/redesign/mock/ReviewMock.astro'
+import SiteNav from '@/components/redesign/sections/SiteNav.astro'
+import Squiggle from '@/components/redesign/sections/Squiggle.astro'
+import SoonBadge from '@/components/redesign/sections/SoonBadge.astro'
+import PricingTable from '@/components/redesign/sections/PricingTable.astro'
+import FaqList from '@/components/redesign/sections/FaqList.astro'
+import SiteFooter from '@/components/redesign/sections/SiteFooter.astro'
+import { AGENTS, FRAMEWORKS, PROOF_POINTS, SUBHEAD, WORDPRESS_SWAP } from '@/components/redesign/content'
+
+const audiences = [
+  'Agencies handing sites to clients', 'Freelancers with ten sites to look after',
+  'Marketers who just need to publish', 'Founders writing the changelog',
+  'Client editors who never asked for Git', 'Writers and reviewers',
+  'Coding agents doing the busywork', 'Whoever owns SEO this quarter',
+]
+const note = 'font-logo text-[17px] italic leading-snug text-neutral-700'
+---
+<RedesignLayout variant="b" title="Variant B · Better than WordPress">
+  <SiteNav />
+
+  <!-- Hero -->
+  <section class="px-5 pb-10 pt-20 text-center sm:pt-24">
+    <p class="text-sm text-neutral-500">For sites built with code, and increasingly with agents</p>
+    <h1 class="mx-auto mt-4 max-w-4xl text-[46px] font-semibold leading-[1.04] tracking-[-0.035em] sm:text-[68px]">
+      The WordPress admin, for sites that <Squiggle class="text-lime-500">stay code</Squiggle>.
+    </h1>
+    <p class="mx-auto mt-7 max-w-2xl text-[18px] leading-relaxed text-neutral-600">{SUBHEAD}</p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a href={loginUrl('/')} class="inline-flex items-center gap-2 rounded-xl bg-neutral-900 px-5 py-3 text-[15px] font-medium text-white hover:bg-neutral-800">Connect your site, free <ArrowRight className="size-4" /></a>
+      <a href="#how" class="inline-flex items-center rounded-xl border border-neutral-200 px-5 py-3 text-[15px] font-medium hover:bg-neutral-50">See how it works</a>
+    </div>
+  </section>
+
+  <section class="relative mx-auto max-w-[1180px] px-5 pb-24">
+    <div class="relative mx-auto max-w-[960px]">
+      <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/services/emergency-roof-repair">
+        <div class="h-[470px]"><EditorMock /></div>
+      </AppWindow>
+      <div class="pointer-events-none absolute -left-44 top-48 hidden w-40 text-right xl:block">
+        <p class={note}>Clients edit fields, not files</p>
+        <svg viewBox="0 0 120 60" class="ml-auto mt-1 h-12 w-28 text-neutral-500" aria-hidden="true"><path d="M4 8 C 40 10, 80 20, 112 50" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /><path d="M100 48 L113 51 L110 38" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+      </div>
+      <div class="pointer-events-none absolute -right-48 top-2 hidden w-44 xl:block">
+        <svg viewBox="0 0 120 60" class="h-12 w-28 text-neutral-500" aria-hidden="true"><path d="M116 52 C 80 50, 40 40, 8 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /><path d="M8 28 L7 13 L21 15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+        <p class={note}>Saved as a draft. Nothing is live yet.</p>
+      </div>
+      <div class="pointer-events-none absolute -right-48 bottom-20 hidden w-44 xl:block">
+        <p class={note}>Every publish is a commit in your repo</p>
+        <svg viewBox="0 0 120 60" class="mt-1 h-12 w-28 text-neutral-500" aria-hidden="true"><path d="M110 6 C 90 40, 50 50, 8 46" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /><path d="M20 38 L7 46 L19 55" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg>
+      </div>
+    </div>
+    <ul class="mt-10 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-neutral-500">
+      {PROOF_POINTS.map((point) => <li class="flex items-center gap-1.5"><Check className="size-4 text-emerald-600" /> {point}</li>)}
+    </ul>
+  </section>
+
+  <!-- Audience band -->
+  <section class="border-y border-lime-200/70 bg-lime-50/60">
+    <div class="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[1fr_1.6fr]">
+      <div>
+        <p class="text-sm font-medium text-lime-800">— Made for</p>
+        <h2 class="mt-2 text-[28px] font-semibold leading-tight tracking-[-0.02em]">Everyone who touches the site after launch</h2>
+        <p class="mt-3 text-[15px] leading-relaxed text-neutral-600">Building got fast. The weeks and years after launch didn’t. That’s who GitCMS is for.</p>
+      </div>
+      <ul class="grid content-center gap-x-8 gap-y-3 text-[15px] text-neutral-700 sm:grid-cols-2">
+        {audiences.map((item) => <li class="flex items-center gap-2"><span class="size-1.5 rounded-full bg-lime-500"></span>{item}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- WordPress swap -->
+  <section class="mx-auto max-w-6xl px-5 py-24">
+    <div class="flex items-start justify-between gap-8">
+      <div class="max-w-2xl">
+        <h2 class="text-[36px] font-semibold leading-tight tracking-[-0.03em] sm:text-[44px]">Keep the admin. <Squiggle class="text-lime-500">Leave the baggage.</Squiggle></h2>
+        <p class="mt-5 text-[17px] leading-relaxed text-neutral-600">Your client loved WordPress for one reason: a place to log in and change things. GitCMS gives them exactly that, on a site that stays fast, portable code.</p>
+      </div>
+      <svg viewBox="0 0 120 100" class="hidden h-24 w-28 shrink-0 text-neutral-800 md:block" aria-hidden="true">
+        <path d="M18 20 h70 a8 8 0 0 1 8 8 v34 a8 8 0 0 1 -8 8 h-42 l-18 16 v-16 h-10 a8 8 0 0 1 -8 -8 v-34 a8 8 0 0 1 8 -8z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" />
+        <path d="M36 44 l8 8 l16 -18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </div>
+    <div class="mt-12 grid gap-4 md:grid-cols-2">
+      <div class="rounded-2xl border-2 border-neutral-900 p-7">
+        <div class="flex items-center gap-2 text-sm font-semibold"><GitCMSLogo className="size-5" /> What your team keeps</div>
+        <ul class="mt-5 space-y-3.5">
+          {WORDPRESS_SWAP.map((row) => <li class="flex items-start gap-2.5 text-[16px]"><Check className="mt-0.5 size-5 shrink-0 text-emerald-600" />{row.kept}</li>)}
+        </ul>
+      </div>
+      <div class="rounded-2xl border border-neutral-200 bg-neutral-50 p-7">
+        <div class="text-sm font-semibold text-neutral-500">What you leave behind</div>
+        <ul class="mt-5 space-y-3.5">
+          {WORDPRESS_SWAP.map((row) => <li class="flex items-start gap-2.5 text-[16px] text-neutral-500"><X className="mt-0.5 size-5 shrink-0 text-neutral-400" /><span class="line-through decoration-neutral-300">{row.left}</span></li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="how" class="mx-auto max-w-6xl px-5 pb-24">
+    <h2 class="text-[36px] font-semibold leading-tight tracking-[-0.03em]">A CMS your client will actually <Squiggle class="text-lime-500">open</Squiggle></h2>
+    <p class="mt-5 max-w-2xl text-[17px] leading-relaxed text-neutral-600">Agent-native for you. Boring, safe and visual for them.</p>
+    <div class="mt-10 grid gap-4 md:grid-cols-2">
+      <div class="rounded-2xl border border-neutral-200 p-7 md:col-span-2">
+        <div class="grid items-center gap-8 md:grid-cols-[1fr_1.4fr]">
+          <div>
+            <h3 class="text-xl font-semibold tracking-tight">Drafts, reviews and a real publish button</h3>
+            <p class="mt-2 text-[15px] leading-relaxed text-neutral-600">Every change is a content task. Your client approves the agent’s draft, or you approve theirs, then it ships as one clean commit.</p>
+          </div>
+          <div class="h-[330px] overflow-hidden rounded-xl border border-neutral-200 shadow-sm"><ReviewMock /></div>
+        </div>
+      </div>
+      <div class="rounded-2xl border border-neutral-200 p-7">
+        <h3 class="text-xl font-semibold tracking-tight">One board for every request</h3>
+        <p class="mt-2 text-[15px] leading-relaxed text-neutral-600">Ideas, drafts and reviews from people and agents, in one place.</p>
+        <div class="mt-6 h-[250px] overflow-hidden rounded-xl border border-neutral-200 bg-white"><BoardMock shell={false} /></div>
+      </div>
+      <div class="rounded-2xl border border-neutral-200 p-7">
+        <h3 class="text-xl font-semibold tracking-tight">Bring your own agent</h3>
+        <p class="mt-2 text-[15px] leading-relaxed text-neutral-600">Claude, ChatGPT and Codex connect over MCP and draft within your collections and fields. No AI credits to buy.</p>
+        <div class="mt-6 grid grid-cols-3 gap-2">
+          {AGENTS.map((agent) => (
+            <div class="flex flex-col items-center gap-2 rounded-xl border border-neutral-200 bg-neutral-50 py-4 text-[13px] font-medium text-neutral-700">
+              <img src={agent.logo} alt="" class="size-6" />{agent.name}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEO -->
+  <section class="border-t border-neutral-200 bg-neutral-50/60">
+    <div class="mx-auto max-w-6xl px-5 py-24">
+      <div class="flex items-start justify-between gap-8">
+        <div class="max-w-2xl">
+          <SoonBadge />
+          <h2 class="mt-3 text-[36px] font-semibold leading-tight tracking-[-0.03em] sm:text-[44px]">The SEO plugin you won’t have to <Squiggle class="text-lime-500">install</Squiggle></h2>
+          <p class="mt-5 text-[17px] leading-relaxed text-neutral-600">A search preview and a pre-publish checklist live in the editor: title and description length, focus keyword, alt text, internal links. No plugin, no upsell.</p>
+        </div>
+        <svg viewBox="0 0 100 100" class="hidden h-24 w-24 shrink-0 text-neutral-800 md:block" aria-hidden="true">
+          <circle cx="42" cy="42" r="26" fill="none" stroke="currentColor" stroke-width="2.4" />
+          <path d="M62 62 L86 86" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+          <path d="M30 42 l8 8 l14 -16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
+      <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/services/emergency-roof-repair?panel=seo" class="mt-10">
+        <div class="h-[450px]"><EditorMock panel="seo" /></div>
+      </AppWindow>
+      <div class="mt-4 grid items-center gap-8 rounded-2xl border border-neutral-200 bg-white p-7 md:grid-cols-[1fr_1.3fr]">
+        <div>
+          <SoonBadge />
+          <h3 class="mt-3 text-2xl font-semibold tracking-tight">Search Console, where you write</h3>
+          <p class="mt-2 text-[15px] leading-relaxed text-neutral-600">See the queries each page ranks for without opening another tab. Spot a page-two keyword, turn it into a content task, or hand it to your agent.</p>
+        </div>
+        <div class="h-[400px] overflow-hidden rounded-xl border border-neutral-200"><SearchMock /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stack tiles -->
+  <section class="mx-auto max-w-6xl px-5 py-24 text-center">
+    <h2 class="text-[36px] font-semibold tracking-[-0.03em]">Works with what you already built</h2>
+    <p class="mx-auto mt-3 max-w-xl text-neutral-600">GitCMS reads the files in your repository. It never sits between your visitors and your site.</p>
+    <div class="mx-auto mt-10 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
+      {FRAMEWORKS.map((item) => (
+        <div class="flex flex-col items-center gap-3 rounded-2xl border border-neutral-200 bg-white py-6 text-sm font-medium text-neutral-700 shadow-sm">
+          <span class="grid size-12 place-items-center rounded-xl border border-neutral-200 bg-neutral-50"><img src={item.logo} alt="" class="size-6" /></span>
+          {item.name}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="border-t border-neutral-200">
+    <div class="mx-auto max-w-6xl px-5 py-24">
+      <h2 class="text-[36px] font-semibold tracking-[-0.03em] sm:text-[44px]">Priced per <Squiggle class="text-lime-500">site</Squiggle>, not per person</h2>
+      <p class="mt-5 max-w-xl text-[17px] text-neutral-600">Invite the whole team and the client. Connect every agent. You pay for the websites you run.</p>
+      <div class="mt-10"><PricingTable /></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="mx-auto max-w-3xl px-5 pb-24">
+    <h2 class="mb-6 text-[28px] font-semibold tracking-[-0.02em]">Good questions</h2>
+    <FaqList />
+  </section>
+
+  <!-- CTA -->
+  <section class="border-t border-neutral-200 px-5 py-24 text-center">
+    <div class="mx-auto grid size-16 place-items-center rounded-2xl border border-neutral-200 bg-white shadow-sm"><GitCMSLogo className="size-8" /></div>
+    <h2 class="mx-auto mt-6 max-w-2xl text-[36px] font-semibold leading-tight tracking-[-0.03em] sm:text-[48px]">Your next client handoff is one invite away</h2>
+    <p class="mx-auto mt-4 max-w-lg text-neutral-600">Connect the repo, invite your client, and go back to building.</p>
+    <a href={loginUrl('/')} class="mt-8 inline-flex items-center gap-2 rounded-xl bg-neutral-900 px-5 py-3 text-[15px] font-medium text-white hover:bg-neutral-800">Connect your site, free <ArrowRight className="size-4" /></a>
+  </section>
+  <SiteFooter />
+</RedesignLayout>

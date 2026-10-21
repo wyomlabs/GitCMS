@@ -35,6 +35,7 @@ export default defineConfig({
       filter: (page) => {
         const pathname = new URL(page).pathname.replace(/\/$/, '')
         return pathname !== '/blog/git-based-cms-vs-db-based-cms'
+          && !pathname.startsWith('/redesign')
           && !pathname.endsWith('.md')
           && !pathname.endsWith('.txt')
           && !pathname.endsWith('.png')

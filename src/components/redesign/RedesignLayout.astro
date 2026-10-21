@@ -1,0 +1,25 @@
+---
+// Preview-only wrapper for the landing redesign variants: noindex, with a
+// switcher to compare them. Not linked from the site or listed in sitemaps.
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Sequencer from './Sequencer.astro'
+
+interface Props {
+  variant: 'a' | 'b' | 'c'
+  title: string
+  bodyClass?: string
+}
+const { variant, title, bodyClass = 'bg-white' } = Astro.props
+---
+<BaseLayout path={`/redesign/${variant}`} title={`${title} · GitCMS redesign`} noIndex>
+  <div class:list={['min-h-screen text-neutral-900', bodyClass]}>
+    <slot />
+  </div>
+  <div class="fixed bottom-4 left-1/2 z-50 flex -translate-x-1/2 items-center gap-1 rounded-full border border-neutral-200 bg-white/90 p-1 text-xs shadow-lg backdrop-blur">
+    <span class="px-2 text-neutral-500">Variant</span>
+    {(['a', 'b', 'c'] as const).map((key) => (
+      <a href={`/redesign/${key}`} class:list={['rounded-full px-3 py-1 font-medium uppercase', key === variant ? 'bg-neutral-900 text-white' : 'text-neutral-600 hover:bg-neutral-100']}>{key}</a>
+    ))}
+  </div>
+  <Sequencer />
+</BaseLayout>

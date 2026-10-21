@@ -1,0 +1,52 @@
+---
+// Reviewing a draft: field changes old → new with a comment thread, then
+// Approve & publish. Editorial words only (DESIGN.md vocabulary).
+import { Check, MessageSquare } from 'lucide-react'
+
+interface Props {
+  class?: string
+}
+const { class: className = '' } = Astro.props
+---
+<div data-seq="7" data-ms="1200" class:list={['flex h-full flex-col bg-white text-[12px]', className]}>
+  <div class="flex items-center gap-2 border-b border-neutral-200 px-4 py-2.5">
+    <span class="rounded border border-violet-200 bg-violet-50 px-1.5 py-0.5 text-[10.5px] font-medium text-violet-700">#57 · Review</span>
+    <span class="font-medium text-neutral-900">Q4 pricing update</span>
+    <span class="ml-auto flex items-center gap-1 text-[11px] text-neutral-500"><img src="/ai-logos/claude-orange.svg" alt="" class="size-3" /> Drafted by Claude</span>
+  </div>
+  <div class="flex-1 space-y-3 overflow-hidden p-4">
+    <div class="text-[10.5px] font-medium uppercase tracking-wide text-neutral-400">Pages › Pricing · 3 changes</div>
+    <div class="grid grid-cols-[92px_1fr] items-start gap-x-3 gap-y-2.5">
+      <span class="pt-1 text-neutral-500">Starting price</span>
+      <div class="flex items-center gap-2">
+        <span class="rounded bg-rose-50 px-1.5 py-0.5 text-rose-700 line-through">$219</span> →
+        <span class="rounded bg-emerald-50 px-1.5 py-0.5 text-emerald-800">$249</span>
+      </div>
+      <span class="pt-1 text-neutral-500">Headline</span>
+      <div class="font-logo text-[14px] leading-snug text-neutral-800">
+        Roof repair, <span class="rounded-sm bg-rose-50 text-rose-700 line-through">weekdays</span>
+        <span class="rounded-sm bg-emerald-50 text-emerald-800">24/7</span>, across Austin
+      </div>
+      <span class="pt-1 text-neutral-500">Body</span>
+      <div class="relative font-logo text-[13px] leading-relaxed text-neutral-700">
+        Crews are on site <span class="rounded-sm bg-emerald-50 text-emerald-800 underline decoration-violet-400 decoration-2 underline-offset-2">within 90 minutes</span>, and every repair is photographed for your insurer.
+      </div>
+    </div>
+    <div class="ml-[104px] max-w-[290px] rounded-lg border border-neutral-200 bg-white p-2.5 shadow-sm" data-at="1">
+      <div class="flex items-center gap-1.5 text-[11px]">
+        <span class="grid size-4 place-items-center rounded-full bg-amber-500 text-[9px] font-semibold text-white">J</span>
+        <span class="font-medium">Jess</span><span class="text-neutral-400">client · 2m</span>
+      </div>
+      <p class="mt-1 text-[11.5px] leading-snug text-neutral-700">Can we promise 60 minutes in central Austin?</p>
+      <div class="mt-2 flex items-center gap-1.5 border-t border-neutral-100 pt-2 text-[11px]" data-at="2">
+        <img src="/ai-logos/claude-orange.svg" alt="" class="size-3.5" />
+        <span class="font-medium">Claude</span><span class="text-neutral-500">Updated: “within 60 minutes in central Austin”</span>
+      </div>
+    </div>
+  </div>
+  <div class="flex items-center gap-2 border-t border-neutral-200 px-4 py-2.5">
+    <span class="flex items-center gap-1 text-[11px] text-neutral-500"><MessageSquare className="size-3.5" /> 1 thread</span>
+    <span class="ml-auto flex items-center gap-1 text-[11px] text-emerald-700" data-at="4" data-fx="fade"><Check className="size-3.5" /> Approved by Jess</span>
+    <span class="rd-pulse rounded-md bg-neutral-900 px-2.5 py-1 text-[11px] font-medium text-white" data-at="3" data-fx="fade">Approve and publish</span>
+  </div>
+</div>

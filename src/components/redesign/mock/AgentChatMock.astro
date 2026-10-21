@@ -1,0 +1,64 @@
+---
+// An agent working through the GitCMS MCP server: it reads entries, saves a
+// draft, and hands the change to a person for review instead of publishing.
+import { ArrowUp, Check, Plus } from 'lucide-react'
+import { GitCMSLogo } from '@/components/gitcms-logo'
+
+interface Props {
+  class?: string
+  prompt?: string
+}
+const {
+  class: className = '',
+  prompt = 'Update our pricing to the Q4 rates and mention 24/7 emergency service everywhere it applies.',
+} = Astro.props
+
+const tools = [
+  { name: 'search_entries', detail: '“pricing” in Pages, Services · 6 entries' },
+  { name: 'update_entry', detail: 'pages/pricing.mdx · 3 fields' },
+  { name: 'update_entry', detail: 'services/*.mdx · 5 entries' },
+  { name: 'submit_for_review', detail: 'Content task #57' },
+] as const
+---
+<div data-seq="10" data-ms="1100" class:list={['flex h-full flex-col bg-[#faf9f5] text-[12.5px] text-neutral-800', className]}>
+  <div class="flex-1 space-y-3 overflow-hidden px-5 py-4">
+    <div class="ml-auto max-w-[78%] rounded-2xl bg-[#f0eee6] px-3.5 py-2 leading-snug" data-at="1" data-fx="fade">
+      <span data-type data-at="1" data-fx="fade" data-speed="22" data-text={prompt}></span>
+    </div>
+    <div class="space-y-1.5" data-at="3" data-fx="fade">
+      <div class="flex items-center gap-1.5 text-[11.5px] text-neutral-500">
+        <img src="/ai-logos/claude-orange.svg" alt="" class="size-3.5" /> Working in GitCMS · acme-roofing.com
+      </div>
+      {tools.map((tool, index) => (
+        <div class="flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-2.5 py-1.5" data-at={3 + index}>
+          <GitCMSLogo className="size-3.5 shrink-0" />
+          <code class="text-[11px] font-medium text-neutral-900">{tool.name}</code>
+          <span class="truncate text-[11px] text-neutral-500">{tool.detail}</span>
+          <Check className="ml-auto size-3.5 shrink-0 text-emerald-600" />
+        </div>
+      ))}
+    </div>
+    <div class="leading-snug" data-at="7" data-fx="fade">
+      I drafted the changes on 6 pages. Nothing is live yet; Jess can review them in GitCMS.
+    </div>
+    <div class="rounded-xl border border-neutral-200 bg-white p-3 shadow-sm" data-at="8">
+      <div class="flex items-center gap-2">
+        <span class="rounded border border-violet-200 bg-violet-50 px-1.5 py-0.5 text-[10.5px] font-medium text-violet-700">#57 · In review</span>
+        <span class="text-[11.5px] font-medium text-neutral-900">Q4 pricing update</span>
+      </div>
+      <div class="mt-2 flex items-center justify-between text-[11px] text-neutral-500">
+        <span>6 entries · 14 fields changed</span>
+        <span class="rd-pulse rounded-md bg-neutral-900 px-2 py-1 font-medium text-white" data-at="9" data-fx="fade">Open review</span>
+      </div>
+    </div>
+  </div>
+  <div class="m-3 mt-0 rounded-2xl border border-neutral-200 bg-white px-3 py-2 shadow-sm">
+    <div class="text-[12px] text-neutral-400">Reply to Claude…</div>
+    <div class="mt-2 flex items-center gap-2 text-neutral-400">
+      <Plus className="size-3.5" />
+      <span class="inline-flex items-center gap-1 rounded-md border border-neutral-200 px-1.5 py-0.5 text-[10.5px] text-neutral-600"><GitCMSLogo className="size-3" /> GitCMS</span>
+      <span class="ml-auto text-[10.5px]">Opus 5.5</span>
+      <span class="grid size-5 place-items-center rounded-full bg-[#d97757] text-white"><ArrowUp className="size-3" /></span>
+    </div>
+  </div>
+</div>
