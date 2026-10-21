@@ -11,6 +11,8 @@ import AppWindow from '@/components/redesign/mock/AppWindow.astro'
 import EditorMock from '@/components/redesign/mock/EditorMock.astro'
 import SearchMock from '@/components/redesign/mock/SearchMock.astro'
 import FleetMock from '@/components/redesign/mock/FleetMock.astro'
+import HeroWidget from '@/components/redesign/a/HeroWidget.astro'
+import { publishedTestimonials } from '@/lib/testimonials'
 import ChangeRequestMock from '@/components/redesign/a/ChangeRequestMock.astro'
 import Testimonials from '@/components/redesign/a/Testimonials.astro'
 import CostComparator from '@/components/redesign/a/CostComparator.astro'
@@ -56,7 +58,7 @@ const section = 'border-t border-neutral-200 px-6 py-24 sm:py-32 lg:px-16'
   <div class="mx-auto max-w-[1200px] border-x border-neutral-200">
     <!-- Hero -->
     <section class="p-3 sm:p-4">
-      <div class:list={['grid items-center gap-14 overflow-hidden px-6 py-14 lg:grid-cols-[0.95fr_1.05fr] lg:px-16 lg:py-24', card]}>
+      <div class:list={['grid items-center gap-14 overflow-hidden px-6 py-14 lg:grid-cols-[0.9fr_1.1fr] lg:py-24 lg:pl-16 lg:pr-0', card]}>
         <div>
           <a href="#change-requests" class={eyebrow}>
             <span class="rounded-full bg-lime-200 px-1.5 text-[10px] font-semibold text-lime-900">New</span>
@@ -72,19 +74,38 @@ const section = 'border-t border-neutral-200 px-6 py-24 sm:py-32 lg:px-16'
           </div>
           <p class="mt-6 text-[13px] text-neutral-400">Free to explore · No migration · Works with your framework and host</p>
         </div>
-        <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/services/emergency-roof-repair" class="min-w-0">
-          <div class="h-[400px]"><EditorMock compact /></div>
-        </AppWindow>
+        <div class="min-w-0">
+          <!-- Bleeds past the card's right edge, which crops it (cal.com). -->
+          <div class="overflow-hidden lg:overflow-visible"><HeroWidget /></div>
+          <div class="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4 text-[13px] text-neutral-500">
+            <span class="flex items-center gap-2.5">
+              <span class="flex -space-x-2">
+                {publishedTestimonials.filter((item) => item.avatarSrc).map((item) => <img src={item.avatarSrc} alt="" class="size-7 rounded-full object-cover ring-2 ring-white" />)}
+              </span>
+              Loved by agencies and writers
+            </span>
+            <span class="flex items-center gap-2">
+              {['/ai-logos/claude-orange.svg', '/ai-logos/openai-bw.svg', '/ai-logos/cursor.svg'].map((logo) => <img src={logo} alt="" class="size-4" />)}
+              Works with your agents
+            </span>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- Companies -->
     <section class="grid items-center gap-6 border-y border-neutral-200 px-8 py-12 md:grid-cols-[170px_1fr] lg:px-16">
       <p class="text-sm leading-snug text-neutral-500">The best product sites ship as code now</p>
-      <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
-        {companies.map((company) => (
-          <span class="flex items-center gap-2 text-[16px] font-semibold tracking-tight text-neutral-500"><img src={company.logo} alt="" class="size-[18px] opacity-60" />{company.name}</span>
-        ))}
+      <div class="group overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_12%,black_88%,transparent)]">
+        <div class="marquee flex w-max items-center group-hover:[animation-play-state:paused]">
+          {[0, 1].map((copy) => (
+            <div class="flex items-center gap-14 pr-14" aria-hidden={copy === 1 ? 'true' : undefined}>
+              {companies.map((company) => (
+                <span class="flex shrink-0 items-center gap-2 text-[17px] font-semibold tracking-tight text-neutral-500"><img src={company.logo} alt="" class="size-[18px] opacity-60" />{company.name}</span>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
     </section>
 
@@ -303,3 +324,10 @@ const section = 'border-t border-neutral-200 px-6 py-24 sm:py-32 lg:px-16'
   </div>
   <SiteFooter />
 </RedesignLayout>
+
+<style>
+  /* Logo strip: one copy's width per loop, so the seam never shows. */
+  .marquee { animation: a-marquee 36s linear infinite; }
+  @keyframes a-marquee { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .marquee { animation: none; } }
+</style>
