@@ -1,7 +1,8 @@
 ---
 // Content board (DESIGN.md "Board"): tinted workflow columns. A cursor drags
 // one content task, drafted by an agent, from Ideas to Published: grab, lift,
-// glide, drop. Each column keeps an empty slot at the top for it to land in.
+// glide, drop. Each column has a slot at the top that is open only where the
+// card sits, so the other cards slide down to make room and back up after.
 import { MessageSquare } from 'lucide-react'
 import Cursor from './Cursor.astro'
 
@@ -34,7 +35,7 @@ const staticCards: Record<string, Array<{ title: string; id: number; who: string
         <span data-count={column.count} class="ml-auto rounded-full border border-current/10 bg-white px-1.5 text-[10px] tabular-nums text-neutral-500">{column.count + (index === 0 ? 1 : 0)}</span>
       </div>
       <div class="flex flex-col gap-1.5 p-1.5">
-        <div data-slot={index} class="h-[58px] shrink-0 rounded-md"></div>
+        <div data-slot={index} data-open={index === 0 ? 'true' : 'false'} class="-mb-1.5 h-0 shrink-0 rounded-md transition-[height,margin] duration-[600ms] ease-[cubic-bezier(0.22,0.8,0.24,1)] data-[open=true]:mb-0 data-[open=true]:h-[58px]"></div>
         {staticCards[column.name]?.map((card) => (
           <div class="rounded-md border border-neutral-200 bg-white p-2">
             <div class="text-[11px] font-medium leading-snug text-neutral-800">{card.title}</div>
@@ -76,6 +77,7 @@ const staticCards: Record<string, Array<{ title: string; id: number; who: string
 
     // Place the card over a slot; the cursor rides near its top-right.
     const place = () => {
+      slots.forEach((slot, index) => { slot.dataset.open = String(index === column) })
       const box = board.getBoundingClientRect()
       const slot = slots[column]?.getBoundingClientRect()
       if (!slot) return
