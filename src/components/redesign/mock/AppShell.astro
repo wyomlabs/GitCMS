@@ -9,8 +9,10 @@ interface Props {
   crumbs?: string[]
   site?: string
   class?: string
+  /** Narrower sidebar for tight spots like the hero. */
+  compact?: boolean
 }
-const { active = 'Services', crumbs = [], site = 'acme-roofing.com', class: className = '' } = Astro.props
+const { active = 'Services', crumbs = [], site = 'acme-roofing.com', class: className = '', compact = false } = Astro.props
 
 const collections = [
   { label: 'Pages', icon: FileText },
@@ -25,7 +27,7 @@ const tools = [
 ] as const
 ---
 <div class:list={['flex h-full min-h-0 text-[12px] text-neutral-800', className]}>
-  <aside class="hidden w-[168px] shrink-0 flex-col border-r border-neutral-200 bg-neutral-50/80 sm:flex">
+  <aside class:list={['hidden shrink-0 flex-col border-r border-neutral-200 bg-neutral-50/80 sm:flex', compact ? 'w-[132px]' : 'w-[168px]']}>
     <div class="flex items-center gap-1.5 px-3 pb-2 pt-3">
       <GitCMSLogo className="size-5" />
       <span class="font-logo text-[15px] font-medium tracking-tight">GitCMS</span>
@@ -33,7 +35,7 @@ const tools = [
     <div class="px-2 pb-1 text-[10px] font-medium text-neutral-400">Collections</div>
     <nav class="flex flex-col gap-px px-1.5">
       {collections.map(({ label, icon: Icon }) => (
-        <span class:list={['flex items-center gap-2 rounded-md px-2 py-1', active === label ? 'border border-neutral-200 bg-white font-medium shadow-sm' : 'text-neutral-600']}>
+        <span class:list={['flex items-center gap-2 rounded-md px-2 py-1', active === label ? 'border border-neutral-200 bg-white font-medium' : 'text-neutral-600']}>
           <Icon className="size-3.5" /> {label}
         </span>
       ))}
@@ -41,7 +43,7 @@ const tools = [
     <div class="mx-2 my-2 border-t border-neutral-200"></div>
     <nav class="flex flex-col gap-px px-1.5">
       {tools.map(({ label, icon: Icon }) => (
-        <span class:list={['flex items-center gap-2 rounded-md px-2 py-1', active === label ? 'border border-neutral-200 bg-white font-medium shadow-sm' : 'text-neutral-600']}>
+        <span class:list={['flex items-center gap-2 rounded-md px-2 py-1', active === label ? 'border border-neutral-200 bg-white font-medium' : 'text-neutral-600']}>
           <Icon className="size-3.5" /> {label}
         </span>
       ))}

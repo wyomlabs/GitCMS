@@ -8,22 +8,23 @@ import { SEO_CHECKS } from '../content'
 interface Props {
   panel?: 'none' | 'seo'
   class?: string
+  compact?: boolean
 }
-const { panel = 'none', class: className = '' } = Astro.props
+const { panel = 'none', class: className = '', compact = false } = Astro.props
 const firstCheckStep = 5
 ---
 <div data-seq={panel === 'seo' ? 12 : 8} data-ms="1100" class:list={['h-full', className]}>
-  <AppShell active="Services" crumbs={['Services', 'Emergency roof repair']}>
+  <AppShell active="Services" crumbs={['Services', 'Emergency roof repair']} compact={compact}>
     <Fragment slot="actions">
       <span class="hidden items-center overflow-hidden rounded-md border border-violet-200 bg-violet-50 text-[11px] font-medium text-violet-700 md:inline-flex">
         <span class="px-2 py-1">#42</span>
         <span class="border-l border-violet-200 px-1 py-1"><ChevronDown className="size-3" /></span>
       </span>
-      <span class="hidden rounded-md border border-neutral-200 px-2 py-1 text-[11px] text-neutral-500 md:inline" data-at="3" data-fx="fade">Saved to draft</span>
-      <span data-at={panel === 'seo' ? 11 : 6} data-fx="fade" class="rd-pulse rounded-md bg-neutral-900 px-2.5 py-1 text-[11px] font-medium text-white">Submit for review</span>
+      <span class="hidden px-1 text-[11px] text-neutral-400 md:inline">Saved</span>
+      <span class="rounded-md bg-neutral-900 px-2.5 py-1 text-[11px] font-medium text-white">Submit for review</span>
     </Fragment>
     <div class="flex h-full">
-      <div class="min-w-0 flex-1 overflow-hidden px-6 py-5 sm:px-10">
+      <div class:list={['min-w-0 flex-1 overflow-hidden px-6 py-5', compact ? 'sm:px-6' : 'sm:px-10']}>
         <h3 class="font-logo text-[26px] leading-tight tracking-tight text-neutral-900">Emergency roof repair</h3>
         <dl class="mt-4 grid grid-cols-[96px_1fr] items-center gap-x-3 gap-y-2 text-[11.5px]">
           <dt class="flex items-center gap-1.5 text-neutral-500"><FileText className="size-3.5" /> Description</dt>
@@ -53,11 +54,11 @@ const firstCheckStep = 5
         <aside class="hidden w-[250px] shrink-0 flex-col border-l border-neutral-200 bg-white md:flex">
           <div class="flex h-9 items-center gap-1.5 border-b border-neutral-200 px-3 text-[11.5px] font-medium">
             <Search className="size-3.5" /> SEO
-            <span class="ml-auto rounded-full bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700" data-at="10" data-fx="fade">92 · Good</span>
+            <span class="ml-auto rounded-full bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700">92 · Good</span>
           </div>
           <div class="p-3">
             <div class="text-[10px] font-medium uppercase tracking-wide text-neutral-400">Search preview</div>
-            <div class="mt-1.5 rounded-lg border border-neutral-200 p-2.5" data-at="4" data-fx="fade">
+            <div class="mt-1.5 rounded-lg border border-neutral-200 p-2.5">
               <div class="flex items-center gap-1.5 text-[10px] text-neutral-500">
                 <span class="size-3.5 rounded-full bg-amber-400"></span> acme-roofing.com › services
               </div>

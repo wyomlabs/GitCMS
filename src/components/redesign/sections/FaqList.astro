@@ -13,7 +13,7 @@ const { dark = false } = Astro.props
         {faq.question}
         <span class:list={['text-xl leading-none transition-transform group-open:rotate-45', dark ? 'text-neutral-500' : 'text-neutral-400']}>+</span>
       </summary>
-      <p class:list={['mt-2 max-w-2xl text-[15px] leading-relaxed', dark ? 'text-neutral-400' : 'text-neutral-600']}>{faq.answer}</p>
+      <p class:list={['mt-2 max-w-2xl text-[15px] leading-relaxed', dark ? 'text-neutral-400' : 'text-neutral-500']}>{faq.answer}</p>
     </details>
   ))}
 </div>

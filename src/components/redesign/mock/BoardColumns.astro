@@ -39,7 +39,7 @@ const moving = [
       </div>
       <div class="flex flex-col gap-1.5 p-1.5">
         {moving.filter(([name]) => name === column.name).map(([, from, until]) => (
-          <div data-at={from} data-until={until} data-fx="collapse" class="rounded-md border border-violet-300 bg-white p-2 shadow-sm ring-2 ring-violet-100">
+          <div data-at={from} data-until={until} data-fx="collapse" class="rounded-md border border-violet-300 bg-white p-2 ring-2 ring-violet-100">
             <div class="text-[11px] font-medium leading-snug text-neutral-900">Q4 pricing update</div>
             <div class="mt-1 flex items-center gap-1 text-[10px] text-neutral-500">
               <span class="rounded border border-neutral-200 px-1 font-medium text-neutral-700">#57</span>
@@ -53,7 +53,7 @@ const moving = [
           </div>
         ))}
         {column.name === 'Ideas' && (
-          <div data-at="0" data-until="1" data-fx="collapse" class="rounded-md border border-neutral-200 bg-white p-2 shadow-sm">
+          <div data-at="0" data-until="1" data-fx="collapse" class="rounded-md border border-neutral-200 bg-white p-2">
             <div class="text-[11px] font-medium leading-snug text-neutral-900">Q4 pricing update</div>
             <div class="mt-1 text-[10px] text-neutral-500"><span class="rounded border border-neutral-200 px-1 font-medium text-neutral-700">#57</span> Idea</div>
           </div>

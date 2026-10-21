@@ -1,7 +1,8 @@
 ---
-// Variant A — "Day Two". Framed page (cal.com), live app UI in the hero,
-// the Day One → Day Two story told as a diagram.
-import { ArrowRight, Check, Terminal } from 'lucide-react'
+// Variant A — "Day Two". Framed, flat layout in the spirit of cal.com: live
+// app UI in the hero, then setup, the Day Two story, change requests,
+// integrations, proof, and what running a site really costs.
+import { ArrowRight, Check, GitBranch, Inbox, Plug, Quote, Rocket, Search, Sparkles, Terminal } from 'lucide-react'
 import { GitCMSLogo } from '@/components/gitcms-logo'
 import { loginUrl } from '@/lib/start-login'
 import RedesignLayout from '@/components/redesign/RedesignLayout.astro'
@@ -10,13 +11,33 @@ import AppWindow from '@/components/redesign/mock/AppWindow.astro'
 import EditorMock from '@/components/redesign/mock/EditorMock.astro'
 import SearchMock from '@/components/redesign/mock/SearchMock.astro'
 import FleetMock from '@/components/redesign/mock/FleetMock.astro'
-import ActivityMock from '@/components/redesign/mock/ActivityMock.astro'
+import ChangeRequestMock from '@/components/redesign/a/ChangeRequestMock.astro'
+import Testimonials from '@/components/redesign/a/Testimonials.astro'
+import CostComparator from '@/components/redesign/a/CostComparator.astro'
 import SiteNav from '@/components/redesign/sections/SiteNav.astro'
 import SoonBadge from '@/components/redesign/sections/SoonBadge.astro'
 import PricingTable from '@/components/redesign/sections/PricingTable.astro'
 import FaqList from '@/components/redesign/sections/FaqList.astro'
 import SiteFooter from '@/components/redesign/sections/SiteFooter.astro'
-import { AGENTS, CATEGORY, DAY_TWO_REQUESTS, FRAMEWORKS, PILLARS, PROOF_POINTS, SUBHEAD } from '@/components/redesign/content'
+import { CATEGORY, DAY_TWO_REQUESTS, SUBHEAD } from '@/components/redesign/content'
+
+// Companies whose marketing sites are code. Not customers; verify each
+// before this ships.
+const companies = [
+  { name: 'OpenAI', logo: '/logos/openai.svg' },
+  { name: 'Anthropic', logo: '/logos/anthropic.svg' },
+  { name: 'Cursor', logo: '/logos/cursor.svg' },
+  { name: 'Plausible', logo: '/logos/plausibleanalytics.svg' },
+  { name: 'OpenCode', logo: '/ai-logos/opencode.svg' },
+  { name: 'Supabase', logo: '/logos/supabase.svg' },
+  { name: 'Vercel', logo: '/logos/vercel.svg' },
+]
+
+const integrations = [
+  { group: 'Frameworks', items: [['Astro', '/ssg-logos/astro.svg'], ['Next.js', '/ssg-logos/nextjs.svg'], ['Nuxt', '/ssg-logos/nuxtjs.svg'], ['SvelteKit', '/ssg-logos/svelte.svg'], ['Hugo', '/ssg-logos/hugo.svg'], ['Eleventy', '/ssg-logos/eleventy.svg']] },
+  { group: 'Hosting and data', items: [['GitHub', '/brand-logos/github.svg'], ['Cloudflare', '/brand-logos/cloudflare.svg'], ['Vercel', '/logos/vercel.svg'], ['Netlify', '/logos/netlify.svg'], ['Search Console', '/logos/googlesearchconsole.svg'], ['Docusaurus', '/ssg-logos/docusaurus.svg']] },
+  { group: 'Agents', items: [['ChatGPT', '/ai-logos/openai-bw.svg'], ['Claude', '/ai-logos/claude-orange.svg'], ['Grok', '/ai-logos/grok-bot.svg'], ['OpenClaw', '/ai-logos/openclaw.svg'], ['Hermes', '/ai-logos/hermes.svg'], ['Muse', '/ai-logos/muse.svg']] },
+] as const
 
 const tones: Record<string, string> = {
   amber: 'bg-amber-500',
@@ -24,53 +45,105 @@ const tones: Record<string, string> = {
   emerald: 'bg-emerald-500',
   orange: 'bg-white border border-neutral-200',
 }
+const eyebrow = 'inline-flex w-fit items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-xs font-medium text-neutral-700'
+const h2 = 'text-[34px] font-semibold leading-[1.1] tracking-[-0.035em] sm:text-[44px]'
+const sub = 'text-[16px] leading-relaxed text-neutral-500'
+const card = 'rounded-2xl border border-neutral-200 bg-white'
 ---
-<RedesignLayout variant="a" title="Variant A · Day Two" bodyClass="bg-[#f6f6f4]">
+<RedesignLayout variant="a" title="Variant A · Day Two" bodyClass="bg-[#f4f4f3]">
   <SiteNav />
-  <div class="mx-auto max-w-[1200px] border-x border-neutral-200/80">
+  <div class="mx-auto max-w-[1200px] border-x border-neutral-200">
     <!-- Hero -->
     <section class="p-3 sm:p-4">
-      <div class="grid items-center gap-10 overflow-hidden rounded-2xl border border-neutral-200 bg-white px-6 py-12 shadow-sm lg:grid-cols-[0.9fr_1.1fr] lg:px-12 lg:py-16">
+      <div class:list={['grid items-center gap-10 overflow-hidden px-6 py-12 lg:grid-cols-[0.95fr_1.05fr] lg:px-12 lg:py-16', card]}>
         <div>
-          <a href="#seo" class="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-xs text-neutral-600 shadow-sm hover:border-neutral-300">
-            <span class="rounded-full bg-lime-200 px-1.5 text-[10px] font-semibold text-lime-900">Soon</span>
-            SEO checks and Search Console <ArrowRight className="size-3" />
+          <a href="#change-requests" class={eyebrow}>
+            <span class="rounded-full bg-lime-200 px-1.5 text-[10px] font-semibold text-lime-900">New</span>
+            Change requests on preview deployments <ArrowRight className="size-3" />
           </a>
-          <h1 class="mt-5 text-[44px] font-semibold leading-[1.02] tracking-[-0.035em] sm:text-[58px]">
+          <h1 class="mt-5 text-[42px] font-semibold leading-[1.03] tracking-[-0.04em] sm:text-[52px]">
             Your agent built the site. <span class="text-neutral-400">Now your team can run it.</span>
           </h1>
-          <p class="mt-5 max-w-lg text-[17px] leading-relaxed text-neutral-600">{SUBHEAD}</p>
+          <p class:list={['mt-5 max-w-lg text-[17px]', 'leading-relaxed text-neutral-500']}>{SUBHEAD}</p>
           <div class="mt-7 flex flex-wrap gap-3">
             <a href={loginUrl('/')} class="inline-flex items-center gap-2 rounded-lg bg-neutral-900 px-5 py-3 text-sm font-medium text-white hover:bg-neutral-800">Connect your site, free <ArrowRight className="size-4" /></a>
-            <a href="#product" class="inline-flex items-center rounded-lg border border-neutral-200 px-5 py-3 text-sm font-medium hover:bg-neutral-50">See how it works</a>
+            <a href="#product" class="inline-flex items-center rounded-lg border border-neutral-200 bg-white px-5 py-3 text-sm font-medium hover:bg-neutral-50">See how it works</a>
           </div>
-          <ul class="mt-7 grid max-w-md grid-cols-2 gap-x-4 gap-y-1.5 text-[13px] text-neutral-500">
-            {PROOF_POINTS.map((point) => <li class="flex items-center gap-1.5"><Check className="size-3.5 text-emerald-600" /> {point}</li>)}
-          </ul>
+          <p class="mt-5 text-[13px] text-neutral-400">Free to explore · No migration · Works with your framework and host</p>
         </div>
-        <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/services/emergency-roof-repair" class="lg:-mr-28">
-          <div class="h-[400px]"><EditorMock /></div>
+        <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/services/emergency-roof-repair" class="min-w-0">
+          <div class="h-[400px]"><EditorMock compact /></div>
         </AppWindow>
       </div>
     </section>
 
-    <!-- Logos -->
-    <section class="grid items-center gap-6 border-y border-neutral-200/80 px-8 py-6 md:grid-cols-[220px_1fr]">
-      <p class="text-sm leading-snug text-neutral-500">Works with the agents and frameworks you already use</p>
-      <div class="flex flex-wrap items-center gap-x-7 gap-y-3 opacity-80 grayscale">
-        {[...AGENTS.slice(0, 4), ...FRAMEWORKS.slice(0, 5)].map((item) => (
-          <span class="flex items-center gap-1.5 text-sm font-medium text-neutral-700"><img src={item.logo} alt="" class="size-4" />{item.name}</span>
+    <!-- Companies -->
+    <section class="grid items-center gap-6 border-y border-neutral-200 px-8 py-7 md:grid-cols-[200px_1fr]">
+      <p class="text-sm leading-snug text-neutral-500">The best product sites ship as code now</p>
+      <div class="flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
+        {companies.map((company) => (
+          <span class="flex items-center gap-2 text-[17px] font-semibold tracking-tight text-neutral-500"><img src={company.logo} alt="" class="size-5 opacity-60" />{company.name}</span>
         ))}
       </div>
     </section>
 
+    <!-- How it works -->
+    <section class="px-6 pb-16 pt-20 text-center lg:px-12">
+      <span class={eyebrow}><Rocket className="size-3.5" /> How it works</span>
+      <h2 class:list={['mx-auto mt-4 max-w-3xl', h2]}>From repository to client-ready in minutes</h2>
+      <p class:list={['mx-auto mt-3 max-w-xl', sub]}>No migration and no new hosting. GitCMS reads what’s already in your repo.</p>
+      <div class="mt-12 grid gap-3 text-left md:grid-cols-3">
+        <div class:list={['flex flex-col p-6', card]}>
+          <span class="w-fit rounded-md bg-neutral-100 px-2 py-0.5 font-mono text-xs text-neutral-500">01</span>
+          <h3 class="mt-4 text-lg font-semibold tracking-tight">Connect your repository</h3>
+          <p class="mt-1 text-[15px] leading-relaxed text-neutral-500">GitCMS finds your sites, framework and content folders, and fills in the setup.</p>
+          <div class="mt-6 space-y-2 rounded-xl border border-neutral-200 bg-neutral-50 p-4 text-[12px]">
+            <div class="flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-2.5 py-2"><img src="/brand-logos/github.svg" alt="" class="size-3.5" /> acme/roofing-site <span class="ml-auto text-neutral-400">main</span></div>
+            <div class="flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-2.5 py-2"><img src="/ssg-logos/astro.svg" alt="" class="size-3.5" /> Astro detected <Check className="ml-auto size-3.5 text-emerald-600" /></div>
+            <div class="flex flex-wrap gap-1.5 pt-1">
+              {['Services', 'Blog', 'Locations', 'Site data'].map((name) => <span class="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-neutral-600">{name}</span>)}
+            </div>
+          </div>
+        </div>
+        <div class:list={['flex flex-col p-6', card]}>
+          <span class="w-fit rounded-md bg-neutral-100 px-2 py-0.5 font-mono text-xs text-neutral-500">02</span>
+          <h3 class="mt-4 text-lg font-semibold tracking-tight">Invite people and agents</h3>
+          <p class="mt-1 text-[15px] leading-relaxed text-neutral-500">Clients and teammates by email. Agents over MCP, with the same rules.</p>
+          <div class="mt-6 space-y-2 rounded-xl border border-neutral-200 bg-neutral-50 p-4 text-[12px]">
+            {[['J', 'bg-amber-500', 'jess@acmeroofing.com', 'Client'], ['S', 'bg-sky-500', 'sam@brightside.studio', 'Editor']].map(([initial, color, email, role]) => (
+              <div class="flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-2.5 py-2">
+                <span class:list={['grid size-5 place-items-center rounded-full text-[9px] font-semibold text-white', color]}>{initial}</span>{email}<span class="ml-auto text-neutral-400">{role}</span>
+              </div>
+            ))}
+            <div class="flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-2.5 py-2">
+              <img src="/ai-logos/claude-orange.svg" alt="" class="size-4" /><img src="/ai-logos/openai-bw.svg" alt="" class="size-4" />Agents connected<span class="ml-auto text-neutral-400">Draft only</span>
+            </div>
+          </div>
+        </div>
+        <div class:list={['flex flex-col p-6', card]}>
+          <span class="w-fit rounded-md bg-neutral-100 px-2 py-0.5 font-mono text-xs text-neutral-500">03</span>
+          <h3 class="mt-4 text-lg font-semibold tracking-tight">Review on a real preview</h3>
+          <p class="mt-1 text-[15px] leading-relaxed text-neutral-500">Every draft gets the preview deployment your host already builds. GitCMS finds it for you.</p>
+          <div class="mt-6 space-y-2 rounded-xl border border-neutral-200 bg-neutral-50 p-4 text-[12px]">
+            <div class="flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-2.5 py-2"><span class="size-1.5 rounded-full bg-emerald-500"></span> Preview ready <span class="ml-auto truncate text-neutral-400">draft-57.acme-roofing.pages.dev</span></div>
+            <div class="grid grid-cols-3 gap-1.5">
+              {[['Cloudflare', '/brand-logos/cloudflare.svg'], ['Vercel', '/logos/vercel.svg'], ['Netlify', '/logos/netlify.svg']].map(([name, logo]) => (
+                <span class="flex items-center justify-center gap-1.5 rounded-md border border-neutral-200 bg-white px-2 py-2 text-neutral-600"><img src={logo} alt="" class="size-3.5" />{name}</span>
+              ))}
+            </div>
+            <div class="flex items-center gap-2 rounded-md bg-neutral-900 px-2.5 py-2 text-white">Open preview <ArrowRight className="ml-auto size-3.5" /></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Day One → Day Two -->
-    <section class="px-6 py-20 lg:px-12">
-      <p class="text-center text-xs font-medium uppercase tracking-[0.18em] text-neutral-500">{CATEGORY}</p>
-      <h2 class="mx-auto mt-3 max-w-3xl text-center text-[36px] font-semibold leading-tight tracking-[-0.03em] sm:text-[44px]">AI made websites cheap to build. It didn’t make them easy to run.</h2>
-      <p class="mx-auto mt-4 max-w-2xl text-center text-[16px] leading-relaxed text-neutral-600">The site shipped in an afternoon. Then everyone needs a change, and none of them should need your codebase, or you.</p>
+    <section class="border-t border-neutral-200 px-6 py-20 lg:px-12">
+      <p class="text-center text-xs font-medium uppercase tracking-[0.18em] text-neutral-400">{CATEGORY}</p>
+      <h2 class:list={['mx-auto mt-3 max-w-3xl text-center', h2]}>AI made websites cheap to build. It didn’t make them easy to run.</h2>
+      <p class:list={['mx-auto mt-4 max-w-2xl text-center', sub]}>The site shipped in an afternoon. Then everyone needs a change, and none of them should need your codebase, or you.</p>
       <div class="mt-14 grid items-center gap-6 lg:grid-cols-[1fr_auto_1.3fr_auto_1fr]">
-        <div class="rounded-xl border border-neutral-200 bg-neutral-950 p-4 font-mono text-[12px] text-neutral-300 shadow-sm">
+        <div class="rounded-xl border border-neutral-800 bg-neutral-950 p-4 font-mono text-[12px] text-neutral-300">
           <div class="flex items-center gap-1.5 text-neutral-500"><Terminal className="size-3.5" /> Day one</div>
           <div class="mt-3"><span class="text-lime-300">❯</span> claude "build our new roofing site"</div>
           <div class="mt-1 text-neutral-500">Astro · 14 pages · deployed</div>
@@ -79,7 +152,7 @@ const tones: Record<string, string> = {
         <div class="hidden text-center text-[10px] font-semibold uppercase tracking-[0.2em] text-neutral-400 lg:block">Day<br />two</div>
         <div class="grid gap-2">
           {DAY_TWO_REQUESTS.map((request) => (
-            <div class="flex items-center gap-3 rounded-xl border border-neutral-200 bg-white px-3 py-2.5 shadow-sm">
+            <div class="flex items-center gap-3 rounded-xl border border-neutral-200 bg-white px-3 py-2.5">
               <span class:list={['grid size-7 place-items-center rounded-full text-[11px] font-semibold text-white', tones[request.tone]]}>
                 {request.avatar === 'agent' ? <img src="/ai-logos/claude-orange.svg" alt="" class="size-4" /> : request.avatar}
               </span>
@@ -91,7 +164,7 @@ const tones: Record<string, string> = {
         <svg viewBox="0 0 60 180" class="hidden h-44 w-14 text-neutral-300 lg:block" aria-hidden="true">
           {[22, 67, 113, 158].map((y) => <path d={`M0 ${y} C 30 ${y}, 30 90, 60 90`} fill="none" stroke="currentColor" stroke-width="1.5" class="rd-flow" />)}
         </svg>
-        <div class="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm">
+        <div class:list={['p-4', card]}>
           <div class="flex items-center gap-2"><GitCMSLogo className="size-6" /><span class="font-logo text-lg font-medium">GitCMS</span></div>
           <div class="mt-3 space-y-1.5 text-[13px]">
             {[['Draft', 'bg-sky-500'], ['Review', 'bg-violet-500'], ['Published', 'bg-emerald-500']].map(([label, dot]) => (
@@ -103,91 +176,119 @@ const tones: Record<string, string> = {
       </div>
     </section>
 
-    <!-- Pillars bento -->
-    <section class="grid gap-3 border-t border-neutral-200/80 p-3 sm:p-4 lg:grid-cols-3">
-      {PILLARS.map((pillar, index) => (
-        <div class="flex min-w-0 flex-col rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <span class="font-mono text-xs text-neutral-400">0{index + 1}</span>
-          <h3 class="mt-2 text-xl font-semibold tracking-tight">{pillar.title}</h3>
-          <p class="mt-2 text-[15px] leading-relaxed text-neutral-600">{pillar.body}</p>
-          <div class="mt-6 flex flex-1 flex-col justify-center overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50 p-4">
-            {index === 0 && (
-              <div class="space-y-2 text-[12px]">
-                <div class="font-logo text-lg leading-tight">Our services</div>
-                <div class="rounded-md border border-neutral-200 bg-white px-2 py-1.5 text-neutral-600">Emergency roof repair</div>
-                <div class="rounded-md border border-neutral-200 bg-white px-2 py-1.5 text-neutral-600">From <span class="rounded-sm bg-lime-100 px-0.5 text-neutral-900">$249</span></div>
-                <div class="flex justify-end"><span class="rounded-md bg-neutral-900 px-2 py-1 text-[11px] font-medium text-white">Save draft</span></div>
-              </div>
-            )}
-            {index === 1 && (
-              <div class="space-y-2 text-[12px]">
-                <div class="ml-auto w-fit rounded-xl bg-[#f0eee6] px-2.5 py-1.5">Add a page for Round Rock</div>
-                <div class="flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-2 py-1.5"><GitCMSLogo className="size-3.5" /><code class="text-[11px]">create_entry</code><span class="truncate text-neutral-500">locations/round-rock</span></div>
-                <div class="flex items-center gap-1.5 rounded-lg border border-violet-200 bg-violet-50 px-2 py-1.5 text-violet-700">#61 waiting for review</div>
-              </div>
-            )}
-            {index === 2 && <ActivityMock class="origin-top-left scale-[0.82] [width:122%]" />}
-          </div>
-        </div>
-      ))}
+    <!-- Product tour -->
+    <section id="product" class="border-t border-neutral-200 px-6 py-20 text-center lg:px-12">
+      <span class={eyebrow}><GitBranch className="size-3.5" /> One workflow</span>
+      <h2 class:list={['mt-4', h2]}>People and agents, same rules</h2>
+      <p class:list={['mx-auto mt-3 max-w-xl', sub]}>Whoever starts the change, it ends the same way: a draft, a review, and a commit.</p>
+      <div class="mt-12 text-left"><ProductTour /></div>
     </section>
 
-    <!-- Product tour -->
-    <section id="product" class="border-t border-neutral-200/80 px-6 py-20 lg:px-12">
-      <h2 class="text-center text-[36px] font-semibold tracking-[-0.03em] sm:text-[44px]">One workflow for people and agents</h2>
-      <p class="mx-auto mt-3 max-w-xl text-center text-neutral-600">Whoever starts the change, it ends the same way: a draft, a review, and a commit.</p>
-      <div class="mt-12"><ProductTour /></div>
+    <!-- Change requests -->
+    <section id="change-requests" class="border-t border-neutral-200 p-3 sm:p-4">
+      <div class:list={['p-6 lg:p-10', card]}>
+        <div class="grid items-end gap-6 lg:grid-cols-[1.2fr_1fr]">
+          <div>
+            <span class={eyebrow}><span class="rounded-full bg-lime-200 px-1.5 text-[10px] font-semibold text-lime-900">New</span> Change requests</span>
+            <h2 class:list={['mt-4', h2]}>Feedback pinned to the page, not buried in email</h2>
+          </div>
+          <p class={sub}>Clients click the thing they want changed. Each pin becomes a change request your coding agent can pick up with one copied prompt. When the fix deploys, GitCMS finds the preview and checks every pin against it.</p>
+        </div>
+        <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/change-requests/61" class="mt-8">
+          <div class="h-[440px]"><ChangeRequestMock /></div>
+        </AppWindow>
+        <div class="mt-6 grid gap-4 text-[14px] text-neutral-500 sm:grid-cols-3">
+          <p><span class="font-medium text-neutral-900">Select element.</span> Feedback lands on the exact heading, image or button.</p>
+          <p><span class="font-medium text-neutral-900">Copy prompt.</span> Hand open feedback to Claude Code, Codex or Cursor.</p>
+          <p><span class="font-medium text-neutral-900">Verify on the preview.</span> Pins show as changed, still matching, or gone.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Integrations -->
+    <section class="border-t border-neutral-200 p-3 sm:p-4">
+      <div class:list={['grid gap-10 p-6 lg:grid-cols-[1fr_1.15fr] lg:p-12', card]}>
+        <div class="flex flex-col justify-center">
+          <span class={eyebrow}><Plug className="size-3.5" /> Integrations</span>
+          <h2 class:list={['mt-4', h2]}>Your stack. Your agents. Your search data.</h2>
+          <p class:list={['mt-4', sub]}>GitCMS works with the framework and host you already use. Connect Search Console, and the agents you already rely on, like OpenClaw, Hermes or Grok, become content agents: they see what ranks, draft the fix, and wait for a person to approve it.</p>
+          <a href="/agents" class="mt-6 inline-flex w-fit items-center gap-1.5 text-sm font-medium">Connect an agent <ArrowRight className="size-4" /></a>
+        </div>
+        <div class="space-y-5">
+          {integrations.map((group) => (
+            <div>
+              <div class="text-xs font-medium text-neutral-400">{group.group}</div>
+              <div class="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-6">
+                {group.items.map(([name, logo]) => (
+                  <div class="flex flex-col items-center gap-2 rounded-xl border border-neutral-200 py-3.5 text-[11px] text-neutral-500">
+                    <img src={logo} alt="" class="size-6" />{name}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
 
     <!-- SEO + Search Console -->
-    <section id="seo" class="border-t border-neutral-200/80 p-3 sm:p-4">
-      <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm lg:p-10">
-        <div class="grid items-end gap-8 lg:grid-cols-[1.3fr_1fr]">
-          <div>
-            <SoonBadge />
-            <h2 class="mt-3 text-[32px] font-semibold leading-tight tracking-[-0.03em] sm:text-[40px]">The SEO plugin, without the plugin</h2>
-            <p class="mt-3 text-[16px] leading-relaxed text-neutral-600">Title length, meta description, focus keyword, alt text and internal links, checked in the editor before anything goes live. The checklist WordPress sites install a plugin for.</p>
-          </div>
-          <ul class="flex flex-wrap gap-2 lg:justify-end">
-            {['Search preview', 'Title and description length', 'Focus keyword', 'Alt text', 'Internal links', 'Readability'].map((item) => (
-              <li class="rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1 text-[13px] text-neutral-600">{item}</li>
-            ))}
-          </ul>
-        </div>
-        <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/services/emergency-roof-repair?panel=seo" class="mt-8">
-          <div class="h-[440px]"><EditorMock panel="seo" /></div>
-        </AppWindow>
+    <section id="seo" class="border-t border-neutral-200 px-6 py-20 lg:px-12">
+      <div class="text-center">
+        <span class={eyebrow}><Search className="size-3.5" /> SEO</span>
+        <h2 class:list={['mt-4', h2]}>The SEO plugin, without the plugin</h2>
+        <p class:list={['mx-auto mt-3 max-w-2xl', sub]}>A search preview and a pre-publish checklist in the editor, and Search Console next to the page it’s about. The tools WordPress sites install plugins for.</p>
+        <div class="mt-4"><SoonBadge /></div>
       </div>
+      <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/services/emergency-roof-repair?panel=seo" class="mt-10">
+        <div class="h-[440px]"><EditorMock panel="seo" /></div>
+      </AppWindow>
       <div class="mt-3 grid gap-3 lg:grid-cols-[1fr_1.2fr]">
-        <div class="flex flex-col justify-center rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm lg:p-10">
-          <SoonBadge />
-          <h3 class="mt-3 text-[28px] font-semibold leading-tight tracking-[-0.03em]">Search Console, next to the page it’s about</h3>
-          <p class="mt-3 text-[15px] leading-relaxed text-neutral-600">Connect Google Search Console and see which queries each page ranks for. Your agent can read it too, and turn a page-two keyword into a content task.</p>
+        <div class:list={['flex flex-col justify-center p-6 lg:p-10', card]}>
+          <h3 class="text-[26px] font-semibold leading-tight tracking-[-0.03em]">Search Console, next to the page it’s about</h3>
+          <p class="mt-3 text-[15px] leading-relaxed text-neutral-500">See which queries each page ranks for. Spot a page-two keyword and turn it into a content task, for a writer or for your agent.</p>
         </div>
-        <div class="h-[420px] overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm"><SearchMock /></div>
+        <div class:list={['h-[400px] overflow-hidden', card]}><SearchMock /></div>
       </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="border-t border-neutral-200 py-20 text-center">
+      <span class={eyebrow}><Quote className="size-3.5" /> Testimonials</span>
+      <h2 class:list={['mt-4 px-6', h2]}>Don’t just take our word for it</h2>
+      <p class:list={['mx-auto mt-3 max-w-xl px-6', sub]}>Agencies, writers and startups who moved their sites to code, and handed them over with GitCMS.</p>
+      <div class="mt-12 text-left"><Testimonials /></div>
     </section>
 
     <!-- Agencies -->
-    <section class="grid items-center gap-10 border-t border-neutral-200/80 px-6 py-20 lg:grid-cols-2 lg:px-12">
+    <section class="grid items-center gap-10 border-t border-neutral-200 px-6 py-20 lg:grid-cols-2 lg:px-12">
       <div>
-        <p class="text-xs font-medium uppercase tracking-[0.18em] text-neutral-500">For agencies</p>
-        <h2 class="mt-3 text-[36px] font-semibold leading-tight tracking-[-0.03em]">Ship the stack you want. Hand over a CMS clients actually use.</h2>
-        <p class="mt-4 text-[16px] leading-relaxed text-neutral-600">Build with Astro or Next.js and your favourite agent. Every client gets a safe place to edit, and you keep every site in one workspace, with no WordPress to patch.</p>
+        <span class={eyebrow}><Inbox className="size-3.5" /> For agencies</span>
+        <h2 class:list={['mt-4', h2]}>Every client site, one workspace</h2>
+        <p class:list={['mt-4', sub]}>Build with Astro or Next.js and your favourite agent. Every client gets a safe place to edit, and you see every site, review and agent at a glance, with no WordPress to patch.</p>
         <a href="/for-agencies" class="mt-6 inline-flex items-center gap-1.5 text-sm font-medium">GitCMS for agencies <ArrowRight className="size-4" /></a>
       </div>
-      <div class="h-[300px] overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm"><FleetMock /></div>
+      <div class:list={['h-[300px] overflow-hidden', card]}><FleetMock /></div>
+    </section>
+
+    <!-- Cost comparator -->
+    <section class="border-t border-neutral-200 px-6 py-20 lg:px-12">
+      <div class="text-center">
+        <span class={eyebrow}><Sparkles className="size-3.5" /> The real cost</span>
+        <h2 class:list={['mx-auto mt-4 max-w-3xl', h2]}>What a marketing site costs to run</h2>
+        <p class:list={['mx-auto mt-3 max-w-2xl', sub]}>Builders charge per site and per editor. WordPress charges you in plugins and upkeep. A code-first site hosts for free; you only pay for the dashboard.</p>
+      </div>
+      <div class="mt-10"><CostComparator /></div>
     </section>
 
     <!-- Pricing -->
-    <section id="pricing" class="border-t border-neutral-200/80 px-6 py-20 lg:px-12">
-      <h2 class="text-center text-[36px] font-semibold tracking-[-0.03em] sm:text-[44px]">Pay for sites, not seats</h2>
-      <p class="mx-auto mt-3 max-w-xl text-center text-neutral-600">Unlimited people and agents on every paid plan. Bring your own AI; we don’t resell credits.</p>
-      <div class="mt-10 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-6"><PricingTable /></div>
+    <section id="pricing" class="border-t border-neutral-200 px-6 py-20 lg:px-12">
+      <h2 class:list={['text-center', h2]}>Pay for sites, not seats</h2>
+      <p class:list={['mx-auto mt-3 max-w-xl text-center', sub]}>Unlimited people and agents on paid plans. Bring your own AI; we don’t resell credits.</p>
+      <div class:list={['mt-10 p-4 sm:p-6', card]}><PricingTable /></div>
     </section>
 
     <!-- FAQ -->
-    <section class="grid gap-10 border-t border-neutral-200/80 px-6 py-20 lg:grid-cols-[1fr_2fr] lg:px-12">
+    <section class="grid gap-10 border-t border-neutral-200 px-6 py-20 lg:grid-cols-[1fr_2fr] lg:px-12">
       <h2 class="text-[32px] font-semibold leading-tight tracking-[-0.03em]">Questions, answered</h2>
       <FaqList />
     </section>
@@ -195,7 +296,7 @@ const tones: Record<string, string> = {
     <!-- CTA -->
     <section class="p-3 sm:p-4">
       <div class="rounded-2xl bg-neutral-950 px-6 py-16 text-center text-white">
-        <h2 class="mx-auto max-w-2xl text-[36px] font-semibold leading-tight tracking-[-0.03em] sm:text-[48px]">Give your website a control plane</h2>
+        <h2 class="mx-auto max-w-2xl text-[36px] font-semibold leading-tight tracking-[-0.035em] sm:text-[48px]">Give your website a control plane</h2>
         <p class="mx-auto mt-4 max-w-lg text-neutral-400">Connect the repository behind your site. Your team is editing in minutes, and nothing about your stack changes.</p>
         <a href={loginUrl('/')} class="mt-8 inline-flex items-center gap-2 rounded-lg bg-lime-300 px-5 py-3 text-sm font-semibold text-neutral-950 hover:bg-lime-200">Connect your site, free <ArrowRight className="size-4" /></a>
       </div>
