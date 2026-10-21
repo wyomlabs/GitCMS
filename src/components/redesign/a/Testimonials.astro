@@ -15,7 +15,7 @@ const copies = [0, 1, 2]
           {item.avatarSrc && <img src={item.avatarSrc} alt="" class="pointer-events-none size-10 rounded-full object-cover" loading="lazy" />}
           <div class="text-sm">
             <div class="font-medium text-neutral-900">{item.name}</div>
-            <div class="text-neutral-500">{item.role}{item.site && <>, <a href={item.site.href} class="hover:text-neutral-900" rel="noopener" tabindex={copy === 1 ? undefined : -1}>{item.site.label}</a></>}</div>
+            <div class="text-neutral-500">{item.role}{item.site && <>, {item.site.href ? <a href={item.site.href} class="hover:text-neutral-900" rel="noopener" tabindex={copy === 1 ? undefined : -1}>{item.site.label}</a> : item.site.label}</>}</div>
           </div>
         </figcaption>
       </figure>

@@ -71,17 +71,23 @@ function Attribution({
           {testimonial.site ? (
             <>
               {' · '}
-              <a
-                href={testimonial.site.href}
-                target="_blank"
-                rel="noopener"
-                className={cn(
-                  'underline-offset-2 hover:underline',
-                  isDark ? 'text-neutral-300' : 'text-neutral-700',
-                )}
-              >
-                {testimonial.site.label}
-              </a>
+              {testimonial.site.href ? (
+                <a
+                  href={testimonial.site.href}
+                  target="_blank"
+                  rel="noopener"
+                  className={cn(
+                    'underline-offset-2 hover:underline',
+                    isDark ? 'text-neutral-300' : 'text-neutral-700',
+                  )}
+                >
+                  {testimonial.site.label}
+                </a>
+              ) : (
+                <span className={isDark ? 'text-neutral-300' : 'text-neutral-700'}>
+                  {testimonial.site.label}
+                </span>
+              )}
             </>
           ) : null}
         </p>

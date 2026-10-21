@@ -3,6 +3,7 @@
 // the violet task chip, and optionally the SEO panel docked on the right.
 import { AlertTriangle, CalendarDays, Check, ChevronDown, FileText, Image, ListChecks, Search, Tag } from 'lucide-react'
 import AppShell from './AppShell.astro'
+import Cursor from './Cursor.astro'
 import { SEO_CHECKS } from '../content'
 
 interface Props {
@@ -13,7 +14,7 @@ interface Props {
 const { panel = 'none', class: className = '', compact = false } = Astro.props
 const firstCheckStep = 5
 ---
-<div data-seq={panel === 'seo' ? 12 : 8} data-ms="1100" class:list={['h-full', className]}>
+<div data-seq={panel === 'seo' ? 12 : 8} data-ms="1100" class:list={['relative h-full', className]}>
   <AppShell active="Services" crumbs={['Services', 'Emergency roof repair']} compact={compact}>
     <Fragment slot="actions">
       <span class="hidden items-center overflow-hidden rounded-md border border-violet-200 bg-violet-50 text-[11px] font-medium text-violet-700 md:inline-flex">
@@ -44,8 +45,8 @@ const firstCheckStep = 5
         </dl>
         <div class="mt-4 border-t border-neutral-200 pt-4 font-logo text-[13.5px] leading-relaxed text-neutral-700">
           <p class="font-sans text-[13px] font-semibold text-neutral-900">When to call us</p>
-          <p class="mt-1.5">A leak after a storm can’t wait for Monday.
-            <span class="rounded-sm bg-lime-100 text-neutral-900" data-type data-at="1" data-fx="fade" data-text=" Crews are on site within 90 minutes, 24/7, across Austin."></span>
+          <p class="mt-1.5" data-cursor-at="0">A leak after a storm can’t wait for Monday.
+            <span class="rounded-sm bg-[#DCF986]/50 text-neutral-900" data-type data-at="1" data-fx="fade" data-text=" Crews are on site within 90 minutes, 24/7, across Austin."></span>
           </p>
           <p class="mt-2 text-neutral-400">We tarp, patch and photograph the damage for your insurer…</p>
         </div>
@@ -84,4 +85,5 @@ const firstCheckStep = 5
       )}
     </div>
   </AppShell>
+  <Cursor />
 </div>

@@ -62,7 +62,7 @@ const section = 'border-t border-neutral-200 px-6 py-24 sm:py-32 lg:px-16'
       <div class="grid min-h-[700px] items-center gap-14 overflow-hidden rounded-xl bg-white px-6 py-16 shadow-[0_1px_5px_-4px_rgba(36,36,36,0.7),0_4px_8px_rgba(36,36,36,0.05)] lg:grid-cols-[500px_1fr] lg:py-20 lg:pl-16 lg:pr-0">
         <div>
           <a href="#change-requests" class={eyebrow}>
-            <span class="rounded-full bg-lime-200 px-1.5 text-[10px] font-semibold text-lime-900">New</span>
+            <span class="rounded-full bg-[#DCF986] px-1.5 text-[10px] font-semibold text-neutral-900">New</span>
             Change requests on preview deployments <ArrowRight className="size-3" />
           </a>
           <h1 class="mt-5 text-[44px] font-semibold leading-[1.1] tracking-[-0.045em] text-[#242424] sm:text-[64px]">
@@ -168,7 +168,7 @@ const section = 'border-t border-neutral-200 px-6 py-24 sm:py-32 lg:px-16'
       <div class="mt-16 grid items-center gap-8 text-left lg:grid-cols-[1fr_auto_1.3fr_auto_1fr]">
         <div class="rounded-xl border border-neutral-800 bg-neutral-950 p-4 font-mono text-[12px] text-neutral-300">
           <div class="flex items-center gap-1.5 text-neutral-500"><Terminal className="size-3.5" /> Day one</div>
-          <div class="mt-3"><span class="text-lime-300">❯</span> claude "build our new roofing site"</div>
+          <div class="mt-3"><span class="text-[#DCF986]">❯</span> claude "build our new roofing site"</div>
           <div class="mt-1 text-neutral-500">Astro · 14 pages · deployed</div>
           <div class="mt-3 flex items-center gap-1.5 text-emerald-400"><Check className="size-3.5" /> Live at acme-roofing.com</div>
         </div>
@@ -184,8 +184,9 @@ const section = 'border-t border-neutral-200 px-6 py-24 sm:py-32 lg:px-16'
             </div>
           ))}
         </div>
-        <svg viewBox="0 0 60 180" class="hidden h-44 w-14 text-neutral-300 lg:block" aria-hidden="true">
-          {[22, 67, 113, 158].map((y) => <path d={`M0 ${y} C 30 ${y}, 30 90, 60 90`} fill="none" stroke="currentColor" stroke-width="1.5" class="rd-flow" />)}
+        <svg viewBox="0 0 72 180" class="hidden h-44 w-[72px] text-neutral-400 lg:block" aria-hidden="true">
+          {[22, 67, 113, 158].map((y) => <path d={`M0 ${y} C 34 ${y}, 30 90, 62 90`} fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" class="rd-flow" />)}
+          <path d="M60 84 L70 90 L60 96" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
         <div class:list={['p-4', card]}>
           <div class="flex items-center gap-2"><GitCMSLogo className="size-6" /><span class="font-logo text-lg font-medium">GitCMS</span></div>
@@ -210,7 +211,7 @@ const section = 'border-t border-neutral-200 px-6 py-24 sm:py-32 lg:px-16'
     <!-- Change requests -->
     <section id="change-requests" class={section}>
       <div class="text-center">
-        <span class={eyebrow}><span class="rounded-full bg-lime-200 px-1.5 text-[10px] font-semibold text-lime-900">New</span> Change requests</span>
+        <span class={eyebrow}><span class="rounded-full bg-[#DCF986] px-1.5 text-[10px] font-semibold text-neutral-900">New</span> Change requests</span>
         <h2 class:list={['mx-auto mt-5 max-w-3xl', h2]}>Feedback pinned to the page, not buried in email</h2>
         <p class:list={['mx-auto mt-5 max-w-2xl', sub]}>Clients click the thing they want changed. Each pin becomes a change request your coding agent can pick up with one copied prompt. When the fix deploys, GitCMS finds the preview and checks every pin against it.</p>
       </div>
@@ -254,7 +255,7 @@ const section = 'border-t border-neutral-200 px-6 py-24 sm:py-32 lg:px-16'
     <!-- SEO + Search Console -->
     <section id="seo" class={section}>
       <div class="text-center">
-        <span class={eyebrow}><Search className="size-3.5" /> SEO <span class="rounded-full bg-lime-200 px-1.5 text-[10px] font-semibold text-lime-900">Soon</span></span>
+        <span class={eyebrow}><Search className="size-3.5" /> SEO <span class="rounded-full bg-[#DCF986] px-1.5 text-[10px] font-semibold text-neutral-900">Soon</span></span>
         <h2 class:list={['mt-5', h2]}>The SEO plugin, without the plugin</h2>
         <p class:list={['mx-auto mt-5 max-w-2xl', sub]}>A search preview and a pre-publish checklist in the editor, and Search Console next to the page it’s about. See what each page ranks for, and turn a page-two keyword into a content task for a writer or your agent.</p>
       </div>
@@ -319,7 +320,7 @@ const section = 'border-t border-neutral-200 px-6 py-24 sm:py-32 lg:px-16'
       <div class="rounded-2xl bg-neutral-950 px-6 py-24 text-center text-white">
         <h2 class="mx-auto max-w-2xl text-[36px] font-semibold leading-tight tracking-[-0.035em] sm:text-[48px]">Give your website a control plane</h2>
         <p class="mx-auto mt-4 max-w-lg text-neutral-400">Connect the repository behind your site. Your team is editing in minutes, and nothing about your stack changes.</p>
-        <a href={loginUrl('/')} class="mt-8 inline-flex items-center gap-2 rounded-lg bg-lime-300 px-5 py-3 text-sm font-semibold text-neutral-950 hover:bg-lime-200">Connect your site, free <ArrowRight className="size-4" /></a>
+        <a href={loginUrl('/')} class="mt-8 inline-flex items-center gap-2 rounded-xl bg-[#DCF986] px-5 py-3 text-sm font-semibold text-neutral-950 hover:bg-[#d4f47a]">Connect your site, free <ArrowRight className="size-4" /></a>
       </div>
     </section>
     <div class="border-t border-neutral-200"><CalFooter /></div>

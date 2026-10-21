@@ -3,6 +3,10 @@
 // it's on screen; children with `data-at="k"` get `.on` from step k (until
 // `data-until`), and `[data-type]` children type their `data-text` when on.
 // Reduced motion shows the final step and never animates.
+//
+// A `[data-cursor]` child glides to the element tagged `data-cursor-at="k"`
+// (space-separated steps) and clicks it, one step before the change it causes.
+// Dispatch `seq:restart` on a root to replay it from step 0.
 ---
 <style is:global>
   [data-seq] [data-at] {
@@ -53,8 +57,27 @@
     stroke-dasharray: 4 8;
     animation: rd-flow 1.2s linear infinite;
   }
+  [data-cursor] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 30;
+    pointer-events: none;
+    opacity: 0;
+    transition: transform 0.75s cubic-bezier(0.22, 0.8, 0.24, 1), opacity 0.3s ease;
+  }
+  [data-cursor].visible { opacity: 1; }
+  [data-cursor] .ring { opacity: 0; transform: scale(0.4); }
+  [data-cursor].clicking .ring { animation: rd-click 0.45s ease-out; }
+  [data-cursor].clicking svg { transform: scale(0.88); }
+  [data-cursor] svg { transition: transform 0.12s ease; transform-origin: 3px 3px; }
+  @keyframes rd-click {
+    0% { opacity: 0.55; transform: scale(0.4); }
+    100% { opacity: 0; transform: scale(1.6); }
+  }
   @media (prefers-reduced-motion: reduce) {
     .rd-flow, .rd-pulse.on, .rd-draw.on { animation: none; }
+    [data-cursor] { display: none; }
   }
 </style>
 
@@ -86,6 +109,24 @@
     const items = [...root.querySelectorAll<HTMLElement>('[data-at]')]
     let step = 0
     let timer: number | undefined
+    const cursor = root.querySelector<HTMLElement>('[data-cursor]')
+
+    // Glide the cursor to this step's target, then click once it arrives.
+    const moveCursor = () => {
+      if (!cursor) return
+      const target = root.querySelector<HTMLElement>(`[data-cursor-at~="${step}"]`)
+      if (!target) return
+      const box = root.getBoundingClientRect()
+      const rect = target.getBoundingClientRect()
+      const x = rect.left - box.left + Math.min(rect.width * 0.6, rect.width - 6)
+      const y = rect.top - box.top + rect.height * 0.55
+      cursor.style.transform = `translate(${x}px, ${y}px)`
+      cursor.classList.add('visible')
+      window.setTimeout(() => {
+        cursor.classList.add('clicking')
+        window.setTimeout(() => cursor.classList.remove('clicking'), 450)
+      }, 780)
+    }
 
     const render = () => {
       for (const item of items) {
@@ -96,7 +137,14 @@
         item.classList.toggle('on', on)
         if (on && !wasOn && item.dataset.type !== undefined) typeInto(item)
       }
+      moveCursor()
     }
+
+    root.addEventListener('seq:restart', () => {
+      step = 0
+      for (const item of items) item.classList.remove('on')
+      render()
+    })
 
     if (reduce) {
       step = Number(root.dataset.final ?? steps)

@@ -10,7 +10,7 @@ interface Props {
 }
 const { class: className = '', shell = true } = Astro.props
 ---
-<div data-seq="9" data-ms="1000" data-final="6" class:list={['h-full', className]}>
+<div class:list={['h-full', className]}>
   {shell ? (
     <AppShell active="Content board" crumbs={['Content board']}>
       <Fragment slot="actions">

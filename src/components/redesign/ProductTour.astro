@@ -18,7 +18,7 @@ const tabs = [
   <AppWindow url={tabs[0].url} class="relative">
     <div class="relative h-[460px]">
       {tabs.map((tab, index) => (
-        <div data-tour-panel={tab.key} data-url={tab.url} class:list={['absolute inset-0 transition-opacity duration-500', index !== 0 && 'pointer-events-none opacity-0']}>
+        <div data-tour-panel={tab.key} data-url={tab.url} data-active={index === 0 ? 'true' : 'false'} class="tour-panel absolute inset-0 bg-white">
           {tab.key === 'edit' && <EditorMock />}
           {tab.key === 'agent' && <AgentChatMock />}
           {tab.key === 'review' && <ReviewMock />}
@@ -29,7 +29,7 @@ const tabs = [
   </AppWindow>
   <div class="mt-10 grid gap-6 sm:grid-cols-4" role="tablist">
     {tabs.map((tab, index) => (
-      <button type="button" role="tab" data-tour-tab={tab.key} aria-selected={index === 0 ? 'true' : 'false'} class="group text-left">
+      <button type="button" role="tab" data-tour-tab={tab.key} data-duration={tab.key === 'board' ? 14000 : 9000} aria-selected={index === 0 ? 'true' : 'false'} class="group text-left">
         <span class="block h-0.5 overflow-hidden rounded-full bg-neutral-200">
           <span data-tour-bar class="block h-full w-0 bg-neutral-900"></span>
         </span>
@@ -43,7 +43,6 @@ const tabs = [
 </div>
 
 <script>
-  const DURATION = 9000
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   for (const tour of document.querySelectorAll<HTMLElement>('[data-tour]')) {
@@ -60,8 +59,13 @@ const tabs = [
       started = performance.now()
       tabs.forEach((tab, i) => tab.setAttribute('aria-selected', String(i === index)))
       panels.forEach((panel, i) => {
-        panel.classList.toggle('opacity-0', i !== index)
-        panel.classList.toggle('pointer-events-none', i !== index)
+        const active = i === index
+        const wasActive = panel.dataset.active === 'true'
+        panel.dataset.active = String(active)
+        // Replay the incoming demo from its first step.
+        if (active && !wasActive) {
+          for (const demo of panel.querySelectorAll('[data-seq], [data-board]')) demo.dispatchEvent(new Event('seq:restart'))
+        }
       })
       if (url) url.textContent = panels[index]?.dataset.url ?? ''
       tabs.forEach((tab, i) => {
@@ -82,7 +86,7 @@ const tabs = [
 
     const tick = (now: number) => {
       if (auto && !paused) {
-        const progress = Math.min(1, (now - started) / DURATION)
+        const progress = Math.min(1, (now - started) / Number(tabs[current]?.dataset.duration ?? 9000))
         const bar = tabs[current]?.querySelector<HTMLElement>('[data-tour-bar]')
         if (bar) bar.style.width = `${progress * 100}%`
         if (progress >= 1) show((current + 1) % tabs.length)
@@ -93,3 +97,18 @@ const tabs = [
     if (auto) requestAnimationFrame(tick)
   }
 </script>
+
+<style>
+  /* Outgoing panel leaves fast; incoming fades in after it, so they never overlap. */
+  .tour-panel[data-active='false'] {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.18s ease, visibility 0s linear 0.18s;
+  }
+  .tour-panel[data-active='true'] {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.4s ease 0.18s;
+  }
+</style>

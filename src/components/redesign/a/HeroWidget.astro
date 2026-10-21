@@ -3,7 +3,6 @@
 // the product instead of a full app window. Left: a content task (who, what,
 // stage). Right: the entry it changes, cropped by the hero card's edge.
 import { Bot, Globe, MessageSquare } from 'lucide-react'
-import { GitCMSLogo } from '@/components/gitcms-logo'
 
 const stages = ['Draft', 'Review', 'Published'] as const
 ---
@@ -18,7 +17,6 @@ const stages = ['Draft', 'Review', 'Published'] as const
     <h3 class="mt-0.5 text-[19px] font-semibold tracking-tight text-neutral-900">Q4 pricing update</h3>
     <p class="mt-2 text-[13px] leading-relaxed text-neutral-500">New starting price and 24/7 emergency service across the services pages.</p>
     <div class="mt-5 flex items-center gap-2">
-      <span class="text-neutral-400"><GitCMSLogo className="size-4" /></span>
       <div class="relative grid flex-1 grid-cols-3 rounded-lg bg-neutral-100 p-1 text-[12.5px]">
         {stages.map((stage, index) => (
           <span class="relative z-10 py-1 text-center text-neutral-500">
@@ -55,7 +53,7 @@ const stages = ['Draft', 'Review', 'Published'] as const
     </dl>
     <p class="mt-6 border-t border-neutral-100 pt-5 font-logo text-[15px] leading-relaxed text-neutral-700">
       A leak after a storm can’t wait for Monday.
-      <span class="rounded-sm bg-lime-100 text-neutral-900" data-type data-at="1" data-fx="fade" data-text=" Crews are on site within 60 minutes, day or night."></span>
+      <span class="rounded-sm bg-[#DCF986]/50 text-neutral-900" data-type data-at="1" data-fx="fade" data-text=" Crews are on site within 60 minutes, day or night."></span>
     </p>
     <p class="mt-3 font-logo text-[15px] leading-relaxed text-neutral-300">Every repair is photographed for your insurer, and…</p>
   </div>

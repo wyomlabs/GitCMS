@@ -4,6 +4,7 @@
 // pins against the preview deployment GitCMS found for the fix.
 // Mirrors DESIGN.md "Change Requests": one bordered site window, no shadow.
 import { Check, Copy, MousePointerClick, RotateCw } from 'lucide-react'
+import Cursor from '../mock/Cursor.astro'
 
 const feedback = [
   { ref: 'F1', who: 'Jess', role: 'Client', text: 'Make the phone number bigger on mobile', status: 'Changed' },
@@ -11,11 +12,11 @@ const feedback = [
   { ref: 'F3', who: 'Jess', role: 'Client', text: 'Add “Licensed & insured” under the headline', status: 'Still matching' },
 ] as const
 ---
-<div data-seq="8" data-ms="1200" data-final="7" class="grid h-full grid-cols-1 bg-white text-[12px] md:grid-cols-[1fr_300px]">
+<div data-seq="8" data-ms="1400" data-final="7" class="relative grid h-full grid-cols-1 bg-white text-[12px] md:grid-cols-[1fr_300px]">
   <div class="flex min-w-0 flex-col border-neutral-200 p-3 md:border-r">
     <!-- Site browser bar -->
     <div class="flex items-center gap-2 rounded-t-lg border border-neutral-200 bg-neutral-50 px-2.5 py-1.5 text-[11px] text-neutral-500">
-      <span class="inline-flex overflow-hidden rounded-md border border-neutral-200 bg-white">
+      <span data-cursor-at="3" class="inline-flex overflow-hidden rounded-md border border-neutral-200 bg-white">
         <span class="px-2 py-0.5" data-at="0" data-until="4" data-fx="collapse">Live site</span>
         <span class="px-2 py-0.5 text-neutral-400" data-at="0" data-until="4" data-fx="collapse">Preview</span>
         <span class="px-2 py-0.5 text-neutral-400" data-at="4" data-fx="collapse">Live site</span>
@@ -32,17 +33,17 @@ const feedback = [
     <div class="relative flex-1 overflow-hidden rounded-b-lg border border-t-0 border-neutral-200 bg-[#f7f4ee] p-6">
       <div class="flex items-center justify-between text-[11px] text-neutral-500"><span class="font-semibold text-neutral-900">Acme Roofing</span><span>Services · Areas · Contact</span></div>
       <div class="mt-8 max-w-[70%]">
-        <h4 class="relative inline-block pr-3 font-logo text-[26px] leading-tight text-neutral-900">Emergency roof repair, 24/7<span data-at="3" class="absolute -right-2.5 -top-2.5 grid size-5 place-items-center rounded-full bg-violet-600 text-[9px] font-semibold text-white ring-[3px] ring-violet-200">F3</span></h4>
+        <h4 data-cursor-at="2" class="relative inline-block pr-3 font-logo text-[26px] leading-tight text-neutral-900">Emergency roof repair, 24/7<span data-at="3" class="absolute -right-2.5 -top-2.5 grid size-5 place-items-center rounded-full bg-violet-600 text-[9px] font-semibold text-white ring-[3px] ring-violet-200">F3</span></h4>
         <p class="mt-1 text-[11px] text-emerald-700" data-at="5" data-fx="fade">Licensed &amp; insured</p>
         <p class="mt-2 text-[12px] text-neutral-600">Fast, insured repairs across Austin.</p>
         <div class="mt-4 flex items-center gap-2">
-          <span class="relative rounded-md bg-neutral-900 px-3 py-1.5 text-[11px] font-medium text-white"><span data-at="1" class="absolute -right-2.5 -top-2.5 grid size-5 place-items-center rounded-full bg-violet-600 text-[9px] font-semibold text-white ring-[3px] ring-violet-200">F1</span>Call
+          <span data-cursor-at="0" class="relative rounded-md bg-neutral-900 px-3 py-1.5 text-[11px] font-medium text-white"><span data-at="1" class="absolute -right-2.5 -top-2.5 grid size-5 place-items-center rounded-full bg-violet-600 text-[9px] font-semibold text-white ring-[3px] ring-violet-200">F1</span>Call
             <span class="transition-all" data-at="0" data-until="4" data-fx="collapse">(512) 555-0142</span>
             <span class="text-[13px] font-semibold" data-at="4" data-fx="collapse">(512) 555-0142</span>
           </span>
         </div>
       </div>
-      <div class="absolute bottom-5 right-5 h-20 w-32"><span data-at="2" class="absolute -right-2.5 -top-2.5 grid size-5 place-items-center rounded-full bg-violet-600 text-[9px] font-semibold text-white ring-[3px] ring-violet-200">F2</span><div class="absolute inset-0 overflow-hidden rounded-md">
+      <div data-cursor-at="1" class="absolute bottom-5 right-5 h-20 w-32"><span data-at="2" class="absolute -right-2.5 -top-2.5 grid size-5 place-items-center rounded-full bg-violet-600 text-[9px] font-semibold text-white ring-[3px] ring-violet-200">F2</span><div class="absolute inset-0 overflow-hidden rounded-md">
         <div class="absolute inset-0 bg-gradient-to-br from-sky-200 to-slate-300" data-at="0" data-until="4" data-fx="fade"></div>
         <div class="absolute inset-0 bg-gradient-to-br from-amber-200 via-orange-300 to-rose-300" data-at="4" data-fx="fade"></div>
       </div></div>
@@ -75,4 +76,5 @@ const feedback = [
       </div>
     </div>
   </div>
+  <Cursor />
 </div>

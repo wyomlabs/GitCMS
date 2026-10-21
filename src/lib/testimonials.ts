@@ -9,7 +9,7 @@ export type Testimonial = {
   name: string
   role: string
   /** Customer site or company; linking customers is fine, never competitors. */
-  site?: { label: string; href: string }
+  site?: { label: string; href?: string }
   avatarSrc?: string
   /** Short context chip, e.g. the move they made. */
   context: string
@@ -25,6 +25,7 @@ export const testimonials: ReadonlyArray<Testimonial> = [
     id: 'phil',
     name: 'Phil Henry',
     role: 'Founder',
+    site: { label: 'WebSynergetics' },
     avatarSrc: '/images/landing/users/phil-henry.webp',
     context: 'Agency handoff',
     persona: 'agency',
