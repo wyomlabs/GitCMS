@@ -25,3 +25,6 @@
 /mcp /agents 308
 
 /for-indie-hackers /for-solo-builders 308
+
+# TanStack Start served /sitemap.xml; Astro's sitemap integration writes an index.
+/sitemap.xml /sitemap-index.xml 301
