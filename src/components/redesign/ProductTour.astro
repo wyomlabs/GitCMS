@@ -27,7 +27,7 @@ const tabs = [
       ))}
     </div>
   </AppWindow>
-  <div class="mt-6 grid gap-4 sm:grid-cols-4" role="tablist">
+  <div class="mt-10 grid gap-6 sm:grid-cols-4" role="tablist">
     {tabs.map((tab, index) => (
       <button type="button" role="tab" data-tour-tab={tab.key} aria-selected={index === 0 ? 'true' : 'false'} class="group text-left">
         <span class="block h-0.5 overflow-hidden rounded-full bg-neutral-200">
