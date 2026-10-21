@@ -15,7 +15,6 @@ import ChangeRequestMock from '@/components/redesign/a/ChangeRequestMock.astro'
 import Testimonials from '@/components/redesign/a/Testimonials.astro'
 import CostComparator from '@/components/redesign/a/CostComparator.astro'
 import SiteNav from '@/components/redesign/sections/SiteNav.astro'
-import SoonBadge from '@/components/redesign/sections/SoonBadge.astro'
 import PricingTable from '@/components/redesign/sections/PricingTable.astro'
 import FaqList from '@/components/redesign/sections/FaqList.astro'
 import SiteFooter from '@/components/redesign/sections/SiteFooter.astro'
@@ -49,6 +48,8 @@ const eyebrow = 'inline-flex w-fit items-center gap-1.5 rounded-full border bord
 const h2 = 'text-[34px] font-semibold leading-[1.1] tracking-[-0.035em] sm:text-[44px]'
 const sub = 'text-[16px] leading-relaxed text-neutral-500'
 const card = 'rounded-2xl border border-neutral-200 bg-white'
+// Every section: heading on the page background, visuals in white cards.
+const section = 'border-t border-neutral-200 px-6 py-20 lg:px-12'
 ---
 <RedesignLayout variant="a" title="Variant A · Day Two" bodyClass="bg-[#f4f4f3]">
   <SiteNav />
@@ -88,7 +89,7 @@ const card = 'rounded-2xl border border-neutral-200 bg-white'
     </section>
 
     <!-- How it works -->
-    <section class="px-6 pb-16 pt-20 text-center lg:px-12">
+    <section class:list={[section, 'border-t-0 text-center']}>
       <span class={eyebrow}><Rocket className="size-3.5" /> How it works</span>
       <h2 class:list={['mx-auto mt-4 max-w-3xl', h2]}>From repository to client-ready in minutes</h2>
       <p class:list={['mx-auto mt-3 max-w-xl', sub]}>No migration and no new hosting. GitCMS reads what’s already in your repo.</p>
@@ -138,11 +139,11 @@ const card = 'rounded-2xl border border-neutral-200 bg-white'
     </section>
 
     <!-- Day One → Day Two -->
-    <section class="border-t border-neutral-200 px-6 py-20 lg:px-12">
-      <p class="text-center text-xs font-medium uppercase tracking-[0.18em] text-neutral-400">{CATEGORY}</p>
-      <h2 class:list={['mx-auto mt-3 max-w-3xl text-center', h2]}>AI made websites cheap to build. It didn’t make them easy to run.</h2>
-      <p class:list={['mx-auto mt-4 max-w-2xl text-center', sub]}>The site shipped in an afternoon. Then everyone needs a change, and none of them should need your codebase, or you.</p>
-      <div class="mt-14 grid items-center gap-6 lg:grid-cols-[1fr_auto_1.3fr_auto_1fr]">
+    <section class:list={[section, 'text-center']}>
+      <span class={eyebrow}><Terminal className="size-3.5" /> {CATEGORY}</span>
+      <h2 class:list={['mx-auto mt-4 max-w-3xl', h2]}>AI made websites cheap to build. It didn’t make them easy to run.</h2>
+      <p class:list={['mx-auto mt-3 max-w-2xl', sub]}>The site shipped in an afternoon. Then everyone needs a change, and none of them should need your codebase, or you.</p>
+      <div class="mt-12 grid items-center gap-6 text-left lg:grid-cols-[1fr_auto_1.3fr_auto_1fr]">
         <div class="rounded-xl border border-neutral-800 bg-neutral-950 p-4 font-mono text-[12px] text-neutral-300">
           <div class="flex items-center gap-1.5 text-neutral-500"><Terminal className="size-3.5" /> Day one</div>
           <div class="mt-3"><span class="text-lime-300">❯</span> claude "build our new roofing site"</div>
@@ -177,7 +178,7 @@ const card = 'rounded-2xl border border-neutral-200 bg-white'
     </section>
 
     <!-- Product tour -->
-    <section id="product" class="border-t border-neutral-200 px-6 py-20 text-center lg:px-12">
+    <section id="product" class:list={[section, 'text-center']}>
       <span class={eyebrow}><GitBranch className="size-3.5" /> One workflow</span>
       <h2 class:list={['mt-4', h2]}>People and agents, same rules</h2>
       <p class:list={['mx-auto mt-3 max-w-xl', sub]}>Whoever starts the change, it ends the same way: a draft, a review, and a commit.</p>
@@ -185,112 +186,110 @@ const card = 'rounded-2xl border border-neutral-200 bg-white'
     </section>
 
     <!-- Change requests -->
-    <section id="change-requests" class="border-t border-neutral-200 p-3 sm:p-4">
-      <div class:list={['p-6 lg:p-10', card]}>
-        <div class="grid items-end gap-6 lg:grid-cols-[1.2fr_1fr]">
-          <div>
-            <span class={eyebrow}><span class="rounded-full bg-lime-200 px-1.5 text-[10px] font-semibold text-lime-900">New</span> Change requests</span>
-            <h2 class:list={['mt-4', h2]}>Feedback pinned to the page, not buried in email</h2>
-          </div>
-          <p class={sub}>Clients click the thing they want changed. Each pin becomes a change request your coding agent can pick up with one copied prompt. When the fix deploys, GitCMS finds the preview and checks every pin against it.</p>
-        </div>
-        <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/change-requests/61" class="mt-8">
-          <div class="h-[440px]"><ChangeRequestMock /></div>
-        </AppWindow>
-        <div class="mt-6 grid gap-4 text-[14px] text-neutral-500 sm:grid-cols-3">
-          <p><span class="font-medium text-neutral-900">Select element.</span> Feedback lands on the exact heading, image or button.</p>
-          <p><span class="font-medium text-neutral-900">Copy prompt.</span> Hand open feedback to Claude Code, Codex or Cursor.</p>
-          <p><span class="font-medium text-neutral-900">Verify on the preview.</span> Pins show as changed, still matching, or gone.</p>
-        </div>
+    <section id="change-requests" class={section}>
+      <div class="text-center">
+        <span class={eyebrow}><span class="rounded-full bg-lime-200 px-1.5 text-[10px] font-semibold text-lime-900">New</span> Change requests</span>
+        <h2 class:list={['mx-auto mt-4 max-w-3xl', h2]}>Feedback pinned to the page, not buried in email</h2>
+        <p class:list={['mx-auto mt-3 max-w-2xl', sub]}>Clients click the thing they want changed. Each pin becomes a change request your coding agent can pick up with one copied prompt. When the fix deploys, GitCMS finds the preview and checks every pin against it.</p>
+      </div>
+      <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/change-requests/61" class="mt-12">
+        <div class="h-[440px]"><ChangeRequestMock /></div>
+      </AppWindow>
+      <div class="mt-3 grid gap-3 sm:grid-cols-3">
+        {[
+          ['Select element', 'Feedback lands on the exact heading, image or button.'],
+          ['Copy prompt', 'Hand open feedback to Claude Code, Codex or Cursor.'],
+          ['Verify on the preview', 'Pins show as changed, still matching, or gone.'],
+        ].map(([title, body]) => (
+          <div class:list={['p-5 text-[14px] leading-relaxed text-neutral-500', card]}><span class="block font-medium text-neutral-900">{title}</span>{body}</div>
+        ))}
       </div>
     </section>
 
     <!-- Integrations -->
-    <section class="border-t border-neutral-200 p-3 sm:p-4">
-      <div class:list={['grid gap-10 p-6 lg:grid-cols-[1fr_1.15fr] lg:p-12', card]}>
-        <div class="flex flex-col justify-center">
-          <span class={eyebrow}><Plug className="size-3.5" /> Integrations</span>
-          <h2 class:list={['mt-4', h2]}>Your stack. Your agents. Your search data.</h2>
-          <p class:list={['mt-4', sub]}>GitCMS works with the framework and host you already use. Connect Search Console, and the agents you already rely on, like OpenClaw, Hermes or Grok, become content agents: they see what ranks, draft the fix, and wait for a person to approve it.</p>
-          <a href="/agents" class="mt-6 inline-flex w-fit items-center gap-1.5 text-sm font-medium">Connect an agent <ArrowRight className="size-4" /></a>
-        </div>
-        <div class="space-y-5">
-          {integrations.map((group) => (
-            <div>
-              <div class="text-xs font-medium text-neutral-400">{group.group}</div>
-              <div class="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-6">
-                {group.items.map(([name, logo]) => (
-                  <div class="flex flex-col items-center gap-2 rounded-xl border border-neutral-200 py-3.5 text-[11px] text-neutral-500">
-                    <img src={logo} alt="" class="size-6" />{name}
-                  </div>
-                ))}
-              </div>
+    <section class={section}>
+      <div class="text-center">
+        <span class={eyebrow}><Plug className="size-3.5" /> Integrations</span>
+        <h2 class:list={['mx-auto mt-4 max-w-3xl', h2]}>Your stack. Your agents. Your search data.</h2>
+        <p class:list={['mx-auto mt-3 max-w-2xl', sub]}>GitCMS works with the framework and host you already use. Connect Search Console, and the agents you already rely on, like OpenClaw, Hermes or Grok, become content agents: they see what ranks, draft the fix, and wait for a person to approve it.</p>
+      </div>
+      <div class="mt-12 grid gap-3 lg:grid-cols-3">
+        {integrations.map((group) => (
+          <div class:list={['p-5', card]}>
+            <div class="text-sm font-medium text-neutral-900">{group.group}</div>
+            <div class="mt-4 grid grid-cols-3 gap-2">
+              {group.items.map(([name, logo]) => (
+                <div class="flex flex-col items-center gap-2 rounded-xl border border-neutral-200 py-3.5 text-[11px] text-neutral-500">
+                  <img src={logo} alt="" class="size-6" />{name}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </section>
 
     <!-- SEO + Search Console -->
-    <section id="seo" class="border-t border-neutral-200 px-6 py-20 lg:px-12">
+    <section id="seo" class={section}>
       <div class="text-center">
-        <span class={eyebrow}><Search className="size-3.5" /> SEO</span>
+        <span class={eyebrow}><Search className="size-3.5" /> SEO <span class="rounded-full bg-lime-200 px-1.5 text-[10px] font-semibold text-lime-900">Soon</span></span>
         <h2 class:list={['mt-4', h2]}>The SEO plugin, without the plugin</h2>
-        <p class:list={['mx-auto mt-3 max-w-2xl', sub]}>A search preview and a pre-publish checklist in the editor, and Search Console next to the page it’s about. The tools WordPress sites install plugins for.</p>
-        <div class="mt-4"><SoonBadge /></div>
+        <p class:list={['mx-auto mt-3 max-w-2xl', sub]}>A search preview and a pre-publish checklist in the editor, and Search Console next to the page it’s about. See what each page ranks for, and turn a page-two keyword into a content task for a writer or your agent.</p>
       </div>
-      <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/services/emergency-roof-repair?panel=seo" class="mt-10">
+      <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/services/emergency-roof-repair?panel=seo" class="mt-12">
         <div class="h-[440px]"><EditorMock panel="seo" /></div>
       </AppWindow>
-      <div class="mt-3 grid gap-3 lg:grid-cols-[1fr_1.2fr]">
-        <div class:list={['flex flex-col justify-center p-6 lg:p-10', card]}>
-          <h3 class="text-[26px] font-semibold leading-tight tracking-[-0.03em]">Search Console, next to the page it’s about</h3>
-          <p class="mt-3 text-[15px] leading-relaxed text-neutral-500">See which queries each page ranks for. Spot a page-two keyword and turn it into a content task, for a writer or for your agent.</p>
-        </div>
-        <div class:list={['h-[400px] overflow-hidden', card]}><SearchMock /></div>
-      </div>
+      <div class:list={['mt-3 h-[400px] overflow-hidden', card]}><SearchMock /></div>
     </section>
 
     <!-- Testimonials -->
-    <section class="border-t border-neutral-200 py-20 text-center">
-      <span class={eyebrow}><Quote className="size-3.5" /> Testimonials</span>
-      <h2 class:list={['mt-4 px-6', h2]}>Don’t just take our word for it</h2>
-      <p class:list={['mx-auto mt-3 max-w-xl px-6', sub]}>Agencies, writers and startups who moved their sites to code, and handed them over with GitCMS.</p>
-      <div class="mt-12 text-left"><Testimonials /></div>
+    <section class="border-t border-neutral-200 py-20">
+      <div class="px-6 text-center">
+        <span class={eyebrow}><Quote className="size-3.5" /> Testimonials</span>
+        <h2 class:list={['mt-4', h2]}>Don’t just take our word for it</h2>
+        <p class:list={['mx-auto mt-3 max-w-xl', sub]}>Agencies, writers and startups who moved their sites to code, and handed them over with GitCMS.</p>
+      </div>
+      <div class="mt-12"><Testimonials /></div>
     </section>
 
     <!-- Agencies -->
-    <section class="grid items-center gap-10 border-t border-neutral-200 px-6 py-20 lg:grid-cols-2 lg:px-12">
-      <div>
+    <section class={section}>
+      <div class="text-center">
         <span class={eyebrow}><Inbox className="size-3.5" /> For agencies</span>
         <h2 class:list={['mt-4', h2]}>Every client site, one workspace</h2>
-        <p class:list={['mt-4', sub]}>Build with Astro or Next.js and your favourite agent. Every client gets a safe place to edit, and you see every site, review and agent at a glance, with no WordPress to patch.</p>
-        <a href="/for-agencies" class="mt-6 inline-flex items-center gap-1.5 text-sm font-medium">GitCMS for agencies <ArrowRight className="size-4" /></a>
+        <p class:list={['mx-auto mt-3 max-w-2xl', sub]}>Build with Astro or Next.js and your favourite agent. Every client gets a safe place to edit, and you see every site, review and agent at a glance, with no WordPress to patch.</p>
+        <a href="/for-agencies" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium">GitCMS for agencies <ArrowRight className="size-4" /></a>
       </div>
-      <div class:list={['h-[300px] overflow-hidden', card]}><FleetMock /></div>
+      <div class:list={['mx-auto mt-12 h-[300px] max-w-3xl overflow-hidden', card]}><FleetMock /></div>
     </section>
 
     <!-- Cost comparator -->
-    <section class="border-t border-neutral-200 px-6 py-20 lg:px-12">
+    <section class={section}>
       <div class="text-center">
         <span class={eyebrow}><Sparkles className="size-3.5" /> The real cost</span>
         <h2 class:list={['mx-auto mt-4 max-w-3xl', h2]}>What a marketing site costs to run</h2>
         <p class:list={['mx-auto mt-3 max-w-2xl', sub]}>Builders charge per site and per editor. WordPress charges you in plugins and upkeep. A code-first site hosts for free; you only pay for the dashboard.</p>
       </div>
-      <div class="mt-10"><CostComparator /></div>
+      <div class="mt-12"><CostComparator /></div>
     </section>
 
     <!-- Pricing -->
-    <section id="pricing" class="border-t border-neutral-200 px-6 py-20 lg:px-12">
-      <h2 class:list={['text-center', h2]}>Pay for sites, not seats</h2>
-      <p class:list={['mx-auto mt-3 max-w-xl text-center', sub]}>Unlimited people and agents on paid plans. Bring your own AI; we don’t resell credits.</p>
-      <div class:list={['mt-10 p-4 sm:p-6', card]}><PricingTable /></div>
+    <section id="pricing" class={section}>
+      <div class="text-center">
+        <span class={eyebrow}><Rocket className="size-3.5" /> Pricing</span>
+        <h2 class:list={['mt-4', h2]}>Pay for sites, not seats</h2>
+        <p class:list={['mx-auto mt-3 max-w-xl', sub]}>Unlimited people and agents on paid plans. Bring your own AI; we don’t resell credits.</p>
+      </div>
+      <div class:list={['mt-12 p-4 sm:p-6', card]}><PricingTable /></div>
     </section>
 
     <!-- FAQ -->
-    <section class="grid gap-10 border-t border-neutral-200 px-6 py-20 lg:grid-cols-[1fr_2fr] lg:px-12">
-      <h2 class="text-[32px] font-semibold leading-tight tracking-[-0.03em]">Questions, answered</h2>
-      <FaqList />
+    <section class={section}>
+      <div class="text-center">
+        <span class={eyebrow}><Quote className="size-3.5" /> FAQ</span>
+        <h2 class:list={['mt-4', h2]}>Questions, answered</h2>
+      </div>
+      <div class:list={['mx-auto mt-12 max-w-3xl px-6 [&>div]:border-y-0', card]}><FaqList /></div>
     </section>
 
     <!-- CTA -->
