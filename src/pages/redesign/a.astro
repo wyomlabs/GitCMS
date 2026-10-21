@@ -16,10 +16,10 @@ import { publishedTestimonials } from '@/lib/testimonials'
 import ChangeRequestMock from '@/components/redesign/a/ChangeRequestMock.astro'
 import Testimonials from '@/components/redesign/a/Testimonials.astro'
 import CostComparator from '@/components/redesign/a/CostComparator.astro'
-import SiteNav from '@/components/redesign/sections/SiteNav.astro'
+import CalNav from '@/components/redesign/a/CalNav.astro'
 import PricingTable from '@/components/redesign/sections/PricingTable.astro'
 import FaqList from '@/components/redesign/sections/FaqList.astro'
-import SiteFooter from '@/components/redesign/sections/SiteFooter.astro'
+import CalFooter from '@/components/redesign/a/CalFooter.astro'
 import { CATEGORY, DAY_TWO_REQUESTS, SUBHEAD } from '@/components/redesign/content'
 
 // Companies whose marketing sites are code. Not customers; verify each
@@ -48,31 +48,32 @@ const tones: Record<string, string> = {
 }
 const eyebrow = 'inline-flex w-fit items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-xs font-medium text-neutral-700'
 const h2 = 'text-[34px] font-semibold leading-[1.1] tracking-[-0.035em] sm:text-[44px]'
-const sub = 'text-[16px] leading-relaxed text-neutral-500'
+const sub = 'text-[16px] leading-[1.6] text-[#898989]'
 const card = 'rounded-2xl border border-neutral-200 bg-white'
 // Every section: heading on the page background, visuals in white cards.
 const section = 'border-t border-neutral-200 px-6 py-24 sm:py-32 lg:px-16'
 ---
-<RedesignLayout variant="a" title="Variant A · Day Two" bodyClass="bg-[#f4f4f3]">
-  <SiteNav />
-  <div class="mx-auto max-w-[1200px] border-x border-neutral-200">
+<RedesignLayout variant="a" title="Variant A · Day Two" bodyClass="bg-[#f4f4f4]">
+  <CalNav />
+  <!-- The fixed header floats over this frame; pt clears it like cal.com. -->
+  <div class="mx-auto max-w-[1200px] border-x border-neutral-200 pt-[96px]">
     <!-- Hero -->
-    <section class="p-3 sm:p-4">
-      <div class:list={['grid items-center gap-14 overflow-hidden px-6 py-14 lg:grid-cols-[0.9fr_1.1fr] lg:py-24 lg:pl-16 lg:pr-0', card]}>
+    <section class="px-3 pb-3 sm:px-3">
+      <div class="grid min-h-[700px] items-center gap-14 overflow-hidden rounded-xl bg-white px-6 py-16 shadow-[0_1px_5px_-4px_rgba(36,36,36,0.7),0_4px_8px_rgba(36,36,36,0.05)] lg:grid-cols-[500px_1fr] lg:py-20 lg:pl-16 lg:pr-0">
         <div>
           <a href="#change-requests" class={eyebrow}>
             <span class="rounded-full bg-lime-200 px-1.5 text-[10px] font-semibold text-lime-900">New</span>
             Change requests on preview deployments <ArrowRight className="size-3" />
           </a>
-          <h1 class="mt-7 text-[42px] font-semibold leading-[1.03] tracking-[-0.04em] sm:text-[52px]">
+          <h1 class="mt-5 text-[44px] font-semibold leading-[1.1] tracking-[-0.045em] text-[#242424] sm:text-[64px]">
             Your agent built the site. <span class="text-neutral-400">Now your team can run it.</span>
           </h1>
-          <p class:list={['mt-6 max-w-lg text-[17px]', 'leading-relaxed text-neutral-500']}>{SUBHEAD}</p>
-          <div class="mt-9 flex flex-wrap gap-3">
-            <a href={loginUrl('/')} class="inline-flex items-center gap-2 rounded-lg bg-neutral-900 px-5 py-3 text-sm font-medium text-white hover:bg-neutral-800">Connect your site, free <ArrowRight className="size-4" /></a>
-            <a href="#product" class="inline-flex items-center rounded-lg border border-neutral-200 bg-white px-5 py-3 text-sm font-medium hover:bg-neutral-50">See how it works</a>
+          <p class="mt-5 max-w-[500px] text-[16px] leading-[1.5] text-[#898989]">{SUBHEAD}</p>
+          <div class="mt-7 flex flex-wrap gap-3">
+            <a href={loginUrl('/')} class="inline-flex h-10 items-center gap-2 rounded-xl bg-neutral-900 px-4 text-[14px] font-medium text-white hover:bg-neutral-800">Connect your site, free <ArrowRight className="size-4" /></a>
+            <a href="#product" class="inline-flex h-10 items-center rounded-xl border border-neutral-200 bg-white px-4 text-[14px] font-medium hover:bg-neutral-50">See how it works</a>
           </div>
-          <p class="mt-6 text-[13px] text-neutral-400">Free to explore · No migration · Works with your framework and host</p>
+          <p class="mt-4 text-[14px] text-[#898989]">Free to explore · No migration · Works with your framework and host</p>
         </div>
         <div class="min-w-0">
           <!-- Bleeds past the card's right edge, which crops it (cal.com). -->
@@ -321,8 +322,8 @@ const section = 'border-t border-neutral-200 px-6 py-24 sm:py-32 lg:px-16'
         <a href={loginUrl('/')} class="mt-8 inline-flex items-center gap-2 rounded-lg bg-lime-300 px-5 py-3 text-sm font-semibold text-neutral-950 hover:bg-lime-200">Connect your site, free <ArrowRight className="size-4" /></a>
       </div>
     </section>
+    <div class="border-t border-neutral-200"><CalFooter /></div>
   </div>
-  <SiteFooter />
 </RedesignLayout>
 
 <style>
@@ -330,4 +331,6 @@ const section = 'border-t border-neutral-200 px-6 py-24 sm:py-32 lg:px-16'
   .marquee { animation: a-marquee 36s linear infinite; }
   @keyframes a-marquee { to { transform: translateX(-50%); } }
   @media (prefers-reduced-motion: reduce) { .marquee { animation: none; } }
+  /* Anchor jumps land below the fixed header. */
+  :global(html) { scroll-padding-top: 88px; }
 </style>

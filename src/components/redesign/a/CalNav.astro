@@ -1,0 +1,39 @@
+---
+// Floating header (cal.com): fixed 8px from the top, inset to the page
+// frame, transparent over the hero and white once the page scrolls. It never
+// moves or resizes; only the fill changes.
+import { ChevronRight } from 'lucide-react'
+import { GitCMSLogo } from '@/components/gitcms-logo'
+import { loginUrl } from '@/lib/start-login'
+
+const links = [
+  { label: 'Product', href: '#product' },
+  { label: 'Agents', href: '/agents' },
+  { label: 'Docs', href: '/docs/' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Pricing', href: '#pricing' },
+]
+---
+<header class="pointer-events-none fixed inset-x-0 top-2 z-40 px-3">
+  <div data-nav class="pointer-events-auto mx-auto flex h-[57px] max-w-[1152px] items-center gap-8 rounded-2xl border border-transparent px-5 transition-[background-color,border-color] duration-200 data-[scrolled=true]:border-neutral-200 data-[scrolled=true]:bg-white sm:px-7">
+    <a href="/" class="flex items-center gap-2">
+      <GitCMSLogo className="size-7" />
+      <span class="font-logo text-[22px] font-medium tracking-tight text-neutral-900">GitCMS</span>
+    </a>
+    <nav class="mx-auto hidden items-center gap-9 text-[14px] text-neutral-700 md:flex">
+      {links.map((link) => <a href={link.href} class="transition-colors hover:text-neutral-950">{link.label}</a>)}
+    </nav>
+    <div class="ml-auto flex items-center gap-1 text-[14px] md:ml-0">
+      <a href={loginUrl('/')} class="hidden px-3 py-2 font-medium text-neutral-900 sm:inline">Sign in</a>
+      <a href={loginUrl('/')} class="inline-flex h-9 items-center gap-1 rounded-xl bg-neutral-900 pl-3.5 pr-2.5 font-medium text-white hover:bg-neutral-800">Get started <ChevronRight className="size-4 opacity-70" /></a>
+    </div>
+  </div>
+</header>
+
+<script>
+  for (const nav of document.querySelectorAll<HTMLElement>('[data-nav]')) {
+    const update = () => { nav.dataset.scrolled = String(window.scrollY > 8) }
+    window.addEventListener('scroll', update, { passive: true })
+    update()
+  }
+</script>

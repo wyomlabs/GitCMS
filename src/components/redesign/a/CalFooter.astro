@@ -1,0 +1,31 @@
+---
+// Footer on the page background inside the framed column (cal.com): brand
+// and short blurb on the left, four link columns on the right. No white band.
+import { GitCMSLogo } from '@/components/gitcms-logo'
+import { PRODUCT_DEFINITION } from '@/lib/positioning'
+import { DISCORD_INVITE_URL, SITE_REPOSITORY_URL } from '@/lib/support-links'
+
+const columns = [
+  { title: 'Product', links: [['Docs', '/docs/'], ['Changelog', '/changelog'], ['Agents and MCP', '/agents'], ['Pricing', '#pricing'], ['Free tools', '/tools']] },
+  { title: 'Use cases', links: [['Agencies', '/for-agencies'], ['Startups', '/for-startups'], ['Freelancers', '/for-freelancers'], ['Solo builders', '/for-solo-builders']] },
+  { title: 'Resources', links: [['Blog', '/blog'], ['Compare', '/compare'], ['Glossary', '/glossary'], ['Prompt library', '/prompts']] },
+  { title: 'Company', links: [['Manifesto', '/manifesto'], ['GitHub', SITE_REPOSITORY_URL], ['Discord', DISCORD_INVITE_URL], ['Terms', '/terms'], ['Privacy', '/privacy']] },
+] as const
+---
+<footer class="grid gap-14 px-6 pb-24 pt-20 lg:grid-cols-[1fr_2fr] lg:px-16">
+  <div class="max-w-xs">
+    <a href="/" class="flex items-center gap-2"><GitCMSLogo className="size-7" /><span class="font-logo text-[24px] font-medium tracking-tight">GitCMS</span></a>
+    <p class="mt-5 text-[14px] leading-relaxed text-[#898989]">{PRODUCT_DEFINITION}</p>
+    <p class="mt-6 text-[14px] text-[#898989]">© {new Date().getFullYear()} GitCMS</p>
+  </div>
+  <div class="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4">
+    {columns.map((column) => (
+      <div>
+        <div class="text-[16px] font-medium text-neutral-900">{column.title}</div>
+        <ul class="mt-5 space-y-4 text-[15px] text-neutral-600">
+          {column.links.map(([label, href]) => <li><a href={href} class="transition-colors hover:text-neutral-950">{label}</a></li>)}
+        </ul>
+      </div>
+    ))}
+  </div>
+</footer>
