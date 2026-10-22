@@ -15,7 +15,7 @@ export function getAgenticOnboardingPrompt(
     'Inspect the repo first. Prefer the CLI over hand-writing config.',
     '',
     'Preferred commands from the repo root:',
-    '- Interactive: npm init gitcms@latest',
+    '- Interactive: npx create-gitcms@latest',
     '- Agentic dry run: npx create-gitcms@latest --yes --dry-run',
     '- Agentic write: npx create-gitcms@latest --yes',
     '- When a site has no address in its config: add --website-url <site-root>=<website-url> for that site',
