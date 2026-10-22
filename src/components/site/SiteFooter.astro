@@ -18,9 +18,9 @@ const columns = [
   { title: 'Company', links: [['Manifesto', '/manifesto'], ['GitHub', SITE_REPOSITORY_URL], ['Discord', DISCORD_INVITE_URL], ['Terms', '/terms'], ['Privacy', '/privacy']] },
 ]
 const directory = [
-  { title: 'Agents', links: directoryAgentList.map((agent) => [agent.name, `/agents/${agent.slug}`]) },
-  { title: 'Frameworks', links: frameworkList.map((framework) => [framework.name, `/git-based-cms-for-${framework.slug}`]) },
-  { title: 'Comparisons', links: (await getComparisons()).map((entry) => [`vs ${entry.data.competitor}`, `/compare/${entry.id.replace(/\.mdx?$/, '')}`]) },
+  { title: 'Agents', links: directoryAgentList.map((agent) => ({ label: agent.name, href: `/agents/${agent.slug}`, logo: agent.logoPath })) },
+  { title: 'Frameworks', links: frameworkList.map((framework) => ({ label: framework.name, href: `/git-based-cms-for-${framework.slug}`, logo: framework.logo })) },
+  { title: 'Comparisons', links: (await getComparisons()).map((entry) => ({ label: `vs ${entry.data.competitor}`, href: `/compare/${entry.id.replace(/\.mdx?$/, '')}`, logo: undefined })) },
 ]
 ---
 <footer class="grid gap-14 border-t border-neutral-200 px-6 pb-24 pt-20 lg:grid-cols-[1fr_2fr] lg:px-16">
@@ -44,7 +44,12 @@ const directory = [
       <div class="flex flex-col gap-2 sm:flex-row sm:gap-6">
         <div class="w-28 shrink-0 font-medium text-neutral-900">{row.title}</div>
         <div class="flex flex-wrap gap-x-4 gap-y-1.5 text-neutral-500">
-          {row.links.map(([label, href]) => <a href={href} class="transition-colors hover:text-neutral-950">{label}</a>)}
+          {row.links.map(({ label, href, logo }) => (
+            <a href={href} class="inline-flex items-center gap-1.5 transition-colors hover:text-neutral-950">
+              {logo && <img src={logo} alt="" loading="lazy" class="size-3.5 shrink-0 object-contain" />}
+              {label}
+            </a>
+          ))}
         </div>
       </div>
     ))}

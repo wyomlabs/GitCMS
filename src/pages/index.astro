@@ -9,7 +9,7 @@ import MarketingLayout from '@/layouts/MarketingLayout.astro'
 import Section from '@/components/site/Section.astro'
 import SectionHeading from '@/components/site/SectionHeading.astro'
 import CtaBand from '@/components/site/CtaBand.astro'
-import { card, eyebrow } from '@/components/site/styles'
+import { card, eyebrow, heading } from '@/components/site/styles'
 import { faqStructuredData } from '@/lib/structured-data'
 import { DEFAULT_SEO_DESCRIPTION, PRODUCT_NAME, SITE_URL } from '@/lib/positioning'
 import { UPCOMING_PLANS } from '@/lib/pricing-plans'
@@ -90,7 +90,7 @@ const structuredData = {
           <span class="rounded-full bg-[#DCF986] px-1.5 text-[10px] font-semibold text-neutral-900">New</span>
           Change requests on preview deployments <ArrowRight className="size-3" />
         </a>
-        <h1 class="mt-5 text-[44px] font-semibold leading-[1.1] tracking-[-0.045em] text-[#242424] sm:text-[64px]">
+        <h1 class:list={['mt-5 text-[44px] leading-[1.1] text-[#242424] sm:text-[64px]', heading]}>
           Your agent built the site. <span class="text-neutral-400">Now your team can run it.</span>
         </h1>
         <p class="mt-5 max-w-[500px] text-[16px] leading-[1.5] text-[#898989]">{SUBHEAD}</p>

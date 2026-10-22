@@ -18,5 +18,6 @@ Set `PUBLIC_APP_URL` to point product links and tool embeds at a local or previe
 - `src/worker.ts` only serves static assets and redirects legacy `/:owner/:repo` links to the app. Keep pages asset-first, and add new top-level sections to its reserved segments.
 - Free tool pages are the `tools` collection. Their interactive part is framed from the app at `/embed/v1/tools/<slug>`; the slug must be one the app serves.
 - Marketing and content pages use `src/layouts/MarketingLayout.astro` and compose `src/components/site` (Section, SectionHeading, CtaBand, CopyButton, shared classes in `styles.ts`). Product demos live in `src/components/mock`. Use-case pages (`/for-*`) share one template; their copy is `src/lib/use-cases.ts`. Docs keep their own layout (`DocsShell`); don't move them onto MarketingLayout.
+- Page and section headings take their typeface from `heading`, `h1`, `h2` and `prose` in `src/components/site/styles.ts`. `HEADING_FONT` there switches every heading between the brand serif and Geist; don't set heading fonts per page.
 - Preserve the visual design unless a task asks for a redesign.
 - See `CONTENT.md` for writing guidelines.

@@ -2,6 +2,7 @@
 // Closing call to action: sign up, or hand the setup prompt to an agent.
 import { ArrowRight } from 'lucide-react'
 import CopyButton from './CopyButton.astro'
+import { heading } from './styles'
 import { AGENT_SETUP_PROMPT } from '@/lib/agent-setup-prompt'
 import { loginUrl } from '@/lib/start-login'
 
@@ -16,7 +17,7 @@ const {
 ---
 <section class="border-t border-neutral-200 p-3 sm:p-4">
   <div class="rounded-2xl bg-neutral-950 px-6 py-24 text-center text-white">
-    <h2 class="mx-auto max-w-2xl text-[36px] font-semibold leading-tight tracking-[-0.035em] sm:text-[48px]">{title}</h2>
+    <h2 class:list={['mx-auto max-w-2xl text-[36px] leading-tight sm:text-[48px]', heading]}>{title}</h2>
     <p class="mx-auto mt-4 max-w-lg text-neutral-400">{description}</p>
     <div class="mt-8 flex flex-wrap justify-center gap-3">
       <a href={loginUrl('/')} class="inline-flex h-10 items-center gap-2 rounded-xl bg-[#DCF986] px-5 text-sm font-semibold text-neutral-950 hover:bg-[#d4f47a]">Connect your site, free <ArrowRight className="size-4" /></a>

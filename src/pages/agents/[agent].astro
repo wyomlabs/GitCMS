@@ -11,7 +11,7 @@ import AgentChatMock from '@/components/mock/AgentChatMock.astro'
 import DemoWindow from '@/components/mock/DemoWindow.astro'
 import LinkGrid from '@/components/sections/LinkGrid.astro'
 import ConnectionMethods from '@/components/agents/ConnectionMethods.astro'
-import { card, eyebrow, h1, primaryButton, sub } from '@/components/site/styles'
+import { card, eyebrow, h1, heading, primaryButton, sub } from '@/components/site/styles'
 import {
   AGENT_FAMILY_LABELS,
   agentList,
@@ -59,12 +59,12 @@ const others = directoryAgentList
     <div class="grid gap-5 md:grid-cols-2">
       <div class:list={['p-8', card]}>
         <span class="text-[13px] font-medium text-[#898989]">{AGENT_FAMILY_LABELS[agent.family]}</span>
-        <h2 class="mt-3 text-[24px] font-semibold tracking-[-0.03em]">What is {agent.name}?</h2>
+        <h2 class:list={['mt-3 text-[26px]', heading]}>What is {agent.name}?</h2>
         <p class="mt-3 text-[15px] leading-relaxed text-[#898989]">{agent.whatIs}</p>
       </div>
       <div class:list={['p-8', card]}>
         <span class="text-[13px] font-medium text-[#898989]">Why connect it</span>
-        <h2 class="mt-3 text-[24px] font-semibold tracking-[-0.03em]">Why use {agent.name} with GitCMS?</h2>
+        <h2 class:list={['mt-3 text-[26px]', heading]}>Why use {agent.name} with GitCMS?</h2>
         <p class="mt-3 text-[15px] leading-relaxed text-[#898989]">{agent.whyGitcms}</p>
       </div>
     </div>

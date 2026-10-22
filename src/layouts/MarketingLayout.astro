@@ -1,11 +1,13 @@
 ---
 // Every marketing and content page (not docs): grey page background, the
-// floating header, a bordered 1200px column holding the page's sections, and
-// the footer inside that column. Pages compose Section and SectionHeading.
+// floating header, a bordered 1200px column holding the page's sections, the
+// footer inside that column, and the floating Discord support button. Pages
+// compose Section and SectionHeading.
 import BaseLayout from './BaseLayout.astro'
 import SiteNav from '@/components/site/SiteNav.astro'
 import SiteFooter from '@/components/site/SiteFooter.astro'
 import Sequencer from '@/components/site/Sequencer.astro'
+import DiscordSupportButton from '@/components/site/DiscordSupportButton.astro'
 import type { SeoOptions } from '@/lib/seo'
 
 interface Props extends SeoOptions {
@@ -21,6 +23,7 @@ interface Props extends SeoOptions {
       <SiteFooter />
     </div>
   </div>
+  <DiscordSupportButton />
   <Sequencer />
 </BaseLayout>
 

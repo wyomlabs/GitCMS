@@ -5,7 +5,7 @@ import Section from '@/components/site/Section.astro'
 import SectionHeading from '@/components/site/SectionHeading.astro'
 import CopyButton from '@/components/site/CopyButton.astro'
 import CtaBand from '@/components/site/CtaBand.astro'
-import { card } from '@/components/site/styles'
+import { card, heading } from '@/components/site/styles'
 import { PROMPT_CATEGORY_LABELS, type PromptCategory } from '@/components/resources/resource-mdx-components'
 import { promptText } from '@/lib/prompt-text'
 
@@ -23,7 +23,7 @@ const prompts = (await getCollection('prompts'))
     if (items.length === 0) return null
     return (
       <Section class="!py-20">
-        <h2 class="text-[26px] font-semibold tracking-[-0.03em]">{PROMPT_CATEGORY_LABELS[category]}</h2>
+        <h2 class:list={['text-[28px]', heading]}>{PROMPT_CATEGORY_LABELS[category]}</h2>
         <div class="mt-8 grid gap-5 md:grid-cols-2">
           {items.map((prompt) => (
             <div class:list={['relative flex flex-col p-6 transition-colors hover:border-neutral-300', card]}>

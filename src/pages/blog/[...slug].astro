@@ -12,7 +12,7 @@ import Breadcrumbs from '@/components/site/Breadcrumbs.astro'
 import CtaBand from '@/components/site/CtaBand.astro'
 import PostCard from '@/components/blog/PostCard.astro'
 import { BlogTOCSidebar } from '@/components/blog/blog-toc'
-import { card, h1, prose, sub } from '@/components/site/styles'
+import { card, h1, heading, prose, sub } from '@/components/site/styles'
 import { blogCategoryLabels } from '@/lib/blog'
 import { formatDate } from '@/lib/format-date'
 import ImageZoom from '@/components/docs/image-zoom.astro'
@@ -115,7 +115,7 @@ const mdxComponents = { ...defaultMdxComponents, Callout, Steps, Step, Card, Car
 
   {relatedPosts.length > 0 && (
     <Section>
-      <h2 class="text-[24px] font-semibold tracking-[-0.03em]">Related posts</h2>
+      <h2 class:list={['text-[26px]', heading]}>Related posts</h2>
       <div class="mt-8 grid gap-5 md:grid-cols-3">{relatedPosts.map((related) => <PostCard post={related} compact />)}</div>
     </Section>
   )}

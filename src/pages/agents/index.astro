@@ -8,7 +8,7 @@ import CtaBand from '@/components/site/CtaBand.astro'
 import FaqList from '@/components/site/FaqList.astro'
 import ProductTour from '@/components/sections/ProductTour.astro'
 import ConnectionMethods from '@/components/agents/ConnectionMethods.astro'
-import { card, primaryButton } from '@/components/site/styles'
+import { card, heading, primaryButton } from '@/components/site/styles'
 import { AGENT_FAMILY_DESCRIPTIONS, AGENT_FAMILY_LABELS, SHARED_AGENT_FAMILIES, SHARED_AGENT_FAQS, getAgentsByFamily } from '@/lib/agent-data'
 import { MCP_CONNECTOR_URL } from '@/lib/mcp'
 import { faqStructuredData } from '@/lib/structured-data'
@@ -35,7 +35,7 @@ const steps = [
     <div class="mx-auto mt-16 grid max-w-5xl gap-5 md:grid-cols-2">
       {SHARED_AGENT_FAMILIES.map((family) => (
         <div class:list={['flex flex-col p-8', card]}>
-          <h2 class="text-[22px] font-semibold tracking-[-0.02em]">{AGENT_FAMILY_LABELS[family]}s</h2>
+          <h2 class:list={['text-[24px]', heading]}>{AGENT_FAMILY_LABELS[family]}s</h2>
           <p class="mt-2 flex-1 text-[14.5px] leading-relaxed text-[#898989]">{AGENT_FAMILY_DESCRIPTIONS[family]}</p>
           <div class="mt-6 flex flex-wrap gap-2">
             {getAgentsByFamily(family).map((agent) => (

@@ -9,7 +9,7 @@ import FaqList from '@/components/site/FaqList.astro'
 import AgentSetupMock from '@/components/mock/AgentSetupMock.astro'
 import ProductTour from '@/components/sections/ProductTour.astro'
 import LinkGrid from '@/components/sections/LinkGrid.astro'
-import { card, eyebrow, h1, primaryButton, sub } from '@/components/site/styles'
+import { card, eyebrow, h1, heading, primaryButton, sub } from '@/components/site/styles'
 import { AGENT_SETUP_PROMPT, SETUP_CLI_COMMAND } from '@/lib/agent-setup-prompt'
 import {
   cliFrameworkId,
@@ -60,7 +60,7 @@ const tree = [
     <div class:list={['mt-16 grid gap-10 p-6 sm:p-8 lg:grid-cols-2 lg:items-center lg:gap-x-5', card]}>
       <div class="min-w-0 lg:pr-10">
         <span class="w-fit rounded-md bg-neutral-100 px-2 py-0.5 font-mono text-xs text-neutral-500">Setup</span>
-        <h2 class="mt-4 text-2xl font-semibold tracking-tight">Your agent sets it up in one prompt</h2>
+        <h2 class:list={['mt-4 text-[26px]', heading]}>Your agent sets it up in one prompt</h2>
         <p class="mt-2 text-[15px] leading-relaxed text-[#898989]">Paste the setup prompt into Claude Code, Codex or Cursor. It runs <code class="font-mono text-[13px] text-neutral-700">create-gitcms</code>, which reads your {framework.name} project, finds the content folders and the site’s address, and commits a small <code class="font-mono text-[13px] text-neutral-700">.gitcms</code> folder. Your build and hosting don’t change.</p>
         <a href="/docs/getting-started/cli-onboarding" class="mt-6 inline-block text-[13px] text-neutral-500 hover:text-neutral-900">or run <code class="font-mono text-[12px] text-neutral-700">{SETUP_CLI_COMMAND}</code> yourself →</a>
       </div>

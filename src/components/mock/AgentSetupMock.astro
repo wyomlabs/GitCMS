@@ -27,7 +27,7 @@ const dim = 'text-neutral-500'
 <div data-agent-setup class="relative">
   <div class="mb-3 flex flex-wrap gap-1.5" role="tablist" aria-label="Coding agent">
     {agents.map((agent, index) => (
-      <button type="button" role="tab" data-agent-tab={agent.key} data-label={agent.label} data-logo={agent.logo} data-invert={String(agent.invert)} aria-selected={index === 0 ? 'true' : 'false'} class="inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-2.5 py-1 text-[12px] font-medium text-neutral-500 transition-colors aria-selected:border-neutral-900 aria-selected:text-neutral-900">
+      <button type="button" role="tab" data-agent-tab={agent.key} data-label={agent.label} data-logo={agent.logo} data-invert={String(agent.invert)} aria-selected={index === 0 ? 'true' : 'false'} class="inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-2.5 py-1 text-[12px] font-medium text-neutral-500 transition-colors aria-selected:border-neutral-300 aria-selected:bg-neutral-50 aria-selected:text-neutral-900 aria-selected:shadow-[0_1px_2px_rgb(0_0_0/0.06)]">
         <img src={agent.logo} alt="" class="size-3.5" /> {agent.label}
       </button>
     ))}
