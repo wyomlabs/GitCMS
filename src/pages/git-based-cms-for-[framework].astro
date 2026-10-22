@@ -1,5 +1,5 @@
 ---
-import ContentLayout from '@/layouts/ContentLayout.astro'
+import MarketingLayout from '@/layouts/MarketingLayout.astro'
 import { FrameworkPage } from '@/components/landing/framework-page'
 import {
   frameworkList,
@@ -19,11 +19,11 @@ export function getStaticPaths() {
 const { framework } = Astro.props
 const structuredData = faqStructuredData(getFrameworkFaqs(framework))
 ---
-<ContentLayout
+<MarketingLayout
   title={`${getFrameworkLandingTitle(framework)} — GitCMS`}
   description={getFrameworkLandingDescription(framework)}
   path={`/git-based-cms-for-${framework.slug}`}
   structuredData={structuredData}
 >
   <FrameworkPage framework={framework} client:load />
-</ContentLayout>
+</MarketingLayout>

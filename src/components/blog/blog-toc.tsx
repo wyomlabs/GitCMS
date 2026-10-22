@@ -135,10 +135,10 @@ export function BlogTOCSidebar({ toc, shareTitle }: BlogTOCProps) {
   return (
     <AnchorProvider toc={toc}>
       <ScrollProvider containerRef={containerRef}>
-        <div className="sticky top-20">
+        <div className="sticky top-24">
           <div
             ref={containerRef}
-            className="h-[calc(100vh-8rem)] overflow-y-auto pe-4 [scrollbar-gutter:stable]"
+            className="h-[calc(100vh-9rem)] overflow-y-auto pe-4 [scrollbar-gutter:stable]"
           >
             <p className="mb-3 text-xs font-medium uppercase tracking-wider text-neutral-500">
               On this page

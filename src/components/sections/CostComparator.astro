@@ -3,7 +3,7 @@
 // WordPress versus a code-first site on free static hosting plus GitCMS.
 // List prices billed yearly, October 2026. WordPress plugins and upkeep are
 // estimates; the page says so.
-import { UPCOMING_PLANS } from '@/components/landing/pricing-plans'
+import { UPCOMING_PLANS } from '@/lib/pricing-plans'
 
 const options = [
   { key: 'wordpress', name: 'WordPress', logo: '/logos/wordpress.svg', note: 'Managed hosting $30, premium plugins ~$20, updates and security upkeep ~$50, per site' },
@@ -42,8 +42,8 @@ const options = [
 </div>
 
 <script>
-  import type { UpcomingPlan } from '@/components/landing/pricing-plans'
-  import { monthlyCost } from '@/components/landing/pricing-plans'
+  import type { UpcomingPlan } from '@/lib/pricing-plans'
+  import { monthlyCost } from '@/lib/pricing-plans'
 
   for (const root of document.querySelectorAll<HTMLElement>('[data-cost]')) {
     const plans: UpcomingPlan[] = JSON.parse(root.querySelector('[data-cost-plans]')?.textContent ?? '[]')

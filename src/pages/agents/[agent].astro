@@ -1,5 +1,5 @@
 ---
-import ContentLayout from '@/layouts/ContentLayout.astro'
+import MarketingLayout from '@/layouts/MarketingLayout.astro'
 import { AgentDetailPage } from '@/components/landing/agent-detail-page'
 import {
   agentList,
@@ -15,11 +15,11 @@ export function getStaticPaths() {
 const { agent } = Astro.props
 const structuredData = faqStructuredData(agent.faqs)
 ---
-<ContentLayout
+<MarketingLayout
   title={getAgentLandingTitle(agent)}
   description={getAgentLandingDescription(agent)}
   path={`/agents/${agent.slug}`}
   structuredData={structuredData}
 >
   <AgentDetailPage agent={agent} client:load />
-</ContentLayout>
+</MarketingLayout>

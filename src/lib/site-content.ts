@@ -1,6 +1,6 @@
-// Shared copy for the landing redesign variants (/redesign/a, /b, /c). Once a
-// variant wins, this becomes the homepage's content source.
-import { UPCOMING_PLANS } from '@/components/landing/pricing-plans'
+// Copy for the homepage and its demo mockups. B and C (pages/redesign/_b,
+// _c) still read a few of these until they're deleted.
+import { UPCOMING_PLANS } from '@/lib/pricing-plans'
 
 export const CATEGORY = 'The control plane for code-first websites'
 

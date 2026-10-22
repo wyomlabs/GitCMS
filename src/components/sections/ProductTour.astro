@@ -1,11 +1,11 @@
 ---
 // Tabbed walkthrough with a progress bar that advances on its own while the
 // tour is on screen. Picking a tab jumps to it and the tour carries on.
-import AppWindow from './mock/AppWindow.astro'
-import AgentChatMock from './mock/AgentChatMock.astro'
-import BoardMock from './mock/BoardMock.astro'
-import EditorMock from './mock/EditorMock.astro'
-import ReviewMock from './mock/ReviewMock.astro'
+import AppWindow from '@/components/mock/AppWindow.astro'
+import AgentChatMock from '@/components/mock/AgentChatMock.astro'
+import BoardMock from '@/components/mock/BoardMock.astro'
+import EditorMock from '@/components/mock/EditorMock.astro'
+import ReviewMock from '@/components/mock/ReviewMock.astro'
 
 const tabs = [
   { key: 'edit', label: 'Edit visually', blurb: 'Clients change copy, prices and photos in fields that match the site.', url: 'app.gitcms.dev/sites/acme-roofing.com/services/emergency-roof-repair' },

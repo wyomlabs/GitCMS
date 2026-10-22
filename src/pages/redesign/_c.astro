@@ -6,20 +6,20 @@ import { ArrowRight, Check, Copy } from 'lucide-react'
 import { GitCMSLogo } from '@/components/gitcms-logo'
 import { loginUrl } from '@/lib/start-login'
 import RedesignLayout from '@/components/redesign/RedesignLayout.astro'
-import AppWindow from '@/components/redesign/mock/AppWindow.astro'
-import AgentChatMock from '@/components/redesign/mock/AgentChatMock.astro'
-import ReviewMock from '@/components/redesign/mock/ReviewMock.astro'
-import BoardMock from '@/components/redesign/mock/BoardMock.astro'
-import EditorMock from '@/components/redesign/mock/EditorMock.astro'
-import SearchMock from '@/components/redesign/mock/SearchMock.astro'
-import FleetMock from '@/components/redesign/mock/FleetMock.astro'
-import ActivityMock from '@/components/redesign/mock/ActivityMock.astro'
+import AppWindow from '@/components/mock/AppWindow.astro'
+import AgentChatMock from '@/components/mock/AgentChatMock.astro'
+import ReviewMock from '@/components/mock/ReviewMock.astro'
+import BoardMock from '@/components/mock/BoardMock.astro'
+import EditorMock from '@/components/mock/EditorMock.astro'
+import SearchMock from '@/components/mock/SearchMock.astro'
+import FleetMock from '@/components/mock/FleetMock.astro'
+import ActivityMock from '@/components/mock/ActivityMock.astro'
 import SiteNav from '@/components/redesign/sections/SiteNav.astro'
 import SoonBadge from '@/components/redesign/sections/SoonBadge.astro'
-import PricingTable from '@/components/redesign/sections/PricingTable.astro'
-import FaqList from '@/components/redesign/sections/FaqList.astro'
+import PricingTable from '@/components/sections/PricingTable.astro'
+import FaqList from '@/components/site/FaqList.astro'
 import SiteFooter from '@/components/redesign/sections/SiteFooter.astro'
-import { AGENTS, CATEGORY, FRAMEWORKS, PILLARS, PROOF_POINTS, SUBHEAD } from '@/components/redesign/content'
+import { AGENTS, CATEGORY, FAQS, FRAMEWORKS, PILLARS, PROOF_POINTS, SUBHEAD } from '@/lib/site-content'
 
 const people = [
   { label: 'Marketing', avatar: 'M', color: 'bg-amber-500' },
@@ -223,7 +223,7 @@ const hatch = 'bg-[repeating-linear-gradient(135deg,transparent_0_6px,rgba(0,0,0
       <!-- FAQ -->
       <section class="border-t border-neutral-200 px-6 py-20 sm:px-10">
         <h2 class="text-center text-[38px] font-medium tracking-[-0.04em]">Frequently asked questions</h2>
-        <div class="mx-auto mt-10 max-w-3xl"><FaqList /></div>
+        <div class="mx-auto mt-10 max-w-3xl"><FaqList faqs={FAQS} /></div>
       </section>
 
       <!-- CTA -->

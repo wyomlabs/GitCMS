@@ -11,7 +11,7 @@ import {
   FeatureTryNowLink,
 } from './feature-learn-more-link'
 import { MockEditor } from './mock-editor'
-import { CodeFirstTeamsStrip } from './code-first-teams'
+import { CodeFirstTeamsStrip } from '@/components/resources/code-first-teams'
 import {
   FeatureSection,
   FeatureVideo,

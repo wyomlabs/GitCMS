@@ -1,43 +1,35 @@
 ---
-import ContentLayout from '@/layouts/ContentLayout.astro'
+import MarketingLayout from '@/layouts/MarketingLayout.astro'
+import Section from '@/components/site/Section.astro'
+import SectionHeading from '@/components/site/SectionHeading.astro'
+import CtaBand from '@/components/site/CtaBand.astro'
+import { card } from '@/components/site/styles'
 import { getChangelogs } from '@/lib/content'
+import { formatDate } from '@/lib/format-date'
+
 const entries = await getChangelogs()
-function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })
-}
+const slugOf = (filePath: string | undefined) => (filePath ?? '').split('/').at(-1)?.replace(/\.mdx?$/, '') ?? ''
 ---
-<ContentLayout title="Changelog — GitCMS" description="Product updates and release notes for GitCMS." path="/changelog">
-  <div class="mx-auto max-w-5xl px-6 py-16">
-    <h1 class="font-logo text-4xl font-normal tracking-tight sm:text-5xl">Changelog</h1>
-    <p class="mt-3 text-base text-neutral-500">Product updates and release notes.</p>
-    <div class="mt-14">
-      {entries.length === 0 && <p class="text-neutral-400">No releases yet. Check back soon.</p>}
-      {entries.map((entry, i) => (
-        <div class="grid grid-cols-[160px_32px_1fr] sm:grid-cols-[200px_32px_1fr]">
-          <div class="sticky top-8 h-fit pt-1 pr-4 text-right">
-            <time datetime={entry.data.date} class="text-sm font-medium text-neutral-500">{formatDate(entry.data.date)}</time>
-          </div>
-          <div class="flex flex-col items-center">
-            <div class="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-blue-600"></div>
-            {i < entries.length - 1 && <div class="mt-1 w-px flex-1 bg-neutral-200"></div>}
-          </div>
-          <div class="pb-10 pl-4">
-            <a href={`/changelog/${entry.filePath!.split('/').at(-1)!.replace(/\.mdx?$/, '')}`} class="group block">
-              <div class="overflow-hidden rounded-xl border border-neutral-200 bg-white transition-all hover:border-neutral-300 hover:shadow-md">
-                <div class="p-6">
-                  <span class="inline-block rounded-full bg-neutral-900 px-3 py-1 text-xs font-medium text-white">{entry.data.version}</span>
-                  <h2 class="mt-3 font-logo text-2xl font-medium tracking-tight text-neutral-900 transition-colors group-hover:text-neutral-600">{entry.data.title}</h2>
-                  {entry.data.description && <p class="mt-2 text-sm leading-relaxed text-neutral-600">{entry.data.description}</p>}
-                  <div class="mt-4 flex items-center gap-2 text-sm font-medium text-neutral-900">
-                    Read more
-                    <span class="transition-transform group-hover:translate-x-1">→</span>
-                  </div>
-                </div>
-              </div>
+<MarketingLayout title="Changelog — GitCMS" description="Product updates and release notes for GitCMS." path="/changelog">
+  <Section first>
+    <SectionHeading level={1} eyebrow="Changelog" title="What shipped" description="Product updates and release notes." />
+    {entries.length === 0 && <p class="mt-16 text-center text-[#898989]">No releases yet. Check back soon.</p>}
+    <ol class="mx-auto mt-16 max-w-4xl">
+      {entries.map((entry, index) => (
+        <li class="grid grid-cols-[1fr] gap-x-8 sm:grid-cols-[150px_1fr]">
+          <time datetime={entry.data.date} class="pb-3 pt-1 text-[13px] font-medium text-[#898989] sm:sticky sm:top-24 sm:h-fit sm:pb-0 sm:text-right">{formatDate(entry.data.date, 'long')}</time>
+          <div class:list={['relative pb-10 sm:border-l sm:border-neutral-200 sm:pl-8', index === entries.length - 1 && 'sm:border-transparent']}>
+            <span class="absolute -left-[5px] top-2 hidden size-2.5 rounded-full bg-[#B5D74E] ring-4 ring-[#f4f4f4] sm:block"></span>
+            <a href={`/changelog/${slugOf(entry.filePath)}`} class:list={['group block p-6 transition-colors hover:border-neutral-300', card]}>
+              <span class="rounded-md bg-neutral-100 px-2 py-0.5 font-mono text-[12px] text-neutral-600">{entry.data.version}</span>
+              <h2 class="mt-3 text-[20px] font-semibold tracking-[-0.02em] text-neutral-900 group-hover:text-neutral-600">{entry.data.title}</h2>
+              {entry.data.description && <p class="mt-2 text-[14.5px] leading-relaxed text-[#898989]">{entry.data.description}</p>}
+              <div class="mt-4 text-[13px] font-medium text-neutral-900">Read release notes →</div>
             </a>
           </div>
-        </div>
+        </li>
       ))}
-    </div>
-  </div>
-</ContentLayout>
+    </ol>
+  </Section>
+  <CtaBand />
+</MarketingLayout>

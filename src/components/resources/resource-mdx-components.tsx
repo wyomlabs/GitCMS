@@ -22,9 +22,6 @@ export const resourceMdxComponents = {
   GitCMSSetupPrompt,
 }
 
-export const proseClassName =
-  'prose prose-neutral prose-lg max-w-none prose-headings:font-logo prose-headings:font-medium prose-headings:tracking-tight prose-a:text-neutral-900 prose-a:underline-offset-2 [&_:is(h1,h2,h3,h4,h5,h6)_a]:no-underline'
-
 // Display order and labels for glossary categories (see source.config.ts).
 export const GLOSSARY_CATEGORY_LABELS = {
   building: 'Ways to build a website',

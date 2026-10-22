@@ -1,0 +1,32 @@
+---
+// Eyebrow pill, heading and dim subtext: the opening of every section. Use
+// `level={1}` for the page's own heading.
+import type { ComponentType } from 'react'
+import { badge as badgeClass, eyebrow as eyebrowClass, h1, h2, sub } from './styles'
+
+interface Props {
+  eyebrow?: string
+  icon?: ComponentType<{ className?: string }>
+  badge?: string
+  title: string
+  description?: string
+  level?: 1 | 2
+  align?: 'center' | 'left'
+  class?: string
+}
+const { eyebrow, icon: Icon, badge, title, description, level = 2, align = 'center', class: className = '' } = Astro.props
+const Heading = level === 1 ? 'h1' : 'h2'
+const centered = align === 'center'
+---
+<div class:list={[centered && 'text-center', className]}>
+  {eyebrow && (
+    <span class={eyebrowClass}>
+      {badge && <span class={badgeClass}>{badge}</span>}
+      {Icon && <Icon className="size-3.5" />}
+      {eyebrow}
+    </span>
+  )}
+  <Heading class:list={[eyebrow && 'mt-5', level === 1 ? h1 : h2, 'max-w-3xl', centered && 'mx-auto']}>{title}</Heading>
+  {description && <p class:list={['mt-5 max-w-2xl', sub, centered && 'mx-auto']}>{description}</p>}
+  <slot />
+</div>

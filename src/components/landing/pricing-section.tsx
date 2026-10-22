@@ -5,7 +5,7 @@ import {
   UPCOMING_PLANS,
   breakEvenMonths,
   getUpcomingPlan,
-} from './pricing-plans'
+} from '@/lib/pricing-plans'
 import {
   ComingSoonPill,
   FoundingCtaButton,

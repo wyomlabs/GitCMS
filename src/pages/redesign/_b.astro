@@ -6,18 +6,18 @@ import { ArrowRight, Check, X } from 'lucide-react'
 import { GitCMSLogo } from '@/components/gitcms-logo'
 import { loginUrl } from '@/lib/start-login'
 import RedesignLayout from '@/components/redesign/RedesignLayout.astro'
-import AppWindow from '@/components/redesign/mock/AppWindow.astro'
-import EditorMock from '@/components/redesign/mock/EditorMock.astro'
-import BoardMock from '@/components/redesign/mock/BoardMock.astro'
-import SearchMock from '@/components/redesign/mock/SearchMock.astro'
-import ReviewMock from '@/components/redesign/mock/ReviewMock.astro'
+import AppWindow from '@/components/mock/AppWindow.astro'
+import EditorMock from '@/components/mock/EditorMock.astro'
+import BoardMock from '@/components/mock/BoardMock.astro'
+import SearchMock from '@/components/mock/SearchMock.astro'
+import ReviewMock from '@/components/mock/ReviewMock.astro'
 import SiteNav from '@/components/redesign/sections/SiteNav.astro'
 import Squiggle from '@/components/redesign/sections/Squiggle.astro'
 import SoonBadge from '@/components/redesign/sections/SoonBadge.astro'
-import PricingTable from '@/components/redesign/sections/PricingTable.astro'
-import FaqList from '@/components/redesign/sections/FaqList.astro'
+import PricingTable from '@/components/sections/PricingTable.astro'
+import FaqList from '@/components/site/FaqList.astro'
 import SiteFooter from '@/components/redesign/sections/SiteFooter.astro'
-import { AGENTS, FRAMEWORKS, PROOF_POINTS, SUBHEAD, WORDPRESS_SWAP } from '@/components/redesign/content'
+import { AGENTS, FAQS, FRAMEWORKS, PROOF_POINTS, SUBHEAD, WORDPRESS_SWAP } from '@/lib/site-content'
 
 const audiences = [
   'Agencies handing sites to clients', 'Freelancers with ten sites to look after',
@@ -196,7 +196,7 @@ const note = 'font-logo text-[17px] italic leading-snug text-neutral-700'
   <!-- FAQ -->
   <section class="mx-auto max-w-3xl px-5 pb-24">
     <h2 class="mb-6 text-[28px] font-semibold tracking-[-0.02em]">Good questions</h2>
-    <FaqList />
+    <FaqList faqs={FAQS} />
   </section>
 
   <!-- CTA -->

@@ -17,5 +17,6 @@ Set `PUBLIC_APP_URL` to point product links and tool embeds at a local or previe
 - This site has no auth, database, or billing. Product CTAs point at the app (`PUBLIC_APP_URL`).
 - `src/worker.ts` only serves static assets and redirects legacy `/:owner/:repo` links to the app. Keep pages asset-first, and add new top-level sections to its reserved segments.
 - Free tool pages are the `tools` collection. Their interactive part is framed from the app at `/embed/v1/tools/<slug>`; the slug must be one the app serves.
+- Marketing and content pages use `src/layouts/MarketingLayout.astro` and compose `src/components/site` (Section, SectionHeading, CtaBand, CopyButton, shared classes in `styles.ts`). Product demos live in `src/components/mock`. Docs keep their own layout (`DocsShell`); don't move them onto MarketingLayout.
 - Preserve the visual design unless a task asks for a redesign.
 - See `CONTENT.md` for writing guidelines.

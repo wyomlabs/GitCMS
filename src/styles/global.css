@@ -349,6 +349,13 @@
   letter-spacing: -0.025em;
 }
 
+/* Marketing articles (blog, glossary, prompts, comparisons) use the site's sans headings. */
+.site-prose :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
 /* Public editorial pages stay light even when the saved docs theme is dark.
    Shiki still switches token colors from `.dark`, which paints pale syntax on
    these white cards. Keep the light tokens. Changelog blocks opt out because

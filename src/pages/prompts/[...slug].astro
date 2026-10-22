@@ -1,12 +1,16 @@
 ---
 import { getCollection, render } from 'astro:content'
-import ContentLayout from '@/layouts/ContentLayout.astro'
-import { LaunchCtaSection } from '@/components/landing/launch-cta-section'
+import MarketingLayout from '@/layouts/MarketingLayout.astro'
+import Section from '@/components/site/Section.astro'
+import ArticleHeader from '@/components/site/ArticleHeader.astro'
+import CopyButton from '@/components/site/CopyButton.astro'
+import CtaBand from '@/components/site/CtaBand.astro'
+import { card, prose } from '@/components/site/styles'
 import {
   PROMPT_CATEGORY_LABELS,
-  proseClassName,
   resourceMdxComponents,
 } from '@/components/resources/resource-mdx-components'
+import { promptText } from '@/lib/prompt-text'
 import { PRODUCT_NAME } from '@/lib/positioning'
 
 export async function getStaticPaths() {
@@ -18,6 +22,7 @@ export async function getStaticPaths() {
 const { prompt } = Astro.props
 const { Content } = await render(prompt)
 const slug = prompt.id.replace(/\.mdx?$/, '')
+const text = promptText(prompt.body)
 const allPrompts = await getCollection('prompts')
 const related = allPrompts
   .filter((candidate) => candidate.data.category === prompt.data.category && candidate.id !== prompt.id)
@@ -33,26 +38,25 @@ const structuredData = {
   publisher: { '@type': 'Organization', name: PRODUCT_NAME },
 }
 ---
-<ContentLayout title={`${prompt.data.title} — Prompt | GitCMS`} description={prompt.data.description} path={`/prompts/${slug}`} structuredData={structuredData}>
-  <article class="mx-auto max-w-3xl px-6 py-16">
-    <a href="/prompts" class="text-sm text-neutral-600 transition-colors hover:text-neutral-900">← Prompt library</a>
-    <header class="mb-10 mt-8">
-      <div class="flex flex-wrap items-center gap-2">
-        <span class="rounded-full bg-neutral-900 px-3 py-1 text-xs font-medium uppercase tracking-wider text-white">{PROMPT_CATEGORY_LABELS[prompt.data.category]}</span>
-        {prompt.data.agents.map((agent) => <span class="rounded-full border border-neutral-200 px-3 py-1 text-xs font-medium text-neutral-600">{agent}</span>)}
+<MarketingLayout title={`${prompt.data.title} — Prompt | GitCMS`} description={prompt.data.description} path={`/prompts/${slug}`} structuredData={structuredData}>
+  <Section first>
+    <ArticleHeader breadcrumbs={[{ label: 'Prompt library', href: '/prompts' }, { label: PROMPT_CATEGORY_LABELS[prompt.data.category] }]} title={prompt.data.title} description={prompt.data.description}>
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-2">
+        {prompt.data.agents.map((agent) => <span class="rounded-full bg-white px-2.5 py-0.5 text-[12px] font-medium text-neutral-600 ring-1 ring-neutral-200">{agent}</span>)}
       </div>
-      <h1 class="mt-5 font-logo text-3xl font-normal leading-tight tracking-tight text-neutral-900 sm:text-4xl md:text-[42px]">{prompt.data.title}</h1>
-      <p class="mt-4 text-base leading-relaxed text-neutral-600 sm:text-lg">{prompt.data.description}</p>
-    </header>
-    <div class={proseClassName}><Content components={resourceMdxComponents} /></div>
-    {related.length > 0 && (
-      <aside class="mt-14 border-t border-neutral-200 pt-8">
-        <h2 class="text-sm font-medium uppercase tracking-widest text-neutral-500">More {PROMPT_CATEGORY_LABELS[prompt.data.category].toLowerCase()} prompts</h2>
-        <ul class="mt-4 space-y-2">
-          {related.map((item) => <li><a href={`/prompts/${item.slug}`} class="text-base text-neutral-700 underline-offset-2 hover:text-neutral-900 hover:underline">{item.title}</a></li>)}
-        </ul>
-      </aside>
-    )}
-  </article>
-  <LaunchCtaSection heading="Agents draft." highlightedHeading="People approve." body="Connect your site to GitCMS, turn on review before publish, and every content change from a prompt waits for a person before it ships." landingPath="/prompts" landingVariant="prompts" />
-</ContentLayout>
+      {text && <div class="mt-8 flex justify-center"><CopyButton tone="lime" text={text} label="Copy prompt" copiedLabel="Copied. Paste it into your agent" /></div>}
+    </ArticleHeader>
+    <article class:list={['mx-auto mt-12 max-w-3xl px-6 py-10 sm:px-12 sm:py-14', card]}>
+      <div class={prose}><Content components={resourceMdxComponents} /></div>
+      {related.length > 0 && (
+        <aside class="mt-14 border-t border-neutral-200 pt-8">
+          <h2 class="text-[13px] font-medium text-[#898989]">More {PROMPT_CATEGORY_LABELS[prompt.data.category].toLowerCase()} prompts</h2>
+          <ul class="mt-3 space-y-2">
+            {related.map((item) => <li><a href={`/prompts/${item.slug}`} class="text-[15px] text-neutral-700 underline-offset-2 hover:text-neutral-900 hover:underline">{item.title}</a></li>)}
+          </ul>
+        </aside>
+      )}
+    </article>
+  </Section>
+  <CtaBand title="Agents draft. People approve." description="Connect your site to GitCMS, turn on review before publish, and every content change from a prompt waits for a person before it ships." />
+</MarketingLayout>

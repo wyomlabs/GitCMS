@@ -8,7 +8,7 @@ import { MockEditor } from './mock-editor'
 import { GitHubMark, McpEditorMockup, McpSectionEyebrow } from './mcp-shared'
 import type { PersonaContent } from './persona-content'
 import { PersonaPickerSection } from './persona-picker-section'
-import { CodeFirstTeamsStrip } from './code-first-teams'
+import { CodeFirstTeamsStrip } from '@/components/resources/code-first-teams'
 
 function PersonaVisual({
   visual,

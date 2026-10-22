@@ -1,0 +1,15 @@
+---
+// One page section inside the framed column. `first` drops the top hairline
+// for the section directly under the header.
+import { section } from './styles'
+
+interface Props {
+  id?: string
+  first?: boolean
+  class?: string
+}
+const { id, first = false, class: className = '' } = Astro.props
+---
+<section id={id} class:list={[section, first && 'border-t-0 pt-12 sm:pt-16', className]}>
+  <slot />
+</section>

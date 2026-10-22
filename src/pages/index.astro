@@ -1,14 +1,62 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro'
-import { LandingPage } from '@/components/landing/landing-page'
-import { homepageFaqs } from '@/components/landing/faq-section'
-import {
-  DEFAULT_SEO_DESCRIPTION,
-  LICENSE_PRICING,
-  PRODUCT_NAME,
-  SITE_URL,
-} from '@/lib/positioning'
+// Homepage — "Day Two". Live app UI in the hero, then agent setup, the Day
+// Two story, change requests, integrations, proof, and what running a site
+// really costs.
+import { ArrowRight, Check, GitBranch, Inbox, Plug, Quote, Rocket, Search, Sparkles, Terminal } from 'lucide-react'
+import { GitCMSLogo } from '@/components/gitcms-logo'
+import { loginUrl } from '@/lib/start-login'
+import MarketingLayout from '@/layouts/MarketingLayout.astro'
+import Section from '@/components/site/Section.astro'
+import SectionHeading from '@/components/site/SectionHeading.astro'
+import CtaBand from '@/components/site/CtaBand.astro'
+import { card, eyebrow } from '@/components/site/styles'
+import { faqStructuredData } from '@/lib/structured-data'
+import { DEFAULT_SEO_DESCRIPTION, PRODUCT_NAME, SITE_URL } from '@/lib/positioning'
+import { UPCOMING_PLANS } from '@/lib/pricing-plans'
+import ProductTour from '@/components/sections/ProductTour.astro'
+import AppWindow from '@/components/mock/AppWindow.astro'
+import EditorMock from '@/components/mock/EditorMock.astro'
+import SearchMock from '@/components/mock/SearchMock.astro'
+import FleetMock from '@/components/mock/FleetMock.astro'
+import HeroWidget from '@/components/mock/HeroWidget.astro'
+import { publishedTestimonials } from '@/lib/testimonials'
+import ChangeRequestMock from '@/components/mock/ChangeRequestMock.astro'
+import Testimonials from '@/components/sections/Testimonials.astro'
+import CostComparator from '@/components/sections/CostComparator.astro'
+import PricingTable from '@/components/sections/PricingTable.astro'
+import FaqList from '@/components/site/FaqList.astro'
+import CopyButton from '@/components/site/CopyButton.astro'
+import AgentSetupMock from '@/components/mock/AgentSetupMock.astro'
+import { AGENT_SETUP_PROMPT, SETUP_CLI_COMMAND } from '@/lib/agent-setup-prompt'
+import { CATEGORY, DAY_TWO_REQUESTS, FAQS, SUBHEAD } from '@/lib/site-content'
 
+// Companies whose marketing sites are code. Not customers; verify each
+// before this ships.
+const companies = [
+  { name: 'OpenAI', logo: '/logos/openai.svg' },
+  { name: 'Anthropic', logo: '/logos/anthropic.svg' },
+  { name: 'Cursor', logo: '/logos/cursor.svg' },
+  { name: 'Plausible', logo: '/logos/plausibleanalytics.svg' },
+  { name: 'OpenCode', logo: '/ai-logos/opencode.svg' },
+  { name: 'Supabase', logo: '/logos/supabase.svg' },
+  { name: 'Vercel', logo: '/logos/vercel.svg' },
+]
+
+const integrations = [
+  { group: 'Frameworks', items: [['Astro', '/ssg-logos/astro.svg'], ['Next.js', '/ssg-logos/nextjs.svg'], ['Nuxt', '/ssg-logos/nuxtjs.svg'], ['SvelteKit', '/ssg-logos/svelte.svg'], ['Hugo', '/ssg-logos/hugo.svg'], ['Eleventy', '/ssg-logos/eleventy.svg']] },
+  { group: 'Hosting and data', items: [['GitHub', '/brand-logos/github.svg'], ['Cloudflare', '/logos/cloudflare.svg'], ['Vercel', '/logos/vercel.svg'], ['Netlify', '/logos/netlify.svg'], ['Search Console', '/logos/google-search-console.svg'], ['AWS S3', '/logos/amazon-s3.svg']] },
+  { group: 'Agents', items: [['ChatGPT', '/ai-logos/openai-bw.svg'], ['Claude', '/ai-logos/claude-orange.svg'], ['Grok', '/ai-logos/grok-bot.svg'], ['OpenClaw', '/ai-logos/openclaw.svg'], ['Hermes', '/ai-logos/hermes.svg'], ['Muse', '/ai-logos/muse.svg']] },
+] as const
+
+const tones: Record<string, string> = {
+  amber: 'bg-amber-500',
+  sky: 'bg-sky-500',
+  emerald: 'bg-emerald-500',
+  orange: 'bg-white border border-neutral-200',
+}
+
+// The FAQ markup matches the questions on the page; offers mirror the plans
+// in the pricing table.
 const structuredData = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -21,27 +69,254 @@ const structuredData = {
       operatingSystem: 'Web',
       description: DEFAULT_SEO_DESCRIPTION,
       publisher: { '@id': `${SITE_URL}/#organization` },
-      offers: {
+      offers: UPCOMING_PLANS.map((plan) => ({
         '@type': 'Offer',
-        price: LICENSE_PRICING.sitePrice,
+        name: plan.name,
+        price: plan.monthlyPrice,
         priceCurrency: 'USD',
-        description: 'One-time site license',
-      },
-    },
-    {
-      '@type': 'FAQPage',
-      mainEntity: homepageFaqs.map((faq) => ({
-        '@type': 'Question',
-        name: faq.question,
-        acceptedAnswer: { '@type': 'Answer', text: faq.answer },
       })),
     },
+    { '@type': 'FAQPage', mainEntity: faqStructuredData(FAQS).mainEntity },
   ],
 }
 ---
-<BaseLayout
-  path="/"
-  structuredData={structuredData}
->
-  <LandingPage client:idle />
-</BaseLayout>
+<MarketingLayout path="/" structuredData={structuredData}>
+  <!-- Hero -->
+  <section class="px-3 pb-3 pt-2">
+    <div class="grid min-h-[700px] items-center gap-14 overflow-hidden rounded-xl bg-white px-6 py-16 shadow-[0_1px_5px_-4px_rgba(36,36,36,0.7),0_4px_8px_rgba(36,36,36,0.05)] lg:grid-cols-[500px_1fr] lg:py-20 lg:pl-16 lg:pr-0">
+      <div>
+        <a href="#change-requests" class={eyebrow}>
+          <span class="rounded-full bg-[#DCF986] px-1.5 text-[10px] font-semibold text-neutral-900">New</span>
+          Change requests on preview deployments <ArrowRight className="size-3" />
+        </a>
+        <h1 class="mt-5 text-[44px] font-semibold leading-[1.1] tracking-[-0.045em] text-[#242424] sm:text-[64px]">
+          Your agent built the site. <span class="text-neutral-400">Now your team can run it.</span>
+        </h1>
+        <p class="mt-5 max-w-[500px] text-[16px] leading-[1.5] text-[#898989]">{SUBHEAD}</p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href={loginUrl('/')} class="inline-flex h-10 items-center gap-2 rounded-xl bg-neutral-900 px-4 text-[14px] font-medium text-white hover:bg-neutral-800">Connect your site, free <ArrowRight className="size-4" /></a>
+          <CopyButton text={AGENT_SETUP_PROMPT} label="Set up with your agent" copiedLabel="Copied. Paste it into your agent" />
+        </div>
+        <p class="mt-4 text-[14px] text-[#898989]">Free to explore · No migration · Works with your framework and host</p>
+      </div>
+      <div class="min-w-0">
+        <!-- Bleeds past the card's right edge, which crops it (cal.com). -->
+        <div class="overflow-hidden lg:overflow-visible"><HeroWidget /></div>
+        <div class="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4 text-[13px] text-neutral-500">
+          <span class="flex items-center gap-2.5">
+            <span class="flex -space-x-2">
+              {publishedTestimonials.filter((item) => item.avatarSrc).map((item) => <img src={item.avatarSrc} alt="" class="size-7 rounded-full object-cover ring-2 ring-white" />)}
+            </span>
+            Loved by agencies and writers
+          </span>
+          <span class="flex items-center gap-2">
+            {['/ai-logos/claude-orange.svg', '/ai-logos/openai-bw.svg', '/ai-logos/cursor.svg', '/ai-logos/pi.svg'].map((logo) => <img src={logo} alt="" class="size-4" />)}
+            Works with your agents
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Companies -->
+  <section class="grid items-center gap-6 border-y border-neutral-200 px-8 py-12 md:grid-cols-[170px_1fr] lg:px-16">
+    <p class="text-sm leading-snug text-neutral-500">The best product sites ship as code now</p>
+    <div class="group overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_12%,black_88%,transparent)]">
+      <div class="marquee flex w-max items-center group-hover:[animation-play-state:paused]">
+        {[0, 1].map((copy) => (
+          <div class="flex items-center gap-14 pr-14" aria-hidden={copy === 1 ? 'true' : undefined}>
+            {companies.map((company) => (
+              <span class="flex shrink-0 items-center gap-2 text-[17px] font-semibold tracking-tight text-neutral-500"><img src={company.logo} alt="" class="size-[18px] opacity-60" />{company.name}</span>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <Section class="border-t-0">
+    <SectionHeading eyebrow="How it works" icon={Rocket} title="From repository to client-ready in minutes" description="No migration and no new hosting. Your agent sets GitCMS up from what’s already in your repo." />
+    <!-- 50/50 so it lines up with cards 02 and 03 below: with 32px padding and
+         the same 20px gap as the cards, the terminal starts at card 03's edge. -->
+    <div class:list={['mt-16 grid gap-10 p-6 text-left sm:p-8 lg:grid-cols-2 lg:items-center lg:gap-x-5', card]}>
+      <div class="min-w-0">
+        <span class="w-fit rounded-md bg-neutral-100 px-2 py-0.5 font-mono text-xs text-neutral-500">01</span>
+        <h3 class="mt-4 text-2xl font-semibold tracking-tight">Hand your agent one prompt</h3>
+        <p class="mt-2 text-[15px] leading-relaxed text-neutral-500">Paste it into Claude Code, Codex, Cursor or any coding agent. It runs <code class="font-mono text-[13px] text-neutral-700">create-gitcms</code>, which finds your sites, framework, content folders and website address, then commits the setup.</p>
+        <ul class="mt-6 space-y-2 text-[14px] text-neutral-600">
+          {['Every site in the repository, monorepos included', 'Collections, media folder and frontmatter format', 'Nothing to migrate: config is a folder in your repo'].map((item) => (
+            <li class="flex items-start gap-2"><Check className="mt-0.5 size-4 shrink-0 text-emerald-600" />{item}</li>
+          ))}
+        </ul>
+        <div class="mt-8 flex flex-col items-start gap-3">
+          <CopyButton tone="lime" text={AGENT_SETUP_PROMPT} label="Copy setup prompt" copiedLabel="Copied. Paste it into your agent" />
+          <a href="/docs/getting-started/cli-onboarding" class="text-[13px] text-neutral-500 hover:text-neutral-900">or run <code class="font-mono text-[12px] text-neutral-700">{SETUP_CLI_COMMAND}</code> yourself →</a>
+        </div>
+      </div>
+      <div class="min-w-0"><AgentSetupMock /></div>
+    </div>
+    <div class="mt-5 grid gap-5 text-left md:grid-cols-2">
+      <div class:list={['flex min-w-0 flex-col p-6 sm:p-8', card]}>
+        <span class="w-fit rounded-md bg-neutral-100 px-2 py-0.5 font-mono text-xs text-neutral-500">02</span>
+        <h3 class="mt-4 text-lg font-semibold tracking-tight">Invite people and agents</h3>
+        <p class="mt-1 text-[15px] leading-relaxed text-neutral-500">Clients and teammates by email. Agents over MCP, with the same rules.</p>
+        <div class="mt-8 space-y-2.5 rounded-xl border border-neutral-200 bg-neutral-50 p-5 text-[12px]">
+          {[['J', 'bg-amber-500', 'jess@acmeroofing.com', 'Client'], ['S', 'bg-sky-500', 'sam@brightside.studio', 'Editor']].map(([initial, color, email, role]) => (
+            <div class="flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-2.5 py-2">
+              <span class:list={['grid size-5 place-items-center rounded-full text-[9px] font-semibold text-white', color]}>{initial}</span>{email}<span class="ml-auto text-neutral-400">{role}</span>
+            </div>
+          ))}
+          <div class="flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-2.5 py-2">
+            <img src="/ai-logos/claude-orange.svg" alt="" class="size-4" /><img src="/ai-logos/openai-bw.svg" alt="" class="size-4" />Agents connected<span class="ml-auto text-neutral-400">Draft only</span>
+          </div>
+        </div>
+      </div>
+      <div class:list={['flex min-w-0 flex-col p-6 sm:p-8', card]}>
+        <span class="w-fit rounded-md bg-neutral-100 px-2 py-0.5 font-mono text-xs text-neutral-500">03</span>
+        <h3 class="mt-4 text-lg font-semibold tracking-tight">Review on a real preview</h3>
+        <p class="mt-1 text-[15px] leading-relaxed text-neutral-500">Every draft gets the preview deployment your host already builds. GitCMS finds it for you.</p>
+        <div class="mt-8 space-y-2.5 rounded-xl border border-neutral-200 bg-neutral-50 p-5 text-[12px]">
+          <div class="flex items-center gap-2 whitespace-nowrap rounded-md border border-neutral-200 bg-white px-2.5 py-2"><span class="size-1.5 shrink-0 rounded-full bg-emerald-500"></span> Preview ready <span class="ml-auto min-w-0 truncate text-neutral-400">draft-57.pages.dev</span></div>
+          <div class="grid grid-cols-3 gap-1.5">
+            {[['Cloudflare', '/logos/cloudflare.svg'], ['Vercel', '/logos/vercel.svg'], ['Netlify', '/logos/netlify.svg']].map(([name, logo]) => (
+              <span class="flex flex-col items-center gap-1.5 rounded-md border border-neutral-200 bg-white px-1 py-2.5 text-neutral-600"><img src={logo} alt="" class="size-4" />{name}</span>
+            ))}
+          </div>
+          <div class="flex items-center gap-2 rounded-md bg-neutral-900 px-2.5 py-2 text-white">Open preview <ArrowRight className="ml-auto size-3.5" /></div>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Day One → Day Two -->
+  <Section>
+    <SectionHeading eyebrow={CATEGORY} icon={Terminal} title="AI made websites cheap to build. It didn’t make them easy to run." description="The site shipped in an afternoon. Then everyone needs a change, and none of them should need your codebase, or you." />
+    <div class="mt-16 grid items-center gap-8 text-left lg:grid-cols-[1fr_auto_1.3fr_auto_1fr]">
+      <div class="rounded-xl border border-neutral-800 bg-neutral-950 p-4 font-mono text-[12px] text-neutral-300">
+        <div class="flex items-center gap-1.5 text-neutral-500"><Terminal className="size-3.5" /> Day one</div>
+        <div class="mt-3"><span class="text-[#DCF986]">❯</span> claude "build our new roofing site"</div>
+        <div class="mt-1 text-neutral-500">Astro · 14 pages · deployed</div>
+        <div class="mt-3 flex items-center gap-1.5 text-emerald-400"><Check className="size-3.5" /> Live at acme-roofing.com</div>
+      </div>
+      <div class="hidden text-center text-[10px] font-semibold uppercase tracking-[0.2em] text-neutral-400 lg:block">Day<br />two</div>
+      <div class="grid gap-3">
+        {DAY_TWO_REQUESTS.map((request) => (
+          <div class="flex items-center gap-3 rounded-xl border border-neutral-200 bg-white px-3 py-2.5">
+            <span class:list={['grid size-7 place-items-center rounded-full text-[11px] font-semibold text-white', tones[request.tone]]}>
+              {request.avatar === 'agent' ? <img src="/ai-logos/claude-orange.svg" alt="" class="size-4" /> : request.avatar}
+            </span>
+            <span class="text-sm font-medium">{request.who}</span>
+            <span class="truncate text-sm text-neutral-500">{request.ask}</span>
+          </div>
+        ))}
+      </div>
+      <svg viewBox="0 0 72 180" class="hidden h-44 w-[72px] text-neutral-400 lg:block" aria-hidden="true">
+        {[22, 67, 113, 158].map((y) => <path d={`M0 ${y} C 34 ${y}, 30 90, 62 90`} fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" class="rd-flow" />)}
+        <path d="M60 84 L70 90 L60 96" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <div class:list={['p-4', card]}>
+        <div class="flex items-center gap-2"><GitCMSLogo className="size-6" /><span class="font-logo text-lg font-medium">GitCMS</span></div>
+        <div class="mt-3 space-y-1.5 text-[13px]">
+          {[['Draft', 'bg-sky-500'], ['Review', 'bg-violet-500'], ['Published', 'bg-emerald-500']].map(([label, dot]) => (
+            <div class="flex items-center gap-2 rounded-md border border-neutral-200 px-2.5 py-1.5"><span class:list={['size-1.5 rounded-full', dot]}></span>{label}</div>
+          ))}
+        </div>
+        <div class="mt-3 text-[12px] text-neutral-500">Every publish is a commit to your repo.</div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Product tour -->
+  <Section id="product">
+    <SectionHeading eyebrow="One workflow" icon={GitBranch} title="People and agents, same rules" description="Whoever starts the change, it ends the same way: a draft, a review, and a commit." />
+    <div class="mt-16 text-left"><ProductTour /></div>
+  </Section>
+
+  <!-- Change requests -->
+  <Section id="change-requests">
+    <SectionHeading eyebrow="Change requests" badge="New" title="Feedback pinned to the page, not buried in email" description="Clients click the thing they want changed. Each pin becomes a change request your coding agent can pick up with one copied prompt. When the fix deploys, GitCMS finds the preview and checks every pin against it." />
+    <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/change-requests/61" class="mt-16">
+      <div class="h-[440px]"><ChangeRequestMock /></div>
+    </AppWindow>
+    <div class="mt-3 grid gap-5 sm:grid-cols-3">
+      {[
+        ['Select element', 'Feedback lands on the exact heading, image or button.'],
+        ['Copy prompt', 'Hand open feedback to Claude Code, Codex or Cursor.'],
+        ['Verify on the preview', 'Pins show as changed, still matching, or gone.'],
+      ].map(([title, body]) => (
+        <div class:list={['p-7 text-[14px] leading-relaxed text-neutral-500', card]}><span class="block font-medium text-neutral-900">{title}</span>{body}</div>
+      ))}
+    </div>
+  </Section>
+
+  <!-- Integrations -->
+  <Section>
+    <SectionHeading eyebrow="Integrations" icon={Plug} title="Your stack. Your agents. Your search data." description="GitCMS works with the framework and host you already use. Connect Search Console, and the agents you already rely on, like OpenClaw, Hermes or Grok, become content agents: they see what ranks, draft the fix, and wait for a person to approve it." />
+    <div class="mt-16 grid gap-5 lg:grid-cols-3">
+      {integrations.map((group) => (
+        <div class:list={['p-7', card]}>
+          <div class="text-sm font-medium text-neutral-900">{group.group}</div>
+          <div class="mt-4 grid grid-cols-3 gap-2">
+            {group.items.map(([name, logo]) => (
+              <div class="flex flex-col items-center gap-2 rounded-xl border border-neutral-200 py-3.5 text-[11px] text-neutral-500">
+                <img src={logo} alt="" class="size-6" />{name}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </Section>
+
+  <!-- SEO + Search Console -->
+  <Section id="seo">
+    <SectionHeading eyebrow="SEO" icon={Search} badge="Soon" title="The SEO plugin, without the plugin" description="A search preview and a pre-publish checklist in the editor, and Search Console next to the page it’s about. See what each page ranks for, and turn a page-two keyword into a content task for a writer or your agent." />
+    <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/services/emergency-roof-repair?panel=seo" class="mt-16">
+      <div class="h-[440px]"><EditorMock panel="seo" /></div>
+    </AppWindow>
+    <div class:list={['mt-3 h-[400px] overflow-hidden', card]}><SearchMock /></div>
+  </Section>
+
+  <!-- Testimonials -->
+  <!-- Full-bleed so the testimonial strip runs edge to edge. -->
+  <Section class="!px-0">
+    <SectionHeading class="px-6" eyebrow="Testimonials" icon={Quote} title="Don’t just take our word for it" description="Agencies, writers and startups who moved their sites to code, and handed them over with GitCMS." />
+    <div class="mt-16"><Testimonials /></div>
+  </Section>
+
+  <!-- Agencies -->
+  <Section>
+    <SectionHeading eyebrow="For agencies" icon={Inbox} title="Every client site, one workspace" description="Build with Astro or Next.js and your favourite agent. Every client gets a safe place to edit, and you see every site, review and agent at a glance, with no WordPress to patch.">
+      <a href="/for-agencies" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium">GitCMS for agencies <ArrowRight className="size-4" /></a>
+    </SectionHeading>
+    <div class:list={['mx-auto mt-16 h-[300px] max-w-3xl overflow-hidden', card]}><FleetMock /></div>
+  </Section>
+
+  <!-- Cost comparator -->
+  <Section>
+    <SectionHeading eyebrow="The real cost" icon={Sparkles} title="What a marketing site costs to run" description="Builders charge per site and per editor. WordPress charges you in plugins and upkeep. A code-first site hosts for free; you only pay for the dashboard." />
+    <div class="mt-16"><CostComparator /></div>
+  </Section>
+
+  <!-- Pricing -->
+  <Section id="pricing">
+    <SectionHeading eyebrow="Pricing" icon={Rocket} title="Pay for sites, not seats" description="Unlimited people and agents on paid plans. Bring your own AI; we don’t resell credits." />
+    <div class:list={['mt-16 p-5 sm:p-8', card]}><PricingTable /></div>
+  </Section>
+
+  <!-- FAQ -->
+  <Section>
+    <SectionHeading eyebrow="FAQ" icon={Quote} title="Questions, answered" />
+    <div class:list={['mx-auto mt-16 max-w-3xl px-8 py-3 [&>div]:border-y-0', card]}><FaqList faqs={FAQS} /></div>
+  </Section>
+
+  <CtaBand />
+</MarketingLayout>
+
+<style>
+  /* Logo strip: one copy's width per loop, so the seam never shows. */
+  .marquee { animation: a-marquee 36s linear infinite; }
+  @keyframes a-marquee { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .marquee { animation: none; } }
+</style>
