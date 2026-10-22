@@ -1,7 +1,7 @@
 ---
 // The CMS frame from apps/web: sidebar with collections, top bar with the
 // site switcher breadcrumb and page actions. Mirrors DESIGN.md "Layout".
-import { BookOpen, FileText, Folder, LayoutGrid, MapPin, Newspaper, Settings, SlidersHorizontal, Wrench } from 'lucide-react'
+import { FileText, Folder, LayoutGrid, MapPin, Newspaper, Settings, SlidersHorizontal, Wrench } from 'lucide-react'
 import { GitCMSLogo } from '@/components/gitcms-logo'
 
 interface Props {
@@ -61,7 +61,6 @@ const tools = [
   </aside>
   <div class="flex min-w-0 flex-1 flex-col">
     <header class="flex h-10 shrink-0 items-center gap-2 border-b border-neutral-200 px-3">
-      <BookOpen className="size-3.5 text-neutral-400" />
       <span class="flex min-w-0 items-center gap-1.5 truncate text-neutral-500">
         <span class="grid size-3.5 shrink-0 place-items-center rounded-[3px] bg-amber-500 text-[8px] font-bold uppercase text-white">{site[0]}</span>
         <span>{site}</span>

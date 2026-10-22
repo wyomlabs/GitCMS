@@ -1,6 +1,6 @@
 ---
-// Tabbed walkthrough with a progress bar that advances on its own (pauses on
-// hover, stops once someone picks a tab).
+// Tabbed walkthrough with a progress bar that advances on its own while the
+// tour is on screen. Picking a tab jumps to it and the tour carries on.
 import AppWindow from './mock/AppWindow.astro'
 import AgentChatMock from './mock/AgentChatMock.astro'
 import BoardMock from './mock/BoardMock.astro'
@@ -50,13 +50,15 @@ const tabs = [
     const panels = [...tour.querySelectorAll<HTMLElement>('[data-tour-panel]')]
     const url = tour.querySelector<HTMLElement>('[data-window-url]')
     let current = 0
-    let started = performance.now()
-    let auto = !reduce
-    let paused = false
+    // Time spent on the current tab while the tour is on screen. Like the
+    // demos, the clock only runs while visible, so bar and demo stay in step.
+    let elapsed = 0
+    let last = performance.now()
+    let visible = false
 
     const show = (index: number) => {
       current = index
-      started = performance.now()
+      elapsed = 0
       tabs.forEach((tab, i) => tab.setAttribute('aria-selected', String(i === index)))
       panels.forEach((panel, i) => {
         const active = i === index
@@ -70,31 +72,29 @@ const tabs = [
       if (url) url.textContent = panels[index]?.dataset.url ?? ''
       tabs.forEach((tab, i) => {
         const bar = tab.querySelector<HTMLElement>('[data-tour-bar]')
-        if (bar) bar.style.width = i < index || (!auto && i === index) ? '100%' : '0%'
+        if (bar) bar.style.width = i < index || (reduce && i === index) ? '100%' : '0%'
       })
     }
 
-    tabs.forEach((tab, index) => tab.addEventListener('click', () => {
-      auto = false
-      show(index)
-    }))
-    tour.addEventListener('mouseenter', () => { paused = true })
-    tour.addEventListener('mouseleave', () => {
-      paused = false
-      started = performance.now()
-    })
+    // Picking a tab jumps there and keeps the tour cycling from that point.
+    tabs.forEach((tab, index) => tab.addEventListener('click', () => show(index)))
 
     const tick = (now: number) => {
-      if (auto && !paused) {
-        const progress = Math.min(1, (now - started) / Number(tabs[current]?.dataset.duration ?? 9000))
+      if (visible) {
+        elapsed += now - last
+        const progress = Math.min(1, elapsed / Number(tabs[current]?.dataset.duration ?? 9000))
         const bar = tabs[current]?.querySelector<HTMLElement>('[data-tour-bar]')
         if (bar) bar.style.width = `${progress * 100}%`
         if (progress >= 1) show((current + 1) % tabs.length)
       }
+      last = now
       requestAnimationFrame(tick)
     }
     show(0)
-    if (auto) requestAnimationFrame(tick)
+    if (!reduce) {
+      new IntersectionObserver(([entry]) => { visible = Boolean(entry?.isIntersecting) }, { threshold: 0.25 }).observe(tour)
+      requestAnimationFrame(tick)
+    }
   }
 </script>
 
