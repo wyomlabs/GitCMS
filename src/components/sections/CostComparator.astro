@@ -5,6 +5,13 @@
 // estimates; the page says so.
 import { UPCOMING_PLANS } from '@/lib/pricing-plans'
 
+interface Props {
+  /** Starting slider values, so each audience sees its own numbers first. */
+  sites?: number
+  editors?: number
+}
+const { sites = 3, editors = 4 } = Astro.props
+
 const options = [
   { key: 'wordpress', name: 'WordPress', logo: '/logos/wordpress.svg', note: 'Managed hosting $30, premium plugins ~$20, updates and security upkeep ~$50, per site' },
   { key: 'webflow', name: 'Webflow', logo: '/logos/webflow.svg', note: 'Premium site plan $25 per site; workspace seats extra' },
@@ -14,10 +21,10 @@ const options = [
 ---
 <div data-cost class="grid gap-5 lg:grid-cols-[320px_1fr]">
   <div class="rounded-2xl border border-neutral-200 bg-white p-8">
-    <label class="flex items-baseline justify-between text-sm text-neutral-600" for="cost-sites">Websites <span data-out="sites" class="text-2xl font-semibold tabular-nums text-neutral-900">3</span></label>
-    <input id="cost-sites" data-in="sites" type="range" min="1" max="25" value="3" class="mt-2 w-full accent-neutral-900" />
-    <label class="mt-6 flex items-baseline justify-between text-sm text-neutral-600" for="cost-editors">People editing <span data-out="editors" class="text-2xl font-semibold tabular-nums text-neutral-900">4</span></label>
-    <input id="cost-editors" data-in="editors" type="range" min="1" max="20" value="4" class="mt-2 w-full accent-neutral-900" />
+    <label class="flex items-baseline justify-between text-sm text-neutral-600" for="cost-sites">Websites <span data-out="sites" class="text-2xl font-semibold tabular-nums text-neutral-900">{sites}</span></label>
+    <input id="cost-sites" data-in="sites" type="range" min="1" max="25" value={sites} class="mt-2 w-full accent-neutral-900" />
+    <label class="mt-6 flex items-baseline justify-between text-sm text-neutral-600" for="cost-editors">People editing <span data-out="editors" class="text-2xl font-semibold tabular-nums text-neutral-900">{editors}</span></label>
+    <input id="cost-editors" data-in="editors" type="range" min="1" max="20" value={editors} class="mt-2 w-full accent-neutral-900" />
     <p class="mt-6 text-[13px] leading-relaxed text-neutral-500">The site itself costs a coding agent an afternoon. What you pay for every month is running it.</p>
   </div>
   <div class="rounded-2xl border border-neutral-200 bg-white p-8">

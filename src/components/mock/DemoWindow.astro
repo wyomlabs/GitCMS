@@ -1,0 +1,49 @@
+---
+// One product demo in its browser window, picked by name, at a height that
+// fits the demo. Landing pages choose demos by name instead of wiring mocks.
+import AppWindow from './AppWindow.astro'
+import BoardMock from './BoardMock.astro'
+import ChangeRequestMock from './ChangeRequestMock.astro'
+import EditorMock from './EditorMock.astro'
+import FleetMock from './FleetMock.astro'
+import ReviewMock from './ReviewMock.astro'
+import SearchMock from './SearchMock.astro'
+
+export type DemoName = 'fleet' | 'editor' | 'review' | 'board' | 'seo' | 'search' | 'change-requests'
+
+interface Props {
+  demo: DemoName
+  class?: string
+}
+const { demo, class: className = '' } = Astro.props
+const site = 'app.gitcms.dev/sites/acme-roofing.com'
+const urls: Record<DemoName, string> = {
+  fleet: 'app.gitcms.dev/brightside-studio',
+  editor: `${site}/services/emergency-roof-repair`,
+  review: `${site}/reviews/57`,
+  board: `${site}/board`,
+  seo: `${site}/services/emergency-roof-repair?panel=seo`,
+  search: `${site}/search`,
+  'change-requests': `${site}/change-requests/61`,
+}
+const heights: Record<DemoName, string> = {
+  fleet: 'h-[280px]',
+  editor: 'h-[440px]',
+  review: 'h-[460px]',
+  board: 'h-[440px]',
+  seo: 'h-[440px]',
+  search: 'h-[420px]',
+  'change-requests': 'h-[440px]',
+}
+---
+<AppWindow url={urls[demo]} class={className}>
+  <div class:list={['relative', heights[demo]]}>
+    {demo === 'fleet' && <FleetMock />}
+    {demo === 'editor' && <EditorMock />}
+    {demo === 'review' && <ReviewMock />}
+    {demo === 'board' && <BoardMock />}
+    {demo === 'seo' && <EditorMock panel="seo" />}
+    {demo === 'search' && <SearchMock />}
+    {demo === 'change-requests' && <ChangeRequestMock />}
+  </div>
+</AppWindow>

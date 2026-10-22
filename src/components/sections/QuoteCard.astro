@@ -1,0 +1,20 @@
+---
+// One customer quote, large. Use-case pages show the quote from their audience.
+import type { Testimonial } from '@/lib/testimonials'
+import { card } from '@/components/site/styles'
+
+interface Props {
+  testimonial: Testimonial
+}
+const { testimonial } = Astro.props
+---
+<figure class:list={['mx-auto max-w-3xl p-10 text-center sm:p-14', card]}>
+  <blockquote class="text-[22px] font-medium leading-snug tracking-[-0.015em] text-neutral-900 sm:text-[26px]">“{testimonial.quote}”</blockquote>
+  <figcaption class="mt-8 flex items-center justify-center gap-3 text-left">
+    {testimonial.avatarSrc && <img src={testimonial.avatarSrc} alt="" class="size-11 rounded-full object-cover" loading="lazy" />}
+    <div class="text-[14px]">
+      <div class="font-medium text-neutral-900">{testimonial.name}</div>
+      <div class="text-[#898989]">{testimonial.role}{testimonial.site && <>, {testimonial.site.href ? <a href={testimonial.site.href} rel="noopener" class="hover:text-neutral-900">{testimonial.site.label}</a> : testimonial.site.label}</>}</div>
+    </div>
+  </figcaption>
+</figure>

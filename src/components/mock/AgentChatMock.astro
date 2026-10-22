@@ -9,10 +9,13 @@ import Cursor from './Cursor.astro'
 interface Props {
   class?: string
   prompt?: string
+  /** The agent in the chat; defaults to Claude. `model` and `accent` style the composer. */
+  agent?: { name: string; logo: string; model?: string; accent?: string }
 }
 const {
   class: className = '',
   prompt = 'Update our pricing to the Q4 rates and mention 24/7 emergency service everywhere it applies.',
+  agent = { name: 'Claude', logo: '/ai-logos/claude-orange.svg', model: 'Opus 5.5', accent: '#d97757' },
 } = Astro.props
 
 const tools = [
@@ -29,7 +32,7 @@ const sent = 4
     <div class="ml-auto w-fit max-w-[78%] rounded-2xl bg-[#f0eee6] px-3.5 py-2 leading-snug" data-at={sent}>{prompt}</div>
     <div class="space-y-1.5" data-at={sent + 1} data-fx="fade">
       <div class="flex items-center gap-1.5 text-[11.5px] text-neutral-500">
-        <img src="/ai-logos/claude-orange.svg" alt="" class="size-3.5" /> Working in GitCMS · acme-roofing.com
+        <img src={agent.logo} alt="" class="size-3.5" /> Working in GitCMS · acme-roofing.com
       </div>
       {tools.map((tool, index) => (
         <div class="flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-2.5 py-1.5" data-at={sent + 1 + index}>
@@ -59,13 +62,13 @@ const sent = 4
     <div class="min-h-[2.6em] text-[12.5px] leading-snug text-neutral-800">
       <span class="text-neutral-400" data-at="0" data-until="1" data-fx="collapse">How can I help you today?</span>
       <span data-type data-at="1" data-until={sent} data-fx="collapse" data-speed="22" data-text={prompt}></span>
-      <span class="text-neutral-400" data-at={sent} data-fx="collapse">Reply to Claude…</span>
+      <span class="text-neutral-400" data-at={sent} data-fx="collapse">Reply to {agent.name}…</span>
     </div>
     <div class="mt-2 flex items-center gap-2 text-neutral-400">
       <Plus className="size-3.5" />
       <span class="inline-flex items-center gap-1 rounded-md border border-neutral-200 px-1.5 py-0.5 text-[10.5px] text-neutral-600"><GitCMSLogo className="size-3" /> GitCMS</span>
-      <span class="ml-auto text-[10.5px]">Opus 5.5</span>
-      <span data-at="1" data-until={sent} data-fx="enable" data-cursor-at={sent - 1} class="grid size-6 place-items-center rounded-full bg-[#d97757] text-white"><ArrowUp className="size-3.5" /></span>
+      <span class="ml-auto text-[10.5px]">{agent.model}</span>
+      <span data-at="1" data-until={sent} data-fx="enable" data-cursor-at={sent - 1} class="grid size-6 place-items-center rounded-full text-white" style={`background-color: ${agent.accent ?? '#171717'}`}><ArrowUp className="size-3.5" /></span>
     </div>
   </div>
   <Cursor />

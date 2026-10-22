@@ -258,6 +258,15 @@ export function getFramework(slug: string) {
   return frameworksBySlug[slug]
 }
 
+// Framework ids create-gitcms detects (gitcms-config's SSG list). Others
+// still set up; the CLI just reports the framework as undetected.
+const CLI_FRAMEWORK_IDS = new Set(['astro', 'nextjs', 'gatsby', 'hugo', 'jekyll', 'eleventy', 'vuepress', 'docusaurus', 'nuxtjs', 'mkdocs', 'svelte', 'tanstack-start'])
+
+/** What `create-gitcms` prints as this site's framework. */
+export function cliFrameworkId(framework: FrameworkInfo) {
+  return CLI_FRAMEWORK_IDS.has(framework.slug) ? framework.slug : 'undetected'
+}
+
 export function getFrameworkLandingDescription(framework: FrameworkInfo) {
   return `GitCMS is the CMS for code-first ${framework.name} sites: your team, clients, and AI agents edit, review, and publish changes while content stays in your repo.`
 }

@@ -1,11 +1,5 @@
 ---
-import MarketingLayout from '@/layouts/MarketingLayout.astro'
-import { getRequiredPersona } from '@/components/landing/persona-content'
-import { PersonaPage } from '@/components/landing/persona-page'
-import { faqStructuredData } from '@/lib/structured-data'
-const persona = getRequiredPersona('startups')
-const structuredData = faqStructuredData(persona.faq)
+import UseCasePage from '@/components/use-case/UseCasePage.astro'
+import { getUseCase } from '@/lib/use-cases'
 ---
-<MarketingLayout title={persona.seoTitle} description={persona.seoDescription} path={persona.path} structuredData={structuredData}>
-  <PersonaPage persona={persona} client:load />
-</MarketingLayout>
+<UseCasePage useCase={getUseCase('startups')} />

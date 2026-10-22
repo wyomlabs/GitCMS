@@ -2,10 +2,11 @@
 import { Check, Minus } from 'lucide-react'
 import { loginUrl } from '@/lib/start-login'
 import { PRICING_PLANS, PRICING_ROWS } from '@/lib/site-content'
+import type { PlanKey } from '@/lib/pricing-plans'
 
 interface Props {
   dark?: boolean
-  highlight?: 'team' | 'agency'
+  highlight?: PlanKey
 }
 const { dark = false, highlight = 'team' } = Astro.props
 const muted = dark ? 'text-neutral-400' : 'text-neutral-500'

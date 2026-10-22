@@ -1,7 +1,7 @@
 import { getCollection } from 'astro:content'
 import { agentList, getAgentLandingDescription, getAgentLandingTitle } from '@/lib/agent-data'
 import { frameworkList, getFrameworkFaqs, getFrameworkLandingDescription, getFrameworkLandingTitle } from '@/lib/framework-data'
-import { personaList } from '@/components/landing/persona-content'
+import { useCases } from '@/lib/use-cases'
 import {
   DEFAULT_SEO_DESCRIPTION,
   DEFAULT_SEO_TITLE,
@@ -116,34 +116,29 @@ function agentBody(agent: (typeof agentList)[number]) {
   ].join('\n')
 }
 
-function personaBody(persona: (typeof personaList)[number]) {
+function useCaseBody(useCase: (typeof useCases)[number]) {
+  const soon = (item: { soon?: boolean }) => (item.soon ? ' (coming soon)' : '')
   return [
-    persona.heroBody,
+    useCase.description,
     '',
-    ...persona.heroSupport.map((point) => `- ${point}`),
+    `## ${useCase.painsTitle}`,
     '',
-    `## ${persona.painTitle}`,
+    ...useCase.pains.flatMap((point) => [`### ${point.title}`, '', point.body, '']),
+    `## ${useCase.workflowTitle}`,
     '',
-    ...persona.pains.flatMap((point) => [`### ${point.title}`, '', point.body, '']),
-    `## ${persona.valueTitle}`,
+    useCase.workflowDescription,
     '',
-    persona.valueBody,
+    ...useCase.steps.flatMap((step, index) => [`### ${index + 1}. ${step.title}${soon(step)}`, '', step.body, '']),
+    `## ${useCase.featuresTitle}`,
     '',
-    ...persona.valuePoints.map((point) => `- ${point}`),
-    '',
-    `## ${persona.scenarioTitle}`,
-    '',
-    persona.scenarioBody,
-    '',
-    ...persona.scenarioSteps.flatMap((step, index) => [`### ${index + 1}. ${step.title}`, '', step.body, '']),
-    persona.scenarioFooter,
+    ...useCase.features.map((feature) => `- **${feature.title}${soon(feature)}:** ${feature.body}`),
     '',
     '## FAQ',
     '',
-    ...persona.faq.flatMap((faq) => [`### ${faq.question}`, '', faq.answer, '']),
+    ...useCase.faqs.flatMap((faq) => [`### ${faq.question}`, '', faq.answer, '']),
     '## Related',
     '',
-    ...persona.relatedLinks.map((link) => `- [${link.label}](${link.href})`),
+    ...useCase.related.map((link) => `- [${link.label}](${link.href})`),
   ].join('\n')
 }
 
@@ -331,14 +326,14 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
     }))
   }
 
-  for (const persona of personaList) {
+  for (const useCase of useCases) {
     resources.push(resource({
-      id: `persona:${persona.slug}`,
+      id: `persona:${useCase.slug}`,
       kind: 'persona',
-      title: persona.seoTitle,
-      description: persona.seoDescription,
-      htmlPath: persona.path,
-      body: personaBody(persona),
+      title: useCase.seoTitle,
+      description: useCase.seoDescription,
+      htmlPath: useCase.path,
+      body: useCaseBody(useCase),
     }))
   }
 

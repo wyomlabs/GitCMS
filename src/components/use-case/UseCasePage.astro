@@ -1,0 +1,118 @@
+---
+// The page every /for-* audience shares: their problem, how GitCMS changes
+// the workflow, what they get, prompts to start with, proof, what it costs,
+// and their questions. All copy comes from lib/use-cases.ts.
+import { getCollection } from 'astro:content'
+import { ArrowRight, CircleAlert, Quote, Sparkles, Terminal, Wallet, Workflow } from 'lucide-react'
+import MarketingLayout from '@/layouts/MarketingLayout.astro'
+import Section from '@/components/site/Section.astro'
+import SectionHeading from '@/components/site/SectionHeading.astro'
+import CopyButton from '@/components/site/CopyButton.astro'
+import CtaBand from '@/components/site/CtaBand.astro'
+import FaqList from '@/components/site/FaqList.astro'
+import DemoWindow from '@/components/mock/DemoWindow.astro'
+import CostComparator from '@/components/sections/CostComparator.astro'
+import PricingTable from '@/components/sections/PricingTable.astro'
+import PromptCard from '@/components/sections/PromptCard.astro'
+import QuoteCard from '@/components/sections/QuoteCard.astro'
+import { badge, card, primaryButton } from '@/components/site/styles'
+import { AGENT_SETUP_PROMPT } from '@/lib/agent-setup-prompt'
+import { loginUrl } from '@/lib/start-login'
+import { faqStructuredData } from '@/lib/structured-data'
+import { publishedTestimonials } from '@/lib/testimonials'
+import type { UseCase } from '@/lib/use-cases'
+
+interface Props {
+  useCase: UseCase
+}
+const { useCase } = Astro.props
+const prompts = (await getCollection('prompts'))
+  .filter((prompt) => prompt.data.category === useCase.promptCategory)
+  .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999))
+  .slice(0, 4)
+const testimonial = publishedTestimonials.find((item) => item.persona === useCase.testimonial)
+---
+<MarketingLayout title={useCase.seoTitle} description={useCase.seoDescription} path={useCase.path} structuredData={faqStructuredData(useCase.faqs)}>
+  <Section first>
+    <SectionHeading level={1} eyebrow={`For ${useCase.name.toLowerCase()}`} title={useCase.title} description={useCase.description}>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href={loginUrl('/')} class={primaryButton}>Connect your site, free <ArrowRight className="size-4" /></a>
+        <CopyButton text={AGENT_SETUP_PROMPT} label="Set up with your agent" copiedLabel="Copied. Paste it into your agent" />
+      </div>
+    </SectionHeading>
+    <DemoWindow demo={useCase.heroDemo} class="mx-auto mt-16 max-w-5xl" />
+  </Section>
+
+  <Section>
+    <SectionHeading eyebrow="The problem" icon={CircleAlert} title={useCase.painsTitle} />
+    <div class="mt-16 grid gap-5 md:grid-cols-3">
+      {useCase.pains.map((pain, index) => (
+        <div class:list={['p-8', card]}>
+          <span class="rounded-md bg-neutral-100 px-2 py-0.5 font-mono text-xs text-neutral-500">0{index + 1}</span>
+          <h3 class="mt-4 text-lg font-semibold tracking-tight">{pain.title}</h3>
+          <p class="mt-2 text-[15px] leading-relaxed text-[#898989]">{pain.body}</p>
+        </div>
+      ))}
+    </div>
+  </Section>
+
+  <Section>
+    <SectionHeading eyebrow="How it works" icon={Workflow} title={useCase.workflowTitle} description={useCase.workflowDescription} />
+    <ol class="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {useCase.steps.map((step, index) => (
+        <li class:list={['p-6', card]}>
+          <div class="flex items-center gap-2">
+            <span class="grid size-6 place-items-center rounded-full bg-neutral-900 text-[11px] font-semibold text-white">{index + 1}</span>
+            {step.soon && <span class={badge}>Soon</span>}
+          </div>
+          <h3 class="mt-4 text-[16px] font-semibold tracking-tight">{step.title}</h3>
+          <p class="mt-2 text-[14px] leading-relaxed text-[#898989]">{step.body}</p>
+        </li>
+      ))}
+    </ol>
+    <DemoWindow demo={useCase.workflowDemo} class="mt-5" />
+  </Section>
+
+  <Section>
+    <SectionHeading eyebrow="What you get" icon={Sparkles} title={useCase.featuresTitle} />
+    <div class="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {useCase.features.map((feature) => (
+        <div class:list={['p-7', card]}>
+          <h3 class="flex items-center gap-2 text-[16px] font-semibold tracking-tight">{feature.title} {feature.soon && <span class={badge}>Soon</span>}</h3>
+          <p class="mt-2 text-[14.5px] leading-relaxed text-[#898989]">{feature.body}</p>
+        </div>
+      ))}
+    </div>
+  </Section>
+
+  {prompts.length > 0 && (
+    <Section>
+      <SectionHeading eyebrow="Prompt library" icon={Terminal} title={useCase.promptsTitle} description="Copy one into Claude Code, Codex, ChatGPT or Claude. On sites with review before publish, the result waits for a person." />
+      <div class="mt-16 grid gap-5 md:grid-cols-2">{prompts.map((prompt) => <PromptCard prompt={prompt} />)}</div>
+      <div class="mt-8 text-center"><a href="/prompts" class="inline-flex items-center gap-1.5 text-sm font-medium">Browse the prompt library <ArrowRight className="size-4" /></a></div>
+    </Section>
+  )}
+
+  {testimonial && (
+    <Section>
+      <QuoteCard testimonial={testimonial} />
+    </Section>
+  )}
+
+  <Section>
+    <SectionHeading eyebrow="The real cost" icon={Wallet} title="What it costs to run" description="Builders charge per site and per editor. WordPress charges you in plugins and upkeep. A code-first site hosts for free; you only pay for the dashboard." />
+    <div class="mt-16"><CostComparator sites={useCase.cost.sites} editors={useCase.cost.editors} /></div>
+    <div class:list={['mt-5 p-5 sm:p-8', card]}><PricingTable highlight={useCase.plan} /></div>
+  </Section>
+
+  <Section>
+    <SectionHeading eyebrow="FAQ" icon={Quote} title="Questions, answered" />
+    <div class:list={['mx-auto mt-16 max-w-3xl px-8 py-3 [&>div]:border-y-0', card]}><FaqList faqs={useCase.faqs} /></div>
+    <div class="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-x-6 gap-y-2 text-[14px]">
+      <span class="text-[#898989]">Read next:</span>
+      {useCase.related.map((link) => <a href={link.href} class="font-medium text-neutral-900 underline-offset-4 hover:underline">{link.label}</a>)}
+    </div>
+  </Section>
+
+  <CtaBand title={useCase.ctaTitle} description={useCase.ctaDescription} />
+</MarketingLayout>

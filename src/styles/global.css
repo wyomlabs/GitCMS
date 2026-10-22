@@ -5,7 +5,6 @@
 
 @source "../**/*.{astro,ts,tsx}";
 
-@plugin "tailwind-scrollbar-hide";
 @plugin "@tailwindcss/typography";
 @import 'tw-animate-css';
 

@@ -2,7 +2,7 @@
 // Agentic onboarding: the setup prompt is pasted into a coding agent, which
 // runs create-gitcms, commits `.gitcms`, and hands back the link that adds
 // the site in GitCMS. CLI lines mirror packages/create-gitcms output for a
-// single Astro site at the repository root. The agent tabs only change the
+// single site at the repository root. The agent tabs only change the
 // terminal's chrome; the prompt is the same for every agent.
 import { GitCMSLogo } from '@/components/gitcms-logo'
 import Cursor from './Cursor.astro'
@@ -15,6 +15,11 @@ const agents = [
   { key: 'opencode', label: 'OpenCode', logo: '/ai-logos/opencode.svg', invert: true },
   { key: 'pi', label: 'Pi', logo: '/ai-logos/pi.svg', invert: true },
 ] as const
+interface Props {
+  /** The framework id create-gitcms reports (gitcms-config's ssg list), or 'undetected'. */
+  framework?: string
+}
+const { framework = 'astro' } = Astro.props
 const promptHead = 'Set up GitCMS for this repository so my team can edit its content.'
 const collections = ['Pages', 'Services', 'Blog', 'Locations']
 const dim = 'text-neutral-500'
@@ -43,7 +48,7 @@ const dim = 'text-neutral-500'
         <div>Mode: single</div>
         <div>Sites: 1</div>
         <div class="text-neutral-300">- .gitcms/sites/site/config.jsonc</div>
-        <div>&nbsp; framework: <span class="text-neutral-300">astro</span></div>
+        <div>&nbsp; framework: <span class="text-neutral-300">{framework}</span></div>
         <div>&nbsp; website_url: <span class="text-neutral-300">https://acme-roofing.com</span></div>
         <div>&nbsp; collections: <span class="text-neutral-300">4 (high)</span></div>
       </div>

@@ -1,12 +1,24 @@
 ---
+import { ArrowRight, FileCode2, FileText, Folder, GitBranch, Lightbulb, Quote, Settings2 } from 'lucide-react'
 import MarketingLayout from '@/layouts/MarketingLayout.astro'
-import { FrameworkPage } from '@/components/landing/framework-page'
+import Section from '@/components/site/Section.astro'
+import SectionHeading from '@/components/site/SectionHeading.astro'
+import CopyButton from '@/components/site/CopyButton.astro'
+import CtaBand from '@/components/site/CtaBand.astro'
+import FaqList from '@/components/site/FaqList.astro'
+import AgentSetupMock from '@/components/mock/AgentSetupMock.astro'
+import ProductTour from '@/components/sections/ProductTour.astro'
+import LinkGrid from '@/components/sections/LinkGrid.astro'
+import { card, eyebrow, h1, primaryButton, sub } from '@/components/site/styles'
+import { AGENT_SETUP_PROMPT, SETUP_CLI_COMMAND } from '@/lib/agent-setup-prompt'
 import {
+  cliFrameworkId,
   frameworkList,
   getFrameworkFaqs,
   getFrameworkLandingDescription,
   getFrameworkLandingTitle,
 } from '@/lib/framework-data'
+import { loginUrl } from '@/lib/start-login'
 import { faqStructuredData } from '@/lib/structured-data'
 
 export function getStaticPaths() {
@@ -17,13 +29,82 @@ export function getStaticPaths() {
 }
 
 const { framework } = Astro.props
-const structuredData = faqStructuredData(getFrameworkFaqs(framework))
+const faqs = getFrameworkFaqs(framework)
+const others = frameworkList
+  .filter((other) => other.slug !== framework.slug)
+  .map((other) => ({ label: other.name, href: `/git-based-cms-for-${other.slug}`, logo: other.logo }))
+// The files GitCMS reads and writes in a typical repository for this framework.
+const tree = [
+  { icon: Settings2, path: framework.configFile, note: `${framework.name} config, untouched` },
+  { icon: Folder, path: `${framework.contentPath}/`, note: 'a collection in GitCMS' },
+  { icon: FileText, path: framework.exampleFile, note: 'an entry your team edits' },
+  { icon: FileCode2, path: '.gitcms/sites/site/config.jsonc', note: 'written once by create-gitcms' },
+]
 ---
 <MarketingLayout
   title={`${getFrameworkLandingTitle(framework)} — GitCMS`}
   description={getFrameworkLandingDescription(framework)}
   path={`/git-based-cms-for-${framework.slug}`}
-  structuredData={structuredData}
+  structuredData={faqStructuredData(faqs)}
 >
-  <FrameworkPage framework={framework} client:load />
+  <Section first>
+    <div class="text-center">
+      <span class={eyebrow}><img src={framework.logo} alt="" class="size-3.5" /> GitCMS for {framework.name}</span>
+      <h1 class:list={['mx-auto mt-5 max-w-3xl', h1]}>{getFrameworkLandingTitle(framework)}</h1>
+      <p class:list={['mx-auto mt-5 max-w-2xl', sub]}>{framework.dayOne} GitCMS gives your team, your clients and AI agents one place to edit, review and publish it, while every change stays in your repository.</p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href={loginUrl('/')} class={primaryButton}>Connect your {framework.name} site <ArrowRight className="size-4" /></a>
+        <CopyButton text={AGENT_SETUP_PROMPT} label="Set up with your agent" copiedLabel="Copied. Paste it into your agent" />
+      </div>
+    </div>
+    <div class:list={['mt-16 grid gap-10 p-6 sm:p-8 lg:grid-cols-2 lg:items-center lg:gap-x-5', card]}>
+      <div class="min-w-0 lg:pr-10">
+        <span class="w-fit rounded-md bg-neutral-100 px-2 py-0.5 font-mono text-xs text-neutral-500">Setup</span>
+        <h2 class="mt-4 text-2xl font-semibold tracking-tight">Your agent sets it up in one prompt</h2>
+        <p class="mt-2 text-[15px] leading-relaxed text-[#898989]">Paste the setup prompt into Claude Code, Codex or Cursor. It runs <code class="font-mono text-[13px] text-neutral-700">create-gitcms</code>, which reads your {framework.name} project, finds the content folders and the site’s address, and commits a small <code class="font-mono text-[13px] text-neutral-700">.gitcms</code> folder. Your build and hosting don’t change.</p>
+        <a href="/docs/getting-started/cli-onboarding" class="mt-6 inline-block text-[13px] text-neutral-500 hover:text-neutral-900">or run <code class="font-mono text-[12px] text-neutral-700">{SETUP_CLI_COMMAND}</code> yourself →</a>
+      </div>
+      <div class="min-w-0"><AgentSetupMock framework={cliFrameworkId(framework)} /></div>
+    </div>
+  </Section>
+
+  <Section>
+    <SectionHeading eyebrow="Your repository" icon={GitBranch} title={`GitCMS edits the files ${framework.name} builds from`} description={framework.handoff} />
+    <div class="mt-16 grid gap-5 lg:grid-cols-[1.4fr_1fr]">
+      <div class:list={['p-6 sm:p-8', card]}>
+        <ul class="space-y-2 font-mono text-[13px]">
+          {tree.map(({ icon: Icon, path, note }) => (
+            <li class="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2.5">
+              <Icon className="size-4 shrink-0 text-neutral-400" />
+              <span class="text-neutral-900">{path}</span>
+              <span class="ml-auto font-sans text-[12px] text-[#898989]">{note}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="mt-5 text-[14px] leading-relaxed text-[#898989]">No content database and no API. Every save in GitCMS is a commit to these files, and your existing {framework.name} build deploys it.</p>
+      </div>
+      <div class="rounded-2xl border border-[#B5D74E]/50 bg-[#DCF986]/25 p-6 sm:p-8">
+        <span class="flex items-center gap-2 text-[13px] font-medium text-neutral-900"><Lightbulb className="size-4" /> Handoff tip for {framework.name}</span>
+        <p class="mt-3 text-[15px] leading-relaxed text-neutral-700">{framework.handoffTip}</p>
+        <a href="/prompts/make-site-client-editable" class="mt-5 inline-flex items-center gap-1.5 text-[14px] font-medium text-neutral-900">Prompt: make a site client-editable <ArrowRight className="size-4" /></a>
+      </div>
+    </div>
+  </Section>
+
+  <Section id="product">
+    <SectionHeading eyebrow="One workflow" icon={GitBranch} title="People and agents, same rules" description={`Whoever changes your ${framework.name} site, it ends the same way: a draft, a review, and a commit.`} />
+    <div class="mt-16 text-left"><ProductTour /></div>
+  </Section>
+
+  <Section>
+    <SectionHeading eyebrow="FAQ" icon={Quote} title={`${framework.name} and GitCMS, answered`} />
+    <div class:list={['mx-auto mt-16 max-w-3xl px-8 py-3 [&>div]:border-y-0', card]}><FaqList faqs={faqs} /></div>
+  </Section>
+
+  <Section>
+    <SectionHeading title="Works with the framework you already use" description="GitCMS reads Markdown and MDX, so it fits most code-first stacks." />
+    <div class="mt-12"><LinkGrid links={others} /></div>
+  </Section>
+
+  <CtaBand title={`Give your ${framework.name} site a control plane`} description={`Connect the repository behind your ${framework.name} site. Your team is editing in minutes, and nothing about your stack changes.`} />
 </MarketingLayout>

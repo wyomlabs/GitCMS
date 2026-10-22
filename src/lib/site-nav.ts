@@ -1,11 +1,7 @@
 /** Site-wide navigation, shared by the header and the footer. */
+import { useCases } from '@/lib/use-cases'
 
-export const USE_CASE_LINKS = [
-  { label: 'Agencies', href: '/for-agencies', blurb: 'Hand off client sites without becoming the bottleneck' },
-  { label: 'Freelancers', href: '/for-freelancers', blurb: 'Let clients edit, keep the code yours' },
-  { label: 'Startups', href: '/for-startups', blurb: 'Website changes without engineering tickets' },
-  { label: 'Solo builders', href: '/for-solo-builders', blurb: 'Ship the blog, docs and changelog your product needs' },
-] as const
+export const USE_CASE_LINKS = useCases.map((useCase) => ({ label: useCase.name, href: useCase.path, blurb: useCase.blurb }))
 
 export const RESOURCE_LINKS = [
   { label: 'Blog', href: '/blog', blurb: 'Guides and opinions on running code-first sites' },
