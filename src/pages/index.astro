@@ -23,6 +23,7 @@ import { publishedTestimonials } from '@/lib/testimonials'
 import ChangeRequestMock from '@/components/mock/ChangeRequestMock.astro'
 import Testimonials from '@/components/sections/Testimonials.astro'
 import CostComparator from '@/components/sections/CostComparator.astro'
+import FounderNote from '@/components/sections/FounderNote.astro'
 import PricingTable from '@/components/sections/PricingTable.astro'
 import FaqList from '@/components/site/FaqList.astro'
 import CopyButton from '@/components/site/CopyButton.astro'
@@ -283,6 +284,11 @@ const structuredData = {
   <Section class="!px-0">
     <SectionHeading class="px-6" eyebrow="Testimonials" icon={Quote} title="Don’t just take our word for it" description="Agencies, writers and startups who moved their sites to code, and handed them over with GitCMS." />
     <div class="mt-16"><Testimonials /></div>
+  </Section>
+
+  <!-- Founder's note -->
+  <Section id="founder-story">
+    <FounderNote note="home" />
   </Section>
 
   <!-- Agencies -->

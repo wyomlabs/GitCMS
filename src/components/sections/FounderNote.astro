@@ -1,0 +1,27 @@
+---
+// The founder's note, in the version written for this page's audience.
+import { ArrowRight } from 'lucide-react'
+import { FOUNDER_NOTES, type FounderNoteKey } from '@/lib/founder-notes'
+import { loginUrl } from '@/lib/start-login'
+import { card } from '@/components/site/styles'
+
+interface Props {
+  note: FounderNoteKey
+}
+const { note } = Astro.props
+// Split on **bold** markers: odd segments are the bold phrases.
+const paragraphs = FOUNDER_NOTES[note].map((paragraph) => paragraph.split('**'))
+---
+<article class:list={['mx-auto max-w-3xl px-6 py-12 sm:px-14 sm:py-16', card]}>
+  <header class="flex flex-col items-center text-center">
+    <img src="/images/founder-waishnav-192.webp" alt="Waishnav, founder of GitCMS" width="192" height="192" class="size-20 rounded-full border-2 border-neutral-200 object-cover sm:size-24" loading="lazy" />
+    <h2 class="mt-6 font-logo text-[28px] font-medium tracking-tight text-neutral-900 sm:text-[32px]">heyo! it’s <span class="text-[#7c3aed]">waishnav</span></h2>
+    <p class="mt-1.5 text-[14px] text-[#898989] sm:text-[15px]">(founder of GitCMS, and the studio that builds and ships it)</p>
+  </header>
+  <div class="mt-10 space-y-6 text-[16px] leading-[1.75] text-neutral-600 sm:text-[17px]">
+    {paragraphs.map((segments) => (
+      <p>{segments.map((segment, index) => (index % 2 === 1 ? <strong class="font-semibold text-neutral-900">{segment}</strong> : segment))}</p>
+    ))}
+  </div>
+  <a href={loginUrl('/')} class="mt-10 inline-flex h-11 items-center gap-2 rounded-xl border border-[#B5D74E] bg-[#DCF986] px-6 text-[14px] font-semibold text-neutral-950 hover:bg-[#d4f47a]">Try it for free <ArrowRight className="size-4" /></a>
+</article>

@@ -15,6 +15,7 @@ import CostComparator from '@/components/sections/CostComparator.astro'
 import PricingTable from '@/components/sections/PricingTable.astro'
 import PromptCard from '@/components/sections/PromptCard.astro'
 import QuoteCard from '@/components/sections/QuoteCard.astro'
+import FounderNote from '@/components/sections/FounderNote.astro'
 import { badge, card, primaryButton } from '@/components/site/styles'
 import { AGENT_SETUP_PROMPT } from '@/lib/agent-setup-prompt'
 import { loginUrl } from '@/lib/start-login'
@@ -98,6 +99,10 @@ const testimonial = publishedTestimonials.find((item) => item.persona === useCas
       <QuoteCard testimonial={testimonial} />
     </Section>
   )}
+
+  <Section id="founder-story">
+    <FounderNote note={useCase.slug} />
+  </Section>
 
   <Section>
     <SectionHeading eyebrow="The real cost" icon={Wallet} title="What it costs to run" description="Builders charge per site and per editor. WordPress charges you in plugins and upkeep. A code-first site hosts for free; you only pay for the dashboard." />
