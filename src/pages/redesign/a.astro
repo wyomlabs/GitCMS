@@ -118,7 +118,9 @@ const section = 'border-t border-neutral-200 px-6 py-24 sm:py-32 lg:px-16'
       <span class={eyebrow}><Rocket className="size-3.5" /> How it works</span>
       <h2 class:list={['mx-auto mt-5 max-w-3xl', h2]}>From repository to client-ready in minutes</h2>
       <p class:list={['mx-auto mt-5 max-w-xl', sub]}>No migration and no new hosting. Your agent sets GitCMS up from what’s already in your repo.</p>
-      <div class:list={['mt-16 grid gap-10 p-6 text-left sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] lg:items-center lg:gap-14 lg:p-10', card]}>
+      <!-- 50/50 so its columns line up with cards 02 and 03 below: with the
+           same 32px padding, an 84px gap puts the terminal's edge on card 03's text. -->
+      <div class:list={['mt-16 grid gap-10 p-6 text-left sm:p-8 lg:grid-cols-2 lg:items-center lg:gap-x-[84px]', card]}>
         <div class="min-w-0">
           <span class="w-fit rounded-md bg-neutral-100 px-2 py-0.5 font-mono text-xs text-neutral-500">01</span>
           <h3 class="mt-4 text-2xl font-semibold tracking-tight">Hand your agent one prompt</h3>
