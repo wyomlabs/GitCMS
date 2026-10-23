@@ -1,50 +1,10 @@
+import { legacyRepoViewerTarget } from './lib/legacy-repo-redirect'
+
 interface Env {
   ASSETS: { fetch(request: Request): Promise<Response> }
 }
 
-// Two-segment paths that miss a static asset are legacy repo-viewer links
-// (`/:owner/:repo`) unless they start with one of the site's own sections or
-// asset directories.
-const RESERVED_ROOT_SEGMENTS = new Set([
-  '_astro',
-  'ai-logos',
-  'brand',
-  'brand-logos',
-  'fonts',
-  'images',
-  'og',
-  'ssg-logos',
-  'tweets',
-  'videos',
-  'agents',
-  'api',
-  'app',
-  'auth',
-  'blog',
-  'changelog',
-  'compare',
-  'docs',
-  'for',
-  'glossary',
-  'login',
-  'oauth',
-  'invite',
-  'prompts',
-  'sites',
-  'tools',
-  'welcome',
-  '.well-known',
-])
-
-function legacyRepoViewerTarget(url: URL) {
-  const segments = url.pathname.split('/').filter(Boolean)
-  if (segments.length < 2 || RESERVED_ROOT_SEGMENTS.has(segments[0] ?? '')) {
-    return null
-  }
-
-  const target = new URL(url.pathname + url.search + url.hash, 'https://app.gitcms.dev')
-  return target
-}
+const APP_ORIGIN = 'https://app.gitcms.dev'
 
 function withMachineReadableHeaders(requestUrl: URL, response: Response) {
   const isMarkdown = requestUrl.pathname.endsWith('.md')
@@ -94,7 +54,7 @@ export default {
       return assetResponse
     }
 
-    const target = legacyRepoViewerTarget(url)
+    const target = legacyRepoViewerTarget(url, APP_ORIGIN)
     if (target) return Response.redirect(target, 308)
 
     return assetResponse
