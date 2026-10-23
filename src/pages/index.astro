@@ -2,7 +2,7 @@
 // Homepage — "Day Two". Live app UI in the hero, then agent setup, the Day
 // Two story, change requests, integrations, proof, and what running a site
 // really costs.
-import { ArrowRight, Check, GitBranch, Inbox, Plug, Quote, Rocket, Search, Sparkles, Terminal } from 'lucide-react'
+import { ArrowRight, Check, Copy, GitBranch, Inbox, MousePointerClick, Plug, Quote, Rocket, ScanEye, Search, Sparkles, Terminal } from 'lucide-react'
 import { GitCMSLogo } from '@/components/gitcms-logo'
 import { loginUrl } from '@/lib/start-login'
 import MarketingLayout from '@/layouts/MarketingLayout.astro'
@@ -16,6 +16,7 @@ import { UPCOMING_PLANS } from '@/lib/pricing-plans'
 import ProductTour from '@/components/sections/ProductTour.astro'
 import AppWindow from '@/components/mock/AppWindow.astro'
 import EditorMock from '@/components/mock/EditorMock.astro'
+import ScaleFrame from '@/components/mock/ScaleFrame.astro'
 import SearchMock from '@/components/mock/SearchMock.astro'
 import FleetMock from '@/components/mock/FleetMock.astro'
 import HeroWidget from '@/components/mock/HeroWidget.astro'
@@ -101,8 +102,9 @@ const structuredData = {
         <p class="mt-4 text-[14px] text-[#898989]">Free to explore · No migration · Works with your framework and host</p>
       </div>
       <div class="min-w-0">
-        <!-- Bleeds past the card's right edge, which crops it (cal.com). -->
-        <div class="overflow-hidden lg:overflow-visible"><HeroWidget /></div>
+        <!-- Bleeds past the card's right edge, which crops it (cal.com).
+             Below lg there's no room to bleed, so it scales down whole. -->
+        <ScaleFrame width={760} height={408} until="lg"><HeroWidget /></ScaleFrame>
         <div class="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4 text-[13px] text-neutral-500">
           <span class="flex items-center gap-2.5">
             <span class="flex -space-x-2">
@@ -193,24 +195,37 @@ const structuredData = {
   <!-- Day One → Day Two -->
   <Section>
     <SectionHeading eyebrow={CATEGORY} icon={Terminal} title="AI made websites cheap to build. It didn’t make them easy to run." description="The site shipped in an afternoon. Then everyone needs a change, and none of them should need your codebase, or you." />
-    <div class="mt-16 grid items-center gap-8 text-left lg:grid-cols-[1fr_auto_1.3fr_auto_1fr]">
+    <!-- Left to right on desktop. Below lg it stacks, and one dashed rail runs
+         from the terminal through each request into GitCMS, so it still reads
+         as one story. -->
+    <div class="mt-16 grid text-left lg:grid-cols-[1fr_auto_1.3fr_auto_1fr] lg:items-center lg:gap-8">
       <div class="rounded-xl border border-neutral-800 bg-neutral-950 p-4 font-mono text-[12px] text-neutral-300">
         <div class="flex items-center gap-1.5 text-neutral-500"><Terminal className="size-3.5" /> Day one</div>
         <div class="mt-3"><span class="text-[#DCF986]">❯</span> claude "build our new roofing site"</div>
         <div class="mt-1 text-neutral-500">Astro · 14 pages · deployed</div>
         <div class="mt-3 flex items-center gap-1.5 text-emerald-400"><Check className="size-3.5" /> Live at acme-roofing.com</div>
       </div>
+      <div class="relative flex h-14 items-center pl-10 lg:hidden">
+        <svg class="absolute left-5 top-0 h-full w-px overflow-visible text-neutral-400 lg:hidden" aria-hidden="true"><line x1="0" y1="0" x2="0" y2="100%" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" class="rd-flow" /></svg>
+        <span class="text-[10px] font-semibold uppercase tracking-[0.2em] text-neutral-400">Day two</span>
+      </div>
       <div class="hidden text-center text-[10px] font-semibold uppercase tracking-[0.2em] text-neutral-400 lg:block">Day<br />two</div>
-      <div class="grid gap-3">
+      <div class="relative grid gap-3 pl-10 lg:pl-0">
+        <svg class="absolute left-5 top-0 h-full w-px overflow-visible text-neutral-400 lg:hidden" aria-hidden="true"><line x1="0" y1="0" x2="0" y2="100%" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" class="rd-flow" /></svg>
         {DAY_TWO_REQUESTS.map((request) => (
-          <div class="flex items-center gap-3 rounded-xl border border-neutral-200 bg-white px-3 py-2.5">
+          <div class="relative flex min-w-0 items-center gap-3 rounded-xl border border-neutral-200 bg-white px-3 py-2.5">
+            <span class="absolute -left-5 top-1/2 w-5 border-t-[1.75px] border-dashed border-neutral-400 lg:hidden" aria-hidden="true"></span>
             <span class:list={['grid size-7 place-items-center rounded-full text-[11px] font-semibold text-white', tones[request.tone]]}>
               {request.avatar === 'agent' ? <img src="/ai-logos/claude-orange.svg" alt="" class="size-4" /> : request.avatar}
             </span>
-            <span class="text-sm font-medium">{request.who}</span>
+            <span class="shrink-0 text-sm font-medium">{request.who}</span>
             <span class="truncate text-sm text-neutral-500">{request.ask}</span>
           </div>
         ))}
+      </div>
+      <div class="relative h-14 lg:hidden" aria-hidden="true">
+        <svg class="absolute left-5 top-0 h-full w-px overflow-visible text-neutral-400 lg:hidden" aria-hidden="true"><line x1="0" y1="0" x2="0" y2="100%" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" class="rd-flow" /></svg>
+        <svg viewBox="0 0 12 8" class="absolute bottom-0 left-5 w-3 -translate-x-1/2 text-neutral-400"><path d="M1 1 L6 6.5 L11 1" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" /></svg>
       </div>
       <svg viewBox="0 0 72 180" class="hidden h-44 w-[72px] text-neutral-400 lg:block" aria-hidden="true">
         {[22, 67, 113, 158].map((y) => <path d={`M0 ${y} C 34 ${y}, 30 90, 62 90`} fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" class="rd-flow" />)}
@@ -237,16 +252,23 @@ const structuredData = {
   <!-- Change requests -->
   <Section id="change-requests">
     <SectionHeading eyebrow="Change requests" badge="New" title="Feedback pinned to the page, not buried in email" description="Clients click the thing they want changed. Each pin becomes a change request your coding agent can pick up with one copied prompt. When the fix deploys, GitCMS finds the preview and checks every pin against it." />
-    <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/change-requests/61" class="mt-16">
-      <div class="h-[440px]"><ChangeRequestMock /></div>
+    <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/change-requests/61" height={440} fill class="mt-16">
+      <ChangeRequestMock />
     </AppWindow>
-    <div class="mt-3 grid gap-5 sm:grid-cols-3">
+    <!-- Chapters of the demo above: each lights up while the demo plays its
+         part and jumps there when picked. Steps match ChangeRequestMock. -->
+    <div data-chapters class="mt-3 grid gap-5 sm:grid-cols-3">
       {[
-        ['Select element', 'Feedback lands on the exact heading, image or button.'],
-        ['Copy prompt', 'Hand open feedback to Claude Code, Codex or Cursor.'],
-        ['Verify on the preview', 'Pins show as changed, still matching, or gone.'],
-      ].map(([title, body]) => (
-        <div class:list={['p-7 text-[14px] leading-relaxed text-neutral-500', card]}><span class="block font-medium text-neutral-900">{title}</span>{body}</div>
+        { icon: MousePointerClick, title: 'Select element', body: 'Feedback lands on the exact heading, image or button.', from: 0, to: 6 },
+        { icon: Copy, title: 'Copy prompt', body: 'Hand open feedback to Claude Code, Codex or Cursor.', from: 7, to: 9 },
+        { icon: ScanEye, title: 'Verify on the preview', body: 'Pins show as changed, still matching, or gone.', from: 10, to: 12 },
+      ].map(({ icon: Icon, title, body, from, to }) => (
+        <button type="button" data-chapter-from={from} data-chapter-to={to} aria-pressed="false" class:list={['group cursor-pointer overflow-hidden p-0 text-left text-[14px] leading-relaxed text-neutral-500 transition-colors hover:border-neutral-300 aria-pressed:border-neutral-300', card]}>
+          <span class="block h-0.5 bg-neutral-100"><span data-chapter-bar class="block h-full w-0 bg-neutral-900"></span></span>
+          <span class="block p-7 pt-[26px]">
+            <span class="flex items-center gap-2 font-medium text-neutral-400 transition-colors group-hover:text-neutral-700 group-aria-pressed:text-neutral-900"><Icon className="size-4 shrink-0" />{title}</span>{body}
+          </span>
+        </button>
       ))}
     </div>
   </Section>
@@ -273,10 +295,10 @@ const structuredData = {
   <!-- SEO + Search Console -->
   <Section id="seo">
     <SectionHeading eyebrow="SEO" icon={Search} badge="Soon" title="The SEO plugin, without the plugin" description="A search preview and a pre-publish checklist in the editor, and Search Console next to the page it’s about. See what each page ranks for, and turn a page-two keyword into a content task for a writer or your agent." />
-    <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/services/emergency-roof-repair?panel=seo" class="mt-16">
-      <div class="h-[440px]"><EditorMock panel="seo" /></div>
+    <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/services/emergency-roof-repair?panel=seo" height={440} fill class="mt-16">
+      <EditorMock panel="seo" />
     </AppWindow>
-    <div class:list={['mt-3 h-[400px] overflow-hidden', card]}><SearchMock /></div>
+    <ScaleFrame width={1024} height={400} fill class="mt-3"><div class:list={['h-full overflow-hidden', card]}><SearchMock /></div></ScaleFrame>
   </Section>
 
   <!-- Testimonials -->
@@ -296,7 +318,7 @@ const structuredData = {
     <SectionHeading eyebrow="For agencies" icon={Inbox} title="Every client site, one workspace" description="Build with Astro or Next.js and your favourite agent. Every client gets a safe place to edit, and you see every site, review and agent at a glance, with no WordPress to patch.">
       <a href="/for-agencies" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium">GitCMS for agencies <ArrowRight className="size-4" /></a>
     </SectionHeading>
-    <div class:list={['mx-auto mt-16 h-[300px] max-w-3xl overflow-hidden', card]}><FleetMock /></div>
+    <ScaleFrame width={768} height={300} class="mx-auto mt-16"><div class:list={['h-full overflow-hidden', card]}><FleetMock /></div></ScaleFrame>
   </Section>
 
   <!-- Cost comparator -->
@@ -319,6 +341,43 @@ const structuredData = {
 
   <CtaBand />
 </MarketingLayout>
+<script>
+  // Chapter cards under the change requests demo follow its steps.
+  for (const chapters of document.querySelectorAll<HTMLElement>('[data-chapters]')) {
+    const demo = chapters.closest('section')?.querySelector<HTMLElement>('[data-seq]')
+    if (!demo) continue
+    const cards = [...chapters.querySelectorAll<HTMLButtonElement>('[data-chapter-from]')]
+    const durations = (demo.dataset.durations ?? '').split(',').map(Number)
+    const sum = (from: number, to: number) => durations.slice(from, to).reduce((total, ms) => total + ms, 0)
+
+    demo.addEventListener('seq:step', (event) => {
+      const step = event instanceof CustomEvent ? Number(event.detail) : 0
+      for (const card of cards) {
+        const from = Number(card.dataset.chapterFrom)
+        const to = Number(card.dataset.chapterTo)
+        const bar = card.querySelector<HTMLElement>('[data-chapter-bar]')
+        const active = step >= from && step <= to
+        card.setAttribute('aria-pressed', String(active))
+        if (!bar) continue
+        const total = sum(from, to + 1)
+        const start = active ? sum(from, step) / total : step > to ? 1 : 0
+        const end = active ? sum(from, step + 1) / total : start
+        // Snap to where this step starts, then fill linearly through it.
+        bar.style.transition = 'none'
+        bar.style.width = `${start * 100}%`
+        if (active) {
+          void bar.offsetWidth
+          bar.style.transition = `width ${durations[step] ?? 0}ms linear`
+          bar.style.width = `${end * 100}%`
+        }
+      }
+    })
+    cards.forEach((card) => card.addEventListener('click', () => {
+      demo.dispatchEvent(new CustomEvent('seq:goto', { detail: Number(card.dataset.chapterFrom) }))
+    }))
+  }
+</script>
+
 
 <style>
   /* Logo strip: one copy's width per loop, so the seam never shows. */

@@ -47,7 +47,7 @@ const staticCards: Record<string, Array<{ title: string; id: number; who: string
   ))}
 
   <!-- The card being dragged, positioned over a column's slot. -->
-  <div data-drag-card class="absolute left-0 top-0 z-20 h-[58px] rounded-md border border-neutral-200 bg-white p-2 transition-[transform,box-shadow,border-color] duration-[750ms] ease-[cubic-bezier(0.22,0.8,0.24,1)] data-[lifted=true]:border-violet-300 data-[lifted=true]:shadow-[0_12px_24px_-12px_rgba(76,29,149,0.35)]">
+  <div data-drag-card class="absolute left-0 top-0 z-20 h-[58px] rounded-md border border-neutral-200 bg-white p-2 transition-[transform,box-shadow,border-color] duration-[550ms] ease-[cubic-bezier(0.22,0.8,0.24,1)] data-[lifted=true]:border-violet-300 data-[lifted=true]:shadow-[0_12px_24px_-12px_rgba(76,29,149,0.35)]">
     <div class="text-[11px] font-medium leading-snug text-neutral-900">Q4 pricing update</div>
     <div class="mt-1 flex items-center gap-1 text-[10px] text-neutral-500">
       <span class="rounded border border-neutral-200 px-1 font-medium text-neutral-700">#57</span>
@@ -61,6 +61,8 @@ const staticCards: Record<string, Array<{ title: string; id: number; who: string
 <script>
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   const sleep = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms))
+  // One pass, in ms. `drag` matches the card's CSS transition.
+  const T = { intro: 500, grab: 180, settle: 150, drag: 550, between: 300, comment: 250, read: 900, end: 1300, fade: 320 }
 
   for (const board of document.querySelectorAll<HTMLElement>('[data-board]')) {
     const card = board.querySelector<HTMLElement>('[data-drag-card]')
@@ -78,11 +80,14 @@ const staticCards: Record<string, Array<{ title: string; id: number; who: string
     // Place the card over a slot; the cursor rides near its top-right.
     const place = () => {
       slots.forEach((slot, index) => { slot.dataset.open = String(index === column) })
+      // The board may sit in a scaled frame: work in its own coordinates.
       const box = board.getBoundingClientRect()
-      const slot = slots[column]?.getBoundingClientRect()
-      if (!slot) return
-      const x = slot.left - box.left
-      const y = slot.top - box.top
+      const scale = box.width / board.offsetWidth || 1
+      const rect = slots[column]?.getBoundingClientRect()
+      if (!rect) return
+      const slot = { width: rect.width / scale }
+      const x = (rect.left - box.left) / scale
+      const y = (rect.top - box.top) / scale
       card.style.width = `${slot.width}px`
       card.style.transform = `translate(${x}px, ${y}px) rotate(${lifted ? 2 : 0}deg) scale(${lifted ? 1.03 : 1})`
       card.dataset.lifted = String(lifted)
@@ -95,48 +100,68 @@ const staticCards: Record<string, Array<{ title: string; id: number; who: string
 
     const press = async (down: boolean) => {
       cursor.classList.add('clicking')
-      await sleep(180)
+      await sleep(T.grab)
       lifted = down
       place()
       window.setTimeout(() => cursor.classList.remove('clicking'), 300)
     }
 
-    // One pass: Ideas → Draft → Review (Jess comments) → Published.
-    const run = async (id: number) => {
-      const alive = () => id === generation
+    // Apply a layout change with transitions off, so a reset never animates.
+    const instantly = (change: () => void) => {
+      const animated = [card, cursor, comment, ...slots]
+      animated.forEach((element) => { element.style.transition = 'none' })
+      change()
+      void board.offsetWidth
+      animated.forEach((element) => { element.style.transition = '' })
+    }
+
+    // One pass: Ideas → Draft → Review (Jess comments) → Published. `from` is
+    // a screen point where a previous demo's cursor stopped (see Sequencer).
+    const run = async (id: number, from: { x: number; y: number } | null) => {
+      const alive = () => id === generation && visible && !board.closest('[data-seq-paused]')
       column = 0
       lifted = false
-      comment.style.opacity = '0'
-      place()
-      cursor.classList.remove('visible')
-      await sleep(900)
+      instantly(() => {
+        comment.style.opacity = '0'
+        place()
+        if (!from) return
+        const box = board.getBoundingClientRect()
+        const scale = box.width / board.offsetWidth || 1
+        cursor.style.transform = `translate(${(from.x - box.left) / scale}px, ${(from.y - box.top) / scale}px)`
+      })
+      // Glide the cursor from where the last demo left it over to the card.
+      if (from) place()
+      cursor.classList.add('visible')
+      board.style.opacity = '1'
+      await sleep(T.intro)
       for (const next of [1, 2, 3]) {
         if (!alive()) return
-        cursor.classList.add('visible')
-        place()
-        await sleep(650)
         await press(true)
-        await sleep(250)
+        await sleep(T.settle)
         columns[next]?.setAttribute('data-target', 'true')
         column = next
         place()
-        await sleep(850)
+        await sleep(T.drag)
         columns[next]?.setAttribute('data-target', 'false')
         await press(false)
         if (next === 2) {
-          await sleep(500)
+          await sleep(T.comment)
           comment.style.opacity = '1'
+          await sleep(T.read)
         }
-        await sleep(1300)
+        await sleep(next === 3 ? T.end : T.between)
       }
-      cursor.classList.remove('visible')
-      await sleep(2200)
-      if (alive() && visible) run(id)
+      if (!alive()) return
+      // A container that cancels this takes over the cut (product tour).
+      if (!board.dispatchEvent(new CustomEvent('seq:end', { cancelable: true }))) return
+      board.style.opacity = '0'
+      await sleep(T.fade)
+      if (alive()) run(id, null)
     }
 
-    const restart = () => {
+    const restart = (from: { x: number; y: number } | null = null) => {
       generation += 1
-      if (!reduce && visible) run(generation)
+      if (!reduce && visible) run(generation, from)
     }
 
     if (reduce) {
@@ -146,9 +171,14 @@ const staticCards: Record<string, Array<{ title: string; id: number; who: string
       continue
     }
 
+    board.dataset.cycle = String(T.intro + 3 * (T.grab + T.settle + T.drag + T.grab) + 2 * T.between + T.end + T.comment + T.read + T.fade)
+    board.style.transition = 'opacity 0.3s ease'
     place()
     window.addEventListener('resize', place)
-    board.addEventListener('seq:restart', restart)
+    board.addEventListener('seq:restart', (event) => {
+      const detail = event instanceof CustomEvent ? event.detail : null
+      restart(detail && typeof detail.x === 'number' && typeof detail.y === 'number' ? { x: detail.x, y: detail.y } : null)
+    })
     new IntersectionObserver(([entry]) => {
       const now = Boolean(entry?.isIntersecting)
       if (now && !visible) { visible = true; restart() }

@@ -9,7 +9,7 @@ interface Props {
 }
 const { class: className = '' } = Astro.props
 ---
-<div data-seq="7" data-ms="1400" class:list={['relative flex h-full flex-col bg-white text-[12px]', className]}>
+<div data-seq="4" data-ms="850" data-hold="1:1200 4:1800" class:list={['relative flex h-full flex-col bg-white text-[12px]', className]}>
   <div class="flex items-center gap-2 border-b border-neutral-200 px-4 py-2.5">
     <span class="rounded border border-violet-200 bg-violet-50 px-1.5 py-0.5 text-[10.5px] font-medium text-violet-700">#57 · Review</span>
     <span class="font-medium text-neutral-900">Q4 pricing update</span>
@@ -41,7 +41,7 @@ const { class: className = '' } = Astro.props
       <p class="mt-1 text-[11.5px] leading-snug text-neutral-700">Can we promise 60 minutes in central Austin?</p>
       <div class="mt-2 flex items-center gap-1.5 border-t border-neutral-100 pt-2 text-[11px]" data-at="2">
         <img src="/ai-logos/claude-orange.svg" alt="" class="size-3.5" />
-        <span class="font-medium">Claude</span><span class="text-neutral-500">Updated: “within 60 minutes in central Austin”</span>
+        <span class="font-medium">Claude</span><span class="text-neutral-500" data-type data-at="2" data-fx="fade" data-speed="14" data-text="Updated: “within 60 minutes in central Austin”"></span>
       </div>
     </div>
   </div>

@@ -1,29 +1,49 @@
 ---
-// Browser chrome around an app mockup.
+// Browser chrome around an app mockup. The window renders at a fixed design
+// size (`width` × chrome + `height`) and scales to fit, so the demo looks the
+// same, proportions and all, on a phone and a desktop.
+// The bar along the bottom edge fills over one loop of the demo inside.
+import ScaleFrame from './ScaleFrame.astro'
+
 interface Props {
   url?: string
   class?: string
   dark?: boolean
+  /** Design height of the content area in px. */
+  height?: number
+  /** Design width in px. */
+  width?: number
+  /** Show the loop progress bar (off when something else shows progress). */
+  progress?: boolean
+  /** Scale past `width` to fill a wider container. */
+  fill?: boolean
 }
-const { url = 'app.gitcms.dev', class: className = '', dark = false } = Astro.props
+const { url = 'app.gitcms.dev', class: className = '', dark = false, height = 440, width = 1024, progress = true, fill = false } = Astro.props
+// h-9 chrome plus the window's 1px top and bottom border.
+const CHROME = 38
 ---
-<div
-  class:list={[
-    'overflow-hidden rounded-xl border',
-    dark ? 'border-neutral-800 bg-neutral-900' : 'border-neutral-200 bg-white',
-    className,
-  ]}
->
-  <div class:list={['flex h-9 items-center gap-3 border-b px-3', dark ? 'border-neutral-800' : 'border-neutral-200 bg-neutral-50']}>
-    <div class="flex gap-1.5">
-      <span class="size-2.5 rounded-full bg-neutral-300"></span>
-      <span class="size-2.5 rounded-full bg-neutral-300"></span>
-      <span class="size-2.5 rounded-full bg-neutral-300"></span>
+<ScaleFrame width={width} height={height + CHROME} fill={fill} class={className}>
+  <div
+    data-app-window
+    class:list={[
+      'relative h-full overflow-hidden rounded-xl border',
+      dark ? 'border-neutral-800 bg-neutral-900' : 'border-neutral-200 bg-white',
+    ]}
+  >
+    <div class:list={['flex h-9 items-center gap-3 border-b px-3', dark ? 'border-neutral-800' : 'border-neutral-200 bg-neutral-50']}>
+      <div class="flex gap-1.5">
+        <span class="size-2.5 rounded-full bg-neutral-300"></span>
+        <span class="size-2.5 rounded-full bg-neutral-300"></span>
+        <span class="size-2.5 rounded-full bg-neutral-300"></span>
+      </div>
+      <div data-window-url class:list={['mx-auto min-w-0 max-w-[70%] truncate rounded-md px-3 py-0.5 text-[11px]', dark ? 'bg-neutral-800 text-neutral-400' : 'border border-neutral-200 bg-white text-neutral-500']}>
+        {url}
+      </div>
+      <div class="w-10"></div>
     </div>
-    <div data-window-url class:list={['mx-auto min-w-0 max-w-[70%] truncate rounded-md px-3 py-0.5 text-[11px]', dark ? 'bg-neutral-800 text-neutral-400' : 'border border-neutral-200 bg-white text-neutral-500']}>
-      {url}
+    <div class="relative" style={`height: ${height}px;`}>
+      <slot />
     </div>
-    <div class="w-10"></div>
+    {progress && <span data-window-progress aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-0 z-40 block h-[2px] origin-left scale-x-0 bg-neutral-900/25"></span>}
   </div>
-  <slot />
-</div>
+</ScaleFrame>

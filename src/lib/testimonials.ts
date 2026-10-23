@@ -75,6 +75,18 @@ export const testimonials: ReadonlyArray<Testimonial> = [
     quote: 'GitCMS helps me visualize and simplify my editing process.',
     approved: true,
   },
+  {
+    id: 'chinmay',
+    name: 'Chinmay Joshi',
+    role: 'CTO',
+    site: { label: 'ACTUAL Inc' },
+    avatarSrc: '/images/landing/users/chinmay-joshi.webp',
+    context: 'Startup team',
+    persona: 'startup',
+    highlight: 'GitCMS’s Notion-like editor is super simple to work with.',
+    quote: 'GitCMS’s Notion-like editor is super simple to work with.',
+    approved: true,
+  },
 ]
 
 /** Testimonials cleared for publishing. */

@@ -2,11 +2,14 @@
 // Hero widget in the spirit of cal.com's booking card: one focused piece of
 // the product instead of a full app window. Left: a content task (who, what,
 // stage). Right: the entry it changes, cropped by the hero card's edge.
-import { Bot, Globe, MessageSquare } from 'lucide-react'
+// One take: Claude types the new copy and changes the price, a person sends
+// it to Review, Jess comments, and it's published.
+import { Bot, Check, Globe, MessageSquare } from 'lucide-react'
+import Cursor from './Cursor.astro'
 
 const stages = ['Draft', 'Review', 'Published'] as const
 ---
-<div data-seq="9" data-ms="1300" data-final="5" class="grid w-[760px] max-w-none grid-cols-[280px_1fr] overflow-hidden rounded-xl border border-neutral-200 bg-white text-left">
+<div data-seq="7" data-ms="1000" data-hold="2:1300 4:1600 7:2600" data-final="6" class="relative grid w-[760px] max-w-none grid-cols-[280px_1fr] overflow-hidden rounded-xl border border-neutral-200 bg-white text-left">
   <!-- Task -->
   <div class="border-r border-neutral-200 p-6">
     <div class="flex -space-x-1.5">
@@ -19,8 +22,8 @@ const stages = ['Draft', 'Review', 'Published'] as const
     <div class="mt-5 flex items-center gap-2">
       <div class="relative grid flex-1 grid-cols-3 rounded-lg bg-neutral-100 p-1 text-[12.5px]">
         {stages.map((stage, index) => (
-          <span class="relative z-10 py-1 text-center text-neutral-500">
-            <span class="absolute inset-0 -z-10 rounded-md bg-white shadow-[0_1px_2px_rgba(0,0,0,0.08)]" data-at={[0, 3, 6][index]} data-until={[3, 6, 99][index]} data-fx="fade"></span>
+          <span class="relative z-10 py-1 text-center text-neutral-500" data-cursor-at={[undefined, 3, 5][index]}>
+            <span class="absolute inset-0 -z-10 rounded-md bg-white shadow-[0_1px_2px_rgba(0,0,0,0.08)]" data-at={[0, 4, 6][index]} data-until={[4, 6, 99][index]} data-fx="fade"></span>
             {stage}
           </span>
         ))}
@@ -28,9 +31,13 @@ const stages = ['Draft', 'Review', 'Published'] as const
     </div>
     <ul class="mt-5 space-y-3 text-[13px] text-neutral-600">
       <li class="flex items-center gap-2.5"><Bot className="size-4 text-neutral-400" /> Drafted by Claude over MCP</li>
-      <li class="flex items-center gap-2.5"><MessageSquare className="size-4 text-neutral-400" /> 1 comment from Jess</li>
+      <li class="flex items-center gap-2.5"><MessageSquare className="size-4 text-neutral-400" />
+        <span data-at="0" data-until="4" data-fx="collapse">No comments yet</span>
+        <span data-at="4" data-fx="collapse">1 comment from Jess</span>
+      </li>
       <li class="flex items-center gap-2.5"><Globe className="size-4 text-neutral-400" /> acme-roofing.com</li>
     </ul>
+    <p class="mt-5 flex items-center gap-1.5 text-[12.5px] font-medium text-emerald-700" data-at="6"><Check className="size-4" /> Published · commit a3f9c2e</p>
   </div>
   <!-- Entry -->
   <div class="p-6">
@@ -41,8 +48,8 @@ const stages = ['Draft', 'Review', 'Published'] as const
     <dl class="mt-5 grid grid-cols-[92px_1fr] items-center gap-x-3 gap-y-2.5 text-[12.5px]">
       <dt class="text-neutral-400">Price from</dt>
       <dd class="flex items-center gap-2">
-        <span class="rounded bg-rose-50 px-1.5 py-0.5 text-rose-700" data-at="2" data-fx="fade">$219</span>
-        <span class="rounded bg-emerald-50 px-1.5 py-0.5 text-emerald-800">$249</span>
+        <span class="rounded bg-neutral-100 px-1.5 py-0.5 text-neutral-700 [&.on]:bg-rose-50 [&.on]:text-rose-700 [&.on]:line-through" data-at="2" data-fx="state">$219</span>
+        <span class="rounded bg-emerald-50 px-1.5 py-0.5 text-emerald-800" data-at="2">$249</span>
       </dd>
       <dt class="text-neutral-400">Hours</dt>
       <dd><span class="rounded bg-neutral-100 px-1.5 py-0.5 text-neutral-700">Open 24/7</span></dd>
@@ -56,5 +63,10 @@ const stages = ['Draft', 'Review', 'Published'] as const
       <span class="rounded-sm bg-[#DCF986]/50 text-neutral-900" data-type data-at="1" data-fx="fade" data-text=" Crews are on site within 60 minutes, day or night."></span>
     </p>
     <p class="mt-3 font-logo text-[15px] leading-relaxed text-neutral-300">Every repair is photographed for your insurer, and…</p>
+    <div class="mt-3 flex w-fit items-start gap-2 rounded-lg border border-neutral-200 bg-white px-2.5 py-2 text-[12px] shadow-[0_8px_20px_-12px_rgba(0,0,0,0.3)]" data-at="4">
+      <span class="grid size-5 shrink-0 place-items-center rounded-full bg-amber-500 text-[9px] font-semibold text-white">J</span>
+      <span><span class="font-medium text-neutral-900">Jess</span> <span class="text-neutral-600">Looks right. Ship it before the storm season.</span></span>
+    </div>
   </div>
+  <Cursor />
 </div>

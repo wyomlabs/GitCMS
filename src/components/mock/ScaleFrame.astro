@@ -1,0 +1,71 @@
+---
+// Renders its content at a fixed design size and scales the whole thing to
+// the available width, so a demo keeps one aspect ratio and one layout on
+// every screen, like a screen recording. Never scales above 1, unless
+// `fill` asks it to match a wider container (e.g. a row of cards below it).
+interface Props {
+  /** Design width in px; the demo always lays out at this width. */
+  width: number
+  /** Design height in px. */
+  height: number
+  /** Stop scaling from this breakpoint up, for layouts that crop on purpose. */
+  until?: 'lg'
+  /** Scale up past the design width to fill the container. */
+  fill?: boolean
+  class?: string
+}
+const { width, height, until, fill = false, class: className = '' } = Astro.props
+---
+<div data-scale-frame data-until={until} data-fill={fill ? '' : undefined} class:list={['scale-frame', className]} style={`--frame-w: ${width}px; ${fill ? '' : `max-width: ${width}px; `}aspect-ratio: ${width} / ${height};`}>
+  <div class="scale-frame-inner" style={`width: ${width}px; height: ${height}px;`}>
+    <slot />
+  </div>
+</div>
+
+<style is:global>
+  .scale-frame {
+    position: relative;
+    width: 100%;
+    container-type: inline-size;
+  }
+  /* tan(atan2(a, b)) divides two lengths into a plain number, so the scale
+     is right before any script runs; the script below covers browsers that
+     can't do that math. */
+  .scale-frame-inner {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform-origin: top left;
+    transform: scale(var(--frame-scale, min(1, tan(atan2(100cqw, var(--frame-w))))));
+  }
+  .scale-frame[data-fill] > .scale-frame-inner {
+    transform: scale(var(--frame-scale, tan(atan2(100cqw, var(--frame-w)))));
+  }
+  @media (min-width: 1024px) {
+    .scale-frame[data-until='lg'] {
+      max-width: none !important;
+      aspect-ratio: auto !important;
+      container-type: normal;
+    }
+    .scale-frame[data-until='lg'] > .scale-frame-inner {
+      position: static;
+      width: auto !important;
+      height: auto !important;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  const frames = document.querySelectorAll<HTMLElement>('[data-scale-frame]')
+  const observer = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      const frame = entry.target
+      if (!(frame instanceof HTMLElement)) continue
+      const width = Number.parseFloat(frame.style.getPropertyValue('--frame-w'))
+      const scale = entry.contentRect.width / width
+      frame.style.setProperty('--frame-scale', String(frame.dataset.fill === undefined ? Math.min(1, scale) : scale))
+    }
+  })
+  frames.forEach((frame) => observer.observe(frame))
+</script>

@@ -26,20 +26,21 @@ const urls: Record<DemoName, string> = {
   search: `${site}/search`,
   'change-requests': `${site}/change-requests/61`,
 }
-const heights: Record<DemoName, string> = {
-  fleet: 'h-[280px]',
-  editor: 'h-[440px]',
-  review: 'h-[460px]',
-  board: 'h-[440px]',
-  seo: 'h-[440px]',
-  search: 'h-[420px]',
-  'change-requests': 'h-[440px]',
+// Design heights in px; the window scales to fit, keeping this ratio.
+const heights: Record<DemoName, number> = {
+  fleet: 280,
+  editor: 440,
+  review: 460,
+  board: 440,
+  seo: 440,
+  search: 420,
+  'change-requests': 440,
 }
 ---
-<AppWindow url={urls[demo]} class={className}>
-  <div class:list={['relative', heights[demo]]}>
+<AppWindow url={urls[demo]} height={heights[demo]} class={className}>
+  <div class="relative h-full">
     {demo === 'fleet' && <FleetMock />}
-    {demo === 'editor' && <EditorMock />}
+    {demo === 'editor' && <EditorMock siteData />}
     {demo === 'review' && <ReviewMock />}
     {demo === 'board' && <BoardMock />}
     {demo === 'seo' && <EditorMock panel="seo" />}
