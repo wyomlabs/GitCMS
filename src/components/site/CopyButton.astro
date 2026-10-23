@@ -8,9 +8,11 @@ interface Props {
   copiedLabel?: string
   tone?: 'light' | 'dark' | 'lime'
   size?: 'md' | 'sm'
+  /** Overlapping logos shown in place of the copy icon, e.g. the agents a prompt is for. */
+  logos?: ReadonlyArray<string>
   class?: string
 }
-const { text, label, copiedLabel = 'Copied', tone = 'light', size = 'md', class: className = '' } = Astro.props
+const { text, label, copiedLabel = 'Copied', tone = 'light', size = 'md', logos, class: className = '' } = Astro.props
 const tones = {
   light: 'border border-neutral-200 bg-white text-neutral-900 hover:bg-neutral-50',
   dark: 'border border-white/15 bg-white/5 text-white hover:bg-white/10',
@@ -22,7 +24,12 @@ const sizes = {
 }
 ---
 <button type="button" data-copy={text} class:list={['group/copy inline-flex shrink-0 items-center font-medium transition-colors', sizes[size], tones[tone], className]}>
-  <span class="contents group-data-[copied=true]/copy:hidden"><Copy className="opacity-60" /> {label}</span>
+  <span class="contents group-data-[copied=true]/copy:hidden">
+    {logos
+      ? <span class="flex -space-x-2">{logos.map((logo) => <span class="grid size-6 place-items-center rounded-full border border-neutral-200 bg-white"><img src={logo} alt="" class="size-3.5 object-contain" /></span>)}</span>
+      : <Copy className="opacity-60" />}
+    {label}
+  </span>
   <span class="hidden items-center gap-[inherit] group-data-[copied=true]/copy:inline-flex"><Check className="text-emerald-500" /> {copiedLabel}</span>
 </button>
 

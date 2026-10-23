@@ -12,7 +12,7 @@ import CtaBand from '@/components/site/CtaBand.astro'
 import { card, eyebrow, heading } from '@/components/site/styles'
 import { faqStructuredData } from '@/lib/structured-data'
 import { DEFAULT_SEO_DESCRIPTION, PRODUCT_NAME, SITE_URL } from '@/lib/positioning'
-import { UPCOMING_PLANS } from '@/lib/pricing-plans'
+import { FOUNDING_LICENSE } from '@/lib/pricing-plans'
 import ProductTour from '@/components/sections/ProductTour.astro'
 import AppWindow from '@/components/mock/AppWindow.astro'
 import EditorMock from '@/components/mock/EditorMock.astro'
@@ -20,12 +20,14 @@ import ScaleFrame from '@/components/mock/ScaleFrame.astro'
 import SearchMock from '@/components/mock/SearchMock.astro'
 import FleetMock from '@/components/mock/FleetMock.astro'
 import HeroWidget from '@/components/mock/HeroWidget.astro'
+import HeroOverview from '@/components/mock/HeroOverview.astro'
 import { publishedTestimonials } from '@/lib/testimonials'
 import ChangeRequestMock from '@/components/mock/ChangeRequestMock.astro'
 import Testimonials from '@/components/sections/Testimonials.astro'
 import CostComparator from '@/components/sections/CostComparator.astro'
 import FounderNote from '@/components/sections/FounderNote.astro'
 import PricingTable from '@/components/sections/PricingTable.astro'
+import FoundingLicenseOffer from '@/components/sections/FoundingLicenseOffer.astro'
 import FaqList from '@/components/site/FaqList.astro'
 import CopyButton from '@/components/site/CopyButton.astro'
 import AgentSetupMock from '@/components/mock/AgentSetupMock.astro'
@@ -57,8 +59,8 @@ const tones: Record<string, string> = {
   orange: 'bg-white border border-neutral-200',
 }
 
-// The FAQ markup matches the questions on the page; offers mirror the plans
-// in the pricing table.
+// The FAQ markup matches the questions on the page. The only offer is the
+// founding license: the monthly plans in the table can't be bought yet.
 const structuredData = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -71,12 +73,13 @@ const structuredData = {
       operatingSystem: 'Web',
       description: DEFAULT_SEO_DESCRIPTION,
       publisher: { '@id': `${SITE_URL}/#organization` },
-      offers: UPCOMING_PLANS.map((plan) => ({
+      offers: {
         '@type': 'Offer',
-        name: plan.name,
-        price: plan.monthlyPrice,
+        name: 'Founding site license',
+        price: FOUNDING_LICENSE.sitePrice,
         priceCurrency: 'USD',
-      })),
+        availability: 'https://schema.org/InStock',
+      },
     },
     { '@type': 'FAQPage', mainEntity: faqStructuredData(FAQS).mainEntity },
   ],
@@ -96,30 +99,40 @@ const structuredData = {
         </h1>
         <p class="mt-5 max-w-[500px] text-[16px] leading-[1.5] text-[#898989]">{SUBHEAD}</p>
         <div class="mt-7 flex flex-wrap gap-3">
-          <a href={loginUrl('/')} class="inline-flex h-10 items-center gap-2 rounded-xl bg-neutral-900 px-4 text-[14px] font-medium text-white hover:bg-neutral-800">Connect your site, free <ArrowRight className="size-4" /></a>
-          <CopyButton text={AGENT_SETUP_PROMPT} label="Set up with your agent" copiedLabel="Copied. Paste it into your agent" />
+          <a href={loginUrl('/')} data-hero-cta data-umami-event="hero-connect" class="inline-flex h-10 items-center gap-2 rounded-xl bg-neutral-900 px-4 text-[14px] font-medium text-white hover:bg-neutral-800">Connect your site, free <ArrowRight className="size-4" /></a>
+          <CopyButton text={AGENT_SETUP_PROMPT} label="Set up with your agent" copiedLabel="Copied. Paste it into your agent" logos={['/ai-logos/claude-orange.svg', '/ai-logos/openai-bw.svg', '/ai-logos/cursor.svg', '/ai-logos/pi.svg']} />
         </div>
         <p class="mt-4 text-[14px] text-[#898989]">Free to explore · No migration · Works with your framework and host</p>
       </div>
       <div class="min-w-0">
         <!-- Bleeds past the card's right edge, which crops it (cal.com).
              Below lg there's no room to bleed, so it scales down whole. -->
-        <ScaleFrame width={760} height={408} until="lg"><HeroWidget /></ScaleFrame>
+        <!-- Hero visual A/B: the workflow overview is the default;
+             `?hero=task` shows the original task widget. -->
+        <div data-hero-variant="task" hidden><ScaleFrame width={760} height={408} until="lg"><HeroWidget /></ScaleFrame></div>
+        <div data-hero-variant="overview" class="lg:pr-12"><ScaleFrame width={548} height={408}><HeroOverview /></ScaleFrame></div>
         <div class="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4 text-[13px] text-neutral-500">
           <span class="flex items-center gap-2.5">
             <span class="flex -space-x-2">
               {publishedTestimonials.filter((item) => item.avatarSrc).map((item) => <img src={item.avatarSrc} alt="" class="size-7 rounded-full object-cover ring-2 ring-white" />)}
             </span>
-            Loved by agencies and writers
-          </span>
-          <span class="flex items-center gap-2">
-            {['/ai-logos/claude-orange.svg', '/ai-logos/openai-bw.svg', '/ai-logos/cursor.svg', '/ai-logos/pi.svg'].map((logo) => <img src={logo} alt="" class="size-4" />)}
-            Works with your agents
+            Loved by developers, agencies and writers
           </span>
         </div>
       </div>
     </div>
   </section>
+
+  <script>
+    // Hero visual A/B: pick the variant from `?hero=` (default: overview)
+    // and tag the CTA click with it, so Umami can compare them.
+    const requested = new URLSearchParams(window.location.search).get('hero')
+    const variant = requested === 'task' ? requested : 'overview'
+    for (const element of document.querySelectorAll<HTMLElement>('[data-hero-variant]')) {
+      element.hidden = element.dataset.heroVariant !== variant
+    }
+    document.querySelector('[data-hero-cta]')?.setAttribute('data-umami-event-variant', variant)
+  </script>
 
   <!-- Companies -->
   <section class="grid items-center gap-6 border-y border-neutral-200 px-8 py-12 md:grid-cols-[170px_1fr] lg:px-16">
@@ -330,7 +343,9 @@ const structuredData = {
   <!-- Pricing -->
   <Section id="pricing">
     <SectionHeading eyebrow="Pricing" icon={Rocket} title="Pay for sites, not seats" description="Unlimited people and agents on paid plans. Bring your own AI; we don’t resell credits." />
-    <div class:list={['mt-16 p-5 sm:p-8', card]}><PricingTable /></div>
+    <div class="mt-16"><FoundingLicenseOffer /></div>
+    <p class="mt-12 flex items-center justify-center gap-2 text-[13px] font-medium text-neutral-500"><span class="rounded-full border border-neutral-200 bg-white px-2.5 py-0.5">Monthly plans · launching soon</span></p>
+    <div class:list={['mt-4 p-5 sm:p-8', card]}><PricingTable /></div>
   </Section>
 
   <!-- FAQ -->
@@ -347,10 +362,12 @@ const structuredData = {
     const demo = chapters.closest('section')?.querySelector<HTMLElement>('[data-seq]')
     if (!demo) continue
     const cards = [...chapters.querySelectorAll<HTMLButtonElement>('[data-chapter-from]')]
-    const durations = (demo.dataset.durations ?? '').split(',').map(Number)
-    const sum = (from: number, to: number) => durations.slice(from, to).reduce((total, ms) => total + ms, 0)
 
     demo.addEventListener('seq:step', (event) => {
+      // Read per step: the Sequencer writes data-durations after this script
+      // runs (it loads later in the layout).
+      const durations = (demo.dataset.durations ?? '').split(',').map(Number)
+      const sum = (from: number, to: number) => durations.slice(from, to).reduce((total, ms) => total + ms, 0)
       const step = event instanceof CustomEvent ? Number(event.detail) : 0
       for (const card of cards) {
         const from = Number(card.dataset.chapterFrom)

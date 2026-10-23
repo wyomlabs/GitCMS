@@ -129,4 +129,8 @@ export const FAQS = [
     question: 'What happens if I stop using GitCMS?',
     answer: 'Your site keeps working. Content was always files in your repository, and every change is already in its Git history.',
   },
+  {
+    question: 'What happens to the founding license when monthly plans launch?',
+    answer: 'It keeps working, and you never have to move to a monthly plan. A founding license is a single payment per site and includes every future update. It stops being sold when monthly plans launch, so the price is only available until then.',
+  },
 ] as const
