@@ -1,0 +1,74 @@
+---
+title: AI Site Builders
+description: Let clients edit a site built with Lovable, Bolt, Emergent or v0 in GitCMS, while you keep building in the builder.
+---
+
+Sites made with AI site builders keep their copy inside React components. GitCMS edits files, so the setup has two parts: move the copy into content files once, then connect the repository. After that, you keep building in the builder and your client edits in GitCMS. Both work on the same GitHub repository.
+
+## Before you start
+
+GitCMS saves are commits to the repository, so the builder has to bring commits from GitHub back in before you build again. Some do it by themselves; with others you pull the repository first. A builder that only pushes to GitHub never sees your client's edits, and its next push can overwrite them.
+
+| Builder | Sync from GitHub back into the builder |
+|---------|----------------------------------------|
+| [Lovable](https://docs.lovable.dev/integrations/github) | Commits pushed to the project's active branch sync into Lovable |
+| [Bolt](https://support.bolt.new/integrations/git) | Bolt checks GitHub every 30 seconds and pulls in changes made outside Bolt |
+| [Emergent](https://emergent.sh/glossary/github-integration) | Not automatic. Pull the repository into your Emergent workspace before you build again |
+| v0, Replit and others | Check the builder's docs. If changes from GitHub don't come back in, edit in GitCMS only after you've stopped building in the tool |
+
+Built the site with a coding agent such as Claude Code, Codex or Cursor? It works in the repository directly, so there's nothing to sync. Follow the [Claude Code](/agents/claude-code), [Codex](/agents/codex) or [Cursor](/agents/cursor) guide instead.
+
+## Step 1: Connect the project to GitHub
+
+Connect GitHub from the builder. Lovable creates a new repository for the project; Bolt can link a new private repository or import an existing one; Emergent's **Save to GitHub** commits to a new or existing repository and branch.
+
+## Step 2: Move the copy into files
+
+Paste [Make a Lovable, Bolt, Emergent or v0 site editable](/prompts/make-ai-built-site-editable) into the builder. It asks for:
+
+| File | What it holds | In GitCMS |
+|------|---------------|-----------|
+| `content/pages/*.md` | One file per page. Copy sits in frontmatter fields; repeated items (plans, FAQs, testimonials) are lists | The **Pages** collection, edited as a form |
+| `content/blog/*.md` | One file per post | The **Blog** collection |
+| `data/site.json` | Navigation, footer, contact details, social links | [Site data](/docs/features/site-data) |
+| `public/images/` | Images a client may swap | The repository media library |
+
+Check the builder's preview afterwards: the site should look the same as before.
+
+GitCMS finds a site by its Markdown collections, so keep at least the pages collection even if the site has no blog.
+
+## Step 3: Add the site in GitCMS
+
+Choose **Add site** and pick the repository. GitCMS lists the collections it found with their fields. Enter the site's address (the builder's published URL or your custom domain), choose how changes go live, and save.
+
+Then open **Configure → Site data**, choose `data/site.json`, and select **Auto-detect** to turn it into a form.
+
+## Step 4: Invite your client
+
+Invite your client to the site from **Workspace settings → Members**. They sign in with Google and never need an account with the builder. See [Roles & Site Access](/docs/features/access-control).
+
+## How the builder and GitCMS share the repository
+
+- **Direct publish:** each save is a commit on the default branch. Lovable and Bolt pick it up by themselves; Emergent does after you pull.
+- **Review before publish:** a draft stays on its own branch until it's approved. The builder only gets it once it's published to the default branch.
+- **Asking the builder's AI to change copy** still works: it edits the same content files.
+
+### Lovable
+
+- Lovable syncs one branch, normally the default branch. Commits on other branches appear only after they're merged into it.
+- If a published change doesn't appear in Lovable, Lovable's docs say a missed GitHub notification is the usual cause, and pushing a new commit to the synced branch (an empty commit works) makes Lovable sync again.
+- Lovable can't link an existing repository; connecting GitHub always creates a new one.
+
+### Emergent
+
+- Emergent doesn't watch GitHub for new commits. Pull the repository into your workspace at the start of every build session, so you build on your client's latest copy and your next **Save to GitHub** doesn't work from an old version.
+
+### Bolt
+
+- If Bolt and GitHub change at almost the same moment, Bolt keeps its own version and overwrites GitHub's. Avoid editing the same page in Bolt and GitCMS at the same time.
+- Bolt can't merge branches. That doesn't affect GitCMS: publishing a reviewed draft merges it on GitHub.
+- Only the project owner manages Bolt's GitHub connection.
+
+## Rendering and SEO
+
+The prompt keeps the builder's rendering as it is. A single-page React app, the default for Lovable and many Bolt projects, still renders in the browser after the change. Moving copy into files doesn't make it better or worse for search engines.

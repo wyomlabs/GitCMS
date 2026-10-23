@@ -1,0 +1,63 @@
+---
+title: 'Make a Lovable, Bolt, Emergent or v0 site editable'
+description: 'Paste into your site builder: it moves the copy out of React components into Markdown and JSON files, so clients edit the site in GitCMS while you keep building.'
+category: handoff
+agents:
+  - 'Lovable'
+  - 'Bolt'
+  - 'Emergent'
+  - 'v0'
+order: 3
+lastReviewed: '2026-10-23'
+---
+
+## The prompt
+
+```text
+Make this site's copy editable in GitCMS, a visual CMS that edits the files
+in this repository. Move text out of components into content files. Don't
+change how anything looks.
+
+1. Pages: create content/pages/ with one Markdown file per page (home.md,
+   about.md, services.md). Put every piece of copy a client might change in
+   YAML frontmatter: headlines, subheadings, button labels and links, prices,
+   opening hours and contact details. Repeated items such as features,
+   pricing plans, testimonials, team members and FAQs become lists of
+   objects. Use field names a non-developer understands (heroHeadline, not
+   h1Text). Longer free text can go in the Markdown body.
+2. Blog: if the site has posts, news or case studies, give each its own
+   Markdown file in content/blog/ with title, description, date and image in
+   the frontmatter.
+3. Site-wide data: put the navigation, footer, contact details and social
+   links in data/site.json.
+4. Images a client may swap go in public/images/ and are referenced as
+   /images/<file>.
+5. Read the files at build time, with no database or API:
+   - Vite + React: load content/**/*.md with import.meta.glob (query '?raw',
+     eager), parse frontmatter with the front-matter package, render Markdown
+     bodies with react-markdown, and import data/site.json directly.
+   - Next.js: read the files in server components with fs and gray-matter.
+   - Astro: use content collections in src/content instead of content/.
+   YAML dates load as Date objects, so format them before rendering.
+6. Keep every component and the design exactly as they are. Only replace
+   hardcoded strings with values from the files.
+7. When you're done, list the content files you created and the components
+   you changed.
+```
+
+## What it does
+
+AI site builders write copy straight into React components. That's quick for building, but nobody except the builder (and its AI) can change it, and every small edit costs a prompt. This prompt draws a line: copy in files, design in code.
+
+Pages become Markdown files whose frontmatter holds the copy, so GitCMS shows each page as a form: a headline field, a list of pricing plans, a list of FAQs. Site-wide details sit in one JSON file that GitCMS edits as [site data](/docs/features/site-data).
+
+## Before you run it
+
+- Connect the project to GitHub from your builder, so GitCMS edits the repository the builder works from.
+- Check the preview after the change: it should look identical.
+
+## After you run it
+
+In GitCMS, choose **Add site** and pick the repository. GitCMS finds `content/pages` and `content/blog` as collections. Then add `data/site.json` under **Configure → Site data**. Edits your client makes in GitCMS are commits to the repository. Lovable and Bolt pull them back in by themselves; with Emergent, pull the repository into your workspace before you build again.
+
+Step by step: [AI site builders](/docs/getting-started/ai-site-builders). Builder guides: [Lovable](/cms-for-lovable), [Bolt](/cms-for-bolt), [Emergent](/cms-for-emergent). Built with a coding agent instead? See [Claude Code](/agents/claude-code) or [Codex](/agents/codex).

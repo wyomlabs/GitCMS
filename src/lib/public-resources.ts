@@ -1,7 +1,9 @@
 import { getCollection } from 'astro:content'
 import { agentList, getAgentLandingDescription, getAgentLandingTitle } from '@/lib/agent-data'
 import { frameworkList, getFrameworkFaqs, getFrameworkLandingDescription, getFrameworkLandingTitle } from '@/lib/framework-data'
-import { useCases } from '@/lib/use-cases'
+import { features } from '@/lib/features'
+import { getSiteBuilderDescription, getSiteBuilderTitle, siteBuilders } from '@/lib/site-builders'
+import { getUseCase, useCases } from '@/lib/use-cases'
 import {
   DEFAULT_SEO_DESCRIPTION,
   DEFAULT_SEO_TITLE,
@@ -19,8 +21,10 @@ export type PublicResourceKind =
   | 'prompt'
   | 'tool'
   | 'agent'
+  | 'feature'
   | 'persona'
   | 'framework'
+  | 'builder'
   | 'page'
   | 'index'
 
@@ -142,6 +146,42 @@ function useCaseBody(useCase: (typeof useCases)[number]) {
   ].join('\n')
 }
 
+function featureBody(feature: (typeof features)[number]) {
+  return [
+    feature.description,
+    '',
+    `## ${feature.problemTitle}`,
+    '',
+    ...feature.problem.flatMap((paragraph) => [paragraph, '']),
+    `## ${feature.stepsTitle}`,
+    '',
+    ...feature.steps.flatMap((step, index) => [`### ${index + 1}. ${step.title}`, '', step.body, ...(step.inRepo ? ['', `In the repository: \`${step.inRepo}\``] : []), '']),
+    ...(feature.showcase ? [`## ${feature.showcase.title}`, '', feature.showcase.description, ''] : []),
+    '## Who it’s for',
+    '',
+    ...feature.audiences.map((audience) => `- **[${getUseCase(audience.useCase).name}](${getUseCase(audience.useCase).path}):** ${audience.body}`),
+    '',
+    `## ${feature.underTheHood.title}`,
+    '',
+    feature.underTheHood.intro,
+    '',
+    '| In GitCMS | In your repository |',
+    '| --- | --- |',
+    ...feature.underTheHood.rows.map((row) => `| ${row.action} | ${row.repo} |`),
+    '',
+    `## ${feature.detailsTitle}`,
+    '',
+    ...feature.details.map((detail) => `- **${detail.title}${detail.soon ? ' (coming soon)' : ''}:** ${detail.body}`),
+    '',
+    '## FAQ',
+    '',
+    ...feature.faqs.flatMap((faq) => [`### ${faq.question}`, '', faq.answer, '']),
+    '## Related',
+    '',
+    ...feature.related.map((link) => `- [${link.label}](${link.href})`),
+  ].join('\n')
+}
+
 function frameworkBody(framework: (typeof frameworkList)[number]) {
   const faqs = getFrameworkFaqs(framework)
   return [
@@ -164,6 +204,25 @@ function frameworkBody(framework: (typeof frameworkList)[number]) {
     '## FAQ',
     '',
     ...faqs.flatMap((faq) => [`### ${faq.question}`, '', faq.answer, '']),
+  ].join('\n')
+}
+
+function builderBody(builder: (typeof siteBuilders)[number]) {
+  return [
+    getSiteBuilderDescription(builder),
+    '',
+    '## How it works',
+    '',
+    `1. Paste the prompt from /prompts/make-ai-built-site-editable into ${builder.name}. It moves copy out of components into content/pages/*.md (frontmatter fields), content/blog/*.md and data/site.json, without changing the design.`,
+    `2. ${builder.connect} In GitCMS, Add site finds the pages, posts and site data.`,
+    `3. Clients edit in GitCMS; every save is a commit. ${builder.syncBack}`,
+    '',
+    `${builder.name} usually builds ${builder.stack}.`,
+    '',
+    '## FAQ',
+    '',
+    ...builder.faqs.flatMap((faq) => [`### ${faq.question}`, '', faq.answer, '']),
+    'Setup guide: /docs/getting-started/ai-site-builders',
   ].join('\n')
 }
 
@@ -326,6 +385,17 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
     }))
   }
 
+  for (const feature of features) {
+    resources.push(resource({
+      id: `feature:${feature.slug}`,
+      kind: 'feature',
+      title: feature.seoTitle,
+      description: feature.seoDescription,
+      htmlPath: feature.path,
+      body: featureBody(feature),
+    }))
+  }
+
   for (const useCase of useCases) {
     resources.push(resource({
       id: `persona:${useCase.slug}`,
@@ -345,6 +415,17 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       description: getFrameworkLandingDescription(framework),
       htmlPath: `/git-based-cms-for-${framework.slug}`,
       body: frameworkBody(framework),
+    }))
+  }
+
+  for (const builder of siteBuilders) {
+    resources.push(resource({
+      id: `builder:${builder.slug}`,
+      kind: 'builder',
+      title: `${getSiteBuilderTitle(builder)} — GitCMS`,
+      description: getSiteBuilderDescription(builder),
+      htmlPath: `/cms-for-${builder.slug}`,
+      body: builderBody(builder),
     }))
   }
 

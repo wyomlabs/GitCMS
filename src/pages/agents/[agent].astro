@@ -8,6 +8,7 @@ import CtaBand from '@/components/site/CtaBand.astro'
 import FaqList from '@/components/site/FaqList.astro'
 import AppWindow from '@/components/mock/AppWindow.astro'
 import AgentChatMock from '@/components/mock/AgentChatMock.astro'
+import BuilderSessionMock from '@/components/mock/BuilderSessionMock.astro'
 import DemoWindow from '@/components/mock/DemoWindow.astro'
 import LinkGrid from '@/components/sections/LinkGrid.astro'
 import ConnectionMethods from '@/components/agents/ConnectionMethods.astro'
@@ -50,9 +51,24 @@ const others = directoryAgentList
         <CopyButton text={MCP_CONNECTOR_URL} label="Copy connector URL" copiedLabel="Connector URL copied" />
       </div>
     </div>
-    <AppWindow url={chatUrls[agent.slug] ?? `${agent.name} · GitCMS connector`} class="mx-auto mt-16 max-w-5xl">
-      <div class="h-[460px]"><AgentChatMock agent={agent.slug === 'claude' ? undefined : { name: agent.name, logo: agent.logoPath }} /></div>
-    </AppWindow>
+    {agent.family === 'coding'
+      ? (
+        <AppWindow url={`${agent.name} · acme-roofing`} height={460} class="mx-auto mt-16 max-w-5xl">
+          <BuilderSessionMock
+            agent={{ name: agent.name, logo: agent.logoPath }}
+            prompt="Make the copy editable for my client and set up GitCMS. Keep the design exactly the same."
+            work={['Read 6 components with hardcoded copy', 'Moved hero, pricing and FAQs into content/pages/home.md', 'Ran npx create-gitcms@latest --yes', 'Pushed .gitcms/ and content/ to main']}
+            reply="Done. The site looks the same, and Jess can now edit the headline, prices and FAQs in GitCMS."
+            sync="git pull · 1 commit"
+            previewUrl="localhost:4321"
+          />
+        </AppWindow>
+      )
+      : (
+        <AppWindow url={chatUrls[agent.slug] ?? `${agent.name} · GitCMS connector`} height={460} class="mx-auto mt-16 max-w-5xl">
+          <div class="h-full"><AgentChatMock agent={agent.slug === 'claude' ? undefined : { name: agent.name, logo: agent.logoPath }} /></div>
+        </AppWindow>
+      )}
   </Section>
 
   <Section>

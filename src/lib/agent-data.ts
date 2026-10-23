@@ -305,6 +305,11 @@ export const agentList: ReadonlyArray<AgentInfo> = [
         answer:
           'Yes. One GitCMS connection gives Claude Code access to every site you can access in GitCMS, so agencies can work on content across client sites without cloning each repository.',
       },
+      {
+        question: 'I designed the site in Claude Design. Does this still apply?',
+        answer:
+          'Yes. Claude Design hands a finished design to Claude Code, which builds the site in your repository. From there it’s the same handoff: make the copy client-editable, set up GitCMS, and invite your client.',
+      },
       ...SHARED_AGENT_FAQS,
     ],
   },

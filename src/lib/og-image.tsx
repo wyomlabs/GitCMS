@@ -58,8 +58,10 @@ function kindLabel(resource: PublicResource) {
     prompt: 'Prompt library',
     tool: 'Free tool',
     agent: 'AI agents',
+    feature: 'Feature',
     persona: 'Who it’s for',
     framework: 'Framework guide',
+    builder: 'AI site builders',
     page: 'GitCMS',
     index: 'GitCMS',
   }
