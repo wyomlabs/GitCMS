@@ -1,0 +1,132 @@
+---
+// The page every /features/* capability shares: a definition and live demo,
+// the problem it removes, three steps, what it's worth to each audience,
+// what it writes to the repository, the details, and searched questions.
+// All copy comes from lib/features.ts.
+import { ArrowRight, CircleAlert, FolderGit2, GitBranch, Quote, Sparkles, Users, Workflow } from 'lucide-react'
+import MarketingLayout from '@/layouts/MarketingLayout.astro'
+import Section from '@/components/site/Section.astro'
+import SectionHeading from '@/components/site/SectionHeading.astro'
+import CopyButton from '@/components/site/CopyButton.astro'
+import CtaBand from '@/components/site/CtaBand.astro'
+import FaqList from '@/components/site/FaqList.astro'
+import DemoWindow from '@/components/mock/DemoWindow.astro'
+import InlineCode from './InlineCode.astro'
+import { badge, card, eyebrow, h2, primaryButton, sub } from '@/components/site/styles'
+import { AGENT_SETUP_PROMPT } from '@/lib/agent-setup-prompt'
+import { loginUrl } from '@/lib/start-login'
+import { faqStructuredData } from '@/lib/structured-data'
+import { USE_CASE_ICONS } from '@/lib/site-nav'
+import { getUseCase } from '@/lib/use-cases'
+import type { Feature } from '@/lib/features'
+
+interface Props {
+  feature: Feature
+}
+const { feature } = Astro.props
+const audiences = feature.audiences.map((audience) => ({ ...audience, useCase: getUseCase(audience.useCase), Icon: USE_CASE_ICONS[audience.useCase] }))
+---
+<MarketingLayout title={feature.seoTitle} description={feature.seoDescription} path={feature.path} structuredData={faqStructuredData(feature.faqs)}>
+  <Section first>
+    <SectionHeading level={1} eyebrow={feature.name} icon={feature.icon} badge={feature.beta && 'Beta'} title={feature.title} description={feature.description}>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href={loginUrl('/')} class={primaryButton}>Connect your site, free <ArrowRight className="size-4" /></a>
+        <CopyButton text={AGENT_SETUP_PROMPT} label="Set up with your agent" copiedLabel="Copied. Paste it into your agent" />
+      </div>
+    </SectionHeading>
+    <DemoWindow demo={feature.demo} class="mx-auto mt-16 max-w-5xl" />
+  </Section>
+
+  <Section>
+    <div class="grid gap-10 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <span class={eyebrow}><CircleAlert className="size-3.5" /> The problem</span>
+        <h2 class:list={['mt-5', h2]}>{feature.problemTitle}</h2>
+      </div>
+      <div class:list={['space-y-5 lg:pt-12', sub]}>
+        {feature.problem.map((paragraph) => <p><InlineCode text={paragraph} /></p>)}
+      </div>
+    </div>
+  </Section>
+
+  <Section>
+    <SectionHeading eyebrow="How it works" icon={Workflow} title={feature.stepsTitle} />
+    <ol class="mt-16 grid gap-5 md:grid-cols-3">
+      {feature.steps.map((step, index) => (
+        <li class:list={['flex flex-col p-7', card]}>
+          <span class="grid size-6 place-items-center rounded-full bg-neutral-900 text-[11px] font-semibold text-white">{index + 1}</span>
+          <h3 class="mt-4 text-[16px] font-semibold tracking-tight">{step.title}</h3>
+          <p class="mt-2 text-[14.5px] leading-relaxed text-[#898989]">{step.body}</p>
+          {step.inRepo && (
+            <p class="mt-auto flex min-w-0 items-center gap-2 pt-5 text-[12px] text-neutral-500">
+              <FolderGit2 className="size-3.5 shrink-0" />
+              <code class="truncate rounded-md bg-neutral-100 px-1.5 py-0.5 font-mono text-[11.5px] text-neutral-700">{step.inRepo}</code>
+            </p>
+          )}
+        </li>
+      ))}
+    </ol>
+    {feature.showcase && (
+      <div class="mt-24">
+        <SectionHeading title={feature.showcase.title} description={feature.showcase.description} />
+        <DemoWindow demo={feature.showcase.demo} class="mx-auto mt-12 max-w-5xl" />
+      </div>
+    )}
+  </Section>
+
+  <Section>
+    <SectionHeading eyebrow="Who it’s for" icon={Users} title="What it changes for you" />
+    <div class="mt-16 grid gap-5 md:grid-cols-2">
+      {audiences.map(({ useCase, Icon, body }) => (
+        <a href={useCase.path} class:list={['group/audience flex flex-col p-7 transition-colors hover:border-neutral-300', card]}>
+          <span class="flex items-center gap-3">
+            <span class="grid size-10 shrink-0 place-items-center rounded-lg border border-neutral-200/80 bg-neutral-100 text-neutral-700"><Icon className="size-[18px]" strokeWidth={1.75} /></span>
+            <span class="text-[16px] font-semibold tracking-tight">{useCase.name}</span>
+          </span>
+          <p class="mt-4 text-[14.5px] leading-relaxed text-[#898989]">{body}</p>
+          <span class="mt-auto inline-flex items-center gap-1.5 pt-5 text-[13px] font-medium text-neutral-900">GitCMS for {useCase.name.toLowerCase()} <ArrowRight className="size-3.5 transition-transform group-hover/audience:translate-x-0.5" /></span>
+        </a>
+      ))}
+    </div>
+  </Section>
+
+  <Section>
+    <SectionHeading eyebrow="Under the hood" icon={GitBranch} title={feature.underTheHood.title} description={feature.underTheHood.intro} />
+    <div class:list={['mx-auto mt-16 max-w-4xl overflow-hidden', card]}>
+      <div class="hidden grid-cols-[220px_1fr] border-b border-neutral-200 bg-neutral-50 px-7 py-3 text-[12px] font-medium uppercase tracking-wide text-neutral-500 sm:grid">
+        <span>In GitCMS</span><span>In your repository</span>
+      </div>
+      <dl class="divide-y divide-neutral-100">
+        {feature.underTheHood.rows.map((row) => (
+          <div class="grid gap-1 px-7 py-4 sm:grid-cols-[220px_1fr] sm:gap-0">
+            <dt class="text-[14.5px] font-medium text-neutral-900">{row.action}</dt>
+            <dd class="text-[14.5px] leading-relaxed text-[#898989]"><InlineCode text={row.repo} /></dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </Section>
+
+  <Section>
+    <SectionHeading eyebrow="Details" icon={Sparkles} title={feature.detailsTitle} />
+    <div class="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {feature.details.map((detail) => (
+        <div class:list={['p-7', card]}>
+          <h3 class="flex items-center gap-2 text-[16px] font-semibold tracking-tight">{detail.title} {detail.soon && <span class={badge}>Soon</span>}</h3>
+          <p class="mt-2 text-[14.5px] leading-relaxed text-[#898989]">{detail.body}</p>
+        </div>
+      ))}
+    </div>
+  </Section>
+
+  <Section>
+    <SectionHeading eyebrow="FAQ" icon={Quote} title="Questions, answered" />
+    <div class:list={['mx-auto mt-16 max-w-3xl px-8 py-3 [&>div]:border-y-0', card]}><FaqList faqs={feature.faqs} /></div>
+    <div class="mx-auto mt-8 flex max-w-3xl flex-wrap justify-center gap-x-6 gap-y-2 text-[14px]">
+      <span class="text-[#898989]">Read next:</span>
+      {feature.related.map((link) => <a href={link.href} class="font-medium text-neutral-900 underline-offset-4 hover:underline">{link.label}</a>)}
+    </div>
+  </Section>
+
+  <CtaBand title={feature.ctaTitle} description={feature.ctaDescription} />
+</MarketingLayout>

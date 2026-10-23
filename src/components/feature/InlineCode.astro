@@ -1,0 +1,8 @@
+---
+// Plain copy with `backticked` spans rendered as code, for data-driven text.
+interface Props {
+  text: string
+}
+const parts = Astro.props.text.split(/`([^`]+)`/)
+---
+{parts.map((part, index) => index % 2 === 1 ? <code class="rounded-md bg-neutral-100 px-1.5 py-0.5 font-mono text-[0.85em] text-neutral-800">{part}</code> : part)}

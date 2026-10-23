@@ -1,18 +1,28 @@
 ---
 // Floating header (cal.com): fixed 8px from the top, inset to the page
 // frame, transparent over the first section and white once the page
-// scrolls. Dropdowns open on hover or keyboard focus; on small screens the
-// links collapse into a native <details> menu, so no menu script is needed.
-import { ChevronDown, ChevronRight, Menu, X } from 'lucide-react'
+// scrolls. Each menu opens a full-width panel on hover or keyboard focus:
+// two link columns and a highlight card. On small screens the links collapse
+// into a native <details> menu, so no menu script is needed.
+import { ArrowRight, ChevronDown, ChevronRight, Menu, Newspaper, X } from 'lucide-react'
 import { GitCMSLogo } from '@/components/gitcms-logo'
+import { badge } from '@/components/site/styles'
+import { getPublishedPosts } from '@/lib/content'
+import { formatDate } from '@/lib/format-date'
 import { loginUrl } from '@/lib/start-login'
-import { RESOURCE_LINKS, USE_CASE_LINKS } from '@/lib/site-nav'
+import { FEATURE_LINKS, FRAMEWORK_LINKS, LEARN_LINKS, PLATFORM_LINKS, UPDATE_LINKS, USE_CASE_LINKS } from '@/lib/site-nav'
+import type { NavLink } from '@/lib/site-nav'
 
-const groups = [
-  { label: 'Use cases', links: USE_CASE_LINKS },
-  { label: 'Resources', links: RESOURCE_LINKS },
-] as const
+const [latestPost] = await getPublishedPosts()
+
+type Menu = { label: string; columns: ReadonlyArray<{ title: string; links: ReadonlyArray<NavLink> }>; highlight: 'change-requests' | 'founder' | 'latest-post' }
+const menus: ReadonlyArray<Menu> = [
+  { label: 'Product', columns: [{ title: 'Features', links: FEATURE_LINKS }, { title: 'Works with', links: PLATFORM_LINKS }], highlight: 'change-requests' },
+  { label: 'Use cases', columns: [{ title: 'By team', links: USE_CASE_LINKS }], highlight: 'founder' },
+  { label: 'Resources', columns: [{ title: 'Learn', links: LEARN_LINKS }, { title: 'Updates', links: UPDATE_LINKS }], highlight: 'latest-post' },
+]
 const link = 'transition-colors hover:text-neutral-950'
+const columnTitle = 'px-3 text-[13px] text-neutral-500'
 ---
 <header class="pointer-events-none fixed inset-x-0 top-2 z-40 px-3">
   <div data-nav class="pointer-events-auto relative mx-auto flex h-[57px] max-w-[1152px] items-center gap-8 rounded-2xl border border-transparent px-5 transition-[background-color,border-color] duration-200 data-[scrolled=true]:border-neutral-200 data-[scrolled=true]:bg-white sm:px-7">
@@ -20,24 +30,79 @@ const link = 'transition-colors hover:text-neutral-950'
       <GitCMSLogo className="size-8" />
       <span class="font-logo text-[27px] font-medium tracking-tight text-neutral-900">GitCMS</span>
     </a>
-    <nav aria-label="Primary" class="mx-auto hidden items-center gap-8 text-[14px] text-neutral-700 lg:flex">
-      <a href="/#product" class={link}>Product</a>
-      {groups.map((group) => (
-        <div class="group relative">
-          <button type="button" class:list={['flex items-center gap-1', link]}>{group.label} <ChevronDown className="size-3.5 opacity-60 transition-transform group-hover:rotate-180 group-focus-within:rotate-180" /></button>
-          <div class="invisible absolute left-1/2 top-full w-[340px] -translate-x-1/2 pt-4 opacity-0 transition-opacity duration-150 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
-            <div class="rounded-2xl border border-neutral-200 bg-white p-2 shadow-[0_12px_32px_-16px_rgba(0,0,0,0.25)]">
-              {group.links.map((item) => (
-                <a href={item.href} class="block rounded-xl px-3 py-2.5 hover:bg-neutral-50">
-                  <span class="block font-medium text-neutral-900">{item.label}</span>
-                  <span class="block text-[13px] text-[#898989]">{item.blurb}</span>
-                </a>
+    <nav aria-label="Primary" class="mx-auto hidden items-center gap-8 self-stretch text-[14px] text-neutral-700 lg:flex">
+      {menus.map((menu) => (
+        <div class="group flex h-full items-center">
+          {/* The trigger spans the full bar height so the cursor never leaves the hover area on its way to the panel; the close delay forgives diagonal moves. */}
+          <button type="button" class:list={['flex items-center gap-1', link]}>{menu.label} <ChevronDown className="size-3.5 opacity-60 transition-transform group-hover:rotate-180 group-focus-within:rotate-180" /></button>
+          <div class="invisible absolute inset-x-0 top-full pt-2 opacity-0 transition-[opacity,visibility] delay-150 duration-150 group-focus-within:visible group-focus-within:z-10 group-focus-within:delay-0 group-hover:z-10 group-hover:delay-0 group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+            <div class="grid grid-cols-[1fr_1fr_300px] gap-4 rounded-2xl border border-neutral-200 bg-white p-4 shadow-[0_16px_40px_-20px_rgba(0,0,0,0.3)]">
+              {menu.columns.map((column) => (
+                <div>
+                  <div class={columnTitle}>{column.title}</div>
+                  <div class="mt-2 grid gap-1">
+                    {column.links.map(({ icon: Icon, ...item }) => (
+                      <a href={item.href} class="group/item flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-neutral-50">
+                        <span class="grid size-10 shrink-0 place-items-center rounded-lg border border-neutral-200/80 bg-neutral-100 text-neutral-700 transition-colors group-hover/item:bg-white group-hover/item:text-neutral-950"><Icon className="size-[18px]" strokeWidth={1.75} /></span>
+                        <span class="min-w-0">
+                          <span class="flex items-center gap-1.5 font-medium text-neutral-900">{item.label} {item.badge && <span class={badge}>{item.badge}</span>}</span>
+                          <span class="block text-[13px] leading-snug text-[#898989]">{item.blurb}</span>
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
               ))}
+              {menu.label === 'Use cases' && (
+                <div>
+                  <div class={columnTitle}>By framework</div>
+                  <div class="mt-2 grid grid-cols-2 gap-x-1">
+                    {FRAMEWORK_LINKS.map((item) => (
+                      <a href={item.href} class="flex items-center gap-2.5 rounded-lg px-3 py-[7px] text-neutral-700 hover:bg-neutral-50 hover:text-neutral-950">
+                        <img src={item.logo} alt="" loading="lazy" class="size-4 shrink-0 object-contain" />
+                        <span class="truncate">{item.label}</span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {menu.highlight === 'change-requests' && (
+                <a href="/features/change-requests" class="group/card relative flex flex-col justify-between overflow-hidden rounded-xl bg-neutral-950 p-6 text-white">
+                  <div class="absolute -right-10 -top-10 size-44 rounded-full bg-[#DCF986]/20 blur-3xl"></div>
+                  <span class:list={['relative w-fit', badge]}>New</span>
+                  <div class="relative">
+                    <div class="text-[18px] font-semibold leading-snug tracking-tight">Change requests on preview deployments</div>
+                    <p class="mt-2 text-[13px] leading-relaxed text-neutral-400">Clients pin feedback on the page. Your agent fixes it, and GitCMS checks the preview.</p>
+                    <span class="mt-4 inline-flex items-center gap-1.5 text-[13px] font-medium text-[#DCF986]">See how it works <ArrowRight className="size-3.5 transition-transform group-hover/card:translate-x-0.5" /></span>
+                  </div>
+                </a>
+              )}
+              {menu.highlight === 'founder' && (
+                <a href="/#founder-story" class="group/card flex flex-col justify-between rounded-xl border border-neutral-200 bg-[#f4f4f4] p-6">
+                  <img src="/images/founder-waishnav-192.webp" alt="" class="size-12 rounded-full border border-neutral-200" loading="lazy" />
+                  <div>
+                    <div class="font-logo text-[20px] font-medium tracking-tight text-neutral-900">heyo! it’s <span class="text-[#7c3aed]">waishnav</span></div>
+                    <p class="mt-2 text-[13px] leading-relaxed text-[#898989]">Why WordPress is turning into legacy tech, and what replaces the admin it gave your clients.</p>
+                    <span class="mt-4 inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-900">Read the founder’s note <ArrowRight className="size-3.5 transition-transform group-hover/card:translate-x-0.5" /></span>
+                  </div>
+                </a>
+              )}
+              {menu.highlight === 'latest-post' && latestPost && (
+                <a href={`/blog/${latestPost.id.replace(/\.mdx?$/, '')}`} class="group/card flex flex-col justify-between overflow-hidden rounded-xl border border-neutral-200 bg-[#f4f4f4]">
+                  {latestPost.data.cover
+                    ? <img src={latestPost.data.cover} alt="" loading="lazy" class="aspect-[1.9/1] w-full border-b border-neutral-200 object-cover" />
+                    : <span class="m-6 mb-0 grid size-10 place-items-center rounded-lg border border-neutral-200 bg-white text-neutral-700"><Newspaper className="size-[18px]" strokeWidth={1.75} /></span>}
+                  <div class="p-6">
+                    <div class="text-[12px] text-[#898989]">Latest post · <time datetime={latestPost.data.date}>{formatDate(latestPost.data.date)}</time></div>
+                    <div class="mt-1.5 line-clamp-3 text-[17px] font-semibold leading-snug tracking-tight text-neutral-900">{latestPost.data.title}</div>
+                    <span class="mt-4 inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-900">Read the post <ArrowRight className="size-3.5 transition-transform group-hover/card:translate-x-0.5" /></span>
+                  </div>
+                </a>
+              )}
             </div>
           </div>
         </div>
       ))}
-      <a href="/agents" class={link}>Agents</a>
       <a href="/docs/" class={link}>Docs</a>
       <a href="/#pricing" class={link}>Pricing</a>
     </nav>
@@ -49,21 +114,19 @@ const link = 'transition-colors hover:text-neutral-950'
           <Menu className="size-5 group-open/menu:hidden" /><X className="hidden size-5 group-open/menu:block" />
         </summary>
         <div class="absolute inset-x-0 top-full mt-2 max-h-[calc(100dvh-90px)] overflow-y-auto rounded-2xl border border-neutral-200 bg-white p-5 shadow-[0_12px_32px_-16px_rgba(0,0,0,0.25)]">
-          <div class="grid gap-1 text-[15px] font-medium text-neutral-900">
-            <a href="/#product" class="py-1.5">Product</a>
-            <a href="/agents" class="py-1.5">Agents</a>
-            <a href="/docs/" class="py-1.5">Docs</a>
-            <a href="/#pricing" class="py-1.5">Pricing</a>
-          </div>
-          <div class="mt-5 grid grid-cols-2 gap-6">
-            {groups.map((group) => (
+          <div class="grid grid-cols-2 gap-x-6 gap-y-6">
+            {menus.flatMap((menu) => menu.columns).map((column) => (
               <div>
-                <div class="text-[12px] font-medium uppercase tracking-wide text-neutral-400">{group.label}</div>
+                <div class="text-[12px] font-medium uppercase tracking-wide text-neutral-400">{column.title}</div>
                 <div class="mt-2 grid gap-1 text-[14px] text-neutral-700">
-                  {group.links.map((item) => <a href={item.href} class="py-1">{item.label}</a>)}
+                  {column.links.map(({ icon: Icon, ...item }) => <a href={item.href} class="flex items-center gap-2 py-1"><Icon className="size-4 shrink-0 text-neutral-400" strokeWidth={1.75} />{item.label}</a>)}
                 </div>
               </div>
             ))}
+          </div>
+          <div class="mt-6 flex gap-6 border-t border-neutral-100 pt-4 text-[15px] font-medium text-neutral-900">
+            <a href="/docs/">Docs</a>
+            <a href="/#pricing">Pricing</a>
           </div>
         </div>
       </details>

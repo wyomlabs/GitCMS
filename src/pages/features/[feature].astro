@@ -1,0 +1,14 @@
+---
+import FeaturePage from '@/components/feature/FeaturePage.astro'
+import { features } from '@/lib/features'
+import type { Feature } from '@/lib/features'
+
+export function getStaticPaths() {
+  return features.map((feature) => ({ params: { feature: feature.slug }, props: { feature } }))
+}
+
+interface Props {
+  feature: Feature
+}
+---
+<FeaturePage feature={Astro.props.feature} />
