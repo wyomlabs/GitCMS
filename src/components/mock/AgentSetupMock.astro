@@ -6,6 +6,7 @@
 // terminal's chrome; the prompt is the same for every agent.
 import { GitCMSLogo } from '@/components/gitcms-logo'
 import Cursor from './Cursor.astro'
+import ScaleFrame from './ScaleFrame.astro'
 import { SETUP_CLI_COMMAND } from '@/lib/agent-setup-prompt'
 
 const agents = [
@@ -33,7 +34,10 @@ const dim = 'text-neutral-500'
     ))}
   </div>
 
-  <div data-seq="8" data-final="8" data-ms="1100" data-hold="8:2600" class="relative flex h-[480px] flex-col overflow-hidden rounded-xl bg-[#121212] font-mono text-[10px] leading-[1.55] text-neutral-200 sm:text-[11.5px] sm:leading-[1.6]">
+  <!-- Laid out at its desktop size and scaled down whole on narrow screens,
+       so the terminal reads the same on a phone as on a laptop. -->
+  <ScaleFrame width={492} height={480}>
+  <div data-seq="8" data-final="8" data-ms="1100" data-hold="8:2600" class="relative flex h-full flex-col overflow-hidden rounded-xl bg-[#121212] font-mono text-[11.5px] leading-[1.6] text-neutral-200">
     <div class="flex h-9 shrink-0 items-center gap-2 border-b border-white/10 px-3 text-[11px] text-neutral-400">
       <span class="flex gap-1.5"><span class="size-2.5 rounded-full bg-white/15"></span><span class="size-2.5 rounded-full bg-white/15"></span><span class="size-2.5 rounded-full bg-white/15"></span></span>
       <img data-agent-logo src={agents[0].logo} alt="" class="ml-2 size-3.5" />
@@ -82,6 +86,7 @@ const dim = 'text-neutral-500'
     </div>
     <Cursor />
   </div>
+  </ScaleFrame>
 </div>
 
 <script>
