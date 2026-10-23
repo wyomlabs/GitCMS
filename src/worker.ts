@@ -13,10 +13,11 @@ function withMachineReadableHeaders(requestUrl: URL, response: Response) {
     || requestUrl.pathname.endsWith('/llms.txt')
   if ((!isMarkdown && !isLlms) || response.status >= 400) return response
 
+  // Pages are served at `<path>/`, so that is their canonical address.
   const canonicalPath = requestUrl.pathname === '/index.md'
     ? '/'
     : isMarkdown
-      ? requestUrl.pathname.slice(0, -'.md'.length)
+      ? `${requestUrl.pathname.slice(0, -'.md'.length)}/`
       : '/'
   const canonicalUrl = new URL(canonicalPath, 'https://gitcms.dev').toString()
   const headers = new Headers(response.headers)
@@ -57,6 +58,10 @@ export default {
     const target = legacyRepoViewerTarget(url, APP_ORIGIN)
     if (target) return Response.redirect(target, 308)
 
-    return assetResponse
+    // Assets answer misses with an empty 404 (`not_found_handling: "none"`
+    // keeps this worker in the path for the redirect above), so serve
+    // Astro's 404 page here with the right status.
+    const notFound = await env.ASSETS.fetch(new Request(new URL('/404', url), request))
+    return new Response(notFound.body, { status: 404, headers: notFound.headers })
   },
 }

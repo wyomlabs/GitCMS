@@ -1,0 +1,36 @@
+---
+// Astro builds this to /404.html. src/worker.ts serves it with a 404 status
+// for any path that has no page and isn't a legacy repository link.
+import { ArrowRight } from 'lucide-react'
+import MarketingLayout from '@/layouts/MarketingLayout.astro'
+import Section from '@/components/site/Section.astro'
+import { card, h1, primaryButton, secondaryButton, sub } from '@/components/site/styles'
+
+const links = [
+  { label: 'Documentation', href: '/docs/', body: 'Set up a site, invite editors and connect agents.' },
+  { label: 'Blog', href: '/blog/', body: 'Guides and opinions on running code-first sites.' },
+  { label: 'AI agents', href: '/agents/', body: 'Claude, ChatGPT, Cursor and more, working through GitCMS.' },
+  { label: 'Changelog', href: '/changelog/', body: 'What shipped, release by release.' },
+]
+---
+<MarketingLayout title="Page not found — GitCMS" description="This page doesn’t exist. Find what you were looking for in the GitCMS docs, blog or changelog." noIndex>
+  <Section first>
+    <div class="text-center">
+      <p class="font-mono text-[13px] text-neutral-400">404</p>
+      <h1 class:list={['mx-auto mt-4 max-w-2xl', h1]}>This page doesn’t exist</h1>
+      <p class:list={['mx-auto mt-5 max-w-xl', sub]}>It may have moved, or the link has a typo. One of these should get you back on track.</p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href="/" class={primaryButton}>Go to the homepage <ArrowRight className="size-4" /></a>
+        <a href="/docs/" class={secondaryButton}>Search the docs</a>
+      </div>
+    </div>
+    <div class="mx-auto mt-16 grid max-w-4xl gap-5 sm:grid-cols-2">
+      {links.map((link) => (
+        <a href={link.href} class:list={['group p-6 transition-colors hover:border-neutral-300', card]}>
+          <span class="flex items-center gap-1.5 text-[16px] font-semibold tracking-tight text-neutral-900">{link.label} <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" /></span>
+          <span class="mt-2 block text-[14px] leading-relaxed text-[#898989]">{link.body}</span>
+        </a>
+      ))}
+    </div>
+  </Section>
+</MarketingLayout>
