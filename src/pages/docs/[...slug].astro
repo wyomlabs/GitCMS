@@ -3,6 +3,7 @@ import { render } from 'astro:content'
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import { Callout } from 'fumadocs-ui/components/callout'
 import { DocsBody, DocsDescription, DocsTitle } from 'fumadocs-ui/layouts/docs/page'
+import '@/styles/docs.css'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import { DocsShell } from '@/components/docs-shell/docs'
 import ImageZoom from '@/components/docs/image-zoom.astro'
@@ -81,7 +82,7 @@ const structuredData = {
       <LLMCopyButton markdownUrl={markdownUrl} client:idle />
       <ViewOptions markdownUrl={markdownUrl} client:idle />
     </div>
-    <DocsBody className="dark:prose-invert">
+    <DocsBody>
       <Content components={{ ...defaultMdxComponents, Callout, img: ImageZoom }} />
     </DocsBody>
   </DocsShell>

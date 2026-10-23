@@ -1,5 +1,7 @@
 ---
-import '@/styles/global.css'
+// Document shell only. Each layout imports its Tailwind entry: global.css for
+// marketing pages, docs.css for /docs.
+import MdxCopyButtons from '@/components/mdx/MdxCopyButtons.astro'
 import { getSeo, type SeoOptions } from '@/lib/seo'
 import { PRODUCT_DEFINITION, PRODUCT_NAME, SITE_URL } from '@/lib/positioning'
 import { absolutePublicUrl, markdownPathForHtmlPath } from '@/lib/public-resources'
@@ -78,5 +80,6 @@ const siteStructuredData = [
   </head>
   <body class="min-h-screen bg-background font-sans antialiased">
     <slot />
+    <MdxCopyButtons />
   </body>
 </html>
