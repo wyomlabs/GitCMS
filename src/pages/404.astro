@@ -1,10 +1,10 @@
 ---
 // Astro builds this to /404.html. src/worker.ts serves it with a 404 status
 // for any path that has no page and isn't a legacy repository link.
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Compass } from 'lucide-react'
 import MarketingLayout from '@/layouts/MarketingLayout.astro'
 import Section from '@/components/site/Section.astro'
-import { card, h1, primaryButton, secondaryButton, sub } from '@/components/site/styles'
+import { card, eyebrow, h1, primaryButton, secondaryButton, sub } from '@/components/site/styles'
 
 const links = [
   { label: 'Documentation', href: '/docs/', body: 'Set up a site, invite editors and connect agents.' },
@@ -16,12 +16,12 @@ const links = [
 <MarketingLayout title="Page not found — GitCMS" description="This page doesn’t exist. Find what you were looking for in the GitCMS docs, blog or changelog." noIndex>
   <Section first>
     <div class="text-center">
-      <p class="font-mono text-[13px] text-neutral-400">404</p>
-      <h1 class:list={['mx-auto mt-4 max-w-2xl', h1]}>This page doesn’t exist</h1>
+      <span class={eyebrow}><Compass className="size-3.5" /> 404 · Page not found</span>
+      <h1 class:list={['mx-auto mt-5 max-w-2xl', h1]}>This page doesn’t exist</h1>
       <p class:list={['mx-auto mt-5 max-w-xl', sub]}>It may have moved, or the link has a typo. One of these should get you back on track.</p>
       <div class="mt-8 flex flex-wrap justify-center gap-3">
         <a href="/" class={primaryButton}>Go to the homepage <ArrowRight className="size-4" /></a>
-        <a href="/docs/" class={secondaryButton}>Search the docs</a>
+        <a href="/docs/" class={secondaryButton}>Read the docs</a>
       </div>
     </div>
     <div class="mx-auto mt-16 grid max-w-4xl gap-5 sm:grid-cols-2">
