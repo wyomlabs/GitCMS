@@ -4,22 +4,6 @@ import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
 import tailwindcss from '@tailwindcss/vite'
 import { rehypeTrailingSlash } from './src/lib/rehype-trailing-slash'
-import { unified } from '@astrojs/markdown-remark'
-import {
-  rehypeCode,
-  remarkCodeTab,
-  remarkHeading,
-  remarkNpm,
-  remarkStructure,
-} from 'fumadocs-core/mdx-plugins'
-
-const remarkPlugins = [
-  remarkHeading,
-  remarkCodeTab,
-  remarkNpm,
-  [remarkStructure, { exportAs: 'structuredData' }],
-]
-const rehypePlugins = [rehypeCode]
 
 export default defineConfig({
   site: 'https://gitcms.dev',
@@ -29,13 +13,8 @@ export default defineConfig({
   trailingSlash: 'always',
   build: { format: 'directory' },
   markdown: {
-    // Astro's own rehype pipeline, shared by Markdown and MDX.
+    // Shared by Markdown and MDX (`extendMarkdownConfig`).
     rehypePlugins: [rehypeTrailingSlash],
-    processor: unified({
-      syntaxHighlight: false,
-      remarkPlugins,
-      rehypePlugins,
-    }),
   },
   integrations: [
     sitemap({
