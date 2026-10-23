@@ -17,7 +17,7 @@ export async function getStaticPaths() {
 const { comparison } = Astro.props
 const { Content } = await render(comparison)
 const slug = comparison.id.replace(/\.mdx?$/, '')
-const canonicalUrl = `https://gitcms.dev/compare/${slug}`
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href
 const structuredData = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -41,7 +41,7 @@ const structuredData = {
           '@type': 'ListItem',
           position: 1,
           name: 'Comparisons',
-          item: 'https://gitcms.dev/compare',
+          item: new URL('/compare/', Astro.site).href,
         },
         {
           '@type': 'ListItem',
@@ -57,11 +57,10 @@ const structuredData = {
 <MarketingLayout
   title={`${comparison.data.title} — GitCMS`}
   description={comparison.data.description}
-  path={`/compare/${slug}`}
   structuredData={structuredData}
 >
   <Section first>
-    <ArticleHeader breadcrumbs={[{ label: 'Compare', href: '/compare' }, { label: `vs ${comparison.data.competitor}` }]} title={comparison.data.title} description={comparison.data.description}>
+    <ArticleHeader breadcrumbs={[{ label: 'Compare', href: '/compare/' }, { label: `vs ${comparison.data.competitor}` }]} title={comparison.data.title} description={comparison.data.description}>
       <div class="mt-5 flex flex-wrap items-center justify-center gap-2 text-[13px] text-[#898989]">
         <span class="rounded-full bg-white px-2.5 py-0.5 text-[12px] font-medium text-neutral-700 ring-1 ring-neutral-200">{comparison.data.category}</span>
         <span>Last reviewed {formatDate(comparison.data.lastReviewed, 'long')}</span>

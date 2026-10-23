@@ -3,6 +3,7 @@ import mdx from '@astrojs/mdx'
 import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
 import tailwindcss from '@tailwindcss/vite'
+import { rehypeTrailingSlash } from './src/lib/rehype-trailing-slash'
 import { unified } from '@astrojs/markdown-remark'
 import {
   rehypeCode,
@@ -23,7 +24,13 @@ const rehypePlugins = [rehypeCode]
 export default defineConfig({
   site: 'https://gitcms.dev',
   output: 'static',
+  // Pages build to `<path>/index.html`, which Cloudflare serves at `<path>/`.
+  // Canonicals, the sitemap and internal links all use that address.
+  trailingSlash: 'always',
+  build: { format: 'directory' },
   markdown: {
+    // Astro's own rehype pipeline, shared by Markdown and MDX.
+    rehypePlugins: [rehypeTrailingSlash],
     processor: unified({
       syntaxHighlight: false,
       remarkPlugins,
@@ -34,8 +41,7 @@ export default defineConfig({
     sitemap({
       filter: (page) => {
         const pathname = new URL(page).pathname.replace(/\/$/, '')
-        return pathname !== '/blog/git-based-cms-vs-db-based-cms'
-          && !pathname.startsWith('/redesign')
+        return !pathname.startsWith('/redesign')
           && !pathname.endsWith('.md')
           && !pathname.endsWith('.txt')
           && !pathname.endsWith('.png')

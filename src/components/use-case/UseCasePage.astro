@@ -33,7 +33,7 @@ const prompts = (await getCollection('prompts'))
   .slice(0, 4)
 const testimonial = publishedTestimonials.find((item) => item.persona === useCase.testimonial)
 ---
-<MarketingLayout title={useCase.seoTitle} description={useCase.seoDescription} path={useCase.path} structuredData={faqStructuredData(useCase.faqs)}>
+<MarketingLayout title={useCase.seoTitle} description={useCase.seoDescription} structuredData={faqStructuredData(useCase.faqs)}>
   <Section first>
     <SectionHeading level={1} eyebrow={`For ${useCase.name.toLowerCase()}`} title={useCase.title} description={useCase.description}>
       <div class="mt-8 flex flex-wrap justify-center gap-3">
@@ -90,7 +90,7 @@ const testimonial = publishedTestimonials.find((item) => item.persona === useCas
     <Section>
       <SectionHeading eyebrow="Prompt library" icon={Terminal} title={useCase.promptsTitle} description="Copy one into Claude Code, Codex, ChatGPT or Claude. On sites with review before publish, the result waits for a person." />
       <div class="mt-16 grid gap-5 md:grid-cols-2">{prompts.map((prompt) => <PromptCard prompt={prompt} />)}</div>
-      <div class="mt-8 text-center"><a href="/prompts" class="inline-flex items-center gap-1.5 text-sm font-medium">Browse the prompt library <ArrowRight className="size-4" /></a></div>
+      <div class="mt-8 text-center"><a href="/prompts/" class="inline-flex items-center gap-1.5 text-sm font-medium">Browse the prompt library <ArrowRight className="size-4" /></a></div>
     </Section>
   )}
 

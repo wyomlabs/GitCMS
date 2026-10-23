@@ -38,9 +38,9 @@ const structuredData = {
   publisher: { '@type': 'Organization', name: PRODUCT_NAME },
 }
 ---
-<MarketingLayout title={`${prompt.data.title} — Prompt | GitCMS`} description={prompt.data.description} path={`/prompts/${slug}`} structuredData={structuredData}>
+<MarketingLayout title={`${prompt.data.title} — Prompt | GitCMS`} description={prompt.data.description} structuredData={structuredData}>
   <Section first>
-    <ArticleHeader breadcrumbs={[{ label: 'Prompt library', href: '/prompts' }, { label: PROMPT_CATEGORY_LABELS[prompt.data.category] }]} title={prompt.data.title} description={prompt.data.description}>
+    <ArticleHeader breadcrumbs={[{ label: 'Prompt library', href: '/prompts/' }, { label: PROMPT_CATEGORY_LABELS[prompt.data.category] }]} title={prompt.data.title} description={prompt.data.description}>
       <div class="mt-6 flex flex-wrap items-center justify-center gap-2">
         {prompt.data.agents.map((agent) => <span class="rounded-full bg-white px-2.5 py-0.5 text-[12px] font-medium text-neutral-600 ring-1 ring-neutral-200">{agent}</span>)}
       </div>
@@ -52,7 +52,7 @@ const structuredData = {
         <aside class="mt-14 border-t border-neutral-200 pt-8">
           <h2 class="text-[13px] font-medium text-[#898989]">More {PROMPT_CATEGORY_LABELS[prompt.data.category].toLowerCase()} prompts</h2>
           <ul class="mt-3 space-y-2">
-            {related.map((item) => <li><a href={`/prompts/${item.slug}`} class="text-[15px] text-neutral-700 underline-offset-2 hover:text-neutral-900 hover:underline">{item.title}</a></li>)}
+            {related.map((item) => <li><a href={`/prompts/${item.slug}/`} class="text-[15px] text-neutral-700 underline-offset-2 hover:text-neutral-900 hover:underline">{item.title}</a></li>)}
           </ul>
         </aside>
       )}

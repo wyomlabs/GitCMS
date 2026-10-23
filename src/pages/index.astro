@@ -82,7 +82,7 @@ const structuredData = {
   ],
 }
 ---
-<MarketingLayout path="/" structuredData={structuredData}>
+<MarketingLayout structuredData={structuredData}>
   <!-- Hero -->
   <section class="px-3 pb-3 pt-2">
     <div class="grid min-h-[700px] items-center gap-14 overflow-hidden rounded-xl bg-white px-6 py-16 shadow-[0_1px_5px_-4px_rgba(36,36,36,0.7),0_4px_8px_rgba(36,36,36,0.05)] lg:grid-cols-[500px_1fr] lg:py-20 lg:pl-16 lg:pr-0">
@@ -154,7 +154,7 @@ const structuredData = {
         </ul>
         <div class="mt-8 flex flex-col items-start gap-3">
           <CopyButton tone="lime" text={AGENT_SETUP_PROMPT} label="Copy setup prompt" copiedLabel="Copied. Paste it into your agent" />
-          <a href="/docs/getting-started/cli-onboarding" class="text-[13px] text-neutral-500 hover:text-neutral-900">or run <code class="font-mono text-[12px] text-neutral-700">{SETUP_CLI_COMMAND}</code> yourself →</a>
+          <a href="/docs/getting-started/cli-onboarding/" class="text-[13px] text-neutral-500 hover:text-neutral-900">or run <code class="font-mono text-[12px] text-neutral-700">{SETUP_CLI_COMMAND}</code> yourself →</a>
         </div>
       </div>
       <div class="min-w-0"><AgentSetupMock /></div>
@@ -316,7 +316,7 @@ const structuredData = {
   <!-- Agencies -->
   <Section>
     <SectionHeading eyebrow="For agencies" icon={Inbox} title="Every client site, one workspace" description="Build with Astro or Next.js and your favourite agent. Every client gets a safe place to edit, and you see every site, review and agent at a glance, with no WordPress to patch.">
-      <a href="/for-agencies" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium">GitCMS for agencies <ArrowRight className="size-4" /></a>
+      <a href="/for-agencies/" class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium">GitCMS for agencies <ArrowRight className="size-4" /></a>
     </SectionHeading>
     <ScaleFrame width={768} height={300} class="mx-auto mt-16"><div class:list={['h-full overflow-hidden', card]}><FleetMock /></div></ScaleFrame>
   </Section>

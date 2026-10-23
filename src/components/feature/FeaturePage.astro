@@ -26,7 +26,7 @@ interface Props {
 const { feature } = Astro.props
 const audiences = feature.audiences.map((audience) => ({ ...audience, useCase: getUseCase(audience.useCase), Icon: USE_CASE_ICONS[audience.useCase] }))
 ---
-<MarketingLayout title={feature.seoTitle} description={feature.seoDescription} path={feature.path} structuredData={faqStructuredData(feature.faqs)}>
+<MarketingLayout title={feature.seoTitle} description={feature.seoDescription} structuredData={faqStructuredData(feature.faqs)}>
   <Section first>
     <SectionHeading level={1} eyebrow={feature.name} icon={feature.icon} badge={feature.beta && 'Beta'} title={feature.title} description={feature.description}>
       <div class="mt-8 flex flex-wrap justify-center gap-3">

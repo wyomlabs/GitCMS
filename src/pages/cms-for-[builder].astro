@@ -32,7 +32,7 @@ const prompt = promptText(promptEntry?.body)
 if (!prompt) throw new Error('The make-ai-built-site-editable prompt has no ```text block')
 
 const others = [
-  ...getBuilderDirectoryLinks().filter((link) => link.href !== `/cms-for-${builder.slug}`),
+  ...getBuilderDirectoryLinks().filter((link) => link.href !== `/cms-for-${builder.slug}/`),
   ...FRAMEWORK_LINKS.filter((link) => ['Astro', 'Next.js'].includes(link.label)),
 ]
 const steps = [
@@ -63,7 +63,6 @@ const faqs = builder.faqs
 <MarketingLayout
   title={`${getSiteBuilderTitle(builder)} — GitCMS`}
   description={getSiteBuilderDescription(builder)}
-  path={`/cms-for-${builder.slug}`}
   structuredData={faqStructuredData(faqs)}
 >
   <Section first>
@@ -151,7 +150,7 @@ const faqs = builder.faqs
   <Section>
     <SectionHeading eyebrow="FAQ" icon={Quote} title={`${builder.name} and GitCMS, answered`} />
     <div class:list={['mx-auto mt-16 max-w-3xl px-8 py-3 [&>div]:border-y-0', card]}><FaqList faqs={faqs} /></div>
-    <p class="mt-8 text-center text-[14px] text-[#898989]">Setting it up? Follow the <a href="/docs/getting-started/ai-site-builders" class="text-neutral-900 underline underline-offset-2">AI site builders guide</a>.</p>
+    <p class="mt-8 text-center text-[14px] text-[#898989]">Setting it up? Follow the <a href="/docs/getting-started/ai-site-builders/" class="text-neutral-900 underline underline-offset-2">AI site builders guide</a>.</p>
   </Section>
 
   <Section>

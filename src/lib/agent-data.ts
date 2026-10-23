@@ -607,5 +607,5 @@ export function getAgentLandingTitle(agent: AgentInfo) {
 }
 
 export function getAgentLandingDescription(agent: AgentInfo) {
-  return `${agent.description} Setup steps, example prompts, and FAQs.`
+  return agent.description
 }

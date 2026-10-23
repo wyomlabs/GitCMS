@@ -32,7 +32,7 @@ const { framework } = Astro.props
 const faqs = getFrameworkFaqs(framework)
 const others = frameworkList
   .filter((other) => other.slug !== framework.slug)
-  .map((other) => ({ label: other.name, href: `/git-based-cms-for-${other.slug}`, logo: other.logo }))
+  .map((other) => ({ label: other.name, href: `/git-based-cms-for-${other.slug}/`, logo: other.logo }))
 // The files GitCMS reads and writes in a typical repository for this framework.
 const tree = [
   { icon: Settings2, path: framework.configFile, note: `${framework.name} config, untouched` },
@@ -44,7 +44,6 @@ const tree = [
 <MarketingLayout
   title={`${getFrameworkLandingTitle(framework)} — GitCMS`}
   description={getFrameworkLandingDescription(framework)}
-  path={`/git-based-cms-for-${framework.slug}`}
   structuredData={faqStructuredData(faqs)}
 >
   <Section first>
@@ -62,7 +61,7 @@ const tree = [
         <span class="w-fit rounded-md bg-neutral-100 px-2 py-0.5 font-mono text-xs text-neutral-500">Setup</span>
         <h2 class:list={['mt-4 text-[26px]', heading]}>Your agent sets it up in one prompt</h2>
         <p class="mt-2 text-[15px] leading-relaxed text-[#898989]">Paste the setup prompt into Claude Code, Codex or Cursor. It runs <code class="font-mono text-[13px] text-neutral-700">create-gitcms</code>, which reads your {framework.name} project, finds the content folders and the site’s address, and commits a small <code class="font-mono text-[13px] text-neutral-700">.gitcms</code> folder. Your build and hosting don’t change.</p>
-        <a href="/docs/getting-started/cli-onboarding" class="mt-6 inline-block text-[13px] text-neutral-500 hover:text-neutral-900">or run <code class="font-mono text-[12px] text-neutral-700">{SETUP_CLI_COMMAND}</code> yourself →</a>
+        <a href="/docs/getting-started/cli-onboarding/" class="mt-6 inline-block text-[13px] text-neutral-500 hover:text-neutral-900">or run <code class="font-mono text-[12px] text-neutral-700">{SETUP_CLI_COMMAND}</code> yourself →</a>
       </div>
       <div class="min-w-0"><AgentSetupMock framework={cliFrameworkId(framework)} /></div>
     </div>
@@ -86,7 +85,7 @@ const tree = [
       <div class="rounded-2xl border border-[#B5D74E]/50 bg-[#DCF986]/25 p-6 sm:p-8">
         <span class="flex items-center gap-2 text-[13px] font-medium text-neutral-900"><Lightbulb className="size-4" /> Handoff tip for {framework.name}</span>
         <p class="mt-3 text-[15px] leading-relaxed text-neutral-700">{framework.handoffTip}</p>
-        <a href="/prompts/make-site-client-editable" class="mt-5 inline-flex items-center gap-1.5 text-[14px] font-medium text-neutral-900">Prompt: make a site client-editable <ArrowRight className="size-4" /></a>
+        <a href="/prompts/make-site-client-editable/" class="mt-5 inline-flex items-center gap-1.5 text-[14px] font-medium text-neutral-900">Prompt: make a site client-editable <ArrowRight className="size-4" /></a>
       </div>
     </div>
   </Section>

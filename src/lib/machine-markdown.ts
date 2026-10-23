@@ -1,8 +1,8 @@
 import { AGENT_SETUP_PROMPT } from '@/lib/agent-setup-prompt'
 import { codeFirstTeams } from '@/lib/code-first-teams'
-import { LICENSE_PRICE_SUMMARY } from '@/lib/positioning'
+import { LICENSE_PRICE_SUMMARY, SITE_URL } from '@/lib/positioning'
+import { pageUrlPath } from '@/lib/public-resources'
 
-const SITE_URL = 'https://gitcms.dev'
 
 function parseQuotedProp(source: string, name: string) {
   const match = source.match(new RegExp(`${name}\\s*=\\s*["']([^"']*)["']`))
@@ -159,7 +159,7 @@ export function markdownDocument({
   canonicalPath: string
   body: string
 }) {
-  const canonical = new URL(canonicalPath, SITE_URL).toString()
+  const canonical = new URL(pageUrlPath(canonicalPath), SITE_URL).toString()
   const intro = [
     `# ${title}`,
     description ? `> ${description}` : '',

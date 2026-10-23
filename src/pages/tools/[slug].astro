@@ -25,7 +25,7 @@ const structuredData = {
   '@type': 'WebApplication',
   name: tool.data.title,
   description: tool.data.description,
-  url: `https://gitcms.dev/tools/${slug}`,
+  url: new URL(Astro.url.pathname, Astro.site).href,
   applicationCategory: 'DeveloperApplication',
   operatingSystem: 'Any',
   browserRequirements: 'Requires JavaScript',
@@ -33,9 +33,9 @@ const structuredData = {
   publisher: { '@type': 'Organization', name: PRODUCT_NAME },
 }
 ---
-<MarketingLayout title={`${tool.data.title} | GitCMS Tools`} description={tool.data.description} path={`/tools/${slug}`} structuredData={structuredData}>
+<MarketingLayout title={`${tool.data.title} | GitCMS Tools`} description={tool.data.description} structuredData={structuredData}>
   <Section first>
-    <ArticleHeader breadcrumbs={[{ label: 'Free tools', href: '/tools' }, { label: tool.data.title }]} title={tool.data.title} description={tool.data.description} />
+    <ArticleHeader breadcrumbs={[{ label: 'Free tools', href: '/tools/' }, { label: tool.data.title }]} title={tool.data.title} description={tool.data.description} />
     <div class="mt-12">
       {tool.data.tool === 'github-repo'
         ? <div class="mx-auto max-w-3xl"><GitHubRepoForm /></div>

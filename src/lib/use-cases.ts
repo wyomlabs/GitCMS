@@ -15,7 +15,7 @@ type Point = { title: string; body: string }
 
 export type UseCase = {
   slug: UseCaseSlug
-  path: `/for-${UseCaseSlug}`
+  path: `/for-${UseCaseSlug}/`
   name: string
   /** One line for menus and the /for picker. */
   blurb: string
@@ -48,7 +48,7 @@ export type UseCase = {
 export const useCases: ReadonlyArray<UseCase> = [
   {
     slug: 'agencies',
-    path: '/for-agencies',
+    path: '/for-agencies/',
     name: 'Agencies',
     blurb: 'Hand off client sites without the bottleneck',
     seoTitle: 'GitCMS for Agencies — Hand Off Claude Code and Astro Sites With a Client CMS',
@@ -92,17 +92,17 @@ export const useCases: ReadonlyArray<UseCase> = [
       { question: 'Can we manage many client sites?', answer: 'Yes. One workspace holds every client site, and each person gets access to all sites or only the ones you choose, so a client sees just their own. Give a client a separate workspace when they need separate billing or full separation.' },
     ],
     related: [
-      { label: 'Roles and site access', href: '/docs/features/access-control' },
-      { label: 'Editorial workflow', href: '/docs/features/editorial-workflow' },
-      { label: 'GitCMS vs WordPress', href: '/compare/gitcms-vs-wordpress' },
-      { label: 'Change requests', href: '/features/change-requests' },
+      { label: 'Roles and site access', href: '/docs/features/access-control/' },
+      { label: 'Editorial workflow', href: '/docs/features/editorial-workflow/' },
+      { label: 'GitCMS vs WordPress', href: '/compare/gitcms-vs-wordpress/' },
+      { label: 'Change requests', href: '/features/change-requests/' },
     ],
     ctaTitle: 'Hand off your next client site with a CMS',
     ctaDescription: 'Connect a client repository, invite the client, and stop being the bottleneck for routine changes.',
   },
   {
     slug: 'freelancers',
-    path: '/for-freelancers',
+    path: '/for-freelancers/',
     name: 'Freelancers',
     blurb: 'Let clients edit, keep the code yours',
     seoTitle: 'GitCMS for Freelancers — Hand Off Custom Client Websites With a Simple CMS',
@@ -146,17 +146,17 @@ export const useCases: ReadonlyArray<UseCase> = [
       { question: 'My client site was built with Claude Code. Will it work?', answer: 'Yes, if the site is in a Git repository and loads its editable content from Markdown or MDX. If copy is hardcoded in components, your agent can move it into collections first.' },
     ],
     related: [
-      { label: 'Quick start', href: '/docs/getting-started/quick-start' },
-      { label: 'Editorial workflow', href: '/docs/features/editorial-workflow' },
-      { label: 'Make a site client-editable', href: '/prompts/make-site-client-editable' },
-      { label: 'Visual editor', href: '/features/visual-editor' },
+      { label: 'Quick start', href: '/docs/getting-started/quick-start/' },
+      { label: 'Editorial workflow', href: '/docs/features/editorial-workflow/' },
+      { label: 'Make a site client-editable', href: '/prompts/make-site-client-editable/' },
+      { label: 'Visual editor', href: '/features/visual-editor/' },
     ],
     ctaTitle: 'Hand off your next site without the follow-up emails',
     ctaDescription: 'Connect the client’s repository, invite them, and let routine edits stop coming back to you.',
   },
   {
     slug: 'startups',
-    path: '/for-startups',
+    path: '/for-startups/',
     name: 'Startups',
     blurb: 'Website changes without engineering tickets',
     seoTitle: 'GitCMS for Startups — Let Marketing Edit Your Code-First Website Without Engineering',
@@ -201,16 +201,16 @@ export const useCases: ReadonlyArray<UseCase> = [
       { question: 'Our marketing site, docs and blog share one repository. Does that work?', answer: 'Yes. GitCMS treats each one as its own site, with its own content folders, settings, board and access, even inside one repository. create-gitcms finds all of them in one run.' },
     ],
     related: [
-      { label: 'Editorial workflow', href: '/features/editorial-workflow' },
-      { label: 'AI agents', href: '/agents' },
-      { label: 'Update a detail everywhere', href: '/prompts/update-copy-across-pages' },
+      { label: 'Editorial workflow', href: '/features/editorial-workflow/' },
+      { label: 'AI agents', href: '/agents/' },
+      { label: 'Update a detail everywhere', href: '/prompts/update-copy-across-pages/' },
     ],
     ctaTitle: 'Take the website out of the engineering queue',
     ctaDescription: 'Connect the repository behind your site and let marketing, founders and AI agents work through one reviewable flow.',
   },
   {
     slug: 'solo-builders',
-    path: '/for-solo-builders',
+    path: '/for-solo-builders/',
     name: 'Solo builders',
     blurb: 'Publish the content that gets your product found',
     seoTitle: 'GitCMS for Solo Builders — Publish the Blog, Docs, and Changelog That Get Your Product Found',
@@ -255,9 +255,9 @@ export const useCases: ReadonlyArray<UseCase> = [
       { question: 'Why not keep using Markdown files and my editor?', answer: 'You can, and many builders do. GitCMS helps when publishing keeps slipping, when you want an agent to draft without editing the repo directly, or when someone else needs to contribute without touching Git.' },
     ],
     related: [
-      { label: 'Sitemaps and internal links', href: '/docs/features/sitemaps-internal-links' },
-      { label: 'AI agents', href: '/agents' },
-      { label: 'SEO, AEO and GEO glossary', href: '/glossary#seo' },
+      { label: 'Sitemaps and internal links', href: '/docs/features/sitemaps-internal-links/' },
+      { label: 'AI agents', href: '/agents/' },
+      { label: 'SEO, AEO and GEO glossary', href: '/glossary/#seo' },
     ],
     ctaTitle: 'Keep your product site publishing while you keep building',
     ctaDescription: 'Connect the repository behind your site and run your blog, docs and changelog from one reviewable workflow.',

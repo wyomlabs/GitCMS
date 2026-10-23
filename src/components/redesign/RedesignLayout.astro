@@ -13,7 +13,7 @@ interface Props {
 }
 const { variant, title, bodyClass = 'bg-white' } = Astro.props
 ---
-<BaseLayout path={`/redesign/${variant}`} title={`${title} · GitCMS redesign`} noIndex>
+<BaseLayout title={`${title} · GitCMS redesign`} noIndex>
   <div class:list={['min-h-screen text-neutral-900', bodyClass]}>
     <slot />
   </div>

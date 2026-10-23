@@ -11,9 +11,10 @@ interface Props extends SeoOptions {
   structuredData?: unknown
 }
 
-const seo = getSeo(Astro.props)
+const page = new URL(Astro.url.pathname, Astro.site)
+const seo = getSeo(page, Astro.props)
 const { structuredData } = Astro.props
-const markdownAlternate = absolutePublicUrl(markdownPathForHtmlPath(Astro.props.path ?? '/'))
+const markdownAlternate = absolutePublicUrl(markdownPathForHtmlPath(page.pathname))
 const llmsIndex = absolutePublicUrl('/llms.txt')
 const siteStructuredData = [
   {
@@ -46,7 +47,7 @@ const siteStructuredData = [
     <meta name="theme-color" content="#DCF986" />
     <title>{seo.title}</title>
     <meta name="description" content={seo.description} />
-    <link rel="canonical" href={seo.canonical} />
+    {!seo.noIndex && <link rel="canonical" href={seo.canonical} />}
     <link rel="alternate" type="text/markdown" href={markdownAlternate} />
     <link rel="describedby" type="text/plain" href={llmsIndex} />
     <meta property="og:type" content={seo.type} />

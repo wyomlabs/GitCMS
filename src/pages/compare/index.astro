@@ -26,7 +26,6 @@ const groups = categoryOrder.flatMap((category) => {
 <MarketingLayout
   title="GitCMS Comparisons — Honest CMS Comparisons"
   description="Honest comparisons between GitCMS, the CMS for code-first and AI-built websites, and headless, traditional, Git-based, and docs CMSs. We say where each tool is stronger."
-  path="/compare"
 >
   <Section first>
     <SectionHeading level={1} eyebrow="Compare" title="GitCMS vs everything else" description="Agents made code the fastest way to build a website. These pages compare what you use to run it after launch: website builders, headless CMSs, other Git-based CMSs, and docs platforms. Every page says where the other tool is genuinely better." />
@@ -36,7 +35,7 @@ const groups = categoryOrder.flatMap((category) => {
       <SectionHeading align="left" title={group.category} description={group.description} />
       <div class="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {group.items.map((comparison) => (
-          <a href={`/compare/${comparison.id.replace(/\.mdx?$/, '')}`} class:list={['group flex flex-col p-6 transition-colors hover:border-neutral-300', card]}>
+          <a href={`/compare/${comparison.id.replace(/\.mdx?$/, '')}/`} class:list={['group flex flex-col p-6 transition-colors hover:border-neutral-300', card]}>
             <h3 class="text-[20px] font-semibold tracking-[-0.02em] text-neutral-900 group-hover:text-neutral-600">vs {comparison.data.competitor}</h3>
             <p class="mt-2 flex-1 text-[14.5px] leading-relaxed text-[#898989]">{comparison.data.description}</p>
             <div class="mt-5 text-[13px] font-medium text-neutral-900">Read comparison →</div>

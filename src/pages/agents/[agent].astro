@@ -33,17 +33,16 @@ const guided = agent.guidedProviderId ? AI_PROVIDERS.find((provider) => provider
 const chatUrls: Record<string, string> = { chatgpt: 'chatgpt.com', claude: 'claude.ai/new' }
 const others = directoryAgentList
   .filter((other) => other.slug !== agent.slug)
-  .map((other) => ({ label: other.name, href: `/agents/${other.slug}`, logo: other.logoPath }))
+  .map((other) => ({ label: other.name, href: `/agents/${other.slug}/`, logo: other.logoPath }))
 ---
 <MarketingLayout
   title={getAgentLandingTitle(agent)}
   description={getAgentLandingDescription(agent)}
-  path={`/agents/${agent.slug}`}
   structuredData={faqStructuredData(agent.faqs)}
 >
   <Section first>
     <div class="text-center">
-      <a href="/agents" class={eyebrow}><img src={agent.logoPath} alt="" class="size-3.5 object-contain" /> GitCMS + {agent.name}</a>
+      <a href="/agents/" class={eyebrow}><img src={agent.logoPath} alt="" class="size-3.5 object-contain" /> GitCMS + {agent.name}</a>
       <h1 class:list={['mx-auto mt-5 max-w-3xl', h1]}>{agent.heroTitle}</h1>
       <p class:list={['mx-auto mt-5 max-w-2xl', sub]}>{agent.description}</p>
       <div class="mt-8 flex flex-wrap justify-center gap-3">
@@ -130,7 +129,7 @@ const others = directoryAgentList
         </div>
       ))}
     </div>
-    <div class="mt-8 text-center"><a href="/prompts" class="inline-flex items-center gap-1.5 text-sm font-medium">Browse the prompt library <ArrowRight className="size-4" /></a></div>
+    <div class="mt-8 text-center"><a href="/prompts/" class="inline-flex items-center gap-1.5 text-sm font-medium">Browse the prompt library <ArrowRight className="size-4" /></a></div>
   </Section>
 
   <Section>
@@ -147,7 +146,7 @@ const others = directoryAgentList
   <Section>
     <SectionHeading title="One workflow, whichever agent you choose" />
     <div class="mt-12"><LinkGrid links={others} /></div>
-    <div class="mt-8 text-center"><a href="/agents" class="inline-flex items-center gap-1.5 text-sm font-medium">Compare all agents <ArrowRight className="size-4" /></a></div>
+    <div class="mt-8 text-center"><a href="/agents/" class="inline-flex items-center gap-1.5 text-sm font-medium">Compare all agents <ArrowRight className="size-4" /></a></div>
   </Section>
 
   <CtaBand title={`Give ${agent.name} a safe way into your website`} description="Keep the agent you already use. GitCMS gives it structured access to your content, and gives your team the final say." />

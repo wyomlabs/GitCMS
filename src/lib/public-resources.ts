@@ -47,6 +47,12 @@ export function normalizeHtmlPath(path: string) {
   return `/${path.replace(/^\/+|\/+$/g, '')}`
 }
 
+/** The address a page is served at: `/docs/quick-start/` (`trailingSlash: 'always'`). */
+export function pageUrlPath(path: string) {
+  const normalized = normalizeHtmlPath(path)
+  return normalized === '/' ? '/' : `${normalized}/`
+}
+
 export function markdownPathForHtmlPath(path: string) {
   const normalized = normalizeHtmlPath(path)
   return normalized === '/' ? '/index.md' : `${normalized}.md`

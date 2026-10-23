@@ -16,13 +16,12 @@ const pill = 'rounded-full border px-3.5 py-1.5 text-[13px] font-medium transiti
 <MarketingLayout
   title="Blog — GitCMS"
   description={description}
-  path="/blog"
   structuredData={{
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: 'GitCMS Blog',
     description,
-    url: 'https://gitcms.dev/blog',
+    url: new URL('/blog/', Astro.site).href,
     publisher: { '@type': 'Organization', name: 'GitCMS', url: 'https://gitcms.dev' },
   }}
 >

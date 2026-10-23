@@ -67,7 +67,7 @@ const columnTitle = 'px-3 text-[13px] text-neutral-500'
                 </div>
               )}
               {menu.highlight === 'change-requests' && (
-                <a href="/features/change-requests" class="group/card relative flex flex-col justify-between overflow-hidden rounded-xl bg-neutral-950 p-6 text-white">
+                <a href="/features/change-requests/" class="group/card relative flex flex-col justify-between overflow-hidden rounded-xl bg-neutral-950 p-6 text-white">
                   <div class="absolute -right-10 -top-10 size-44 rounded-full bg-[#DCF986]/20 blur-3xl"></div>
                   <span class:list={['relative w-fit', badge]}>New</span>
                   <div class="relative">
@@ -88,7 +88,7 @@ const columnTitle = 'px-3 text-[13px] text-neutral-500'
                 </a>
               )}
               {menu.highlight === 'latest-post' && latestPost && (
-                <a href={`/blog/${latestPost.id.replace(/\.mdx?$/, '')}`} class="group/card flex flex-col justify-between overflow-hidden rounded-xl border border-neutral-200 bg-[#f4f4f4]">
+                <a href={`/blog/${latestPost.id.replace(/\.mdx?$/, '')}/`} class="group/card flex flex-col justify-between overflow-hidden rounded-xl border border-neutral-200 bg-[#f4f4f4]">
                   {latestPost.data.cover
                     ? <img src={latestPost.data.cover} alt="" loading="lazy" class="aspect-[1.9/1] w-full border-b border-neutral-200 object-cover" />
                     : <span class="m-6 mb-0 grid size-10 place-items-center rounded-lg border border-neutral-200 bg-white text-neutral-700"><Newspaper className="size-[18px]" strokeWidth={1.75} /></span>}

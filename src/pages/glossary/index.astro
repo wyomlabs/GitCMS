@@ -33,7 +33,6 @@ const structuredData = {
 <MarketingLayout
   title="Glossary — Code-First Websites, Rendering, Git, and AI Agents | GitCMS"
   description={DESCRIPTION}
-  path="/glossary"
   structuredData={structuredData}
 >
   <Section first>
@@ -55,7 +54,7 @@ const structuredData = {
         <h2 class:list={['text-[28px]', heading]}>{GLOSSARY_CATEGORY_LABELS[category]}</h2>
         <div class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {items.map((term) => (
-            <a href={`/glossary/${term.slug}`} class:list={['group p-5 transition-colors hover:border-neutral-300', card]}>
+            <a href={`/glossary/${term.slug}/`} class:list={['group p-5 transition-colors hover:border-neutral-300', card]}>
               <h3 class="text-[16px] font-semibold tracking-[-0.01em] text-neutral-900 group-hover:text-neutral-600">{term.data.title}</h3>
               <p class="mt-2 line-clamp-3 text-[14px] leading-relaxed text-[#898989]">{term.data.definition}</p>
             </a>
@@ -76,7 +75,7 @@ const structuredData = {
           <p class="text-[13px] font-semibold text-neutral-900">{letter}</p>
           <ul class="mt-2 space-y-1.5">
             {terms.filter((term) => term.data.title.charAt(0).toUpperCase() === letter).map((term) => (
-              <li><a href={`/glossary/${term.slug}`} class="text-[14px] text-neutral-500 underline-offset-2 hover:text-neutral-900 hover:underline">{term.data.title}</a></li>
+              <li><a href={`/glossary/${term.slug}/`} class="text-[14px] text-neutral-500 underline-offset-2 hover:text-neutral-900 hover:underline">{term.data.title}</a></li>
             ))}
           </ul>
         </div>

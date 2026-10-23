@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { ComponentProps, ReactNode } from 'react'
 import type { Root } from 'fumadocs-core/page-tree'
 import type { AstroProviderProps } from 'fumadocs-core/framework/astro'
 import { DocsLayout } from 'fumadocs-ui/layouts/docs'
@@ -8,7 +8,14 @@ import { navigate } from 'astro:transitions/client'
 import { GitCMSLogo } from '@/components/gitcms-logo'
 import { DiscordIcon } from '@/components/icons/discord-icon'
 import { DISCORD_INVITE_URL, SITE_REPOSITORY_URL } from '@/lib/support-links'
+import { withTrailingSlash } from '@/lib/trailing-slash'
 import SearchDialog from './search'
+
+// Fumadocs matches its page tree against slash-less URLs, so the tree stays
+// as is and links get the trailing slash when they render.
+function TrailingSlashLink({ href, prefetch: _prefetch, ...props }: ComponentProps<'a'> & { prefetch?: boolean }) {
+  return <a href={href === undefined ? undefined : withTrailingSlash(href)} {...props} />
+}
 
 export function DocsShell({
   tree,
@@ -35,6 +42,7 @@ export function DocsShell({
         disableTransitionOnChange: true,
       }}
       search={{ SearchDialog }}
+      components={{ Link: TrailingSlashLink }}
     >
       <DocsLayout
         tree={tree}
@@ -45,12 +53,12 @@ export function DocsShell({
               <span className="font-logo text-3xl font-medium tracking-tight">GitCMS</span>
             </>
           ),
-          url: '/docs',
+          url: '/docs/',
         }}
         links={[
           { text: 'Home', url: '/' },
-          { text: 'Blog', url: '/blog' },
-          { text: 'Changelog', url: '/changelog' },
+          { text: 'Blog', url: '/blog/' },
+          { text: 'Changelog', url: '/changelog/' },
           {
             type: 'icon',
             text: 'Discord',

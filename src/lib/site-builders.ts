@@ -146,10 +146,10 @@ export function getSiteBuilderSyncLine(builder: SiteBuilder) {
 export function getBuilderDirectoryLinks(): Array<{ label: string; href: string; logo: string }> {
   const agents = ['claude-code', 'codex', 'cursor'].flatMap((slug) => {
     const agent = getAgent(slug)
-    return agent ? [{ label: agent.name, href: `/agents/${agent.slug}`, logo: agent.logoPath }] : []
+    return agent ? [{ label: agent.name, href: `/agents/${agent.slug}/`, logo: agent.logoPath }] : []
   })
   return [
-    ...siteBuilders.map((builder) => ({ label: builder.name, href: `/cms-for-${builder.slug}`, logo: builder.logo })),
+    ...siteBuilders.map((builder) => ({ label: builder.name, href: `/cms-for-${builder.slug}/`, logo: builder.logo })),
     ...agents,
   ]
 }

@@ -324,15 +324,6 @@
             "Waishnav"
           ],
           "color": "blue"
-        },
-        {
-          "name": "redirects",
-          "type": "multiselect",
-          "label": "Redirects",
-          "options": [
-            "git-based-cms-vs-db-based-cms"
-          ],
-          "color": "blue"
         }
       ]
     }

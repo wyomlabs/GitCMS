@@ -14,7 +14,7 @@ const prompts = (await getCollection('prompts'))
   .map((prompt) => ({ ...prompt, slug: prompt.id.replace(/\.mdx?$/, ''), text: promptText(prompt.body) }))
   .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999) || a.data.title.localeCompare(b.data.title))
 ---
-<MarketingLayout title="AI Prompts for Building, Handing Off, and Running Websites | GitCMS" description="Copy-paste prompts for Claude Code, Codex, Cursor, ChatGPT, and Claude: make a site client-editable, update content, improve SEO, and migrate from WordPress." path="/prompts">
+<MarketingLayout title="AI Prompts for Building, Handing Off, and Running Websites | GitCMS" description="Copy-paste prompts for Claude Code, Codex, Cursor, ChatGPT, and Claude: make a site client-editable, update content, improve SEO, and migrate from WordPress.">
   <Section first>
     <SectionHeading level={1} eyebrow="Prompt library" title="Prompts for the whole website lifecycle" description="Copy-paste prompts for coding agents and AI assistants. Use them to make a site client-editable, keep content fresh, and migrate off old platforms. On sites that use review before publish, every content change from a prompt goes through review before it ships." />
   </Section>
@@ -28,7 +28,7 @@ const prompts = (await getCollection('prompts'))
           {items.map((prompt) => (
             <div class:list={['relative flex flex-col p-6 transition-colors hover:border-neutral-300', card]}>
               <h3 class="pr-24 text-[18px] font-semibold tracking-[-0.02em] text-neutral-900">
-                <a href={`/prompts/${prompt.slug}`} class="after:absolute after:inset-0">{prompt.data.title}</a>
+                <a href={`/prompts/${prompt.slug}/`} class="after:absolute after:inset-0">{prompt.data.title}</a>
               </h3>
               <p class="mt-2 flex-1 text-[14.5px] leading-relaxed text-[#898989]">{prompt.data.description}</p>
               <p class="mt-4 text-[12px] text-neutral-500">{prompt.data.agents.join(' · ')}</p>

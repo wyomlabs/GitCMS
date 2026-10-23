@@ -23,11 +23,10 @@ const slug = slugOf(entry.filePath)
 <MarketingLayout
   title={`${entry.data.version} — GitCMS Changelog`}
   description={entry.data.description}
-  path={`/changelog/${slug}`}
   ogImage={`/changelog/${slug}/og.png`}
 >
   <Section first>
-    <ArticleHeader breadcrumbs={[{ label: 'Changelog', href: '/changelog' }, { label: entry.data.version }]} title={entry.data.title}>
+    <ArticleHeader breadcrumbs={[{ label: 'Changelog', href: '/changelog/' }, { label: entry.data.version }]} title={entry.data.title}>
       <div class="mt-5 flex items-center justify-center gap-2 text-[13px] text-[#898989]">
         <span class="rounded-md bg-white px-2 py-0.5 font-mono text-[12px] text-neutral-600 ring-1 ring-neutral-200">{entry.data.version}</span>
         <time datetime={entry.data.date}>{formatDate(entry.data.date, 'long')}</time>

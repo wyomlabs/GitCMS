@@ -1,3 +1,10 @@
+# Renamed blog posts.
+/blog/git-based-cms-vs-db-based-cms /blog/content-is-just-code/ 301
+/blog/git-based-cms-vs-db-based-cms/ /blog/content-is-just-code/ 301
+
+# TanStack Start served /sitemap.xml; Astro's sitemap integration writes an index.
+/sitemap.xml /sitemap-index.xml 301
+
 # Product routes moved to the TanStack Start app. 307 preserves methods for
 # auth/API compatibility while browser-only pages can move permanently.
 /app https://app.gitcms.dev/ 308
@@ -18,13 +25,11 @@
 /api/dodo/* https://app.gitcms.dev/api/dodo/:splat 307
 # Old repo-viewer deep links from the GitHub Markdown Editor tool.
 /tools/github-markdown-editor/:owner/:repo https://app.gitcms.dev/:owner/:repo 308
-/for/indie-hackers /for-solo-builders 308
-/for/startups /for-startups 308
-/for/agencies /for-agencies 308
-/for/freelancers /for-freelancers 308
-/mcp /agents 308
+/for/indie-hackers /for-solo-builders/ 308
+/for/startups /for-startups/ 308
+/for/agencies /for-agencies/ 308
+/for/freelancers /for-freelancers/ 308
+/mcp /agents/ 308
+/mcp/ /agents/ 308
 
-/for-indie-hackers /for-solo-builders 308
-
-# TanStack Start served /sitemap.xml; Astro's sitemap integration writes an index.
-/sitemap.xml /sitemap-index.xml 301
+/for-indie-hackers /for-solo-builders/ 308

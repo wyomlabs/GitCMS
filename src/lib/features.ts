@@ -18,7 +18,7 @@ type Point = { title: string; body: string }
 
 export type Feature = {
   slug: FeatureSlug
-  path: `/features/${FeatureSlug}`
+  path: `/features/${FeatureSlug}/`
   name: string
   /** One line for menus. */
   blurb: string
@@ -53,7 +53,7 @@ export type Feature = {
 export const features: ReadonlyArray<Feature> = [
   {
     slug: 'visual-editor',
-    path: '/features/visual-editor',
+    path: '/features/visual-editor/',
     name: 'Visual editor',
     blurb: 'Markdown, MDX and data files, without the syntax',
     icon: SquarePen,
@@ -109,17 +109,17 @@ export const features: ReadonlyArray<Feature> = [
       { question: 'What happens to my content if I stop using GitCMS?', answer: 'Nothing needs exporting. Your content was always plain files in your repository. Remove the .gitcms folder if you want no trace of the setup.' },
     ],
     related: [
-      { label: 'Markdown editor docs', href: '/docs/features/markdown-editor' },
-      { label: 'Site data', href: '/docs/features/site-data' },
-      { label: 'Collections and fields', href: '/docs/features/collections' },
-      { label: 'Media library', href: '/docs/features/media-management' },
+      { label: 'Markdown editor docs', href: '/docs/features/markdown-editor/' },
+      { label: 'Site data', href: '/docs/features/site-data/' },
+      { label: 'Collections and fields', href: '/docs/features/collections/' },
+      { label: 'Media library', href: '/docs/features/media-management/' },
     ],
     ctaTitle: 'Give your content files an editor',
     ctaDescription: 'Connect your repository and edit your first post. Nothing to migrate, nothing to export later.',
   },
   {
     slug: 'editorial-workflow',
-    path: '/features/editorial-workflow',
+    path: '/features/editorial-workflow/',
     name: 'Editorial workflow',
     blurb: 'Ideas to published on one content board',
     icon: SquareKanban,
@@ -179,17 +179,17 @@ export const features: ReadonlyArray<Feature> = [
       { question: 'Can I switch between review and direct publish later?', answer: 'Yes, per site in Settings. Switching doesn’t rewrite any files.' },
     ],
     related: [
-      { label: 'Editorial workflow docs', href: '/docs/features/editorial-workflow' },
-      { label: 'Roles and site access', href: '/docs/features/access-control' },
-      { label: 'Task-first AI workflows', href: '/docs/ai-mcp/task-first-workflows' },
-      { label: 'Change requests', href: '/features/change-requests' },
+      { label: 'Editorial workflow docs', href: '/docs/features/editorial-workflow/' },
+      { label: 'Roles and site access', href: '/docs/features/access-control/' },
+      { label: 'Task-first AI workflows', href: '/docs/ai-mcp/task-first-workflows/' },
+      { label: 'Change requests', href: '/features/change-requests/' },
     ],
     ctaTitle: 'Put a review step between drafts and your live site',
     ctaDescription: 'Turn on review before publish for any site and see every task on one board.',
   },
   {
     slug: 'change-requests',
-    path: '/features/change-requests',
+    path: '/features/change-requests/',
     name: 'Change requests',
     blurb: 'Feedback pinned to the live site and its previews',
     icon: MousePointerClick,
@@ -245,10 +245,10 @@ export const features: ReadonlyArray<Feature> = [
       { question: 'Is it on every plan?', answer: 'It’s a public beta. Everyone who can edit a site can explore it; submitting and discussing requests needs a licensed site. See pricing for what a license includes.' },
     ],
     related: [
-      { label: 'Previews and change requests docs', href: '/docs/features/editorial-workflow' },
-      { label: 'Set up coding agents', href: '/docs/ai-mcp/coding-agents-setup' },
-      { label: 'Editorial workflow', href: '/features/editorial-workflow' },
-      { label: 'GitCMS for agencies', href: '/for-agencies' },
+      { label: 'Previews and change requests docs', href: '/docs/features/editorial-workflow/' },
+      { label: 'Set up coding agents', href: '/docs/ai-mcp/coding-agents-setup/' },
+      { label: 'Editorial workflow', href: '/features/editorial-workflow/' },
+      { label: 'GitCMS for agencies', href: '/for-agencies/' },
     ],
     ctaTitle: 'Let clients point at what they want changed',
     ctaDescription: 'Connect your site and send your first change request to your coding agent.',

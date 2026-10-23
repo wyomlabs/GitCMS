@@ -16,7 +16,7 @@ const { page } = Astro.props
 const { Content } = await render(page)
 const slug = page.id.replace(/\.mdx?$/, '')
 ---
-<MarketingLayout title={`${page.data.title} — GitCMS`} description={page.data.description} path={`/${slug}`}>
+<MarketingLayout title={`${page.data.title} — GitCMS`} description={page.data.description}>
   <Section first>
     <article class:list={['mx-auto max-w-3xl px-6 py-10 sm:px-12 sm:py-14', card]}>
       <div class:list={[prose, 'prose-h1:text-[36px] prose-h1:sm:text-[44px] prose-h1:tracking-[-0.04em]']}>

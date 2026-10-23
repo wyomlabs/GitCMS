@@ -66,6 +66,9 @@ importers:
       '@resvg/resvg-js':
         specifier: ^2.6.2
         version: 2.6.2
+      '@types/hast':
+        specifier: ^3.0.5
+        version: 3.0.5
       '@types/react':
         specifier: ^19.2.0
         version: 19.3.0

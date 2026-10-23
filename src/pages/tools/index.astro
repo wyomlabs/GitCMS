@@ -13,13 +13,12 @@ const tools = (await getCollection('tools'))
 <MarketingLayout
   title="Free Markdown, README, and Agent File Tools | GitCMS"
   description="Free browser tools for Markdown editing, README editing, AGENTS.md and CLAUDE.md files, public GitHub Markdown, and WebP image compression. No sign-up."
-  path="/tools"
 >
   <Section first>
     <SectionHeading level={1} eyebrow="Free tools" title="Tools for Markdown and website content" description="Free tools that run in your browser. Write Markdown, set up instruction files for coding agents, edit READMEs on GitHub, and shrink images before you commit them." />
     <div class="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
       {tools.map((tool) => (
-        <a href={`/tools/${tool.slug}`} class:list={['group flex flex-col p-6 transition-colors hover:border-neutral-300', card]}>
+        <a href={`/tools/${tool.slug}/`} class:list={['group flex flex-col p-6 transition-colors hover:border-neutral-300', card]}>
           <h2 class="text-[18px] font-semibold tracking-[-0.02em] text-neutral-900 group-hover:text-neutral-600">{tool.data.title}</h2>
           <p class="mt-2 flex-1 text-[14.5px] leading-relaxed text-[#898989]">{tool.data.description}</p>
           <p class="mt-5 text-[13px] font-medium text-neutral-900">Open tool →</p>

@@ -24,16 +24,11 @@ export async function getStaticPaths() {
   for (const post of await getPublishedPosts()) {
     const slug = post.id.replace(/\.mdx?$/, '')
     paths.push({ params: { slug }, props: { post } })
-    for (const redirect of post.data.redirects ?? []) {
-      paths.push({ params: { slug: redirect.replace(/^\/+|\/+$/g, '') }, props: { redirectTo: `/blog/${slug}` } })
-    }
   }
   return paths
 }
 
-const { post, redirectTo } = Astro.props
-if (redirectTo) return Astro.redirect(redirectTo, 301)
-if (!post) throw new Error('Blog post route is missing its post')
+const { post } = Astro.props
 
 const { Content, headings } = await render(post)
 const slug = post.id.replace(/\.mdx?$/, '')
@@ -42,7 +37,7 @@ const toc = headings
   .map((heading) => ({ title: heading.text, url: `#${heading.slug}`, depth: heading.depth }))
 const readingTime = readingTimeFromStructuredData(structure(post.body ?? ''))
 const relatedPosts = await getRelatedPosts(slug, post.data.tags, post.data.category, 3)
-const postPath = `/blog/${slug}`
+const postPath = `/blog/${slug}/`
 const ogImage = `${postPath}/og.png`
 const structuredData = {
   '@context': 'https://schema.org',
@@ -53,16 +48,15 @@ const structuredData = {
   dateModified: post.data.updatedDate ?? post.data.date,
   author: { '@type': 'Person', name: post.data.authors[0], url: 'https://gitcms.dev' },
   publisher: { '@type': 'Organization', name: 'GitCMS', url: 'https://gitcms.dev' },
-  url: `https://gitcms.dev${postPath}`,
+  url: new URL(postPath, Astro.site).href,
   image: `https://gitcms.dev${ogImage}`,
-  mainEntityOfPage: { '@type': 'WebPage', '@id': `https://gitcms.dev${postPath}` },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': new URL(postPath, Astro.site).href },
 }
 const mdxComponents = { ...defaultMdxComponents, Callout, Steps, Step, Card, Cards, img: ImageZoom }
 ---
 <MarketingLayout
   title={`${post.data.title} — GitCMS Blog`}
   description={post.data.description}
-  path={postPath}
   ogImage={ogImage}
   type="article"
   publishedTime={post.data.date}
@@ -71,7 +65,7 @@ const mdxComponents = { ...defaultMdxComponents, Callout, Steps, Step, Card, Car
 >
   <Section first>
     <header class="mx-auto max-w-3xl text-center">
-      <div class="flex justify-center"><Breadcrumbs items={[{ label: 'Blog', href: '/blog' }, { label: blogCategoryLabels[post.data.category] }]} /></div>
+      <div class="flex justify-center"><Breadcrumbs items={[{ label: 'Blog', href: '/blog/' }, { label: blogCategoryLabels[post.data.category] }]} /></div>
       <h1 class:list={['mt-6', h1]}>{post.data.title}</h1>
       <p class:list={['mx-auto mt-5 max-w-2xl', sub]}>{post.data.description}</p>
       <div class="mt-8 flex items-center justify-center gap-3 text-left">

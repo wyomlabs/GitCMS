@@ -11,7 +11,7 @@ interface Props {
 }
 const { post, compact = false } = Astro.props
 ---
-<a href={`/blog/${post.slug}`} data-category={post.category} class:list={['group flex flex-col overflow-hidden transition-colors hover:border-neutral-300', card]}>
+<a href={`/blog/${post.slug}/`} data-category={post.category} class:list={['group flex flex-col overflow-hidden transition-colors hover:border-neutral-300', card]}>
   {post.cover && !compact && <img src={post.cover} alt="" class="aspect-[1.9/1] w-full border-b border-neutral-200 object-cover" loading="lazy" />}
   <div class="flex flex-1 flex-col p-6">
     <div class="flex items-center gap-2 text-[12px] text-[#898989]">

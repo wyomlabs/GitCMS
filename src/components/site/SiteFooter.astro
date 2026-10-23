@@ -13,16 +13,16 @@ import { getBuilderDirectoryLinks } from '@/lib/site-builders'
 import { getComparisons } from '@/lib/content'
 
 const columns = [
-  { title: 'Product', links: [['Docs', '/docs/'], ...FEATURE_LINKS.filter((item) => item.badge !== 'Soon').map((item) => [item.label, item.href]), ['Agents and MCP', '/agents'], ['Pricing', '/#pricing'], ['Chrome extension', '/extension'], ['Changelog', '/changelog']] },
+  { title: 'Product', links: [['Docs', '/docs/'], ...FEATURE_LINKS.filter((item) => item.badge !== 'Soon').map((item) => [item.label, item.href]), ['Agents and MCP', '/agents/'], ['Pricing', '/#pricing'], ['Chrome extension', '/extension/'], ['Changelog', '/changelog/']] },
   { title: 'Use cases', links: USE_CASE_LINKS.map((item) => [item.label, item.href]) },
-  { title: 'Resources', links: RESOURCE_LINKS.filter((item) => item.href !== '/changelog').map((item) => [item.label, item.href]) },
-  { title: 'Company', links: [['Manifesto', '/manifesto'], ['GitHub', SITE_REPOSITORY_URL], ['Discord', DISCORD_INVITE_URL], ['Terms', '/terms'], ['Privacy', '/privacy']] },
+  { title: 'Resources', links: RESOURCE_LINKS.filter((item) => item.href !== '/changelog/').map((item) => [item.label, item.href]) },
+  { title: 'Company', links: [['Manifesto', '/manifesto/'], ['GitHub', SITE_REPOSITORY_URL], ['Discord', DISCORD_INVITE_URL], ['Terms', '/terms/'], ['Privacy', '/privacy/']] },
 ]
 const directory = [
-  { title: 'Agents', links: directoryAgentList.map((agent) => ({ label: agent.name, href: `/agents/${agent.slug}`, logo: agent.logoPath })) },
-  { title: 'Frameworks', links: frameworkList.map((framework) => ({ label: framework.name, href: `/git-based-cms-for-${framework.slug}`, logo: framework.logo })) },
+  { title: 'Agents', links: directoryAgentList.map((agent) => ({ label: agent.name, href: `/agents/${agent.slug}/`, logo: agent.logoPath })) },
+  { title: 'Frameworks', links: frameworkList.map((framework) => ({ label: framework.name, href: `/git-based-cms-for-${framework.slug}/`, logo: framework.logo })) },
   { title: 'AI site builders', links: getBuilderDirectoryLinks() },
-  { title: 'Comparisons', links: (await getComparisons()).map((entry) => ({ label: `vs ${entry.data.competitor}`, href: `/compare/${entry.id.replace(/\.mdx?$/, '')}`, logo: undefined })) },
+  { title: 'Comparisons', links: (await getComparisons()).map((entry) => ({ label: `vs ${entry.data.competitor}`, href: `/compare/${entry.id.replace(/\.mdx?$/, '')}/`, logo: undefined })) },
 ]
 ---
 <footer class="grid gap-14 border-t border-neutral-200 px-6 pb-24 pt-20 lg:grid-cols-[1fr_2fr] lg:px-16">

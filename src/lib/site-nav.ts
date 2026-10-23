@@ -22,25 +22,25 @@ export const FEATURE_LINKS: ReadonlyArray<NavLink> = [
 ]
 
 export const PLATFORM_LINKS: ReadonlyArray<NavLink> = [
-  { label: 'Agents & MCP', href: '/agents', blurb: 'ChatGPT, Claude and coding agents draft for review', icon: Bot },
-  { label: 'One-prompt setup', href: '/docs/getting-started/cli-onboarding', blurb: 'Your coding agent runs create-gitcms', icon: SquareTerminal },
-  { label: 'Chrome extension', href: '/extension', blurb: 'Open any GitHub repo or file in GitCMS', icon: Puzzle },
+  { label: 'Agents & MCP', href: '/agents/', blurb: 'ChatGPT, Claude and coding agents draft for review', icon: Bot },
+  { label: 'One-prompt setup', href: '/docs/getting-started/cli-onboarding/', blurb: 'Your coding agent runs create-gitcms', icon: SquareTerminal },
+  { label: 'Chrome extension', href: '/extension/', blurb: 'Open any GitHub repo or file in GitCMS', icon: Puzzle },
 ]
 
 export const USE_CASE_LINKS: ReadonlyArray<NavLink> = useCases.map((useCase) => ({ label: useCase.name, href: useCase.path, blurb: useCase.blurb, icon: USE_CASE_ICONS[useCase.slug] }))
 
-export const FRAMEWORK_LINKS = frameworkList.map((framework) => ({ label: framework.name, href: `/git-based-cms-for-${framework.slug}`, logo: framework.logo }))
+export const FRAMEWORK_LINKS = frameworkList.map((framework) => ({ label: framework.name, href: `/git-based-cms-for-${framework.slug}/`, logo: framework.logo }))
 
 export const LEARN_LINKS: ReadonlyArray<NavLink> = [
-  { label: 'Blog', href: '/blog', blurb: 'Guides and opinions on running code-first sites', icon: Newspaper },
-  { label: 'Prompt library', href: '/prompts', blurb: 'Copy-paste prompts for your coding agent', icon: SquareTerminal },
-  { label: 'Glossary', href: '/glossary', blurb: 'Website and CMS terms, explained', icon: BookA },
-  { label: 'Compare', href: '/compare', blurb: 'GitCMS next to the tools you’re weighing', icon: GitCompareArrows },
+  { label: 'Blog', href: '/blog/', blurb: 'Guides and opinions on running code-first sites', icon: Newspaper },
+  { label: 'Prompt library', href: '/prompts/', blurb: 'Copy-paste prompts for your coding agent', icon: SquareTerminal },
+  { label: 'Glossary', href: '/glossary/', blurb: 'Website and CMS terms, explained', icon: BookA },
+  { label: 'Compare', href: '/compare/', blurb: 'GitCMS next to the tools you’re weighing', icon: GitCompareArrows },
 ]
 
 export const UPDATE_LINKS: ReadonlyArray<NavLink> = [
-  { label: 'Changelog', href: '/changelog', blurb: 'What shipped, release by release', icon: History },
-  { label: 'Free tools', href: '/tools', blurb: 'Small utilities for your site’s repo', icon: Wrench },
+  { label: 'Changelog', href: '/changelog/', blurb: 'What shipped, release by release', icon: History },
+  { label: 'Free tools', href: '/tools/', blurb: 'Small utilities for your site’s repo', icon: Wrench },
 ]
 
 export const RESOURCE_LINKS: ReadonlyArray<NavLink> = [...LEARN_LINKS, ...UPDATE_LINKS]

@@ -22,7 +22,6 @@ const steps = [
 <MarketingLayout
   title="GitCMS for AI Agents — Draft, Review, and Publish Safely"
   description="Connect ChatGPT, Claude, and personal agents like OpenClaw and Hermes to your website. Agents draft changes; people review and publish."
-  path="/agents"
   structuredData={faqStructuredData(SHARED_AGENT_FAQS)}
 >
   <Section first>
@@ -39,7 +38,7 @@ const steps = [
           <p class="mt-2 flex-1 text-[14.5px] leading-relaxed text-[#898989]">{AGENT_FAMILY_DESCRIPTIONS[family]}</p>
           <div class="mt-6 flex flex-wrap gap-2">
             {getAgentsByFamily(family).map((agent) => (
-              <a href={`/agents/${agent.slug}`} class="inline-flex items-center gap-2 rounded-full border border-neutral-200 px-3 py-1.5 text-[13px] font-medium text-neutral-700 transition-colors hover:border-neutral-400 hover:text-neutral-950">
+              <a href={`/agents/${agent.slug}/`} class="inline-flex items-center gap-2 rounded-full border border-neutral-200 px-3 py-1.5 text-[13px] font-medium text-neutral-700 transition-colors hover:border-neutral-400 hover:text-neutral-950">
                 <img src={agent.logoPath} alt="" class="size-4 object-contain" /> {agent.name}
               </a>
             ))}
