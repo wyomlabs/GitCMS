@@ -11,7 +11,7 @@ import {
 } from '@/components/resources/resource-mdx-components'
 
 const DESCRIPTION =
-  'Plain-language definitions for code-first websites: how they’re built and rendered, the content formats and Git behind them, and running them with people and AI agents.'
+  'Plain-language definitions for code-first websites: how they’re built and rendered, the formats and Git behind them, and running them with agents.'
 const terms = (await getCollection('glossary'))
   .map((term) => ({ ...term, slug: term.id.replace(/\.mdx?$/, '') }))
   .sort((a, b) => a.data.title.localeCompare(b.data.title))

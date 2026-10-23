@@ -159,5 +159,5 @@ export function getSiteBuilderTitle(builder: SiteBuilder) {
 }
 
 export function getSiteBuilderDescription(builder: SiteBuilder) {
-  return `Built your site with ${builder.name}? One prompt moves its copy into files, and GitCMS gives your clients a visual editor for them. ${builder.autoSync ? `Edits sync back into ${builder.name}.` : `Every edit is a commit you can pull into ${builder.name}.`}`
+  return `Built your site with ${builder.name}? One prompt moves its copy into files, and GitCMS gives clients a visual editor for them. ${builder.autoSync ? `Edits sync back into ${builder.name}.` : `You pull their edits into ${builder.name}.`}`
 }

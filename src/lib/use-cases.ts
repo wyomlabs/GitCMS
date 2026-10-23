@@ -214,7 +214,7 @@ export const useCases: ReadonlyArray<UseCase> = [
     name: 'Solo builders',
     blurb: 'Publish the content that gets your product found',
     seoTitle: 'GitCMS for Solo Builders — Publish the Blog, Docs, and Changelog That Get Your Product Found',
-    seoDescription: 'Built your product site with code or a coding agent? GitCMS helps solo builders keep the blog, docs, and changelog publishing, with your agent drafting and SEO checks before anything ships.',
+    seoDescription: 'Built your product site with a coding agent? GitCMS helps solo builders keep the blog, docs, and changelog publishing, with agent drafts and SEO checks.',
     title: 'People find your product through what you publish. Keep publishing.',
     description: 'Search results and AI answers send people to your blog posts, docs and changelog, not your landing page. GitCMS puts writing, your agent and SEO checks in one place on top of your repository, so content stops being the thing you skip.',
     heroDemo: 'seo',
