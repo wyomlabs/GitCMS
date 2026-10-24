@@ -1,0 +1,188 @@
+---
+// Content board (DESIGN.md "Board"): tinted workflow columns. A cursor drags
+// one content task, drafted by an agent, from Ideas to Published: grab, lift,
+// glide, drop. Each column has a slot at the top that is open only where the
+// card sits, so the other cards slide down to make room and back up after.
+import { MessageSquare } from 'lucide-react'
+import Cursor from './Cursor.astro'
+
+const columns = [
+  { name: 'Ideas', dot: 'bg-amber-400', head: 'bg-amber-50/80 border-amber-100', count: 2 },
+  { name: 'Draft', dot: 'bg-sky-500', head: 'bg-sky-50/80 border-sky-100', count: 1 },
+  { name: 'Review', dot: 'bg-violet-500', head: 'bg-violet-50/80 border-violet-100', count: 0 },
+  { name: 'Published', dot: 'bg-emerald-500', head: 'bg-emerald-50/80 border-emerald-100', count: 7 },
+] as const
+
+const staticCards: Record<string, Array<{ title: string; id: number; who: string }>> = {
+  Ideas: [
+    { title: 'Spring storm checklist', id: 51, who: 'Jess' },
+    { title: 'Metal roof cost guide', id: 53, who: 'Claude' },
+  ],
+  Draft: [{ title: 'New Round Rock location page', id: 48, who: 'Sam' }],
+  Review: [],
+  Published: [
+    { title: 'Hail damage FAQ', id: 39, who: 'Jess' },
+    { title: 'Warranty page refresh', id: 37, who: 'Claude' },
+  ],
+}
+---
+<div data-board class="relative grid h-full grid-cols-4 gap-2 p-3">
+  {columns.map((column, index) => (
+    <div data-column={index} class="flex min-w-0 flex-col rounded-lg border border-neutral-200 bg-neutral-50/40 transition-colors duration-200 data-[target=true]:border-violet-300 data-[target=true]:bg-violet-50/40">
+      <div class:list={['flex items-center gap-1.5 rounded-t-lg border-b px-2 py-1.5 text-[11px] font-medium', column.head]}>
+        <span class:list={['size-1.5 rounded-full', column.dot]}></span>
+        {column.name}
+        <span data-count={column.count} class="ml-auto rounded-full border border-current/10 bg-white px-1.5 text-[10px] tabular-nums text-neutral-500">{column.count + (index === 0 ? 1 : 0)}</span>
+      </div>
+      <div class="flex flex-col gap-1.5 p-1.5">
+        <div data-slot={index} data-open={index === 0 ? 'true' : 'false'} class="-mb-1.5 h-0 shrink-0 rounded-md transition-[height,margin] duration-[600ms] ease-[cubic-bezier(0.22,0.8,0.24,1)] data-[open=true]:mb-0 data-[open=true]:h-[58px]"></div>
+        {staticCards[column.name]?.map((card) => (
+          <div class="rounded-md border border-neutral-200 bg-white p-2">
+            <div class="text-[11px] font-medium leading-snug text-neutral-800">{card.title}</div>
+            <div class="mt-1 text-[10px] text-neutral-500"><span class="rounded border border-neutral-200 px-1 font-medium text-neutral-700">#{card.id}</span> {card.who}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+
+  <!-- The card being dragged, positioned over a column's slot. -->
+  <div data-drag-card class="absolute left-0 top-0 z-20 h-[58px] rounded-md border border-neutral-200 bg-white p-2 transition-[transform,box-shadow,border-color] duration-[550ms] ease-[cubic-bezier(0.22,0.8,0.24,1)] data-[lifted=true]:border-violet-300 data-[lifted=true]:shadow-[0_12px_24px_-12px_rgba(76,29,149,0.35)]">
+    <div class="text-[11px] font-medium leading-snug text-neutral-900">Q4 pricing update</div>
+    <div class="mt-1 flex items-center gap-1 text-[10px] text-neutral-500">
+      <span class="rounded border border-neutral-200 px-1 font-medium text-neutral-700">#57</span>
+      <img src="/ai-logos/claude-orange.svg" alt="" class="size-3" /> Claude
+      <span data-drag-comment class="ml-auto inline-flex items-center gap-0.5 text-violet-600 opacity-0 transition-opacity duration-300"><MessageSquare className="size-3" /> 1</span>
+    </div>
+  </div>
+  <Cursor />
+</div>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const sleep = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms))
+  // One pass, in ms. `drag` matches the card's CSS transition.
+  const T = { intro: 500, grab: 180, settle: 150, drag: 550, between: 300, comment: 250, read: 900, end: 1300, fade: 320 }
+
+  for (const board of document.querySelectorAll<HTMLElement>('[data-board]')) {
+    const card = board.querySelector<HTMLElement>('[data-drag-card]')
+    const cursor = board.querySelector<HTMLElement>('[data-cursor]')
+    const comment = board.querySelector<HTMLElement>('[data-drag-comment]')
+    const slots = [...board.querySelectorAll<HTMLElement>('[data-slot]')]
+    const columns = [...board.querySelectorAll<HTMLElement>('[data-column]')]
+    if (!card || !cursor || !comment) continue
+
+    let column = 0
+    let lifted = false
+    let generation = 0
+    let visible = false
+
+    // Place the card over a slot; the cursor rides near its top-right.
+    const place = () => {
+      slots.forEach((slot, index) => { slot.dataset.open = String(index === column) })
+      // The board may sit in a scaled frame: work in its own coordinates.
+      const box = board.getBoundingClientRect()
+      const scale = box.width / board.offsetWidth || 1
+      const rect = slots[column]?.getBoundingClientRect()
+      if (!rect) return
+      const slot = { width: rect.width / scale }
+      const x = (rect.left - box.left) / scale
+      const y = (rect.top - box.top) / scale
+      card.style.width = `${slot.width}px`
+      card.style.transform = `translate(${x}px, ${y}px) rotate(${lifted ? 2 : 0}deg) scale(${lifted ? 1.03 : 1})`
+      card.dataset.lifted = String(lifted)
+      cursor.style.transform = `translate(${x + slot.width * 0.7}px, ${y + 30}px)`
+      columns.forEach((element, index) => {
+        const count = element.querySelector<HTMLElement>('[data-count]')
+        if (count) count.textContent = String(Number(count.dataset.count) + (index === column ? 1 : 0))
+      })
+    }
+
+    const press = async (down: boolean) => {
+      cursor.classList.add('clicking')
+      await sleep(T.grab)
+      lifted = down
+      place()
+      window.setTimeout(() => cursor.classList.remove('clicking'), 300)
+    }
+
+    // Apply a layout change with transitions off, so a reset never animates.
+    const instantly = (change: () => void) => {
+      const animated = [card, cursor, comment, ...slots]
+      animated.forEach((element) => { element.style.transition = 'none' })
+      change()
+      void board.offsetWidth
+      animated.forEach((element) => { element.style.transition = '' })
+    }
+
+    // One pass: Ideas → Draft → Review (Jess comments) → Published. `from` is
+    // a screen point where a previous demo's cursor stopped (see Sequencer).
+    const run = async (id: number, from: { x: number; y: number } | null) => {
+      const alive = () => id === generation && visible && !board.closest('[data-seq-paused]')
+      column = 0
+      lifted = false
+      instantly(() => {
+        comment.style.opacity = '0'
+        place()
+        if (!from) return
+        const box = board.getBoundingClientRect()
+        const scale = box.width / board.offsetWidth || 1
+        cursor.style.transform = `translate(${(from.x - box.left) / scale}px, ${(from.y - box.top) / scale}px)`
+      })
+      // Glide the cursor from where the last demo left it over to the card.
+      if (from) place()
+      cursor.classList.add('visible')
+      board.style.opacity = '1'
+      await sleep(T.intro)
+      for (const next of [1, 2, 3]) {
+        if (!alive()) return
+        await press(true)
+        await sleep(T.settle)
+        columns[next]?.setAttribute('data-target', 'true')
+        column = next
+        place()
+        await sleep(T.drag)
+        columns[next]?.setAttribute('data-target', 'false')
+        await press(false)
+        if (next === 2) {
+          await sleep(T.comment)
+          comment.style.opacity = '1'
+          await sleep(T.read)
+        }
+        await sleep(next === 3 ? T.end : T.between)
+      }
+      if (!alive()) return
+      // A container that cancels this takes over the cut (product tour).
+      if (!board.dispatchEvent(new CustomEvent('seq:end', { cancelable: true }))) return
+      board.style.opacity = '0'
+      await sleep(T.fade)
+      if (alive()) run(id, null)
+    }
+
+    const restart = (from: { x: number; y: number } | null = null) => {
+      generation += 1
+      if (!reduce && visible) run(generation, from)
+    }
+
+    if (reduce) {
+      column = 2
+      comment.style.opacity = '1'
+      place()
+      continue
+    }
+
+    board.dataset.cycle = String(T.intro + 3 * (T.grab + T.settle + T.drag + T.grab) + 2 * T.between + T.end + T.comment + T.read + T.fade)
+    board.style.transition = 'opacity 0.3s ease'
+    place()
+    window.addEventListener('resize', place)
+    board.addEventListener('seq:restart', (event) => {
+      const detail = event instanceof CustomEvent ? event.detail : null
+      restart(detail && typeof detail.x === 'number' && typeof detail.y === 'number' ? { x: detail.x, y: detail.y } : null)
+    })
+    new IntersectionObserver(([entry]) => {
+      const now = Boolean(entry?.isIntersecting)
+      if (now && !visible) { visible = true; restart() }
+      else if (!now) { visible = false; generation += 1 }
+    }, { threshold: 0.3 }).observe(board)
+  }
+</script>

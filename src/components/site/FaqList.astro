@@ -1,0 +1,20 @@
+---
+// Expandable questions. Pages pass the same list to faqStructuredData so the
+// FAQPage markup always matches what's on screen.
+interface Props {
+  faqs: ReadonlyArray<{ question: string; answer: string }>
+  dark?: boolean
+}
+const { faqs, dark = false } = Astro.props
+---
+<div class:list={['divide-y border-y', dark ? 'divide-white/10 border-white/10' : 'divide-neutral-200 border-neutral-200']}>
+  {faqs.map((faq) => (
+    <details class="group py-4">
+      <summary class:list={['flex cursor-pointer list-none items-center justify-between gap-4 text-[15px] font-medium', dark ? 'text-white' : 'text-neutral-900']}>
+        {faq.question}
+        <span class:list={['text-xl leading-none transition-transform group-open:rotate-45', dark ? 'text-neutral-500' : 'text-neutral-400']}>+</span>
+      </summary>
+      <p class:list={['mt-2 max-w-2xl text-[15px] leading-relaxed', dark ? 'text-neutral-400' : 'text-neutral-500']}>{faq.answer}</p>
+    </details>
+  ))}
+</div>

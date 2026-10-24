@@ -1,7 +1,9 @@
 import { getCollection } from 'astro:content'
 import { agentList, getAgentLandingDescription, getAgentLandingTitle } from '@/lib/agent-data'
 import { frameworkList, getFrameworkFaqs, getFrameworkLandingDescription, getFrameworkLandingTitle } from '@/lib/framework-data'
-import { personaList } from '@/components/landing/persona-content'
+import { features } from '@/lib/features'
+import { getSiteBuilderDescription, getSiteBuilderTitle, siteBuilders } from '@/lib/site-builders'
+import { getUseCase, useCases } from '@/lib/use-cases'
 import {
   DEFAULT_SEO_DESCRIPTION,
   DEFAULT_SEO_TITLE,
@@ -19,10 +21,20 @@ export type PublicResourceKind =
   | 'prompt'
   | 'tool'
   | 'agent'
+  | 'feature'
   | 'persona'
   | 'framework'
+  | 'builder'
   | 'page'
   | 'index'
+
+/** The product scene on a page's OG image; pages without one get a default for their kind. */
+export type OgScene =
+  | { type: 'text' }
+  | { type: 'published' }
+  | { type: 'agent'; logo: string }
+  | { type: 'files'; logo: string; files: 'data' | 'markdown' }
+  | { type: 'versus'; competitor: string }
 
 export type PublicResource = {
   id: string
@@ -36,11 +48,18 @@ export type PublicResource = {
   listed?: boolean
   noIndex?: boolean
   updatedAt?: string
+  og?: OgScene
 }
 
 export function normalizeHtmlPath(path: string) {
   if (!path || path === '/') return '/'
   return `/${path.replace(/^\/+|\/+$/g, '')}`
+}
+
+/** The address a page is served at: `/docs/quick-start/` (`trailingSlash: 'always'`). */
+export function pageUrlPath(path: string) {
+  const normalized = normalizeHtmlPath(path)
+  return normalized === '/' ? '/' : `${normalized}/`
 }
 
 export function markdownPathForHtmlPath(path: string) {
@@ -116,34 +135,65 @@ function agentBody(agent: (typeof agentList)[number]) {
   ].join('\n')
 }
 
-function personaBody(persona: (typeof personaList)[number]) {
+function useCaseBody(useCase: (typeof useCases)[number]) {
+  const soon = (item: { soon?: boolean }) => (item.soon ? ' (coming soon)' : '')
   return [
-    persona.heroBody,
+    useCase.description,
     '',
-    ...persona.heroSupport.map((point) => `- ${point}`),
+    `## ${useCase.painsTitle}`,
     '',
-    `## ${persona.painTitle}`,
+    ...useCase.pains.flatMap((point) => [`### ${point.title}`, '', point.body, '']),
+    `## ${useCase.workflowTitle}`,
     '',
-    ...persona.pains.flatMap((point) => [`### ${point.title}`, '', point.body, '']),
-    `## ${persona.valueTitle}`,
+    useCase.workflowDescription,
     '',
-    persona.valueBody,
+    ...useCase.steps.flatMap((step, index) => [`### ${index + 1}. ${step.title}${soon(step)}`, '', step.body, '']),
+    `## ${useCase.featuresTitle}`,
     '',
-    ...persona.valuePoints.map((point) => `- ${point}`),
-    '',
-    `## ${persona.scenarioTitle}`,
-    '',
-    persona.scenarioBody,
-    '',
-    ...persona.scenarioSteps.flatMap((step, index) => [`### ${index + 1}. ${step.title}`, '', step.body, '']),
-    persona.scenarioFooter,
+    ...useCase.features.map((feature) => `- **${feature.title}${soon(feature)}:** ${feature.body}`),
     '',
     '## FAQ',
     '',
-    ...persona.faq.flatMap((faq) => [`### ${faq.question}`, '', faq.answer, '']),
+    ...useCase.faqs.flatMap((faq) => [`### ${faq.question}`, '', faq.answer, '']),
     '## Related',
     '',
-    ...persona.relatedLinks.map((link) => `- [${link.label}](${link.href})`),
+    ...useCase.related.map((link) => `- [${link.label}](${link.href})`),
+  ].join('\n')
+}
+
+function featureBody(feature: (typeof features)[number]) {
+  return [
+    feature.description,
+    '',
+    `## ${feature.problemTitle}`,
+    '',
+    ...feature.problem.flatMap((paragraph) => [paragraph, '']),
+    `## ${feature.stepsTitle}`,
+    '',
+    ...feature.steps.flatMap((step, index) => [`### ${index + 1}. ${step.title}`, '', step.body, ...(step.inRepo ? ['', `In the repository: \`${step.inRepo}\``] : []), '']),
+    ...(feature.showcase ? [`## ${feature.showcase.title}`, '', feature.showcase.description, ''] : []),
+    '## Who it’s for',
+    '',
+    ...feature.audiences.map((audience) => `- **[${getUseCase(audience.useCase).name}](${getUseCase(audience.useCase).path}):** ${audience.body}`),
+    '',
+    `## ${feature.underTheHood.title}`,
+    '',
+    feature.underTheHood.intro,
+    '',
+    '| In GitCMS | In your repository |',
+    '| --- | --- |',
+    ...feature.underTheHood.rows.map((row) => `| ${row.action} | ${row.repo} |`),
+    '',
+    `## ${feature.detailsTitle}`,
+    '',
+    ...feature.details.map((detail) => `- **${detail.title}${detail.soon ? ' (coming soon)' : ''}:** ${detail.body}`),
+    '',
+    '## FAQ',
+    '',
+    ...feature.faqs.flatMap((faq) => [`### ${faq.question}`, '', faq.answer, '']),
+    '## Related',
+    '',
+    ...feature.related.map((link) => `- [${link.label}](${link.href})`),
   ].join('\n')
 }
 
@@ -169,6 +219,25 @@ function frameworkBody(framework: (typeof frameworkList)[number]) {
     '## FAQ',
     '',
     ...faqs.flatMap((faq) => [`### ${faq.question}`, '', faq.answer, '']),
+  ].join('\n')
+}
+
+function builderBody(builder: (typeof siteBuilders)[number]) {
+  return [
+    getSiteBuilderDescription(builder),
+    '',
+    '## How it works',
+    '',
+    `1. Paste the prompt from /prompts/make-ai-built-site-editable into ${builder.name}. It moves copy out of components into content/pages/*.md (frontmatter fields), content/blog/*.md and data/site.json, without changing the design.`,
+    `2. ${builder.connect} In GitCMS, Add site finds the pages, posts and site data.`,
+    `3. Clients edit in GitCMS; every save is a commit. ${builder.syncBack}`,
+    '',
+    `${builder.name} usually builds ${builder.stack}.`,
+    '',
+    '## FAQ',
+    '',
+    ...builder.faqs.flatMap((faq) => [`### ${faq.question}`, '', faq.answer, '']),
+    'Setup guide: /docs/getting-started/ai-site-builders',
   ].join('\n')
 }
 
@@ -251,6 +320,7 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       description: entry.data.description,
       htmlPath: `/compare/${slug}`,
       body: entry.body ?? '',
+      og: { type: 'versus', competitor: entry.data.competitor },
       updatedAt: entry.data.lastReviewed,
     }))
   }
@@ -328,17 +398,29 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       description: getAgentLandingDescription(agent),
       htmlPath: `/agents/${agent.slug}`,
       body: agentBody(agent),
+      og: { type: 'agent', logo: agent.logoPath },
     }))
   }
 
-  for (const persona of personaList) {
+  for (const feature of features) {
     resources.push(resource({
-      id: `persona:${persona.slug}`,
+      id: `feature:${feature.slug}`,
+      kind: 'feature',
+      title: feature.seoTitle,
+      description: feature.seoDescription,
+      htmlPath: feature.path,
+      body: featureBody(feature),
+    }))
+  }
+
+  for (const useCase of useCases) {
+    resources.push(resource({
+      id: `persona:${useCase.slug}`,
       kind: 'persona',
-      title: persona.seoTitle,
-      description: persona.seoDescription,
-      htmlPath: persona.path,
-      body: personaBody(persona),
+      title: useCase.seoTitle,
+      description: useCase.seoDescription,
+      htmlPath: useCase.path,
+      body: useCaseBody(useCase),
     }))
   }
 
@@ -350,6 +432,19 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       description: getFrameworkLandingDescription(framework),
       htmlPath: `/git-based-cms-for-${framework.slug}`,
       body: frameworkBody(framework),
+      og: { type: 'files', logo: framework.logo, files: 'markdown' },
+    }))
+  }
+
+  for (const builder of siteBuilders) {
+    resources.push(resource({
+      id: `builder:${builder.slug}`,
+      kind: 'builder',
+      title: `${getSiteBuilderTitle(builder)} — GitCMS`,
+      description: getSiteBuilderDescription(builder),
+      htmlPath: `/cms-for-${builder.slug}`,
+      body: builderBody(builder),
+      og: { type: 'files', logo: builder.logo, files: 'data' },
     }))
   }
 
@@ -381,7 +476,7 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
     resource({
       id: 'index:agents', kind: 'index', title: 'GitCMS for AI Agents',
       description: 'Connect ChatGPT, Claude, coding agents, and personal agents to website content through GitCMS.',
-      htmlPath: '/agents', body: listBody('Agents', 'Agents draft website changes through GitCMS while people keep control of publishing.', byKind('agent')),
+      htmlPath: '/agents', og: { type: 'agent', logo: '/ai-logos/claude-orange.svg' }, body: listBody('Agents', 'Agents draft website changes through GitCMS while people keep control of publishing.', byKind('agent')),
     }),
     resource({
       id: 'index:for', kind: 'index', title: 'Who GitCMS Is For',

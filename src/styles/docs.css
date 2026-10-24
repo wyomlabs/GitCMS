@@ -1,0 +1,7 @@
+/* Tailwind entry for /docs: Fumadocs' preset and its own typography only.
+   Marketing pages use global.css, which adds @tailwindcss/typography. */
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/shadcn.css';
+@import 'fumadocs-ui/css/preset.css';
+
+@import './site.css';

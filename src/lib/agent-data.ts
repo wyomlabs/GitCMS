@@ -76,7 +76,7 @@ const TOKEN_STEPS = (name: string): ReadonlyArray<AgentSetupStep> => [
   },
 ]
 
-const SHARED_FAQS: ReadonlyArray<AgentFaq> = [
+export const SHARED_AGENT_FAQS: ReadonlyArray<AgentFaq> = [
   {
     question: 'Can the agent publish to my live site?',
     answer:
@@ -174,7 +174,7 @@ export const agentList: ReadonlyArray<AgentInfo> = [
         answer:
           'Yes. When ChatGPT writes content through GitCMS, the GitCMS visual editor opens in the conversation, so you can review and refine the draft without switching tabs.',
       },
-      ...SHARED_FAQS,
+      ...SHARED_AGENT_FAQS,
     ],
   },
   {
@@ -239,7 +239,7 @@ export const agentList: ReadonlyArray<AgentInfo> = [
         answer:
           'No. Claude is the chat assistant; Claude Code is Anthropic’s coding agent for your terminal and editor. Both can connect to GitCMS. See the Claude Code page for its setup.',
       },
-      ...SHARED_FAQS,
+      ...SHARED_AGENT_FAQS,
     ],
   },
   {
@@ -305,7 +305,12 @@ export const agentList: ReadonlyArray<AgentInfo> = [
         answer:
           'Yes. One GitCMS connection gives Claude Code access to every site you can access in GitCMS, so agencies can work on content across client sites without cloning each repository.',
       },
-      ...SHARED_FAQS,
+      {
+        question: 'I designed the site in Claude Design. Does this still apply?',
+        answer:
+          'Yes. Claude Design hands a finished design to Claude Code, which builds the site in your repository. From there it’s the same handoff: make the copy client-editable, set up GitCMS, and invite your client.',
+      },
+      ...SHARED_AGENT_FAQS,
     ],
   },
   {
@@ -370,7 +375,7 @@ export const agentList: ReadonlyArray<AgentInfo> = [
         answer:
           'No. ChatGPT connects as an app in the chat, with the GitCMS editor inside the conversation. Codex connects as an MCP server in your coding environment and works through tool calls.',
       },
-      ...SHARED_FAQS,
+      ...SHARED_AGENT_FAQS,
     ],
   },
   {
@@ -430,7 +435,7 @@ export const agentList: ReadonlyArray<AgentInfo> = [
         answer:
           'Use ~/.cursor/mcp.json to make GitCMS available in every project. Use .cursor/mcp.json in a repository to share the setup with your team; each person still signs in with their own GitCMS account.',
       },
-      ...SHARED_FAQS,
+      ...SHARED_AGENT_FAQS,
     ],
   },
   {
@@ -465,7 +470,7 @@ export const agentList: ReadonlyArray<AgentInfo> = [
           'When I send you a customer story, draft a case study in the case studies collection on [site] with GitCMS and submit it for review.',
       },
     ],
-    faqs: [...PERSONAL_FAQS('OpenClaw'), ...SHARED_FAQS],
+    faqs: [...PERSONAL_FAQS('OpenClaw'), ...SHARED_AGENT_FAQS],
   },
   {
     slug: 'hermes',
@@ -499,7 +504,7 @@ export const agentList: ReadonlyArray<AgentInfo> = [
           'When I ask, translate the entry I name on [site] into [language] with GitCMS and submit it for review.',
       },
     ],
-    faqs: [...PERSONAL_FAQS('Hermes'), ...SHARED_FAQS],
+    faqs: [...PERSONAL_FAQS('Hermes'), ...SHARED_AGENT_FAQS],
   },
   {
     slug: 'grok-bot',
@@ -533,7 +538,7 @@ export const agentList: ReadonlyArray<AgentInfo> = [
           'Read the [page] entry on [site] with GitCMS, update anything that is out of date, and submit the change for review.',
       },
     ],
-    faqs: [...PERSONAL_FAQS('Grok Bot'), ...SHARED_FAQS],
+    faqs: [...PERSONAL_FAQS('Grok Bot'), ...SHARED_AGENT_FAQS],
   },
   {
     slug: 'muse',
@@ -569,7 +574,7 @@ export const agentList: ReadonlyArray<AgentInfo> = [
           'On [site], change [old text] to [new text] in the [page] entry using GitCMS and submit it for review.',
       },
     ],
-    faqs: [...PERSONAL_FAQS('Muse'), ...SHARED_FAQS],
+    faqs: [...PERSONAL_FAQS('Muse'), ...SHARED_AGENT_FAQS],
   },
 ]
 
@@ -590,6 +595,9 @@ export const directoryAgentList = agentList.filter(
   (agent) => agent.family !== 'coding',
 )
 
+/** Families listed on /agents; coding agents are reached from setup docs. */
+export const SHARED_AGENT_FAMILIES: ReadonlyArray<AgentFamily> = ['assistant', 'personal']
+
 export function getAgentsByFamily(family: AgentFamily) {
   return agentList.filter((agent) => agent.family === family)
 }
@@ -599,5 +607,5 @@ export function getAgentLandingTitle(agent: AgentInfo) {
 }
 
 export function getAgentLandingDescription(agent: AgentInfo) {
-  return `${agent.description} Setup steps, example prompts, and FAQs.`
+  return agent.description
 }

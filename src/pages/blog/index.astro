@@ -1,23 +1,53 @@
 ---
-import ContentLayout from '@/layouts/ContentLayout.astro'
-import { BlogIndexPage } from '@/components/blog/blog-index-page'
+import MarketingLayout from '@/layouts/MarketingLayout.astro'
+import Section from '@/components/site/Section.astro'
+import SectionHeading from '@/components/site/SectionHeading.astro'
+import CtaBand from '@/components/site/CtaBand.astro'
+import PostCard from '@/components/blog/PostCard.astro'
+import { blogCategories, blogCategoryLabels } from '@/lib/blog'
 import { getAllCategories, getPublishedPostSummaries } from '@/lib/content'
 
 const posts = await getPublishedPostSummaries()
-const categories = await getAllCategories()
+const usedCategories = new Set((await getAllCategories()).map((item) => item.category))
+const categories = blogCategories.filter((category) => usedCategories.has(category))
+const description = 'Guides, workflows, and deep dives on content management for developers, marketers, and writers.'
+const pill = 'rounded-full border px-3.5 py-1.5 text-[13px] font-medium transition-colors border-neutral-200 bg-white text-neutral-500 hover:text-neutral-900 aria-pressed:border-neutral-900 aria-pressed:text-neutral-900'
 ---
-<ContentLayout
+<MarketingLayout
   title="Blog — GitCMS"
-  description="Guides, workflows, and deep dives on content management for developers, marketers, and writers."
-  path="/blog"
+  description={description}
   structuredData={{
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: 'GitCMS Blog',
-    description: 'Guides, workflows, and deep dives on content management for developers, marketers, and writers.',
-    url: 'https://gitcms.dev/blog',
+    description,
+    url: new URL('/blog/', Astro.site).href,
     publisher: { '@type': 'Organization', name: 'GitCMS', url: 'https://gitcms.dev' },
   }}
 >
-  <BlogIndexPage posts={posts} categories={categories} client:load />
-</ContentLayout>
+  <Section first>
+    <SectionHeading level={1} eyebrow="Blog" title="Notes on running code-first websites" description={description} />
+    {categories.length > 1 && (
+      <div data-blog-filter class="mt-10 flex flex-wrap justify-center gap-2">
+        <button type="button" data-filter="all" aria-pressed="true" class={pill}>All</button>
+        {categories.map((category) => <button type="button" data-filter={category} aria-pressed="false" class={pill}>{blogCategoryLabels[category]}</button>)}
+      </div>
+    )}
+    {posts.length === 0
+      ? <p class="mt-16 text-center text-[#898989]">No posts yet. Check back soon.</p>
+      : <div data-blog-posts class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">{posts.map((post) => <PostCard post={post} />)}</div>}
+  </Section>
+  <CtaBand />
+</MarketingLayout>
+
+<script>
+  // Category filter: every post is in the HTML; buttons only hide the others.
+  const filter = document.querySelector<HTMLElement>('[data-blog-filter]')
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-blog-posts] [data-category]')]
+  filter?.addEventListener('click', (event) => {
+    const button = event.target instanceof Element ? event.target.closest<HTMLButtonElement>('[data-filter]') : null
+    if (!button) return
+    for (const other of filter.querySelectorAll('[data-filter]')) other.setAttribute('aria-pressed', String(other === button))
+    for (const card of cards) card.hidden = button.dataset.filter !== 'all' && card.dataset.category !== button.dataset.filter
+  })
+</script>

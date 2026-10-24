@@ -1,0 +1,59 @@
+---
+// Footer on the page background inside the framed column (cal.com): brand
+// and the canonical definition on the left, four link columns on the right,
+// then a directory of agent, framework, site builder and comparison pages. The directory
+// is the site-wide internal link to those pages, so keep it complete.
+import { GitCMSLogo } from '@/components/gitcms-logo'
+import { PRODUCT_DEFINITION } from '@/lib/positioning'
+import { FEATURE_LINKS, RESOURCE_LINKS, USE_CASE_LINKS } from '@/lib/site-nav'
+import { DISCORD_INVITE_URL, SITE_REPOSITORY_URL } from '@/lib/support-links'
+import { directoryAgentList } from '@/lib/agent-data'
+import { frameworkList } from '@/lib/framework-data'
+import { getBuilderDirectoryLinks } from '@/lib/site-builders'
+import { getComparisons } from '@/lib/content'
+
+const columns = [
+  { title: 'Product', links: [['Docs', '/docs/'], ...FEATURE_LINKS.filter((item) => item.badge !== 'Soon').map((item) => [item.label, item.href]), ['Agents and MCP', '/agents/'], ['Pricing', '/#pricing'], ['Chrome extension', '/extension/'], ['Changelog', '/changelog/']] },
+  { title: 'Use cases', links: USE_CASE_LINKS.map((item) => [item.label, item.href]) },
+  { title: 'Resources', links: RESOURCE_LINKS.filter((item) => item.href !== '/changelog/').map((item) => [item.label, item.href]) },
+  { title: 'Company', links: [['Manifesto', '/manifesto/'], ['GitHub', SITE_REPOSITORY_URL], ['Discord', DISCORD_INVITE_URL], ['Terms', '/terms/'], ['Privacy', '/privacy/']] },
+]
+const directory = [
+  { title: 'Agents', links: directoryAgentList.map((agent) => ({ label: agent.name, href: `/agents/${agent.slug}/`, logo: agent.logoPath })) },
+  { title: 'Frameworks', links: frameworkList.map((framework) => ({ label: framework.name, href: `/git-based-cms-for-${framework.slug}/`, logo: framework.logo })) },
+  { title: 'AI site builders', links: getBuilderDirectoryLinks() },
+  { title: 'Comparisons', links: (await getComparisons()).map((entry) => ({ label: `vs ${entry.data.competitor}`, href: `/compare/${entry.id.replace(/\.mdx?$/, '')}/`, logo: undefined })) },
+]
+---
+<footer class="grid gap-14 border-t border-neutral-200 px-6 pb-24 pt-20 lg:grid-cols-[1fr_2fr] lg:px-16">
+  <div class="max-w-xs">
+    <a href="/" class="flex items-center gap-2"><GitCMSLogo className="size-9" /><span class="font-logo text-[32px] font-medium tracking-tight">GitCMS</span></a>
+    <p class="mt-5 text-[14px] leading-relaxed text-[#898989]">{PRODUCT_DEFINITION}</p>
+    <p class="mt-6 text-[14px] text-[#898989]">© {new Date().getFullYear()} GitCMS, a <a href="https://wyomlabs.com" class="hover:text-neutral-900">Wyom Labs</a> product</p>
+  </div>
+  <div class="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-4">
+    {columns.map((column) => (
+      <div>
+        <div class="text-[16px] font-medium text-neutral-900">{column.title}</div>
+        <ul class="mt-5 space-y-4 text-[15px] text-neutral-600">
+          {column.links.map(([label, href]) => <li><a href={href} class="transition-colors hover:text-neutral-950">{label}</a></li>)}
+        </ul>
+      </div>
+    ))}
+  </div>
+  <div class="space-y-5 border-t border-neutral-200 pt-10 text-[13px] lg:col-span-2">
+    {directory.map((row) => (
+      <div class="flex flex-col gap-2 sm:flex-row sm:gap-6">
+        <div class="w-28 shrink-0 font-medium text-neutral-900">{row.title}</div>
+        <div class="flex flex-wrap gap-x-4 gap-y-1.5 text-neutral-500">
+          {row.links.map(({ label, href, logo }) => (
+            <a href={href} class="inline-flex items-center gap-1.5 transition-colors hover:text-neutral-950">
+              {logo && <img src={logo} alt="" loading="lazy" class="size-3.5 shrink-0 object-contain" />}
+              {label}
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</footer>

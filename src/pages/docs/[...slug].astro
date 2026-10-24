@@ -3,8 +3,10 @@ import { render } from 'astro:content'
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import { Callout } from 'fumadocs-ui/components/callout'
 import { DocsBody, DocsDescription, DocsTitle } from 'fumadocs-ui/layouts/docs/page'
+import '@/styles/docs.css'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import { DocsShell } from '@/components/docs-shell/docs'
+import { pageUrlPath } from '@/lib/public-resources'
 import ImageZoom from '@/components/docs/image-zoom.astro'
 import { LLMCopyButton, ViewOptions } from '@/components/docs/page-actions'
 import { source } from '@/lib/source'
@@ -22,13 +24,13 @@ const slugs = Astro.params.slug?.split('/') ?? []
 const docsPage = source.getPage(slugs)!
 const toc = headings.map((heading) => ({ depth: heading.depth, title: heading.text, url: `#${heading.slug}` }))
 const markdownUrl = docsPage.url === '/docs' ? '/docs.md' : `${docsPage.url}.md`
-const canonicalUrl = `https://gitcms.dev${docsPage.url}`
+const canonicalUrl = new URL(pageUrlPath(docsPage.url), Astro.site).href
 const breadcrumbItems = [
   {
     '@type': 'ListItem',
     position: 1,
     name: 'Documentation',
-    item: 'https://gitcms.dev/docs',
+    item: new URL('/docs/', Astro.site).href,
   },
 ]
 if (docsPage.url !== '/docs') {
@@ -64,7 +66,6 @@ const structuredData = {
 <BaseLayout
   title={`${page.data.title} — GitCMS Docs`}
   description={page.data.description}
-  path={docsPage.url}
   ogImage={`${docsPage.url}/og.png`}
   structuredData={structuredData}
 >
@@ -81,7 +82,7 @@ const structuredData = {
       <LLMCopyButton markdownUrl={markdownUrl} client:idle />
       <ViewOptions markdownUrl={markdownUrl} client:idle />
     </div>
-    <DocsBody className="dark:prose-invert">
+    <DocsBody>
       <Content components={{ ...defaultMdxComponents, Callout, img: ImageZoom }} />
     </DocsBody>
   </DocsShell>

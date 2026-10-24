@@ -1,0 +1,394 @@
+---
+// Drives the looping mockup demos so they play like a screen recording.
+//
+// A `[data-seq="N"]` root plays steps 0..N while it's on screen, then fades
+// out and starts over, like a video loop. Children with `data-at="k"` get
+// `.on` from step k (until `data-until`), and `[data-type]` children type
+// their `data-text` when they turn on.
+// `data-fx="enable"` keeps an element visible but disabled-looking until then;
+// `data-fx="state"` keeps it as is and only toggles `.on` for `[&.on]:` styles;
+// `data-fx="collapse"` removes it from layout while off.
+//
+// Timing: each step lasts `data-ms` (default 1000), a typing step lasts as
+// long as its typing plus a beat, and `data-hold="k:ms k:ms"` overrides steps.
+//
+// A `[data-cursor]` child is always on screen. For every element tagged
+// `data-cursor-at="k"` (space-separated steps) it glides over during step k
+// and clicks just before step k+1, so the change the click causes appears at
+// once, the way a real UI responds.
+//
+// `[data-url-at="k"][data-url]` children set the surrounding app window's
+// address bar from step k, and the window's `[data-window-progress]` bar
+// fills over one loop. `data-progress="off"` leaves the bar to someone else.
+//
+// Events: dispatch `seq:restart` to replay from step 0 and `seq:goto` (with
+// `detail: step`) to jump; the root dispatches `seq:step` (`detail: step`) on
+// every step and a cancelable `seq:end` when a loop finishes (`detail.clicked`
+// says the last step ends on a cursor click). Cancelling it
+// stops the demo on its last frame so a container (the product tour) can cut
+// to the next one. `seq:restart` may carry `detail: { x, y }`, a screen point
+// where the previous demo's cursor stopped, so this cursor carries on from it. `data-cycle` and
+// `data-durations` (ms) let outside controls track progress. Demos inside an element with
+// `data-seq-paused` don't advance. Reduced motion shows `data-final` and never
+// animates.
+---
+<style is:global>
+  [data-seq] [data-at] {
+    transition: opacity 0.22s cubic-bezier(0.19, 1, 0.22, 1), transform 0.22s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+  [data-seq] [data-at]:not(.on) {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  [data-seq] [data-at][data-fx='fade']:not(.on) {
+    transform: none;
+  }
+  [data-seq] [data-at][data-fx='collapse']:not(.on) {
+    display: none;
+  }
+  [data-seq] [data-at][data-fx='state'] {
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  }
+  [data-seq] [data-at][data-fx='state']:not(.on) {
+    opacity: 1;
+    transform: none;
+  }
+  /* Buttons that exist from the start but only enable when they're needed. */
+  [data-seq] [data-at][data-fx='enable'] {
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  [data-seq] [data-at][data-fx='enable']:not(.on) {
+    opacity: 1;
+    transform: none;
+    background-color: #ededed !important;
+    color: #a3a3a3 !important;
+  }
+  /* The element the cursor clicks dips for a moment, like a real press. */
+  [data-seq] .seq-press {
+    transform: scale(0.96) !important;
+    transition: transform 0.12s ease-out !important;
+  }
+  /* Loop cut: fade the whole demo, reset it unseen, fade back in. */
+  [data-seq] {
+    transition: opacity 0.3s ease;
+  }
+  [data-seq].seq-out {
+    opacity: 0;
+  }
+  [data-seq].seq-instant [data-at],
+  [data-seq].seq-instant [data-cursor] {
+    transition: none !important;
+  }
+  [data-type].typing::after {
+    content: '';
+    display: inline-block;
+    width: 1.5px;
+    height: 1em;
+    margin-left: 1px;
+    vertical-align: -0.15em;
+    background: currentColor;
+    animation: rd-caret 0.9s steps(1) infinite;
+  }
+  @keyframes rd-caret {
+    50% { opacity: 0; }
+  }
+  @keyframes rd-draw {
+    from { stroke-dashoffset: var(--len, 600); }
+    to { stroke-dashoffset: 0; }
+  }
+  .rd-draw.on {
+    stroke-dasharray: var(--len, 600);
+    animation: rd-draw 1.6s ease-out both;
+  }
+  @keyframes rd-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(23, 23, 23, 0.25); }
+    50% { box-shadow: 0 0 0 6px rgba(23, 23, 23, 0); }
+  }
+  .rd-pulse.on {
+    animation: rd-pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes rd-flow {
+    to { stroke-dashoffset: -24; }
+  }
+  .rd-flow {
+    stroke-dasharray: 4 8;
+    animation: rd-flow 1.2s linear infinite;
+  }
+  @keyframes rd-spin {
+    to { transform: rotate(360deg); }
+  }
+  .rd-spin {
+    animation: rd-spin 0.9s linear infinite;
+  }
+  [data-cursor] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 30;
+    pointer-events: none;
+    opacity: 0;
+    /* A hand on a mouse: quick start, careful landing. */
+    transition: transform 0.6s cubic-bezier(0.3, 0.7, 0.2, 1), opacity 0.3s ease;
+  }
+  [data-cursor].visible { opacity: 1; }
+  [data-cursor] .ring { opacity: 0; transform: scale(0.4); }
+  [data-cursor].clicking .ring { animation: rd-click 0.45s ease-out; }
+  [data-cursor].clicking svg { transform: scale(0.88); }
+  [data-cursor] svg { transition: transform 0.12s ease; transform-origin: 3px 3px; }
+  @keyframes rd-click {
+    0% { opacity: 0.55; transform: scale(0.4); }
+    100% { opacity: 0; transform: scale(1.6); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rd-flow, .rd-pulse.on, .rd-draw.on, .rd-spin { animation: none; }
+    [data-cursor] { display: none; }
+  }
+</style>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const LOOP_FADE_MS = 320
+  const CLICK_LEAD_MS = 170
+
+  const typeSpeed = (element: HTMLElement) => Number(element.dataset.speed ?? 30)
+  const typingMs = (element: HTMLElement) => (element.dataset.text ?? '').length * typeSpeed(element)
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-seq]')) {
+    const last = Number(root.dataset.seq)
+    const base = Number(root.dataset.ms ?? 1000)
+    const holds = new Map((root.dataset.hold ?? '').split(/\s+/).filter(Boolean).map((pair) => {
+      const [step, ms] = pair.split(':')
+      return [Number(step), Number(ms)] as const
+    }))
+    const items = [...root.querySelectorAll<HTMLElement>('[data-at]')]
+    const typers = items.filter((item) => item.dataset.type !== undefined)
+    const cursor = root.querySelector<HTMLElement>('[data-cursor]')
+    const urls = [...root.querySelectorAll<HTMLElement>('[data-url-at]')].sort((a, b) => Number(a.dataset.urlAt) - Number(b.dataset.urlAt))
+    const appWindow = root.closest('[data-app-window]')
+    const addressBar = urls.length > 0 ? appWindow?.querySelector<HTMLElement>('[data-window-url]') : null
+    const progress = root.dataset.progress === 'off' ? null : appWindow?.querySelector<HTMLElement>('[data-window-progress]')
+
+    const durations = Array.from({ length: last + 1 }, (_, step) => {
+      const hold = holds.get(step)
+      if (hold !== undefined) return hold
+      const typing = typers.filter((item) => Number(item.dataset.at) === step).map(typingMs)
+      return typing.length > 0 ? Math.max(base, Math.max(...typing) + 650) : base
+    })
+    const cycle = durations.reduce((sum, ms) => sum + ms, 0) + LOOP_FADE_MS
+    root.dataset.cycle = String(cycle)
+    root.dataset.durations = durations.join(',')
+
+    let step = 0
+    let timers: number[] = []
+    let typing = new Map<HTMLElement, number>()
+    let running = false
+    let visible = false
+    let cursorAt: { x: number; y: number } | null = null
+
+    const later = (fn: () => void, ms: number) => timers.push(window.setTimeout(fn, ms))
+    const clearTimers = () => {
+      timers.forEach((id) => window.clearTimeout(id))
+      timers = []
+    }
+
+    const stopTyping = () => {
+      typing.forEach((id, element) => {
+        window.clearTimeout(id)
+        element.classList.remove('typing')
+      })
+      typing = new Map()
+    }
+
+    // Types with a little human unevenness: quick runs, a beat after spaces.
+    const typeInto = (element: HTMLElement, animate: boolean) => {
+      const text = element.dataset.text ?? ''
+      if (!animate) {
+        element.textContent = text
+        return
+      }
+      let index = 0
+      element.textContent = ''
+      element.classList.add('typing')
+      const speed = typeSpeed(element)
+      const tick = () => {
+        index += 1
+        element.textContent = text.slice(0, index)
+        if (index >= text.length) {
+          typing.delete(element)
+          window.setTimeout(() => element.classList.remove('typing'), 500)
+          return
+        }
+        const pause = text[index - 1] === ' ' ? speed * 1.6 : speed * (0.6 + Math.random() * 0.6)
+        typing.set(element, window.setTimeout(tick, pause))
+      }
+      typing.set(element, window.setTimeout(tick, speed))
+    }
+
+    // Demos may sit inside a scaled frame, so convert screen pixels back
+    // to the root's own coordinates before positioning the cursor.
+    const pointFor = (target: HTMLElement) => {
+      const box = root.getBoundingClientRect()
+      const rect = target.getBoundingClientRect()
+      const scale = box.width / root.offsetWidth || 1
+      return {
+        x: (rect.left - box.left + Math.min(rect.width * 0.6, rect.width - 6)) / scale,
+        y: (rect.top - box.top + rect.height * 0.55) / scale,
+      }
+    }
+
+    const placeCursor = (point: { x: number; y: number }, ms: number) => {
+      if (!cursor) return
+      cursor.style.transitionDuration = `${ms}ms, 300ms`
+      cursor.style.transform = `translate(${point.x}px, ${point.y}px)`
+      cursor.classList.add('visible')
+      cursorAt = point
+    }
+
+    // Glide over during the step, click just before the next one begins.
+    const scheduleClick = (stepDuration: number) => {
+      const target = root.querySelector<HTMLElement>(`[data-cursor-at~="${step}"]`)
+      if (!cursor || !target) return
+      const point = pointFor(target)
+      const distance = cursorAt ? Math.hypot(point.x - cursorAt.x, point.y - cursorAt.y) : 0
+      const move = cursorAt ? Math.min(750, Math.max(320, 260 + distance * 0.8)) : 0
+      const start = Math.max(0, stepDuration - CLICK_LEAD_MS - move - 60)
+      later(() => placeCursor(point, move), start)
+      later(() => {
+        cursor.classList.add('clicking')
+        target.classList.add('seq-press')
+        window.setTimeout(() => {
+          cursor.classList.remove('clicking')
+          target.classList.remove('seq-press')
+        }, 160)
+      }, start + move + 60)
+    }
+
+    const render = (animate: boolean) => {
+      for (const item of items) {
+        const at = Number(item.dataset.at)
+        const until = item.dataset.until === undefined ? Infinity : Number(item.dataset.until)
+        const on = step >= at && step < until
+        const wasOn = item.classList.contains('on')
+        item.classList.toggle('on', on)
+        if (item.dataset.type === undefined) continue
+        // Text typed in an earlier step is already there when jumping ahead.
+        if (on && !wasOn) typeInto(item, animate && at === step)
+        if (!on) item.textContent = ''
+      }
+      const url = urls.findLast((marker) => Number(marker.dataset.urlAt) <= step)?.dataset.url
+      if (addressBar && url) addressBar.textContent = url
+      root.dispatchEvent(new CustomEvent('seq:step', { detail: step }))
+    }
+
+    const setProgress = (fraction: number, ms: number) => {
+      if (!progress) return
+      progress.style.transition = ms > 0 ? `transform ${ms}ms linear` : 'none'
+      progress.style.transform = `scaleX(${fraction})`
+    }
+
+    const elapsedBefore = (target: number) => durations.slice(0, target).reduce((sum, ms) => sum + ms, 0)
+
+    const play = () => {
+      clearTimers()
+      const duration = durations[step] ?? base
+      setProgress(elapsedBefore(step + 1) / cycle, duration)
+      scheduleClick(duration)
+      later(advance, duration)
+    }
+
+    const advance = () => {
+      if (root.closest('[data-seq-paused]')) {
+        running = false
+        return
+      }
+      if (step < last) {
+        step += 1
+        render(true)
+        play()
+        return
+      }
+      const clicked = Boolean(root.querySelector(`[data-cursor-at~="${last}"]`))
+      if (!root.dispatchEvent(new CustomEvent('seq:end', { cancelable: true, detail: { clicked } }))) {
+        running = false
+        return
+      }
+      root.classList.add('seq-out')
+      setProgress(1, LOOP_FADE_MS)
+      later(() => jump(0, true), LOOP_FADE_MS)
+    }
+
+    // Set the state for `target` without animating anything on the way.
+    const jump = (target: number, resume: boolean, from?: { x: number; y: number }) => {
+      clearTimers()
+      stopTyping()
+      root.classList.add('seq-instant')
+      step = target
+      for (const item of items) item.classList.remove('on')
+      render(false)
+      setProgress(elapsedBefore(step) / cycle, 0)
+      if (step === 0 && from) {
+        const box = root.getBoundingClientRect()
+        const scale = box.width / root.offsetWidth || 1
+        placeCursor({ x: (from.x - box.left) / scale, y: (from.y - box.top) / scale }, 0)
+      } else if (step === 0) {
+        cursor?.classList.remove('visible')
+        cursorAt = null
+      }
+      // Two frames: let the instant state paint before transitions return.
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        root.classList.remove('seq-instant', 'seq-out')
+        if (resume) start()
+      }))
+    }
+
+    const start = () => {
+      if (!visible || root.closest('[data-seq-paused]')) {
+        running = false
+        return
+      }
+      running = true
+      // Rest the cursor near the next target so its first move has somewhere
+      // to come from.
+      const upcoming = Array.from({ length: last - step + 1 }, (_, offset) => step + offset)
+      const first = upcoming.map((at) => root.querySelector<HTMLElement>(`[data-cursor-at~="${at}"]`)).find(Boolean)
+      if (first && !cursorAt) {
+        const point = pointFor(first)
+        placeCursor({ x: point.x + 60, y: point.y + 40 }, 0)
+      }
+      play()
+    }
+
+    const pause = () => {
+      running = false
+      clearTimers()
+      if (progress) progress.style.transform = getComputedStyle(progress).transform
+    }
+
+    const final = Number(root.dataset.final ?? last)
+    if (reduce) {
+      step = final
+      render(false)
+      if (progress) progress.hidden = true
+    }
+
+    // With reduced motion a restart keeps the final frame; a goto still shows
+    // that step, without playing on from it.
+    root.addEventListener('seq:restart', (event) => {
+      const detail = event instanceof CustomEvent ? event.detail : null
+      const from = detail && typeof detail.x === 'number' && typeof detail.y === 'number' ? { x: detail.x, y: detail.y } : undefined
+      jump(reduce ? final : 0, !reduce, from)
+    })
+    root.addEventListener('seq:goto', (event) => {
+      const target = event instanceof CustomEvent ? Number(event.detail) : 0
+      jump(Math.min(last, Math.max(0, target)), !reduce)
+    })
+    if (reduce) continue
+
+    render(false)
+    new IntersectionObserver(([entry]) => {
+      visible = Boolean(entry?.isIntersecting)
+      if (visible && !running) start()
+      else if (!visible && running) pause()
+    }, { threshold: 0.25 }).observe(root)
+  }
+</script>

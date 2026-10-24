@@ -1,13 +1,17 @@
 ---
 import { getCollection } from 'astro:content'
-import ContentLayout from '@/layouts/ContentLayout.astro'
+import MarketingLayout from '@/layouts/MarketingLayout.astro'
+import Section from '@/components/site/Section.astro'
+import SectionHeading from '@/components/site/SectionHeading.astro'
+import CtaBand from '@/components/site/CtaBand.astro'
+import { card, heading } from '@/components/site/styles'
 import {
   GLOSSARY_CATEGORY_LABELS,
   GLOSSARY_CATEGORY_ORDER,
 } from '@/components/resources/resource-mdx-components'
 
 const DESCRIPTION =
-  'Plain-language definitions for code-first websites: how they’re built and rendered, the content formats and Git behind them, and running them with people and AI agents.'
+  'Plain-language definitions for code-first websites: how they’re built and rendered, the formats and Git behind them, and running them with agents.'
 const terms = (await getCollection('glossary'))
   .map((term) => ({ ...term, slug: term.id.replace(/\.mdx?$/, '') }))
   .sort((a, b) => a.data.title.localeCompare(b.data.title))
@@ -26,64 +30,57 @@ const structuredData = {
   })),
 }
 ---
-<ContentLayout
+<MarketingLayout
   title="Glossary — Code-First Websites, Rendering, Git, and AI Agents | GitCMS"
   description={DESCRIPTION}
-  path="/glossary"
   structuredData={structuredData}
 >
-  <section class="mx-auto max-w-5xl px-6 py-16 sm:py-20">
-    <header class="max-w-3xl">
-      <div class="text-sm font-medium uppercase tracking-widest text-neutral-500">Glossary</div>
-      <h1 class="mt-4 font-logo text-4xl font-normal leading-tight tracking-tight text-neutral-900 sm:text-5xl">The language of code-first websites</h1>
-      <p class="mt-6 text-base leading-relaxed text-neutral-600 sm:text-lg">How websites get built, rendered, and deployed now, the formats and Git behind them, how they get found in search and AI answers, and what it takes to run them after launch.</p>
-    </header>
-
-    <nav aria-label="Glossary categories" class="mt-10 flex flex-wrap gap-2">
+  <Section first>
+    <SectionHeading level={1} eyebrow="Glossary" title="The language of code-first websites" description="How websites get built, rendered, and deployed now, the formats and Git behind them, how they get found in search and AI answers, and what it takes to run them after launch." />
+    <nav aria-label="Glossary categories" class="mx-auto mt-10 flex max-w-4xl flex-wrap justify-center gap-2">
       {GLOSSARY_CATEGORY_ORDER.map((category) => (
-        <a href={`#${category}`} class="rounded-full border border-neutral-200 px-3 py-1.5 text-sm text-neutral-600 transition-colors hover:border-neutral-400 hover:text-neutral-900">
+        <a href={`#${category}`} class="rounded-full border border-neutral-200 bg-white px-3.5 py-1.5 text-[13px] font-medium text-neutral-500 transition-colors hover:text-neutral-900">
           {GLOSSARY_CATEGORY_LABELS[category]}
         </a>
       ))}
     </nav>
+  </Section>
 
-    <div class="mt-14 space-y-14">
-      {GLOSSARY_CATEGORY_ORDER.map((category) => {
-        const items = terms.filter((term) => term.data.category === category)
-        if (items.length === 0) return null
-        return (
-          <div id={category} class="scroll-mt-24">
-            <h2 class="border-b border-neutral-200 pb-3 font-logo text-2xl font-normal tracking-tight text-neutral-900">{GLOSSARY_CATEGORY_LABELS[category]}</h2>
-            <div class="mt-6 grid gap-4 md:grid-cols-2">
-              {items.map((term) => (
-                <a href={`/glossary/${term.slug}`} class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:-translate-y-0.5 hover:border-neutral-300 hover:shadow-lg">
-                  <h3 class="font-logo text-lg font-medium tracking-tight text-neutral-900">{term.data.title}</h3>
-                  <p class="mt-2 line-clamp-3 text-sm leading-relaxed text-neutral-600">{term.data.definition}</p>
-                </a>
-              ))}
-            </div>
-          </div>
-        )
-      })}
+  {GLOSSARY_CATEGORY_ORDER.map((category) => {
+    const items = terms.filter((term) => term.data.category === category)
+    if (items.length === 0) return null
+    return (
+      <Section id={category} class="!py-20">
+        <h2 class:list={['text-[28px]', heading]}>{GLOSSARY_CATEGORY_LABELS[category]}</h2>
+        <div class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {items.map((term) => (
+            <a href={`/glossary/${term.slug}/`} class:list={['group p-5 transition-colors hover:border-neutral-300', card]}>
+              <h3 class="text-[16px] font-semibold tracking-[-0.01em] text-neutral-900 group-hover:text-neutral-600">{term.data.title}</h3>
+              <p class="mt-2 line-clamp-3 text-[14px] leading-relaxed text-[#898989]">{term.data.definition}</p>
+            </a>
+          ))}
+        </div>
+      </Section>
+    )
+  })}
+
+  <Section class="!py-20">
+    <h2 class:list={['text-[28px]', heading]}>A–Z</h2>
+    <nav aria-label="Glossary letters" class="mt-5 flex flex-wrap gap-1">
+      {letters.map((letter) => <a href={`#letter-${letter}`} class="flex size-8 items-center justify-center rounded-md text-[13px] font-medium text-neutral-500 hover:bg-white hover:text-neutral-900">{letter}</a>)}
+    </nav>
+    <div class:list={['mt-8 grid gap-x-10 gap-y-6 p-8 sm:grid-cols-2 lg:grid-cols-4', card]}>
+      {letters.map((letter) => (
+        <div id={`letter-${letter}`}>
+          <p class="text-[13px] font-semibold text-neutral-900">{letter}</p>
+          <ul class="mt-2 space-y-1.5">
+            {terms.filter((term) => term.data.title.charAt(0).toUpperCase() === letter).map((term) => (
+              <li><a href={`/glossary/${term.slug}/`} class="text-[14px] text-neutral-500 underline-offset-2 hover:text-neutral-900 hover:underline">{term.data.title}</a></li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
-
-    <section class="mt-20 border-t border-neutral-200 pt-10">
-      <h2 class="font-logo text-2xl font-normal tracking-tight text-neutral-900">A–Z</h2>
-      <nav aria-label="Glossary letters" class="mt-4 flex flex-wrap gap-1">
-        {letters.map((letter) => <a href={`#letter-${letter}`} class="flex size-8 items-center justify-center rounded-md text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900">{letter}</a>)}
-      </nav>
-      <div class="mt-8 grid gap-x-10 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
-        {letters.map((letter) => (
-          <div id={`letter-${letter}`} class="scroll-mt-24">
-            <p class="text-sm font-semibold text-neutral-900">{letter}</p>
-            <ul class="mt-2 space-y-1.5">
-              {terms.filter((term) => term.data.title.charAt(0).toUpperCase() === letter).map((term) => (
-                <li><a href={`/glossary/${term.slug}`} class="text-sm text-neutral-600 underline-offset-2 hover:text-neutral-900 hover:underline">{term.data.title}</a></li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-    </section>
-  </section>
-</ContentLayout>
+  </Section>
+  <CtaBand />
+</MarketingLayout>

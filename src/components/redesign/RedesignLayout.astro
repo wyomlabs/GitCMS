@@ -1,0 +1,21 @@
+---
+// Preview-only wrapper for the landing redesign: noindex, not linked from the
+// site or listed in sitemaps. Variant A won; B and C live on as `_b.astro`
+// and `_c.astro`, which Astro skips when routing, until they're deleted.
+import '@/styles/global.css'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Sequencer from '@/components/site/Sequencer.astro'
+
+interface Props {
+  variant: 'a' | 'b' | 'c'
+  title: string
+  bodyClass?: string
+}
+const { variant, title, bodyClass = 'bg-white' } = Astro.props
+---
+<BaseLayout title={`${title} · GitCMS redesign`} noIndex>
+  <div class:list={['min-h-screen text-neutral-900', bodyClass]}>
+    <slot />
+  </div>
+  <Sequencer />
+</BaseLayout>

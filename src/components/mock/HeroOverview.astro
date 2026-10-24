@@ -1,0 +1,270 @@
+---
+// The workflow as one calm loop, one idea per scene:
+//   Build (any agent or AI builder) → Edit (your team, in GitCMS)
+//   → Deploy (your host) → Live
+// A rail at the top shows the stage; the line to the next stage fills over
+// each handoff. Each scene has one caption and one action, so it reads at a glance.
+// A hero variant next to HeroWidget (see index.astro), designed at 548×408,
+// the width the hero card shows.
+import { Bot, Check, Globe, LoaderCircle, Sparkles } from 'lucide-react'
+import { GitCMSLogo } from '@/components/gitcms-logo'
+import Cursor from './Cursor.astro'
+
+const BUILD = { from: 0, until: 5 }
+const EDIT = { from: 5, until: 9 }
+const DEPLOY = { from: 9, until: 11 }
+const LIVE = { from: 11, until: 99 }
+const SEND = 1
+const PUBLISH = 7
+
+const stages = [
+  { label: 'Build', ...BUILD },
+  { label: 'Edit', ...EDIT },
+  { label: 'Deploy', ...DEPLOY },
+  { label: 'Live', ...LIVE },
+]
+// How long each step lasts (ms); unlisted steps use data-ms or their typing.
+const HOLDS: Record<number, number> = { 0: 800, 2: 900, 3: 1400, 4: 1000, 5: 900, 7: 1200, 8: 1100, 9: 1900, 10: 1100, 11: 1300, 12: 3200 }
+// The handoff from stage i to i+1 happens during one step; the rail's line
+// fills over exactly that step, so it lands as the next stage starts.
+const transits = [4, 8, 10].map((step) => ({ from: step, ms: HOLDS[step]! }))
+// Shown once, as a row, to say "any agent"; elsewhere the builder is generic.
+const builders = ['/ai-logos/lovable.svg', '/ai-logos/bolt.svg', '/ai-logos/cursor.svg', '/ai-logos/openai-bw.svg', '/ai-logos/claude-orange.svg']
+const hosts = [
+  { name: 'Cloudflare', logo: '/logos/cloudflare.svg' },
+  { name: 'Vercel', logo: '/logos/vercel.svg' },
+  { name: 'Netlify', logo: '/logos/netlify.svg' },
+]
+const prompt = 'Build a site for Acme Roofing'
+const headline = 'Emergency roof repair, 24/7'
+const edited = 'Same-day roof repair, 24/7'
+
+const card = 'rounded-xl border border-neutral-200 bg-white'
+const caption = 'mb-3 flex items-center gap-2 text-[15px] font-semibold tracking-tight text-neutral-900'
+---
+<div
+  data-seq="12"
+  data-final="12"
+  data-ms="1000"
+  data-hold={Object.entries(HOLDS).map(([step, ms]) => `${step}:${ms}`).join(' ')}
+  class="hov relative w-[548px] max-w-none overflow-hidden rounded-xl border border-neutral-200 bg-neutral-50 text-left text-[13px] text-neutral-800"
+>
+  <!-- Rail -->
+  <div class="flex items-center border-b border-neutral-200 bg-white px-6 py-3">
+    {stages.map((stage, index) => (
+      <>
+        {index > 0 && (
+          <div class="relative mx-2 h-0.5 flex-1 overflow-hidden rounded-full bg-neutral-200">
+            <span class="hov-line absolute inset-0 origin-left rounded-full bg-[#9BC53D]" style={`--fill-ms: ${transits[index - 1]!.ms}ms`} data-at={transits[index - 1]!.from} data-fx="state"></span>
+          </div>
+        )}
+        <div class="hov-node flex shrink-0 items-center gap-2" data-at={stage.from} data-fx="state">
+          <span class="hov-badge grid size-8 place-items-center rounded-lg border border-neutral-200 bg-white" data-at={stage.from} data-until={stage.until} data-fx="state">
+            {index === 0 && <Sparkles className="size-4 text-neutral-700" />}
+            {index === 1 && <GitCMSLogo className="size-4" />}
+            {index === 2 && <img src={hosts[0]!.logo} alt="" class="size-4 object-contain" />}
+            {index === 3 && <Globe className="size-4 text-neutral-700" />}
+          </span>
+          <span class="text-[12px] font-semibold text-neutral-900">{stage.label}</span>
+        </div>
+      </>
+    ))}
+  </div>
+
+  <div class="relative h-[350px]">
+    <!-- Build -->
+    <div class="hov-exit absolute inset-0 p-5" data-at={BUILD.until} data-fx="state">
+      <div class="hov-enter flex h-full flex-col" data-at={BUILD.from} data-fx="state">
+        <p class={caption}>You build it with any agent
+          <span class="ml-auto flex items-center gap-1.5">{builders.map((logo) => <img src={logo} alt="" class="size-4 object-contain" />)}</span>
+        </p>
+        <div class:list={[card, 'flex min-h-0 flex-1 flex-col overflow-hidden']}>
+          <div class="flex items-center gap-2 border-b border-neutral-200 px-3 py-2.5">
+            <Sparkles className="size-4 text-neutral-400" />
+            <span class="min-h-[1.4em] flex-1">
+              <span class="text-neutral-400" data-at="0" data-until={SEND} data-fx="collapse">Describe your site…</span>
+              <span data-type data-at={SEND} data-fx="collapse" data-speed="24" data-text={prompt}></span>
+            </span>
+            <span data-at={SEND} data-until={SEND + 1} data-fx="enable" data-cursor-at={SEND} class="grid size-6 place-items-center rounded-full bg-neutral-900 text-[11px] text-white">↑</span>
+          </div>
+          <div class="relative flex-1 bg-[#f7f4ee]">
+            <div class="absolute inset-0 grid place-items-center" data-at={SEND + 1} data-until="3" data-fx="fade"><LoaderCircle className="rd-spin size-5 text-neutral-400" /></div>
+            <div class="p-6" data-at="3">
+              <div class="flex justify-between text-[11px] text-neutral-500"><span class="font-semibold text-neutral-900">Acme Roofing</span><span>Services · Contact</span></div>
+              <p class="mt-8 font-logo text-[28px] leading-tight text-neutral-900">{headline}</p>
+              <p class="mt-2 text-[12.5px] text-neutral-600">Fast, insured repairs across Austin.</p>
+              <span class="mt-4 inline-flex rounded-md bg-neutral-900 px-3 py-1.5 text-[11.5px] font-medium text-white">Call (512) 555-0142</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit: a minimal editor page, with SEO checks beside the content -->
+    <div class="hov-exit absolute inset-0 p-5" data-at={EDIT.until} data-fx="state">
+      <div class="hov-enter flex h-full flex-col" data-at={EDIT.from} data-fx="state">
+        <p class={caption}>Your team edits it in GitCMS</p>
+        <div class:list={[card, 'flex min-h-0 flex-1 flex-col overflow-hidden']}>
+          <div class="flex items-center gap-2 border-b border-neutral-200 px-4 py-2.5 text-[12px] text-neutral-500">
+            <GitCMSLogo className="size-4" /> Pages <span class="text-neutral-300">/</span> <span class="font-medium text-neutral-900">Home</span>
+            <span class="ml-auto flex -space-x-1.5">
+              <span class="grid size-5 place-items-center rounded-full bg-amber-500 text-[9px] font-semibold text-white ring-2 ring-white">J</span>
+              <span class="grid size-5 place-items-center rounded-full bg-sky-600 text-[9px] font-semibold text-white ring-2 ring-white">S</span>
+              <span class="grid size-5 place-items-center rounded-full bg-neutral-900 text-white ring-2 ring-white"><Bot className="size-3" /></span>
+            </span>
+            <!-- One button: disabled, then Publish, then Published (green). -->
+            <span class="[&.on>span]:!bg-emerald-600" data-at={PUBLISH + 1} data-fx="state">
+              <span data-at={PUBLISH} data-fx="enable" data-cursor-at={PUBLISH} class="inline-flex items-center gap-1 rounded-md bg-neutral-900 px-3 py-1.5 text-[12px] font-medium text-white transition-colors">
+                <span data-at={EDIT.from} data-until={PUBLISH + 1} data-fx="collapse">Publish</span>
+                <span class="inline-flex items-center gap-1" data-at={PUBLISH + 1} data-fx="collapse"><Check className="size-3.5" /> Published</span>
+              </span>
+            </span>
+          </div>
+          <div class="grid min-h-0 flex-1 grid-cols-[1fr_168px]">
+            <!-- The page itself -->
+            <div class="p-5">
+              <p class="text-[11px] uppercase tracking-wide text-neutral-400">Headline</p>
+              <p class="mt-1 min-h-[1.25em] whitespace-nowrap font-logo text-[21px] leading-tight text-neutral-900">
+                <span data-at={EDIT.from} data-until="6" data-fx="collapse">{headline}</span>
+                <span class="rounded-sm bg-[#DCF986]/40" data-type data-at="6" data-fx="collapse" data-speed="26" data-text={edited}></span>
+              </p>
+              <p class="mt-3 font-logo text-[13px] leading-relaxed text-neutral-500">Fast, insured repairs across Austin. Crews are on site within 60 minutes, day or night.</p>
+              <div class="mt-4 space-y-2" aria-hidden="true">
+                <span class="block h-2 w-full rounded-full bg-neutral-100"></span>
+                <span class="block h-2 w-11/12 rounded-full bg-neutral-100"></span>
+              </div>
+            </div>
+            <!-- SEO, checked while you write -->
+            <div class="border-l border-neutral-200 bg-neutral-50/60 p-4 text-[11.5px]">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-neutral-900">SEO</span>
+                <span class="rounded-full px-2 py-0.5 text-[11px] font-semibold">
+                  <span class="text-amber-700" data-at={EDIT.from} data-until={PUBLISH} data-fx="collapse">78</span>
+                  <span class="text-emerald-700" data-at={PUBLISH} data-fx="collapse">94</span>
+                </span>
+              </div>
+              <ul class="mt-3 space-y-2.5 text-neutral-600">
+                <li class="flex items-start gap-1.5"><Check className="mt-px size-3.5 shrink-0 text-emerald-600" />Title, 52 characters</li>
+                <li class="flex items-start gap-1.5"><Check className="mt-px size-3.5 shrink-0 text-emerald-600" />Meta description set</li>
+                <li class="flex items-start gap-1.5">
+                  <span class="mt-px size-3.5 shrink-0 rounded-full border border-amber-400" data-at={EDIT.from} data-until={PUBLISH} data-fx="collapse"></span>
+                  <Check className="mt-px size-3.5 shrink-0 text-emerald-600" data-at={PUBLISH} data-fx="collapse" />
+                  Keyword in headline
+                </li>
+              </ul>
+              <div class="mt-3 rounded-lg border border-neutral-200 bg-white px-2.5 py-2" data-at="6">
+                <p class="font-medium text-neutral-900">2 internal links</p>
+                <p class="mt-0.5 text-[11px] leading-snug text-neutral-500">“inspection” → Inspection page</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deploy -->
+    <div class="hov-exit absolute inset-0 p-5" data-at={DEPLOY.until} data-fx="state">
+      <div class="hov-enter flex h-full flex-col" data-at={DEPLOY.from} data-fx="state">
+        <p class={caption}>Your host deploys it</p>
+        <div class:list={[card, 'flex flex-1 flex-col items-center justify-center gap-6 p-6']}>
+          <div class="flex items-center gap-2">
+            {hosts.map((host, index) => (
+              <span class:list={['flex items-center gap-2 rounded-lg border px-3 py-2 text-[13px]', index === 0 ? 'border-neutral-300 bg-neutral-50 font-medium text-neutral-900' : 'border-neutral-200 text-neutral-500']}><img src={host.logo} alt="" class="size-4 object-contain" />{host.name}</span>
+            ))}
+          </div>
+          <div class="h-1.5 w-64 overflow-hidden rounded-full bg-neutral-100"><span class="hov-progress block h-full rounded-full bg-neutral-900" data-at={DEPLOY.from} data-fx="state"></span></div>
+          <p class="text-[13px] text-neutral-500">
+            <span data-at={DEPLOY.from} data-until={DEPLOY.from + 1} data-fx="collapse">Building…</span>
+            <span class="font-medium text-emerald-700" data-at={DEPLOY.from + 1} data-fx="collapse"><Check className="inline size-4" /> Deployed in 38s</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live -->
+    <div class="absolute inset-0 p-5">
+      <div class="hov-enter flex h-full flex-col" data-at={LIVE.from} data-fx="state">
+        <p class={caption}>Live, and still code you own</p>
+        <div class:list={[card, 'flex flex-1 flex-col overflow-hidden']}>
+          <div class="flex items-center border-b border-neutral-200 px-3 py-2 text-[11.5px] text-neutral-500">acme-roofing.com<span class="ml-auto text-emerald-700">● live</span></div>
+          <div class="flex-1 bg-[#f7f4ee] p-6">
+            <div class="flex justify-between text-[11px] text-neutral-500"><span class="font-semibold text-neutral-900">Acme Roofing</span><span>Services · Contact</span></div>
+            <p class="mt-8 font-logo text-[28px] leading-tight text-neutral-900"><span class="hov-mark rounded px-1 -mx-1" data-at={LIVE.from + 1} data-fx="state">{edited}</span></p>
+            <p class="mt-2 text-[12.5px] text-neutral-600">Fast, insured repairs across Austin.</p>
+            <span class="mt-4 inline-flex rounded-md bg-neutral-900 px-3 py-1.5 text-[11.5px] font-medium text-white">Call (512) 555-0142</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <Cursor />
+</div>
+
+<style is:global>
+  /* Softer, slower reveals than the Sequencer default for this demo. */
+  .hov[data-seq] [data-at]:not([data-fx='state']):not([data-fx='collapse']) {
+    transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .hov[data-seq] [data-at]:not([data-fx]):not(.on) {
+    transform: translateY(6px);
+  }
+  /* Scenes enter from the right and leave to the left with a long ease-out,
+     so one hands over to the next instead of cutting. */
+  .hov[data-seq] .hov-enter[data-fx='state'],
+  .hov[data-seq] .hov-exit[data-fx='state'] {
+    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .hov[data-seq] .hov-enter[data-fx='state']:not(.on) {
+    opacity: 0;
+    transform: translateX(40px) scale(0.985);
+  }
+  /* The incoming scene waits a beat while the outgoing one fades faster,
+     so the two never blur together. */
+  .hov[data-seq] .hov-enter[data-fx='state'].on {
+    transition-delay: 0.2s;
+  }
+  .hov[data-seq] .hov-exit[data-fx='state'].on {
+    transition-duration: 0.35s, 0.6s;
+    opacity: 0;
+    transform: translateX(-40px) scale(0.985);
+    pointer-events: none;
+  }
+  /* Rail: upcoming stages are muted and the current one gets a soft lime
+     fill. The line to the next stage fills linearly over the handoff step
+     (--fill-ms), so it arrives exactly when that stage starts. */
+  .hov[data-seq] .hov-node[data-fx='state'] {
+    transition: opacity 0.5s ease;
+  }
+  .hov[data-seq] .hov-node[data-fx='state']:not(.on) {
+    opacity: 0.4;
+  }
+  .hov[data-seq] .hov-badge[data-fx='state'] {
+    transition: background-color 0.4s ease, border-color 0.4s ease;
+  }
+  .hov[data-seq] .hov-badge[data-fx='state'].on {
+    background-color: #ecfcc2;
+    border-color: #b5d74e;
+  }
+  .hov[data-seq] .hov-line[data-fx='state'] {
+    transform: scaleX(0);
+    transition: transform var(--fill-ms, 1000ms) linear;
+  }
+  .hov[data-seq] .hov-line[data-fx='state'].on {
+    transform: scaleX(1);
+  }
+  .hov[data-seq] .hov-progress[data-fx='state'] {
+    width: 0;
+  }
+  .hov[data-seq] .hov-progress[data-fx='state'].on {
+    animation: hov-fill 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes hov-fill {
+    to { width: 100%; }
+  }
+  .hov[data-seq] .hov-mark[data-fx='state'] {
+    transition: background-color 0.6s ease;
+  }
+  .hov[data-seq] .hov-mark[data-fx='state'].on {
+    background-color: rgba(220, 249, 134, 0.75);
+  }
+</style>

@@ -7,8 +7,10 @@ const GROUPS: ReadonlyArray<{
   kinds: ReadonlyArray<PublicResource['kind']>
 }> = [
   { title: 'Who GitCMS is for', kinds: ['persona'] },
+  { title: 'Features', kinds: ['feature'] },
   { title: 'Agents', kinds: ['agent'] },
   { title: 'Frameworks', kinds: ['framework'] },
+  { title: 'AI site builders', kinds: ['builder'] },
   { title: 'Comparisons', kinds: ['comparison'] },
   { title: 'Blog', kinds: ['blog'] },
   { title: 'Prompt library', kinds: ['prompt'] },

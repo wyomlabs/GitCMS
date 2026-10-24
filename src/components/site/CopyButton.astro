@@ -1,0 +1,49 @@
+---
+// Copies `text` to the clipboard and confirms in place for a moment.
+import { Check, Copy } from 'lucide-react'
+
+interface Props {
+  text: string
+  label: string
+  copiedLabel?: string
+  tone?: 'light' | 'dark' | 'lime'
+  size?: 'md' | 'sm'
+  /** Overlapping logos shown in place of the copy icon, e.g. the agents a prompt is for. */
+  logos?: ReadonlyArray<string>
+  class?: string
+}
+const { text, label, copiedLabel = 'Copied', tone = 'light', size = 'md', logos, class: className = '' } = Astro.props
+const tones = {
+  light: 'border border-neutral-200 bg-white text-neutral-900 hover:bg-neutral-50',
+  dark: 'border border-white/15 bg-white/5 text-white hover:bg-white/10',
+  lime: 'bg-[#DCF986] text-neutral-950 hover:bg-[#d4f47a]',
+}
+const sizes = {
+  md: 'h-10 gap-2 rounded-xl px-4 text-[14px] [&_svg]:size-4',
+  sm: 'h-8 gap-1.5 rounded-lg px-2.5 text-[12.5px] [&_svg]:size-3.5',
+}
+---
+<button type="button" data-copy={text} class:list={['group/copy inline-flex shrink-0 items-center font-medium transition-colors', sizes[size], tones[tone], className]}>
+  <span class="contents group-data-[copied=true]/copy:hidden">
+    {logos
+      ? <span class="flex -space-x-2">{logos.map((logo) => <span class="grid size-6 place-items-center rounded-full border border-neutral-200 bg-white"><img src={logo} alt="" class="size-3.5 object-contain" /></span>)}</span>
+      : <Copy className="opacity-60" />}
+    {label}
+  </span>
+  <span class="hidden items-center gap-[inherit] group-data-[copied=true]/copy:inline-flex"><Check className="text-emerald-500" /> {copiedLabel}</span>
+</button>
+
+<script>
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-copy]')) {
+    let reset: number | undefined
+    button.addEventListener('click', async (event) => {
+      // Copy buttons can sit inside a linked card; copying shouldn't navigate.
+      event.preventDefault()
+      event.stopPropagation()
+      await navigator.clipboard.writeText(button.dataset.copy ?? '')
+      button.dataset.copied = 'true'
+      window.clearTimeout(reset)
+      reset = window.setTimeout(() => { button.dataset.copied = 'false' }, 2400)
+    })
+  }
+</script>

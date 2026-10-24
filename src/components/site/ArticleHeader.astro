@@ -1,0 +1,19 @@
+---
+// Centered header for detail pages: breadcrumbs, heading, description, then
+// any meta (dates, badges, actions) passed as children.
+import Breadcrumbs from './Breadcrumbs.astro'
+import { h1, sub } from './styles'
+
+interface Props {
+  breadcrumbs: ReadonlyArray<{ label: string; href?: string }>
+  title: string
+  description?: string
+}
+const { breadcrumbs, title, description } = Astro.props
+---
+<header class="mx-auto max-w-3xl text-center">
+  <div class="flex justify-center"><Breadcrumbs items={breadcrumbs} /></div>
+  <h1 class:list={['mt-6', h1]}>{title}</h1>
+  {description && <p class:list={['mx-auto mt-5 max-w-2xl', sub]}>{description}</p>}
+  <slot />
+</header>

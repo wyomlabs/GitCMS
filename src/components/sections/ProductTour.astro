@@ -1,0 +1,178 @@
+---
+// Tabbed walkthrough that plays like one continuous recording: each tab runs
+// its demo once, with the tab's bar tracking that demo's real length, then
+// cuts straight to the next. The cut is a crossfade and the cursor carries
+// on from where it stopped, so the four demos read as one take. A demo that
+// ends on a click (Open review) opens the next one from that point instead. Picking a tab
+// jumps to it and the tour carries on. Only the active demo plays.
+import AppWindow from '@/components/mock/AppWindow.astro'
+import AgentChatMock from '@/components/mock/AgentChatMock.astro'
+import BoardMock from '@/components/mock/BoardMock.astro'
+import EditorMock from '@/components/mock/EditorMock.astro'
+import ReviewMock from '@/components/mock/ReviewMock.astro'
+
+const tabs = [
+  { key: 'edit', label: 'Edit visually', blurb: 'Clients change copy, prices and photos in fields that match the site.', url: 'app.gitcms.dev/sites/acme-roofing.com/services/emergency-roof-repair' },
+  { key: 'agent', label: 'Ask your agent', blurb: 'Claude drafts a multi-page change through GitCMS and stops at review.', url: 'claude.ai/new' },
+  { key: 'review', label: 'Review changes', blurb: 'See exactly what changed, discuss it inline, approve when it’s right.', url: 'app.gitcms.dev/sites/acme-roofing.com/reviews/57' },
+  { key: 'board', label: 'Track the work', blurb: 'Every request is a content task moving from idea to published.', url: 'app.gitcms.dev/sites/acme-roofing.com/board' },
+] as const
+---
+<div data-tour class="mx-auto max-w-5xl">
+  <AppWindow url={tabs[0].url} height={460} progress={false}>
+    <div class="relative h-full">
+      {tabs.map((tab, index) => (
+        <div data-tour-panel={tab.key} data-url={tab.url} data-active={index === 0 ? 'true' : 'false'} data-seq-paused={index === 0 ? undefined : ''} class="tour-panel absolute inset-0 bg-white">
+          {tab.key === 'edit' && <EditorMock />}
+          {tab.key === 'agent' && <AgentChatMock />}
+          {tab.key === 'review' && <ReviewMock />}
+          {tab.key === 'board' && <BoardMock />}
+        </div>
+      ))}
+    </div>
+  </AppWindow>
+  <div class="mt-10 grid gap-6 sm:grid-cols-4" role="tablist">
+    {tabs.map((tab, index) => (
+      <button type="button" role="tab" data-tour-tab={tab.key} aria-selected={index === 0 ? 'true' : 'false'} class="group -m-2 cursor-pointer rounded-xl p-2 text-left transition-colors hover:bg-neutral-900/[0.03] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">
+        <span class="block h-0.5 overflow-hidden rounded-full bg-neutral-200 transition-colors group-hover:bg-neutral-300">
+          <span data-tour-bar class="block h-full w-0 bg-neutral-900"></span>
+        </span>
+        <span class="mt-3 flex items-baseline gap-2 text-sm font-medium text-neutral-400 transition-colors group-hover:text-neutral-700 group-aria-selected:text-neutral-900">
+          <span class="font-mono text-[11px]">0{index + 1}</span>{tab.label}
+        </span>
+        <span class="mt-1 block text-[13px] leading-snug text-neutral-400 transition-colors group-hover:text-neutral-500 group-aria-selected:text-neutral-600">{tab.blurb}</span>
+      </button>
+    ))}
+  </div>
+</div>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  for (const tour of document.querySelectorAll<HTMLElement>('[data-tour]')) {
+    const tabs = [...tour.querySelectorAll<HTMLButtonElement>('[data-tour-tab]')]
+    const panels = [...tour.querySelectorAll<HTMLElement>('[data-tour-panel]')]
+    const demos = panels.map((panel) => panel.querySelector<HTMLElement>('[data-seq], [data-board]'))
+    const url = tour.querySelector<HTMLElement>('[data-window-url]')
+    let current = 0
+    // Time spent on the current tab while the tour is on screen. Like the
+    // demos, the clock only runs while visible, so bar and demo stay in step.
+    let elapsed = 0
+    let last = performance.now()
+    let visible = false
+
+    const duration = (index: number) => Number(demos[index]?.dataset.cycle ?? 9000)
+
+    // Where the outgoing demo's cursor is on screen, for the next one to start from.
+    const cursorPoint = () => {
+      const cursor = panels[current]?.querySelector<HTMLElement>('[data-cursor].visible')
+      if (!cursor) return null
+      const rect = cursor.getBoundingClientRect()
+      return { x: rect.left, y: rect.top }
+    }
+
+    // The incoming panel grows out of the click point, like a window opening.
+    const openFrom = (panel: HTMLElement, from: { x: number; y: number }) => {
+      const rect = panel.getBoundingClientRect()
+      const scale = rect.width / panel.offsetWidth || 1
+      panel.style.transformOrigin = `${(from.x - rect.left) / scale}px ${(from.y - rect.top) / scale}px`
+      panel.classList.remove('opening')
+      void panel.offsetWidth
+      panel.classList.add('opening')
+    }
+
+    const show = (index: number, from: { x: number; y: number } | null = null, open = false) => {
+      current = index
+      elapsed = 0
+      tabs.forEach((tab, i) => tab.setAttribute('aria-selected', String(i === index)))
+      panels.forEach((panel, i) => {
+        const active = i === index
+        panel.dataset.active = String(active)
+        // Unpause before restarting, so the demo starts from its first step.
+        if (active) panel.removeAttribute('data-seq-paused')
+        else panel.setAttribute('data-seq-paused', '')
+      })
+      demos[index]?.dispatchEvent(new CustomEvent('seq:restart', { detail: from }))
+      const incoming = panels[index]
+      if (incoming && from && open) openFrom(incoming, from)
+      if (url) url.textContent = incoming?.dataset.url ?? ''
+      tabs.forEach((tab, i) => {
+        const bar = tab.querySelector<HTMLElement>('[data-tour-bar]')
+        if (bar) bar.style.width = i < index || (reduce && i === index) ? '100%' : '0%'
+      })
+    }
+
+    // Picking a tab jumps there and keeps the tour cycling from that point.
+    tabs.forEach((tab, index) => tab.addEventListener('click', () => show(index, cursorPoint())))
+    // A finished demo holds its last frame (no fade of its own) while the
+    // next tab crossfades in over it.
+    demos.forEach((demo, index) => demo?.addEventListener('seq:end', (event) => {
+      if (index !== current) return
+      event.preventDefault()
+      const clicked = event instanceof CustomEvent && event.detail?.clicked === true
+      show((current + 1) % tabs.length, cursorPoint(), clicked)
+    }))
+    panels.forEach((panel) => panel.addEventListener('animationend', (event) => {
+      if (event.target === panel) panel.classList.remove('opening')
+    }))
+
+    const tick = (now: number) => {
+      if (visible) {
+        elapsed += now - last
+        const progress = Math.min(1, elapsed / duration(current))
+        const bar = tabs[current]?.querySelector<HTMLElement>('[data-tour-bar]')
+        if (bar) bar.style.width = `${progress * 100}%`
+      }
+      last = now
+      requestAnimationFrame(tick)
+    }
+    show(0)
+    if (!reduce) {
+      new IntersectionObserver(([entry]) => { visible = Boolean(entry?.isIntersecting) }, { threshold: 0.25 }).observe(tour)
+      requestAnimationFrame(tick)
+    }
+  }
+</script>
+
+<style>
+  /* Crossfade: the incoming panel fades in on top while the outgoing one
+     stays put underneath, then drops out. No blank frame between demos.
+     The outgoing panel outlasts the longer opening animation below. */
+  .tour-panel[data-active='false'] {
+    z-index: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0s linear 0.46s, visibility 0s linear 0.46s;
+  }
+  .tour-panel[data-active='true'] {
+    z-index: 1;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.28s ease-out;
+  }
+  /* Opened by a click: the next screen grows out of the button as a card,
+     then settles flush into the window. */
+  .tour-panel.opening {
+    overflow: hidden;
+    animation: tour-open 0.44s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  @keyframes tour-open {
+    from {
+      opacity: 0;
+      transform: scale(0.72);
+      border-radius: 14px;
+      box-shadow: 0 0 0 1px rgb(0 0 0 / 0.08), 0 28px 56px -20px rgb(0 0 0 / 0.35);
+    }
+    35% { opacity: 1; }
+    to {
+      opacity: 1;
+      transform: none;
+      border-radius: 0;
+      box-shadow: 0 0 0 0 rgb(0 0 0 / 0), 0 0 0 0 rgb(0 0 0 / 0);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tour-panel.opening { animation: none; }
+  }
+</style>

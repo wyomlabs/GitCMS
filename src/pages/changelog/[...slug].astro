@@ -1,35 +1,42 @@
 ---
 import { getCollection, render } from 'astro:content'
 import { Callout } from 'fumadocs-ui/components/callout'
-import ContentLayout from '@/layouts/ContentLayout.astro'
+import MarketingLayout from '@/layouts/MarketingLayout.astro'
+import Section from '@/components/site/Section.astro'
+import ArticleHeader from '@/components/site/ArticleHeader.astro'
+import CtaBand from '@/components/site/CtaBand.astro'
+import { card, prose } from '@/components/site/styles'
+import { formatDate } from '@/lib/format-date'
+
+const slugOf = (filePath: string | undefined) => (filePath ?? '').split('/').at(-1)?.replace(/\.mdx?$/, '') ?? ''
 
 export async function getStaticPaths() {
   return (await getCollection('changelog')).map((entry) => ({
-    params: { slug: entry.filePath!.split('/').at(-1)!.replace(/\.mdx?$/, '') },
+    params: { slug: (entry.filePath ?? '').split('/').at(-1)?.replace(/\.mdx?$/, '') ?? '' },
     props: { entry },
   }))
 }
 const { entry } = Astro.props
 const { Content } = await render(entry)
-const slug = entry.filePath!.split('/').at(-1)!.replace(/\.mdx?$/, '')
-function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' })
-}
+const slug = slugOf(entry.filePath)
 ---
-<ContentLayout
+<MarketingLayout
   title={`${entry.data.version} — GitCMS Changelog`}
   description={entry.data.description}
-  path={`/changelog/${slug}`}
   ogImage={`/changelog/${slug}/og.png`}
 >
-  <article class="mx-auto max-w-3xl px-6 py-16">
-    <header class="mb-12">
-      <span class="inline-block rounded-full bg-neutral-900 px-3 py-1 text-xs font-medium text-white">{entry.data.version}</span>
-      <h1 class="mt-4 font-logo text-3xl font-normal leading-tight tracking-tight sm:text-4xl md:text-[42px]">{entry.data.title}</h1>
-      <div class="mt-3 text-sm text-neutral-400"><time datetime={entry.data.date}>{formatDate(entry.data.date)}</time></div>
-    </header>
-    <div class="changelog-content prose prose-neutral prose-lg max-w-none prose-headings:font-logo prose-headings:font-medium prose-headings:tracking-tight prose-h1:hidden prose-a:text-neutral-900 prose-a:underline-offset-2 prose-pre:border prose-pre:border-neutral-800 prose-pre:bg-neutral-950 prose-code:text-neutral-900">
-      <Content components={{ Callout }} />
-    </div>
-  </article>
-</ContentLayout>
+  <Section first>
+    <ArticleHeader breadcrumbs={[{ label: 'Changelog', href: '/changelog/' }, { label: entry.data.version }]} title={entry.data.title}>
+      <div class="mt-5 flex items-center justify-center gap-2 text-[13px] text-[#898989]">
+        <span class="rounded-md bg-white px-2 py-0.5 font-mono text-[12px] text-neutral-600 ring-1 ring-neutral-200">{entry.data.version}</span>
+        <time datetime={entry.data.date}>{formatDate(entry.data.date, 'long')}</time>
+      </div>
+    </ArticleHeader>
+    <article class:list={['mx-auto mt-12 max-w-3xl px-6 py-10 sm:px-12 sm:py-14', card]}>
+      <div class:list={['changelog-content', prose, 'prose-h1:hidden prose-pre:border prose-pre:border-neutral-800 prose-pre:bg-neutral-950 prose-code:text-neutral-900']}>
+        <Content components={{ Callout }} />
+      </div>
+    </article>
+  </Section>
+  <CtaBand />
+</MarketingLayout>

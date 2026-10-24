@@ -1,0 +1,4 @@
+# This repository is its own workspace root. It is often checked out inside
+# the GitCMS monorepo at apps/site; without this file pnpm would walk up and
+# install the monorepo instead of this site.
+packages: []

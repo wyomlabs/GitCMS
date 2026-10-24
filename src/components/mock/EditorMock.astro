@@ -1,0 +1,176 @@
+---
+// Entry editor (DESIGN.md "Editor" page type): serif title, fields, body,
+// the violet task chip, and optionally the SEO view in the docked side panel
+// (DESIGN.md "Side panel": full height beside the header, tabs on top, no
+// title row). Submit for review stays disabled until the change is ready.
+// With `siteData`, the cursor then opens the Footer under Site data and edits
+// the JSON file behind it as a form (docs: features/site-data).
+import { AlertTriangle, AtSign, Building2, CalendarDays, Check, ChevronDown, Copyright, FileCode2, FileText, Image, ListChecks, Megaphone, Phone, Tag, X } from 'lucide-react'
+import AppShell from './AppShell.astro'
+import Cursor from './Cursor.astro'
+import { SEO_CHECKS } from '@/lib/site-content'
+
+interface Props {
+  panel?: 'none' | 'seo'
+  class?: string
+  compact?: boolean
+  siteData?: boolean
+}
+const { panel = 'none', class: className = '', compact = false, siteData = false } = Astro.props
+const firstCheckStep = 2
+// Step the edit is ready to submit: right after the typing, or after the checks.
+const submitStep = panel === 'seo' ? firstCheckStep + SEO_CHECKS.length : 2
+// Site data scene: the cursor clicks Footer, then the phone field, the
+// banner toggle and Save, each one step before the change it causes.
+const footerAt = submitStep + 3
+const phoneAt = footerAt + 1
+const bannerAt = phoneAt + 2
+const saveAt = bannerAt + 1
+const savedAt = saveAt + 1
+const finalStep = siteData ? savedAt : submitStep + 1
+// The editor scene stays on screen until the footer opens.
+const editorUntil = siteData ? footerAt : undefined
+---
+<div data-seq={finalStep} data-final={finalStep} data-ms="800" data-hold={`${finalStep}:1800`} class:list={['relative h-full', className]}>
+  <AppShell active="Services" siteData={siteData} navigateTo={siteData ? { label: 'Footer', at: footerAt } : undefined} compact={compact}>
+    <Fragment slot="crumbs">
+      <span class="contents" data-at="0" data-until={editorUntil} data-fx="collapse">
+        <span class="text-neutral-300">›</span><span>Services</span><span class="text-neutral-300">›</span><span class="text-neutral-900">Emergency roof repair</span>
+      </span>
+      {siteData && (
+        <span class="contents" data-at={footerAt} data-fx="collapse">
+          <span class="text-neutral-300">›</span><span>Site data</span><span class="text-neutral-300">›</span><span class="text-neutral-900">Footer</span>
+        </span>
+      )}
+    </Fragment>
+    <Fragment slot="actions">
+      <span class="inline-flex items-center overflow-hidden rounded-md border border-violet-200 bg-violet-50 text-[11px] font-medium text-violet-700">
+        <span class="px-2 py-1">#42</span>
+        <span class="border-l border-violet-200 px-1 py-1"><ChevronDown className="size-3" /></span>
+      </span>
+      <span class="flex items-center gap-1.5" data-at="0" data-until={editorUntil} data-fx="collapse">
+        <span class="px-1 text-[11px] text-neutral-400" data-at="0" data-until={submitStep + 1} data-fx="collapse">Saved</span>
+        <span class="inline-flex items-center gap-1 px-1 text-[11px] text-emerald-700" data-at={submitStep + 1} data-fx="collapse"><Check className="size-3" /> Sent for review</span>
+        <span data-at={submitStep} data-until={submitStep + 1} data-fx="enable" data-cursor-at={submitStep} class="rounded-md bg-neutral-900 px-2.5 py-1 text-[11px] font-medium text-white">Submit for review</span>
+      </span>
+      {siteData && (
+        <span class="flex items-center gap-1.5" data-at={footerAt} data-fx="collapse">
+          <span class="inline-flex items-center gap-1 px-1 text-[11px] text-emerald-700" data-at={savedAt} data-fx="collapse"><Check className="size-3" /> Saved to draft</span>
+          <span data-at={saveAt} data-until={savedAt} data-fx="enable" data-cursor-at={saveAt} class="rounded-md bg-neutral-900 px-2.5 py-1 text-[11px] font-medium text-white">Save</span>
+        </span>
+      )}
+    </Fragment>
+    <div class="h-full" data-at="0" data-until={editorUntil} data-fx="collapse">
+      <div class:list={['min-w-0 flex-1 overflow-hidden py-5', compact ? 'px-6' : 'px-10']}>
+        <h3 class="font-logo text-[26px] leading-tight tracking-tight text-neutral-900">Emergency roof repair</h3>
+        <dl class="mt-4 grid grid-cols-[96px_1fr] items-center gap-x-3 gap-y-2 text-[11.5px]">
+          <dt class="flex items-center gap-1.5 text-neutral-500"><FileText className="size-3.5" /> Description</dt>
+          <dd class="rounded-md border border-neutral-200 bg-neutral-50 px-2 py-1.5 text-neutral-700">Fast, insured roof repairs across Austin, day or night.</dd>
+          <dt class="flex items-center gap-1.5 text-neutral-500"><Tag className="size-3.5" /> Price from</dt>
+          <dd class="rounded-md border border-neutral-200 bg-neutral-50 px-2 py-1.5 text-neutral-700">$249</dd>
+          <dt class="flex items-center gap-1.5 text-neutral-500"><Image className="size-3.5" /> Hero image</dt>
+          <dd class="flex items-center gap-2 rounded-md border border-neutral-200 bg-neutral-50 px-2 py-1.5 text-neutral-500">
+            <span class="h-5 w-8 rounded-sm bg-gradient-to-br from-amber-200 via-orange-300 to-rose-300"></span> crew-on-roof.jpg
+          </dd>
+          <dt class="flex items-center gap-1.5 text-neutral-500"><ListChecks className="size-3.5" /> Areas</dt>
+          <dd class="flex flex-wrap gap-1 rounded-md border border-neutral-200 bg-neutral-50 px-1.5 py-1">
+            {['Austin', 'Round Rock', 'Cedar Park'].map((area) => (
+              <span class="rounded bg-sky-100 px-1.5 py-0.5 text-[10.5px] font-medium text-sky-800">{area} ×</span>
+            ))}
+          </dd>
+        </dl>
+        <div class="mt-4 border-t border-neutral-200 pt-4 font-logo text-[13.5px] leading-relaxed text-neutral-700">
+          <p class="font-sans text-[13px] font-semibold text-neutral-900">When to call us</p>
+          <p class="mt-1.5" data-cursor-at="0">A leak after a storm can’t wait for Monday.
+            <span class="rounded-sm bg-[#DCF986]/50 text-neutral-900" data-type data-at="1" data-fx="fade" data-speed="22" data-text=" Crews are on site within 90 minutes, 24/7, across Austin."></span>
+          </p>
+          <p class="mt-2 text-neutral-400">We tarp, patch and photograph the damage for your insurer…</p>
+        </div>
+      </div>
+    </div>
+    {siteData && (
+      <div class:list={['h-full overflow-hidden py-5', compact ? 'px-6' : 'px-10']} data-at={footerAt} data-fx="collapse">
+        <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <h3 class="font-logo text-[26px] leading-tight tracking-tight text-neutral-900">Footer</h3>
+          <code class="rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-[10.5px] text-neutral-500">src/data/footer.json</code>
+        </div>
+        <div class="mt-4 flex gap-4 border-b border-neutral-200 text-[11.5px]">
+          <span class="relative pb-2 font-medium text-neutral-900">General<span class="absolute inset-x-0 -bottom-px h-0.5 rounded-full bg-neutral-900"></span></span>
+          <span class="pb-2 text-neutral-500">Links</span>
+          <span class="pb-2 text-neutral-500">Social</span>
+          <span class="pb-2 text-neutral-400">+1 more</span>
+        </div>
+        <dl class="mt-4 grid grid-cols-[120px_1fr] items-center gap-x-3 gap-y-2 text-[11.5px]">
+          <dt class="flex items-center gap-1.5 text-neutral-500"><Building2 className="size-3.5" /> Company</dt>
+          <dd class="rounded-md border border-neutral-200 bg-neutral-50 px-2 py-1.5 text-neutral-700">Acme Roofing</dd>
+          <dt class="flex items-center gap-1.5 text-neutral-500"><Phone className="size-3.5" /> Phone</dt>
+          <dd class="rounded-md border border-neutral-200 bg-neutral-50 px-2 py-1.5 text-neutral-700" data-cursor-at={phoneAt - 1}>
+            <span data-at="0" data-until={phoneAt} data-fx="collapse">(512) 555-0142</span>
+            <span class="rounded-sm bg-[#DCF986]/50 text-neutral-900" data-type data-at={phoneAt} data-fx="fade" data-text="(512) 555-0199"></span>
+          </dd>
+          <dt class="flex items-center gap-1.5 text-neutral-500"><AtSign className="size-3.5" /> Email</dt>
+          <dd class="rounded-md border border-neutral-200 bg-neutral-50 px-2 py-1.5 text-neutral-700">hello@acme-roofing.com</dd>
+          <dt class="flex items-center gap-1.5 text-neutral-500"><Megaphone className="size-3.5" /> Storm banner</dt>
+          <dd class="flex items-center gap-2 py-1 text-neutral-500">
+            <span class="group/toggle relative inline-flex h-4 w-7 shrink-0 rounded-full bg-neutral-200 [&.on]:bg-neutral-900" data-at={bannerAt} data-fx="state" data-cursor-at={bannerAt - 1}>
+              <span class="absolute left-0.5 top-0.5 size-3 rounded-full bg-white shadow-sm transition-transform duration-200 group-[.on]/toggle:translate-x-3"></span>
+            </span>
+            Show “24/7 emergency repairs” above the footer
+          </dd>
+          <dt class="flex items-center gap-1.5 text-neutral-500"><Copyright className="size-3.5" /> Copyright</dt>
+          <dd class="rounded-md border border-neutral-200 bg-neutral-50 px-2 py-1.5 text-neutral-700">© 2026 Acme Roofing LLC</dd>
+        </dl>
+        <div class="mt-5 flex w-fit items-center gap-2 rounded-lg border border-neutral-200 bg-white px-2.5 py-1.5 text-[11px] text-neutral-500 shadow-[0_1px_2px_rgb(0_0_0/0.04)]" data-at={savedAt}>
+          <FileCode2 className="size-3.5 text-neutral-400" />
+          <span class="font-mono text-neutral-700">footer.json</span>
+          <span class="font-mono text-emerald-700">+2</span><span class="font-mono text-rose-600">−2</span>
+          <span class="text-neutral-400">· only the edited values, comments and order kept</span>
+        </div>
+      </div>
+    )}
+    {panel === 'seo' && (
+      <aside slot="panel" class="flex w-[260px] shrink-0 flex-col border-l border-neutral-200 bg-white">
+        <div class="flex h-10 shrink-0 items-center gap-4 border-b border-neutral-200 px-3 text-[11.5px]">
+          <span class="text-neutral-400">Task</span>
+          <span class="text-neutral-400">History</span>
+          <span class="relative flex h-full items-center font-medium text-neutral-900">SEO<span class="absolute inset-x-0 -bottom-px h-0.5 rounded-full bg-neutral-900"></span></span>
+          <X className="ml-auto size-3.5 text-neutral-400" />
+        </div>
+        <div class="p-3">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-medium uppercase tracking-wide text-neutral-400">Search preview</span>
+            <span class="rounded-full bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700">92 · Good</span>
+          </div>
+          <div class="mt-1.5 rounded-lg border border-neutral-200 p-2.5">
+            <div class="flex items-center gap-1.5 text-[10px] text-neutral-500">
+              <span class="grid size-3.5 place-items-center rounded-full bg-amber-500 text-[7px] font-bold text-white">A</span> acme-roofing.com › services
+            </div>
+            <div class="mt-1 text-[12.5px] leading-snug text-[#1a0dab]">Emergency Roof Repair in Austin, 24/7 | Acme Roofing</div>
+            <div class="mt-0.5 text-[10.5px] leading-snug text-neutral-600">Fast, insured roof repairs across Austin, day or night. Crews on site within 90 minutes…</div>
+          </div>
+          <div class="mt-3 text-[10px] font-medium uppercase tracking-wide text-neutral-400">Before you publish</div>
+          <ul class="mt-1.5 space-y-1.5">
+            {SEO_CHECKS.map((check, index) => (
+              <li class="flex items-start gap-1.5 text-[11px] leading-snug text-neutral-700" data-at={firstCheckStep + index}>
+                {check.state === 'pass'
+                  ? <Check className="mt-px size-3.5 shrink-0 text-emerald-600" />
+                  : <AlertTriangle className="mt-px size-3.5 shrink-0 text-amber-500" />}
+                {check.label}
+              </li>
+            ))}
+          </ul>
+          <div class="mt-3 flex items-center gap-1.5 rounded-md bg-neutral-50 px-2 py-1.5 text-[10.5px] text-neutral-500">
+            <CalendarDays className="size-3.5" /> Last checked just now
+          </div>
+        </div>
+      </aside>
+    )}
+  </AppShell>
+  {siteData && (
+    <>
+      <span hidden data-url-at="0" data-url="app.gitcms.dev/sites/acme-roofing.com/services/emergency-roof-repair"></span>
+      <span hidden data-url-at={footerAt} data-url="app.gitcms.dev/sites/acme-roofing.com/site-data/footer"></span>
+    </>
+  )}
+  <Cursor />
+</div>

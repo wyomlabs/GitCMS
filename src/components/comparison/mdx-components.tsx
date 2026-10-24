@@ -1,17 +1,14 @@
 import type { ReactNode } from 'react'
 import { Check, Minus, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { LaunchCtaSection } from '@/components/landing/launch-cta-section'
+import { loginUrl } from '@/lib/start-login'
 import { LICENSE_PRICE_SUMMARY } from '@/lib/positioning'
 
 /**
- * Breakout wrapper — extends components beyond the prose column.
- *
- * The article container is `max-w-3xl px-6`. On mobile `-mx-6` cancels
- * the padding so components go edge-to-edge. On md/lg they extend
- * further into the surrounding whitespace to visually separate from prose.
+ * Breakout wrapper — widens tables and case studies to the edges of the
+ * white article card, cancelling its `px-6 sm:px-12` padding.
  */
-const breakout = '-mx-6 sm:-mx-12 md:-mx-24 lg:-mx-36'
+const breakout = '-mx-6 sm:-mx-12'
 
 /* ─── Verdict Cards ─── */
 
@@ -115,7 +112,7 @@ export function CaseStudy({
           Case study
         </p>
       </div>
-      <p className="mt-3 font-logo text-xl font-medium tracking-tight text-neutral-900 sm:text-2xl">
+      <p className="mt-3 text-xl font-semibold tracking-[-0.02em] text-neutral-900 sm:text-2xl">
         {title}
       </p>
       <div className="mt-5 text-base leading-relaxed text-neutral-600 [&>p]:mt-3.5 [&>p:first-child]:mt-0">
@@ -125,7 +122,7 @@ export function CaseStudy({
         <div className="mt-6 flex flex-wrap gap-x-8 gap-y-4 border-t border-neutral-200 pt-6">
           {stats.map((stat) => (
             <div key={stat.label}>
-              <p className="font-logo text-xl font-medium tracking-tight text-neutral-900 sm:text-2xl">
+              <p className="text-xl font-semibold tracking-[-0.02em] text-neutral-900 sm:text-2xl">
                 {stat.value}
               </p>
               <p className="mt-0.5 text-sm text-neutral-500">{stat.label}</p>
@@ -275,7 +272,7 @@ export function Tradeoffs({ children }: { children: ReactNode }) {
         breakout,
       )}
     >
-      <p className="font-logo text-xl font-medium tracking-tight text-neutral-900">
+      <p className="text-xl font-semibold tracking-[-0.02em] text-neutral-900">
         Honest tradeoffs
       </p>
       <div className="mt-4 text-base leading-relaxed text-neutral-700 [&>p]:mt-3.5 [&>p:first-child]:mt-0 [&>ul]:mt-3.5 [&>ul]:list-none [&>ul]:space-y-2.5 [&>ul]:pl-0 [&_li]:flex [&_li]:items-start [&_li]:gap-2.5 [&_li]:before:mt-0.5 [&_li]:before:text-amber-600 [&_li]:before:content-['△']">
@@ -303,7 +300,7 @@ export function PricingCompare({
         <p className="text-sm font-semibold uppercase tracking-widest text-neutral-400">
           GitCMS
         </p>
-        <p className="mt-3 font-logo text-xl font-medium tracking-tight text-white">
+        <p className="mt-3 text-xl font-semibold tracking-[-0.02em] text-white">
           Preview before purchase
         </p>
         <p className="mt-1.5 text-base text-neutral-400">
@@ -317,7 +314,7 @@ export function PricingCompare({
         <p className="text-sm font-semibold uppercase tracking-widest text-neutral-500">
           {competitorName}
         </p>
-        <p className="mt-3 font-logo text-xl font-medium tracking-tight text-neutral-900">
+        <p className="mt-3 text-xl font-semibold tracking-[-0.02em] text-neutral-900">
           {competitor.free}
         </p>
         <p className="mt-1.5 text-base text-neutral-500">{competitor.paid}</p>
@@ -341,14 +338,14 @@ export function CompareCTA({
   accent?: string
 }) {
   return (
-    <div className={cn('not-prose my-12', breakout)}>
-      <LaunchCtaSection
-        heading="Start editing."
-        highlightedHeading="Publish content with taste."
-        body={description}
-        ctaLabel="Open GitCMS"
-        landingVariant="comparison"
-      />
+    <div className="not-prose my-12 flex flex-col items-start justify-between gap-6 rounded-2xl bg-neutral-950 px-8 py-10 text-white sm:px-10 md:flex-row md:items-center">
+      <div>
+        <p className="text-[26px] font-semibold leading-tight tracking-[-0.03em]">Give your website a control plane</p>
+        {description && <p className="mt-2 max-w-md text-[15px] leading-relaxed text-neutral-400">{description}</p>}
+      </div>
+      <a href={loginUrl('/')} className="inline-flex h-10 shrink-0 items-center gap-2 rounded-xl bg-[#DCF986] px-5 text-sm font-semibold text-neutral-950 hover:bg-[#d4f47a]">
+        Connect your site, free
+      </a>
     </div>
   )
 }

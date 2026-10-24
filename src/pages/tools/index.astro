@@ -1,30 +1,30 @@
 ---
 import { getCollection } from 'astro:content'
-import ContentLayout from '@/layouts/ContentLayout.astro'
+import MarketingLayout from '@/layouts/MarketingLayout.astro'
+import Section from '@/components/site/Section.astro'
+import SectionHeading from '@/components/site/SectionHeading.astro'
+import CtaBand from '@/components/site/CtaBand.astro'
+import { card } from '@/components/site/styles'
 
 const tools = (await getCollection('tools'))
   .map((tool) => ({ ...tool, slug: tool.id.replace(/\.mdx?$/, '') }))
   .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999) || a.data.title.localeCompare(b.data.title))
 ---
-<ContentLayout
+<MarketingLayout
   title="Free Markdown, README, and Agent File Tools | GitCMS"
   description="Free browser tools for Markdown editing, README editing, AGENTS.md and CLAUDE.md files, public GitHub Markdown, and WebP image compression. No sign-up."
-  path="/tools"
 >
-  <section class="mx-auto max-w-5xl px-6 py-16 sm:py-20">
-    <header class="max-w-3xl">
-      <div class="text-sm font-medium uppercase tracking-widest text-neutral-500">Free tools</div>
-      <h1 class="mt-4 font-logo text-4xl font-normal leading-tight tracking-tight text-neutral-900 sm:text-5xl">Tools for Markdown and website content</h1>
-      <p class="mt-6 text-base leading-relaxed text-neutral-600 sm:text-lg">Free tools that run in your browser. Write Markdown, set up instruction files for coding agents, edit READMEs on GitHub, and shrink images before you commit them.</p>
-    </header>
-    <div class="mt-12 grid gap-4 md:grid-cols-2">
+  <Section first>
+    <SectionHeading level={1} eyebrow="Free tools" title="Tools for Markdown and website content" description="Free tools that run in your browser. Write Markdown, set up instruction files for coding agents, edit READMEs on GitHub, and shrink images before you commit them." />
+    <div class="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
       {tools.map((tool) => (
-        <a href={`/tools/${tool.slug}`} class="group flex flex-col rounded-xl border border-neutral-200 bg-white p-6 transition-all hover:-translate-y-0.5 hover:border-neutral-300 hover:shadow-lg">
-          <h2 class="font-logo text-lg font-medium tracking-tight text-neutral-900">{tool.data.title}</h2>
-          <p class="mt-2 flex-1 text-sm leading-relaxed text-neutral-600">{tool.data.description}</p>
-          <p class="mt-4 text-sm font-medium text-neutral-900">Open tool →</p>
+        <a href={`/tools/${tool.slug}/`} class:list={['group flex flex-col p-6 transition-colors hover:border-neutral-300', card]}>
+          <h2 class="text-[18px] font-semibold tracking-[-0.02em] text-neutral-900 group-hover:text-neutral-600">{tool.data.title}</h2>
+          <p class="mt-2 flex-1 text-[14.5px] leading-relaxed text-[#898989]">{tool.data.description}</p>
+          <p class="mt-5 text-[13px] font-medium text-neutral-900">Open tool →</p>
         </a>
       ))}
     </div>
-  </section>
-</ContentLayout>
+  </Section>
+  <CtaBand />
+</MarketingLayout>

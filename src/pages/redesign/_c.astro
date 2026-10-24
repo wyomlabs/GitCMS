@@ -1,0 +1,267 @@
+---
+// Variant C — "Control plane". A framed column with hatched gutters
+// (post2all): people and agents flow through GitCMS into the repository,
+// a "with your agent / in GitCMS" toggle, and copy-paste MCP setup.
+import { ArrowRight, Check, Copy } from 'lucide-react'
+import { GitCMSLogo } from '@/components/gitcms-logo'
+import { loginUrl } from '@/lib/start-login'
+import RedesignLayout from '@/components/redesign/RedesignLayout.astro'
+import AppWindow from '@/components/mock/AppWindow.astro'
+import AgentChatMock from '@/components/mock/AgentChatMock.astro'
+import ReviewMock from '@/components/mock/ReviewMock.astro'
+import BoardMock from '@/components/mock/BoardMock.astro'
+import EditorMock from '@/components/mock/EditorMock.astro'
+import SearchMock from '@/components/mock/SearchMock.astro'
+import FleetMock from '@/components/mock/FleetMock.astro'
+import ActivityMock from '@/components/mock/ActivityMock.astro'
+import SiteNav from '@/components/redesign/sections/SiteNav.astro'
+import SoonBadge from '@/components/redesign/sections/SoonBadge.astro'
+import PricingTable from '@/components/sections/PricingTable.astro'
+import FaqList from '@/components/site/FaqList.astro'
+import SiteFooter from '@/components/redesign/sections/SiteFooter.astro'
+import { AGENTS, CATEGORY, FAQS, FRAMEWORKS, PILLARS, PROOF_POINTS, SUBHEAD } from '@/lib/site-content'
+
+const people = [
+  { label: 'Marketing', avatar: 'M', color: 'bg-amber-500' },
+  { label: 'Client', avatar: 'C', color: 'bg-sky-500' },
+  { label: 'Founder', avatar: 'F', color: 'bg-emerald-500' },
+]
+const sources = [
+  ...people.map((person) => ({ kind: 'person' as const, ...person })),
+  ...AGENTS.slice(0, 4).map((agent) => ({ kind: 'agent' as const, label: agent.name, logo: agent.logo })),
+]
+const targets = FRAMEWORKS.slice(0, 6)
+const x = (index: number, count: number) => ((index + 0.5) / count) * 1000
+
+const setups = [
+  { key: 'claude', label: 'Claude and ChatGPT', blurb: 'Add GitCMS as a connector. The visual editor opens right inside the chat.', file: 'Settings › Connectors › Add custom connector', code: 'https://mcp.gitcms.dev' },
+  { key: 'code', label: 'Claude Code and Codex', blurb: 'One command, then sign in once in the browser.', file: '~ terminal', code: 'claude mcp add --transport http --scope user \\\n  gitcms https://mcp.gitcms.dev\n\ncodex mcp add gitcms --url https://mcp.gitcms.dev' },
+  { key: 'cursor', label: 'Cursor and others', blurb: 'Any MCP client that speaks remote HTTP servers.', file: '~/.cursor/mcp.json', code: '{\n  "mcpServers": {\n    "gitcms": { "url": "https://mcp.gitcms.dev" }\n  }\n}' },
+] as const
+const hatch = 'bg-[repeating-linear-gradient(135deg,transparent_0_6px,rgba(0,0,0,0.05)_6px_7px)]'
+---
+<RedesignLayout variant="c" title="Variant C · Control plane" bodyClass="bg-[#fbfbfa]">
+  <SiteNav variant="floating" />
+  <div class="mx-auto grid max-w-[1240px] grid-cols-[20px_1fr_20px] sm:grid-cols-[48px_1fr_48px]">
+    <div class:list={['border-r border-neutral-200', hatch]}></div>
+    <main class="min-w-0">
+      <!-- Hero -->
+      <section class="px-6 pb-6 pt-20 text-center">
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-3 py-1 text-xs text-neutral-600">{CATEGORY}</span>
+        <h1 class="mx-auto mt-6 max-w-4xl text-[46px] font-medium leading-[1.02] tracking-[-0.045em] sm:text-[72px]">One place where people and agents run your website</h1>
+        <p class="mx-auto mt-6 max-w-2xl text-[17px] leading-relaxed text-neutral-600">{SUBHEAD}</p>
+        <div class="mt-8 flex flex-wrap justify-center gap-3">
+          <a href={loginUrl('/')} class="inline-flex items-center gap-2 rounded-lg bg-neutral-900 px-5 py-3 text-sm font-medium text-white hover:bg-neutral-800">Connect your site, free <ArrowRight className="size-4" /></a>
+          <a href="#tour" class="inline-flex items-center rounded-lg border border-neutral-200 bg-white px-5 py-3 text-sm font-medium hover:bg-neutral-50">Watch it work</a>
+        </div>
+      </section>
+
+      <!-- Hub -->
+      <section class="px-4 pb-16 sm:px-10">
+        <div class="relative mx-auto max-w-4xl">
+          <svg viewBox="0 0 1000 380" preserveAspectRatio="none" class="absolute inset-0 h-full w-full text-neutral-300" aria-hidden="true">
+            {sources.map((_, index) => <path d={`M${x(index, sources.length)} 70 C ${x(index, sources.length)} 140, 500 120, 500 160`} fill="none" stroke="currentColor" stroke-width="1.2" class="rd-flow" vector-effect="non-scaling-stroke" />)}
+            {targets.map((_, index) => <path d={`M500 220 C 500 260, ${x(index, targets.length)} 240, ${x(index, targets.length)} 310`} fill="none" stroke="currentColor" stroke-width="1.2" class="rd-flow" vector-effect="non-scaling-stroke" />)}
+          </svg>
+          <div class="relative grid h-[380px] grid-rows-[70px_1fr_70px]">
+            <div class="grid" style={`grid-template-columns: repeat(${sources.length}, minmax(0, 1fr))`}>
+              {sources.map((source) => (
+                <div class="flex flex-col items-center gap-1.5">
+                  <span class="grid size-9 place-items-center rounded-xl border border-neutral-200 bg-white shadow-sm sm:size-12">
+                    {source.kind === 'agent'
+                      ? <img src={source.logo} alt="" class="size-6" />
+                      : <span class:list={['grid size-7 place-items-center rounded-full text-xs font-semibold text-white', source.color]}>{source.avatar}</span>}
+                  </span>
+                  <span class="hidden text-[11px] text-neutral-500 sm:block">{source.label}</span>
+                </div>
+              ))}
+            </div>
+            <div class="grid place-items-center">
+              <div class="flex items-center gap-2.5 rounded-2xl border border-neutral-200 bg-white px-5 py-3 shadow-md">
+                <GitCMSLogo className="size-8" />
+                <span class="font-logo text-2xl font-medium tracking-tight">GitCMS</span>
+                <span class="ml-2 hidden gap-1 text-[11px] sm:flex">
+                  <span class="rounded-full bg-sky-50 px-2 py-0.5 text-sky-700">Draft</span>
+                  <span class="rounded-full bg-violet-50 px-2 py-0.5 text-violet-700">Review</span>
+                  <span class="rounded-full bg-emerald-50 px-2 py-0.5 text-emerald-700">Publish</span>
+                </span>
+              </div>
+            </div>
+            <div class="grid" style={`grid-template-columns: repeat(${targets.length}, minmax(0, 1fr))`}>
+              {targets.map((target) => (
+                <div class="flex flex-col items-center gap-1.5">
+                  <span class="grid size-9 place-items-center rounded-xl border border-neutral-200 bg-white shadow-sm sm:size-11"><img src={target.logo} alt="" class="size-5" /></span>
+                  <span class="hidden text-[11px] text-neutral-500 sm:block">{target.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <p class="mt-6 text-center text-sm text-neutral-500">Your repository stays the source of truth. {PROOF_POINTS.slice(0, 2).join(' · ')}.</p>
+        </div>
+      </section>
+
+      <!-- Tour toggle -->
+      <section id="tour" class="border-t border-neutral-200 px-6 py-20 text-center">
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-3 py-1 text-xs text-neutral-600">Product tour</span>
+        <h2 class="mx-auto mt-4 max-w-3xl text-[38px] font-medium leading-tight tracking-[-0.04em] sm:text-[48px]">From request to published, your way</h2>
+        <p class="mx-auto mt-3 max-w-xl text-neutral-600">Ask your agent or open the dashboard. Either way the change waits for a person before it goes live.</p>
+        <div data-toggle class="mx-auto mt-8 max-w-5xl">
+          <div class="inline-flex rounded-full border border-neutral-200 bg-white p-1 text-sm shadow-sm">
+            <button type="button" data-toggle-tab="agent" aria-selected="true" class="flex items-center gap-1.5 rounded-full px-4 py-1.5 text-neutral-500 aria-selected:bg-neutral-100 aria-selected:text-neutral-900"><img src="/ai-logos/claude-orange.svg" alt="" class="size-4" /> With your agent</button>
+            <button type="button" data-toggle-tab="app" aria-selected="false" class="flex items-center gap-1.5 rounded-full px-4 py-1.5 text-neutral-500 aria-selected:bg-neutral-100 aria-selected:text-neutral-900"><GitCMSLogo className="size-4" /> In GitCMS</button>
+          </div>
+          <div class="relative mt-6 h-[480px] text-left">
+            <div data-toggle-panel="agent" class="absolute inset-0 transition-opacity duration-500">
+              <AppWindow url="claude.ai/new" class="h-full"><div class="h-[444px]"><AgentChatMock /></div></AppWindow>
+            </div>
+            <div data-toggle-panel="app" class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500">
+              <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/reviews/57" class="h-full"><div class="h-[444px]"><ReviewMock /></div></AppWindow>
+            </div>
+          </div>
+          <ol class="mt-6 grid grid-cols-2 gap-4 text-left text-sm sm:grid-cols-4">
+            {['Ask or edit', 'Draft saved', 'Review and approve', 'Published as a commit'].map((step, index) => (
+              <li class="border-t-2 border-neutral-900 pt-2 text-neutral-900 first:border-neutral-900"><span class="mr-1.5 font-mono text-[11px] text-neutral-400">0{index + 1}</span>{step}</li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <!-- Same rules, dark -->
+      <section class="bg-neutral-950 px-6 py-20 text-white sm:px-12">
+        <div class="grid items-center gap-12 lg:grid-cols-2">
+          <div class="min-w-0">
+            <h2 class="text-[36px] font-medium leading-tight tracking-[-0.04em] sm:text-[44px]">Humans and agents change the same website. Same rules for both.</h2>
+            <div class="mt-8 space-y-5">
+              {PILLARS.map((pillar) => (
+                <div class="border-l border-white/15 pl-4">
+                  <div class="font-medium">{pillar.title}</div>
+                  <p class="mt-1 text-[15px] leading-relaxed text-neutral-400">{pillar.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <ActivityMock dark class="min-w-0" />
+        </div>
+      </section>
+
+      <!-- Bento -->
+      <section id="product" class="border-t border-neutral-200 px-6 pt-20 text-center">
+        <h2 class="text-[38px] font-medium tracking-[-0.04em] sm:text-[48px]">Everything after launch</h2>
+        <p class="mx-auto mt-3 max-w-xl text-neutral-600">The day-to-day of running a site, in one dashboard your whole team can use.</p>
+      </section>
+      <section class="mt-12 grid border-y border-neutral-200 md:grid-cols-2 [&>div]:min-w-0">
+        <div class="border-b border-neutral-200 p-8 md:border-r">
+          <h3 class="text-lg font-medium">Visual editing</h3>
+          <p class="mt-1 text-[15px] text-neutral-600">Fields that match your site, so clients can’t break the layout.</p>
+          <div class="mt-6 h-[300px] overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm"><EditorMock /></div>
+        </div>
+        <div class="border-b border-neutral-200 p-8">
+          <h3 class="text-lg font-medium">Content board</h3>
+          <p class="mt-1 text-[15px] text-neutral-600">Every request, from any person or agent, from idea to published.</p>
+          <div class="mt-6 h-[300px] overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm"><BoardMock shell={false} /></div>
+        </div>
+        <div class="border-b border-neutral-200 p-8 md:border-b-0 md:border-r">
+          <div class="flex items-center gap-2"><h3 class="text-lg font-medium">Search Console insights</h3><SoonBadge /></div>
+          <p class="mt-1 text-[15px] text-neutral-600">See what each page ranks for and turn opportunities into tasks.</p>
+          <div class="mt-6 h-[300px] overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm"><SearchMock /></div>
+        </div>
+        <div class="p-8">
+          <h3 class="text-lg font-medium">Every client site, one workspace</h3>
+          <p class="mt-1 text-[15px] text-neutral-600">Agencies see every site, every review and every agent at a glance.</p>
+          <div class="mt-6 h-[300px] overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm"><FleetMock /></div>
+        </div>
+      </section>
+
+      <!-- SEO -->
+      <section class="px-6 py-20 sm:px-10">
+        <div class="text-center">
+          <SoonBadge />
+          <h2 class="mx-auto mt-4 max-w-3xl text-[38px] font-medium leading-tight tracking-[-0.04em] sm:text-[48px]">SEO checks before anything ships</h2>
+          <p class="mx-auto mt-3 max-w-xl text-neutral-600">The checklist WordPress needs a plugin for, built into the editor, and readable by your agent.</p>
+        </div>
+        <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/services/emergency-roof-repair?panel=seo" class="mx-auto mt-10 max-w-5xl">
+          <div class="h-[440px]"><EditorMock panel="seo" /></div>
+        </AppWindow>
+      </section>
+
+      <!-- MCP setup -->
+      <section class="border-t border-neutral-200 px-6 pt-20 text-center">
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-3 py-1 text-xs text-neutral-600">Bring your own agent</span>
+        <h2 class="mx-auto mt-4 max-w-3xl text-[38px] font-medium leading-tight tracking-[-0.04em] sm:text-[48px]">Plug in the agent you already pay for</h2>
+        <p class="mx-auto mt-3 max-w-xl text-neutral-600">GitCMS is a remote MCP server. No AI credits to buy, no new chat app to learn.</p>
+      </section>
+      <section data-setup class="mt-12 grid border-y border-neutral-200 md:grid-cols-[0.8fr_1.2fr]">
+        <div class="divide-y divide-neutral-200 border-b border-neutral-200 md:border-b-0 md:border-r">
+          {setups.map((setup, index) => (
+            <button type="button" data-setup-tab={setup.key} aria-selected={index === 0 ? 'true' : 'false'} class="block w-full border-l-2 border-transparent px-7 py-6 text-left aria-selected:border-neutral-900 aria-selected:bg-white">
+              <div class="text-lg font-medium">{setup.label}</div>
+              <p class="mt-1 text-[14px] leading-snug text-neutral-500">{setup.blurb}</p>
+            </button>
+          ))}
+        </div>
+        <div class="flex min-h-[300px] flex-col bg-neutral-950">
+          {setups.map((setup, index) => (
+            <div data-setup-panel={setup.key} class:list={['flex flex-1 flex-col', index !== 0 && 'hidden']}>
+              <div class="flex items-center gap-3 border-b border-white/10 px-5 py-3 font-mono text-xs text-neutral-400">
+                <span class="flex gap-1.5"><span class="size-2.5 rounded-full bg-neutral-700"></span><span class="size-2.5 rounded-full bg-neutral-700"></span><span class="size-2.5 rounded-full bg-neutral-700"></span></span>
+                {setup.file}
+                <span class="ml-auto flex items-center gap-1 text-neutral-500"><Copy className="size-3.5" /> Copy</span>
+              </div>
+              <pre class="flex-1 overflow-x-auto px-6 py-5 font-mono text-[14px] leading-relaxed text-lime-200"><code>{setup.code}</code></pre>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- Pricing -->
+      <section id="pricing" class="px-6 py-20 sm:px-10">
+        <h2 class="text-center text-[38px] font-medium tracking-[-0.04em] sm:text-[48px]">Plans that grow with your sites</h2>
+        <p class="mx-auto mt-3 max-w-xl text-center text-neutral-600">Unlimited people and agents on paid plans. Pay per site, or per agency.</p>
+        <div class="mt-10"><PricingTable highlight="agency" /></div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="border-t border-neutral-200 px-6 py-20 sm:px-10">
+        <h2 class="text-center text-[38px] font-medium tracking-[-0.04em]">Frequently asked questions</h2>
+        <div class="mx-auto mt-10 max-w-3xl"><FaqList faqs={FAQS} /></div>
+      </section>
+
+      <!-- CTA -->
+      <section class="border-t border-neutral-200 px-6 pb-6 pt-20 text-center">
+        <h2 class="mx-auto max-w-2xl text-[38px] font-medium leading-tight tracking-[-0.04em] sm:text-[48px]">Ready to hand over the keys, safely?</h2>
+        <p class="mx-auto mt-3 max-w-lg text-neutral-600">Connect your repository and invite the people, and agents, who keep the site moving.</p>
+        <a href={loginUrl('/')} class="mt-8 inline-flex items-center gap-2 rounded-lg bg-neutral-900 px-5 py-3 text-sm font-medium text-white hover:bg-neutral-800">Connect your site, free <ArrowRight className="size-4" /></a>
+        <ul class="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-1 text-[13px] text-neutral-500">
+          {PROOF_POINTS.map((point) => <li class="flex items-center gap-1"><Check className="size-3.5 text-emerald-600" />{point}</li>)}
+        </ul>
+        <div class="pointer-events-none mt-16 select-none font-logo text-[22vw] font-medium leading-[0.75] tracking-[-0.05em] text-neutral-200/70 lg:text-[260px]" aria-hidden="true">GitCMS</div>
+      </section>
+    </main>
+    <div class:list={['border-l border-neutral-200', hatch]}></div>
+  </div>
+  <SiteFooter />
+</RedesignLayout>
+
+<script>
+  // Two small tab groups: the agent/app toggle and the MCP setup picker.
+  function wireTabs(root: Element, tabAttr: string, panelAttr: string, hiddenClasses: string[]) {
+    const tabs = [...root.querySelectorAll<HTMLElement>(`[${tabAttr}]`)]
+    const panels = [...root.querySelectorAll<HTMLElement>(`[${panelAttr}]`)]
+    for (const tab of tabs) {
+      tab.addEventListener('click', () => {
+        const key = tab.getAttribute(tabAttr)
+        for (const other of tabs) other.setAttribute('aria-selected', String(other === tab))
+        for (const panel of panels) {
+          const hidden = panel.getAttribute(panelAttr) !== key
+          for (const name of hiddenClasses) panel.classList.toggle(name, hidden)
+        }
+      })
+    }
+  }
+  for (const root of document.querySelectorAll('[data-toggle]')) {
+    wireTabs(root, 'data-toggle-tab', 'data-toggle-panel', ['opacity-0', 'pointer-events-none'])
+  }
+  for (const root of document.querySelectorAll('[data-setup]')) {
+    wireTabs(root, 'data-setup-tab', 'data-setup-panel', ['hidden'])
+  }
+</script>

@@ -1,0 +1,35 @@
+---
+// How each family of agent connects. All use the same connector URL and the
+// same review workflow; the current agent's family is highlighted.
+import { AGENT_FAMILY_LABELS, type AgentFamily } from '@/lib/agent-data'
+import { card } from '@/components/site/styles'
+
+interface Props {
+  current?: AgentFamily
+  currentLabel?: string
+}
+const { current, currentLabel } = Astro.props
+const methods: ReadonlyArray<{ family: AgentFamily; method: string; auth: string; bestFor: string }> = [
+  { family: 'assistant', method: 'App or custom connector', auth: 'Sign in to GitCMS (OAuth)', bestFor: 'Drafting in conversation, with the GitCMS editor inside the chat' },
+  { family: 'coding', method: 'Remote MCP server', auth: 'Sign in to GitCMS (OAuth)', bestFor: 'Content changes next to the code you just shipped' },
+  { family: 'personal', method: 'Remote MCP server', auth: 'Personal access token (bearer)', bestFor: 'Background and scheduled work on your site’s content' },
+]
+---
+<div class:list={['overflow-hidden', card]}>
+  <div class="border-b border-neutral-200 px-6 py-4">
+    <p class="text-[14px] font-semibold">Ways to connect an agent</p>
+    <p class="mt-0.5 text-[12.5px] text-[#898989]">All use the same connector URL and the same review workflow.</p>
+  </div>
+  <ul class="divide-y divide-neutral-200">
+    {methods.map((method) => (
+      <li class:list={['px-6 py-4', method.family === current && 'bg-[#DCF986]/20']}>
+        <div class="flex items-center justify-between gap-3">
+          <p class="text-[14px] font-medium">{AGENT_FAMILY_LABELS[method.family]}s</p>
+          {method.family === current && currentLabel && <span class="rounded-full bg-[#DCF986] px-2 py-0.5 text-[11px] font-semibold text-neutral-900">{currentLabel}</span>}
+        </div>
+        <p class="mt-1 text-[13px] text-neutral-600">{method.method} · {method.auth}</p>
+        <p class="mt-0.5 text-[13px] text-[#898989]">Best for: {method.bestFor}</p>
+      </li>
+    ))}
+  </ul>
+</div>

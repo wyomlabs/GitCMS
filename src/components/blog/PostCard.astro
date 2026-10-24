@@ -1,0 +1,27 @@
+---
+// One post in the blog list or under "Related posts".
+import { blogCategoryLabels } from '@/lib/blog'
+import type { PostSummary } from '@/lib/content'
+import { card } from '@/components/site/styles'
+import { formatDate } from '@/lib/format-date'
+
+interface Props {
+  post: PostSummary
+  compact?: boolean
+}
+const { post, compact = false } = Astro.props
+---
+<a href={`/blog/${post.slug}/`} data-category={post.category} class:list={['group flex flex-col overflow-hidden transition-colors hover:border-neutral-300', card]}>
+  {post.cover && !compact && <img src={post.cover} alt="" class="aspect-[1.9/1] w-full border-b border-neutral-200 object-cover" loading="lazy" />}
+  <div class="flex flex-1 flex-col p-6">
+    <div class="flex items-center gap-2 text-[12px] text-[#898989]">
+      <span class="font-medium text-neutral-700">{blogCategoryLabels[post.category]}</span>
+      <span class="text-neutral-300">·</span>
+      <time datetime={post.date}>{formatDate(post.date)}</time>
+      <span class="text-neutral-300">·</span>
+      <span>{post.readingTime} min read</span>
+    </div>
+    <h3 class:list={['mt-3 font-semibold leading-snug tracking-[-0.02em] text-neutral-900 group-hover:text-neutral-600', compact ? 'text-[17px]' : 'text-[20px]']}>{post.title}</h3>
+    <p class="mt-2 line-clamp-3 text-[14.5px] leading-relaxed text-[#898989]">{post.description}</p>
+  </div>
+</a>

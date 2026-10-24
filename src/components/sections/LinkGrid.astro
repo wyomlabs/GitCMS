@@ -1,0 +1,17 @@
+---
+// A row of small logo links, e.g. other frameworks or other agents.
+import { card } from '@/components/site/styles'
+
+interface Props {
+  links: ReadonlyArray<{ label: string; href: string; logo?: string }>
+}
+const { links } = Astro.props
+---
+<div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+  {links.map((link) => (
+    <a href={link.href} class:list={['flex items-center gap-2.5 px-4 py-3 text-[14px] font-medium text-neutral-700 transition-colors hover:border-neutral-300 hover:text-neutral-950', card]}>
+      {link.logo && <img src={link.logo} alt="" class="size-5 shrink-0 object-contain" loading="lazy" />}
+      <span class="truncate">{link.label}</span>
+    </a>
+  ))}
+</div>

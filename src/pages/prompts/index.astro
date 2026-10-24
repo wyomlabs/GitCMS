@@ -1,38 +1,43 @@
 ---
 import { getCollection } from 'astro:content'
-import ContentLayout from '@/layouts/ContentLayout.astro'
+import MarketingLayout from '@/layouts/MarketingLayout.astro'
+import Section from '@/components/site/Section.astro'
+import SectionHeading from '@/components/site/SectionHeading.astro'
+import CopyButton from '@/components/site/CopyButton.astro'
+import CtaBand from '@/components/site/CtaBand.astro'
+import { card, heading } from '@/components/site/styles'
 import { PROMPT_CATEGORY_LABELS, type PromptCategory } from '@/components/resources/resource-mdx-components'
+import { promptText } from '@/lib/prompt-text'
+
 const CATEGORY_ORDER: ReadonlyArray<PromptCategory> = ['handoff', 'content', 'seo', 'migration']
 const prompts = (await getCollection('prompts'))
-  .map((prompt) => ({ ...prompt, slug: prompt.id.replace(/\.mdx?$/, '') }))
+  .map((prompt) => ({ ...prompt, slug: prompt.id.replace(/\.mdx?$/, ''), text: promptText(prompt.body) }))
   .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999) || a.data.title.localeCompare(b.data.title))
 ---
-<ContentLayout title="AI Prompts for Building, Handing Off, and Running Websites | GitCMS" description="Copy-paste prompts for Claude Code, Codex, Cursor, ChatGPT, and Claude: make a site client-editable, update content, improve SEO, and migrate from WordPress." path="/prompts">
-  <section class="mx-auto max-w-5xl px-6 py-16 sm:py-20">
-    <header class="max-w-3xl">
-      <div class="text-sm font-medium uppercase tracking-widest text-neutral-500">Prompt library</div>
-      <h1 class="mt-4 font-logo text-4xl font-normal leading-tight tracking-tight text-neutral-900 sm:text-5xl">Prompts for the whole website lifecycle</h1>
-      <p class="mt-6 text-base leading-relaxed text-neutral-600 sm:text-lg">Copy-paste prompts for coding agents and AI assistants. Use them to make a site client-editable, keep content fresh, and migrate off old platforms. On sites that use review before publish, every content change from a prompt goes through review before it ships.</p>
-    </header>
-    <div class="mt-14 space-y-14">
-      {CATEGORY_ORDER.map((category) => {
-        const items = prompts.filter((prompt) => prompt.data.category === category)
-        if (items.length === 0) return null
-        return (
-          <div>
-            <h2 class="border-b border-neutral-200 pb-3 font-logo text-2xl font-normal tracking-tight text-neutral-900">{PROMPT_CATEGORY_LABELS[category]}</h2>
-            <div class="mt-6 grid gap-4 md:grid-cols-2">
-              {items.map((prompt) => (
-                <a href={`/prompts/${prompt.slug}`} class="group flex flex-col rounded-xl border border-neutral-200 bg-white p-6 transition-all hover:-translate-y-0.5 hover:border-neutral-300 hover:shadow-lg">
-                  <h3 class="font-logo text-lg font-medium tracking-tight text-neutral-900">{prompt.data.title}</h3>
-                  <p class="mt-2 flex-1 text-sm leading-relaxed text-neutral-600">{prompt.data.description}</p>
-                  <p class="mt-4 text-xs font-medium uppercase tracking-wider text-neutral-500">{prompt.data.agents.join(' · ')}</p>
-                </a>
-              ))}
+<MarketingLayout title="AI Prompts for Building, Handing Off, and Running Websites | GitCMS" description="Copy-paste prompts for Claude Code, Codex, Cursor, ChatGPT, and Claude: make a site client-editable, update content, improve SEO, and migrate from WordPress.">
+  <Section first>
+    <SectionHeading level={1} eyebrow="Prompt library" title="Prompts for the whole website lifecycle" description="Copy-paste prompts for coding agents and AI assistants. Use them to make a site client-editable, keep content fresh, and migrate off old platforms. On sites that use review before publish, every content change from a prompt goes through review before it ships." />
+  </Section>
+  {CATEGORY_ORDER.map((category) => {
+    const items = prompts.filter((prompt) => prompt.data.category === category)
+    if (items.length === 0) return null
+    return (
+      <Section class="!py-20">
+        <h2 class:list={['text-[28px]', heading]}>{PROMPT_CATEGORY_LABELS[category]}</h2>
+        <div class="mt-8 grid gap-5 md:grid-cols-2">
+          {items.map((prompt) => (
+            <div class:list={['relative flex flex-col p-6 transition-colors hover:border-neutral-300', card]}>
+              <h3 class="pr-24 text-[18px] font-semibold tracking-[-0.02em] text-neutral-900">
+                <a href={`/prompts/${prompt.slug}/`} class="after:absolute after:inset-0">{prompt.data.title}</a>
+              </h3>
+              <p class="mt-2 flex-1 text-[14.5px] leading-relaxed text-[#898989]">{prompt.data.description}</p>
+              <p class="mt-4 text-[12px] text-neutral-500">{prompt.data.agents.join(' · ')}</p>
+              {prompt.text && <CopyButton size="sm" text={prompt.text} label="Copy" class="absolute right-5 top-5 z-10" />}
             </div>
-          </div>
-        )
-      })}
-    </div>
-  </section>
-</ContentLayout>
+          ))}
+        </div>
+      </Section>
+    )
+  })}
+  <CtaBand title="Agents draft. People approve." description="Connect your site to GitCMS, turn on review before publish, and every content change from a prompt waits for a person before it ships." />
+</MarketingLayout>

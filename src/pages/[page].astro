@@ -1,8 +1,10 @@
 ---
 import { getCollection, render } from 'astro:content'
 import defaultMdxComponents from 'fumadocs-ui/mdx'
-import ContentLayout from '@/layouts/ContentLayout.astro'
-import { CodeFirstTeamsList } from '@/components/landing/code-first-teams'
+import MarketingLayout from '@/layouts/MarketingLayout.astro'
+import Section from '@/components/site/Section.astro'
+import { CodeFirstTeamsList } from '@/components/resources/code-first-teams'
+import { card, prose } from '@/components/site/styles'
 
 export async function getStaticPaths() {
   return (await getCollection('pages')).map((page) => ({
@@ -14,10 +16,12 @@ const { page } = Astro.props
 const { Content } = await render(page)
 const slug = page.id.replace(/\.mdx?$/, '')
 ---
-<ContentLayout title={`${page.data.title} — GitCMS`} description={page.data.description} path={`/${slug}`}>
-  <article class="mx-auto max-w-3xl px-6 py-16">
-    <div class="prose prose-neutral prose-lg max-w-none prose-headings:font-logo prose-headings:font-medium prose-headings:tracking-tight prose-h1:text-3xl prose-h1:sm:text-4xl prose-a:text-neutral-900 prose-a:underline-offset-2">
-      <Content components={{ ...defaultMdxComponents, CodeFirstTeamsList }} />
-    </div>
-  </article>
-</ContentLayout>
+<MarketingLayout title={`${page.data.title} — GitCMS`} description={page.data.description}>
+  <Section first>
+    <article class:list={['mx-auto max-w-3xl px-6 py-10 sm:px-12 sm:py-14', card]}>
+      <div class:list={[prose, 'prose-h1:text-[36px] prose-h1:sm:text-[44px] prose-h1:tracking-[-0.04em]']}>
+        <Content components={{ ...defaultMdxComponents, CodeFirstTeamsList }} />
+      </div>
+    </article>
+  </Section>
+</MarketingLayout>

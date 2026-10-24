@@ -18,7 +18,6 @@ const blog = defineCollection({
     category: z.enum(blogCategories),
     authors: z.array(z.string()),
     tags: z.array(z.string()).optional(),
-    redirects: z.array(z.string()).optional(),
     cover: z.string().optional(),
     draft: z.boolean().optional(),
   }),

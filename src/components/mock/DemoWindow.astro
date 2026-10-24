@@ -1,0 +1,50 @@
+---
+// One product demo in its browser window, picked by name, at a height that
+// fits the demo. Landing pages choose demos by name instead of wiring mocks.
+import AppWindow from './AppWindow.astro'
+import BoardMock from './BoardMock.astro'
+import ChangeRequestMock from './ChangeRequestMock.astro'
+import EditorMock from './EditorMock.astro'
+import FleetMock from './FleetMock.astro'
+import ReviewMock from './ReviewMock.astro'
+import SearchMock from './SearchMock.astro'
+
+export type DemoName = 'fleet' | 'editor' | 'review' | 'board' | 'seo' | 'search' | 'change-requests'
+
+interface Props {
+  demo: DemoName
+  class?: string
+}
+const { demo, class: className = '' } = Astro.props
+const site = 'app.gitcms.dev/sites/acme-roofing.com'
+const urls: Record<DemoName, string> = {
+  fleet: 'app.gitcms.dev/brightside-studio',
+  editor: `${site}/services/emergency-roof-repair`,
+  review: `${site}/reviews/57`,
+  board: `${site}/board`,
+  seo: `${site}/services/emergency-roof-repair?panel=seo`,
+  search: `${site}/search`,
+  'change-requests': `${site}/change-requests/61`,
+}
+// Design heights in px; the window scales to fit, keeping this ratio.
+const heights: Record<DemoName, number> = {
+  fleet: 280,
+  editor: 440,
+  review: 460,
+  board: 440,
+  seo: 440,
+  search: 420,
+  'change-requests': 440,
+}
+---
+<AppWindow url={urls[demo]} height={heights[demo]} class={className}>
+  <div class="relative h-full">
+    {demo === 'fleet' && <FleetMock />}
+    {demo === 'editor' && <EditorMock siteData />}
+    {demo === 'review' && <ReviewMock />}
+    {demo === 'board' && <BoardMock />}
+    {demo === 'seo' && <EditorMock panel="seo" />}
+    {demo === 'search' && <SearchMock />}
+    {demo === 'change-requests' && <ChangeRequestMock />}
+  </div>
+</AppWindow>

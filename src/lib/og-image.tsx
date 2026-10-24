@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react'
 import { createHash } from 'node:crypto'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
-import { dirname, resolve } from 'node:path'
+import { dirname, extname, resolve } from 'node:path'
 import { Resvg } from '@resvg/resvg-js'
 import satori from 'satori'
-import type { PublicResource } from '@/lib/public-resources'
+import type { OgScene, PublicResource } from '@/lib/public-resources'
 
 const WIDTH = 1200
 const HEIGHT = 630
@@ -58,12 +58,27 @@ function kindLabel(resource: PublicResource) {
     prompt: 'Prompt library',
     tool: 'Free tool',
     agent: 'AI agents',
+    feature: 'Feature',
     persona: 'Who it’s for',
     framework: 'Framework guide',
+    builder: 'AI site builders',
     page: 'GitCMS',
     index: 'GitCMS',
   }
-  return labels[resource.kind]
+  const indexLabels: Record<string, string> = {
+    'index:agents': 'AI agents',
+    'index:compare': 'Comparisons',
+    'index:for': 'Who it’s for',
+    'index:tools': 'Free tools',
+  }
+  return indexLabels[resource.id] ?? labels[resource.kind]
+}
+
+/** Long SEO titles keep their lead phrase, so the scene layout stays at three lines or fewer. */
+function shortTitle(title: string) {
+  if (title.length <= 44) return title
+  const lead = title.split(/\s+—\s+|:\s+/)[0] ?? title
+  return lead.length >= 12 ? lead : title
 }
 
 async function loadFonts() {
@@ -99,7 +114,28 @@ async function loadFonts() {
   }))
 }
 
-function LogoSvg({ size = 44 }: { size?: number }) {
+// Marketing pages: text on white, a small product scene on a black panel.
+// Content pages (blog, docs, glossary, changelog, prompts): text only, so long
+// titles get the full width. Lime appears only in the logo mark.
+const INK = '#0a0a0a'
+const TEXT = '#242424'
+const MUTED = '#737373'
+const FAINT = '#a3a3a3'
+
+function asset(path: string) {
+  const extension = extname(path).slice(1)
+  const mime = extension === 'svg' ? 'image/svg+xml' : extension === 'jpg' ? 'image/jpeg' : `image/${extension}`
+  return `data:${mime};base64,${readFileSync(resolve('public', path.replace(/^\//, ''))).toString('base64')}`
+}
+
+function sceneFor(resource: PublicResource): OgScene {
+  if (resource.og) return resource.og
+  const textIndexes = new Set(['index:blog', 'index:changelog', 'index:glossary', 'index:prompts'])
+  if (['blog', 'changelog', 'docs', 'glossary', 'prompt'].includes(resource.kind) || textIndexes.has(resource.id)) return { type: 'text' }
+  return { type: 'published' }
+}
+
+function LogoSvg({ size = 40 }: { size?: number }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none">
       <rect x="0.5" y="0.5" width="23" height="23" rx="3.5" fill="#DCF986" stroke="#B5D74E" />
@@ -108,92 +144,160 @@ function LogoSvg({ size = 44 }: { size?: number }) {
   )
 }
 
-function EditorField({ label, children }: { label: string; children: ReactNode }) {
+function Brand() {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-      <span style={{ width: 82, fontFamily: 'Geist', fontSize: 12, fontWeight: 500, color: '#737373' }}>
-        {label}
-      </span>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      <LogoSvg size={38} />
+      <span style={{ fontFamily: 'Source Serif 4', fontSize: 30, fontWeight: 500, letterSpacing: '-0.02em', color: INK }}>GitCMS</span>
+    </div>
+  )
+}
+
+function LogoTile({ src, size = 46 }: { src: string | null; size?: number }) {
+  return (
+    <div style={{ width: size, height: size, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: size * 0.24, border: '1px solid #e5e5e5', backgroundColor: src ? 'white' : '#fafafa' }}>
+      {src ? <img src={asset(src)} width={size * 0.56} height={size * 0.56} /> : <LogoSvg size={size * 0.62} />}
+    </div>
+  )
+}
+
+function Card({ children, width = 420, padding = '22px 24px' }: { children: ReactNode; width?: number; padding?: string | number }) {
+  return (
+    <div style={{ width, display: 'flex', flexDirection: 'column', padding, borderRadius: 18, backgroundColor: 'white', boxShadow: '0 24px 60px rgba(0, 0, 0, 0.35)' }}>
       {children}
     </div>
   )
 }
 
-function TagChip({ label, backgroundColor, color }: { label: string; backgroundColor: string; color: string }) {
+function Lines() {
   return (
-    <span style={{ padding: '4px 8px', borderRadius: 999, backgroundColor, fontFamily: 'Geist', fontSize: 11, fontWeight: 500, color }}>
-      {label}
-    </span>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      {[95, 80, 60].map((width) => <div key={width} style={{ height: 10, width: `${width}%`, borderRadius: 6, backgroundColor: '#f0f0f0' }} />)}
+    </div>
   )
 }
 
-function EditorMock() {
+function ReviewCard({ label, action, actionColor, children }: { label: string; action: string; actionColor: string; children: ReactNode }) {
   return (
-    <div style={{ width: 440, height: 530, display: 'flex', flexDirection: 'column', backgroundColor: '#ffffff', border: '1px solid #e5e5e5', borderRight: 'none', borderRadius: '20px 0 0 20px', overflow: 'hidden', boxShadow: '0 28px 72px rgba(10, 10, 10, 0.12)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '15px 18px', borderBottom: '1px solid #e5e5e5', backgroundColor: '#fafafa' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <div style={{ width: 10, height: 10, borderRadius: 999, backgroundColor: '#FF5F57' }} />
-          <div style={{ width: 10, height: 10, borderRadius: 999, backgroundColor: '#FEBC2E' }} />
-          <div style={{ width: 10, height: 10, borderRadius: 999, backgroundColor: '#28C840' }} />
-        </div>
-        <span style={{ fontFamily: 'Geist', fontSize: 13, fontWeight: 500, color: '#737373' }}>getting-started.md</span>
+    <Card padding={0}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid #f0f0f0' }}>
+        <span style={{ fontFamily: 'Geist', fontSize: 17, color: MUTED }}>{label}</span>
+        <span style={{ padding: '8px 14px', borderRadius: 10, backgroundColor: actionColor, color: 'white', fontFamily: 'Geist', fontSize: 16, fontWeight: 500 }}>{action}</span>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16, padding: '18px 18px 22px', flex: 1 }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, paddingBottom: 14, borderBottom: '1px solid #f0f0f0' }}>
-          <div style={{ display: 'flex', fontFamily: 'Source Serif 4', fontSize: 25, fontWeight: 500, lineHeight: 1.1, letterSpacing: '-0.02em', color: '#0a0a0a' }}>Getting Started with Astro</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <EditorField label="Date"><div style={{ display: 'flex', flex: 1, padding: '6px 9px', borderRadius: 10, backgroundColor: '#f5f5f5', fontFamily: 'Geist', fontSize: 12, color: '#171717' }}>2026-02-21</div></EditorField>
-            <EditorField label="Description"><div style={{ display: 'flex', flex: 1, padding: '6px 9px', borderRadius: 10, backgroundColor: '#f5f5f5', fontFamily: 'Geist', fontSize: 12, color: '#171717' }}>A quick guide to using Astro with GitCMS.</div></EditorField>
-            <EditorField label="Tags"><div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 6, padding: '6px 8px', borderRadius: 10, backgroundColor: '#f5f5f5' }}><TagChip label="astro" backgroundColor="#dbeafe" color="#1d4ed8" /><TagChip label="tutorial" backgroundColor="#dcfce7" color="#15803d" /></div></EditorField>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 14, padding: 22 }}>{children}</div>
+    </Card>
+  )
+}
+
+function SceneTitle({ children }: { children: string }) {
+  return <div style={{ display: 'flex', fontFamily: 'Source Serif 4', fontSize: 30, fontWeight: 500, letterSpacing: '-0.02em', color: INK }}>{children}</div>
+}
+
+function Scene({ scene }: { scene: Exclude<OgScene, { type: 'text' }> }) {
+  switch (scene.type) {
+    case 'published':
+      return (
+        <ReviewCard label="Pages / Home" action="✓ Published" actionColor="#059669">
+          <SceneTitle>Websites your team can edit</SceneTitle>
+          <Lines />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 6 }}>
+            <span style={{ padding: '6px 12px', borderRadius: 999, backgroundColor: '#ecfdf5', color: '#047857', fontFamily: 'Geist', fontSize: 16, fontWeight: 500 }}>SEO 94</span>
+            <span style={{ fontFamily: 'Geist', fontSize: 16, color: MUTED }}>Title · Description · Links</span>
           </div>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div style={{ display: 'flex', fontFamily: 'Source Serif 4', fontSize: 22, fontWeight: 500, lineHeight: 1.15, letterSpacing: '-0.02em', color: '#0a0a0a' }}>Why Astro + GitCMS?</div>
-          <p style={{ margin: 0, fontFamily: 'Geist', fontSize: 13, lineHeight: 1.5, color: '#404040' }}>Astro content collections pair well with GitCMS. Your markdown stays in the repo and the editor stays familiar.</p>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 }}><div style={{ display: 'flex', padding: '2px 0 0', fontFamily: 'Geist', fontSize: 16, lineHeight: 1.3, color: '#737373' }}>/</div></div>
-        </div>
-      </div>
-    </div>
-  )
+        </ReviewCard>
+      )
+    case 'agent':
+      return (
+        <ReviewCard label="Review · Pricing page" action="Approve" actionColor="#059669">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <img src={asset(scene.logo)} width={26} height={26} />
+            <span style={{ fontFamily: 'Geist', fontSize: 18, color: '#525252' }}>Agent suggested 3 changes</span>
+          </div>
+          <SceneTitle>Simple pricing for teams</SceneTitle>
+          <Lines />
+        </ReviewCard>
+      )
+    case 'files': {
+      const files = scene.files === 'data'
+        ? ['src/content/home.json', 'src/content/pricing.json', 'src/content/faq.json']
+        : ['src/content/blog/launch.md', 'src/content/blog/pricing.md', 'src/content/docs/setup.md']
+      return (
+        <Card>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, paddingBottom: 14, borderBottom: '1px solid #f0f0f0' }}>
+            <LogoTile src={scene.logo} />
+            <span style={{ fontFamily: 'Geist', fontSize: 22, color: FAINT }}>+</span>
+            <LogoTile src={null} />
+          </div>
+          {files.map((file, index) => (
+            <div key={file} style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid #f5f5f5', fontFamily: 'Geist', fontSize: 18, color: TEXT }}>
+              <span>{file}</span>
+              {index === 0 ? <span style={{ color: '#059669', fontWeight: 500 }}>Edited</span> : null}
+            </div>
+          ))}
+        </Card>
+      )
+    }
+    case 'versus':
+      // Rows describe GitCMS only; claims about the competitor belong on the page.
+      return (
+        <Card width={400} padding="22px 26px">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12 }}>
+            <LogoSvg size={34} />
+            <span style={{ fontFamily: 'Geist', fontSize: 18, color: FAINT }}>vs</span>
+            <span style={{ fontFamily: 'Geist', fontSize: 18, fontWeight: 500, color: TEXT }}>{scene.competitor}</span>
+          </div>
+          {['Content stays in your repo', 'Visual editor for clients', 'Agents draft, people approve', 'Publish through your host'].map((label) => (
+            <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid #f0f0f0', fontFamily: 'Geist', fontSize: 19, color: TEXT }}>
+              <span>{label}</span>
+              <span style={{ color: '#059669', fontWeight: 500 }}>✓</span>
+            </div>
+          ))}
+        </Card>
+      )
+  }
 }
 
-function MenuRow({ label, shortcut = '', active = false }: { label: string; shortcut?: string; active?: boolean }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '7px 9px', borderRadius: 8, backgroundColor: active ? '#f5f5f5' : 'transparent', fontFamily: 'Geist', fontSize: 12, fontWeight: active ? 500 : 400, color: active ? '#171717' : '#525252' }}>
-      <span style={{ display: 'flex' }}>{label}</span><span style={{ display: 'flex', color: '#a3a3a3' }}>{shortcut}</span>
-    </div>
-  )
+function pathLabel(htmlPath: string, max: number) {
+  const full = htmlPath === '/' ? 'gitcms.dev' : `gitcms.dev${htmlPath}`
+  return full.length > max ? `gitcms.dev/${htmlPath.split('/')[1]}` : full
 }
 
-function SlashMenuOverlay() {
-  return (
-    <div style={{ width: 248, display: 'flex', flexDirection: 'column', gap: 2, padding: '10px 8px 8px', borderRadius: 12, border: '1px solid #e5e5e5', backgroundColor: '#ffffff', boxShadow: '0 18px 34px rgba(10, 10, 10, 0.12)' }}>
-      <div style={{ display: 'flex', padding: '0 8px 6px', fontFamily: 'Geist', fontSize: 10, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#a3a3a3' }}>Basic blocks</div>
-      <MenuRow label="Text" active /><MenuRow label="Heading 1" shortcut="# " /><MenuRow label="Heading 2" shortcut="## " /><MenuRow label="Heading 3" shortcut="### " /><MenuRow label="Bulleted list" shortcut="- " /><MenuRow label="Numbered list" shortcut="1. " /><MenuRow label="To-do list" shortcut="[] " /><MenuRow label="Code Block" shortcut="```" />
-    </div>
-  )
+function KindLabel({ resource }: { resource: PublicResource }) {
+  return <div style={{ display: 'flex', fontFamily: 'Geist', fontSize: 18, fontWeight: 500, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8a8a8a' }}>{kindLabel(resource)}</div>
 }
 
 function OgTemplate({ resource }: { resource: PublicResource }) {
-  const pathLabel = resource.htmlPath === '/' ? 'gitcms.dev' : `gitcms.dev${resource.htmlPath}`
-  const title = truncate(resource.title.replace(/\s+—\s+GitCMS$/, ''), 70)
-  const description = resource.description ? truncate(resource.description, 136) : ''
+  const scene = sceneFor(resource)
+  const title = truncate(resource.title.replace(/\s+—\s+GitCMS$/, '').replace(/^GitCMS\s+—\s+/, ''), 90)
+
+  if (scene.type === 'text') {
+    const description = resource.description ? truncate(resource.description, 170) : ''
+    return (
+      <div style={{ width: WIDTH, height: HEIGHT, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '60px 72px', backgroundColor: 'white' }}>
+        <Brand />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+          <KindLabel resource={resource} />
+          <div style={{ display: 'flex', fontFamily: 'Source Serif 4', fontSize: title.length > 48 ? 64 : 76, fontWeight: 500, lineHeight: 1.08, letterSpacing: '-0.03em', color: TEXT }}>{title}</div>
+          {description ? <div style={{ display: 'flex', fontFamily: 'Geist', fontSize: 25, lineHeight: 1.45, color: MUTED, maxWidth: 960 }}>{description}</div> : null}
+        </div>
+        <span style={{ fontFamily: 'Geist', fontSize: 19, color: FAINT }}>{pathLabel(resource.htmlPath, 64)}</span>
+      </div>
+    )
+  }
 
   return (
-    <div style={{ width: 1200, height: 630, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', backgroundColor: 'white', padding: '72px 0 60px 80px', position: 'relative' }}>
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 6, backgroundColor: '#DCF986' }} />
-      <div style={{ position: 'absolute', top: 6, bottom: 0, left: 712, width: 1, backgroundColor: '#f5f5f5' }} />
-      <div style={{ position: 'absolute', top: 6, bottom: 0, left: 944, width: 1, backgroundColor: '#fafafa' }} />
-      <div style={{ display: 'flex', alignItems: 'center' }}><div style={{ display: 'flex', alignItems: 'center', gap: 16 }}><LogoSvg size={44} /><span style={{ fontFamily: 'Source Serif 4', fontSize: 36, fontWeight: 500, letterSpacing: '-0.02em', color: '#0a0a0a' }}>GitCMS</span></div></div>
-      <div style={{ display: 'flex', alignItems: 'center', flex: 1, justifyContent: 'space-between', gap: 40 }}>
-        <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', gap: 18, maxWidth: 560 }}>
-          <div style={{ display: 'flex', fontFamily: 'Geist', fontSize: 13, fontWeight: 500, color: '#7c3aed', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{kindLabel(resource)}</div>
-          <h1 style={{ fontFamily: 'Source Serif 4', fontSize: title.length > 42 ? 42 : 50, fontWeight: 400, lineHeight: 1.2, letterSpacing: '-0.025em', color: '#0a0a0a', margin: 0 }}>{title}</h1>
-          {description ? <p style={{ fontFamily: 'Geist', fontSize: 21, fontWeight: 400, lineHeight: 1.55, color: '#737373', margin: 0, maxWidth: 500 }}>{description}</p> : null}
+    <div style={{ width: WIDTH, height: HEIGHT, display: 'flex', backgroundColor: 'white' }}>
+      <div style={{ width: 660, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '60px 56px 56px 72px' }}>
+        <Brand />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+          <KindLabel resource={resource} />
+          <div style={{ display: 'flex', fontFamily: 'Source Serif 4', fontSize: shortTitle(title).length > 40 ? 54 : 64, fontWeight: 500, lineHeight: 1.08, letterSpacing: '-0.03em', color: TEXT }}>{shortTitle(title)}</div>
         </div>
-        <div style={{ width: 404, display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start', position: 'relative', overflow: 'visible', opacity: 0.84 }}><EditorMock /><div style={{ display: 'flex', position: 'absolute', left: 24, top: 356 }}><SlashMenuOverlay /></div></div>
+        <span style={{ fontFamily: 'Geist', fontSize: 19, color: FAINT }}>{pathLabel(resource.htmlPath, 40)}</span>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center' }}><span style={{ fontFamily: 'Geist', fontSize: 18, fontWeight: 500, color: '#a3a3a3', letterSpacing: '0.02em' }}>{pathLabel}</span></div>
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: INK, backgroundImage: 'radial-gradient(circle at 80% 0%, #262626, #0a0a0a 60%)' }}>
+        <Scene scene={scene} />
+      </div>
     </div>
   )
 }
@@ -201,7 +305,7 @@ function OgTemplate({ resource }: { resource: PublicResource }) {
 function getCachePath(resource: PublicResource, fontBytes: Awaited<ReturnType<typeof loadFonts>>) {
   const hash = createHash('sha256')
   hash.update(readFileSync(resolve('src/lib/og-image.tsx')))
-  hash.update(JSON.stringify({ title: resource.title, description: resource.description, kind: resource.kind, htmlPath: resource.htmlPath }))
+  hash.update(JSON.stringify({ id: resource.id, title: resource.title, description: resource.description, kind: resource.kind, htmlPath: resource.htmlPath, og: resource.og }))
   for (const font of fontBytes) hash.update(new Uint8Array(font.data))
   return resolve(CACHE_DIR, `${hash.digest('hex')}.png`)
 }

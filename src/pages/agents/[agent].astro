@@ -1,11 +1,27 @@
 ---
-import ContentLayout from '@/layouts/ContentLayout.astro'
-import { AgentDetailPage } from '@/components/landing/agent-detail-page'
+import { ArrowRight, Quote, ShieldCheck, Sparkles, Terminal, Workflow } from 'lucide-react'
+import MarketingLayout from '@/layouts/MarketingLayout.astro'
+import Section from '@/components/site/Section.astro'
+import SectionHeading from '@/components/site/SectionHeading.astro'
+import CopyButton from '@/components/site/CopyButton.astro'
+import CtaBand from '@/components/site/CtaBand.astro'
+import FaqList from '@/components/site/FaqList.astro'
+import AppWindow from '@/components/mock/AppWindow.astro'
+import AgentChatMock from '@/components/mock/AgentChatMock.astro'
+import BuilderSessionMock from '@/components/mock/BuilderSessionMock.astro'
+import DemoWindow from '@/components/mock/DemoWindow.astro'
+import LinkGrid from '@/components/sections/LinkGrid.astro'
+import ConnectionMethods from '@/components/agents/ConnectionMethods.astro'
+import { card, eyebrow, h1, heading, primaryButton, sub } from '@/components/site/styles'
 import {
+  AGENT_FAMILY_LABELS,
   agentList,
+  directoryAgentList,
   getAgentLandingDescription,
   getAgentLandingTitle,
 } from '@/lib/agent-data'
+import { AI_PROVIDERS } from '@/lib/ai-providers'
+import { MCP_CONNECTOR_URL } from '@/lib/mcp'
 import { faqStructuredData } from '@/lib/structured-data'
 
 export function getStaticPaths() {
@@ -13,13 +29,125 @@ export function getStaticPaths() {
 }
 
 const { agent } = Astro.props
-const structuredData = faqStructuredData(agent.faqs)
+const guided = agent.guidedProviderId ? AI_PROVIDERS.find((provider) => provider.id === agent.guidedProviderId) : undefined
+const chatUrls: Record<string, string> = { chatgpt: 'chatgpt.com', claude: 'claude.ai/new' }
+const others = directoryAgentList
+  .filter((other) => other.slug !== agent.slug)
+  .map((other) => ({ label: other.name, href: `/agents/${other.slug}/`, logo: other.logoPath }))
 ---
-<ContentLayout
+<MarketingLayout
   title={getAgentLandingTitle(agent)}
   description={getAgentLandingDescription(agent)}
-  path={`/agents/${agent.slug}`}
-  structuredData={structuredData}
+  structuredData={faqStructuredData(agent.faqs)}
 >
-  <AgentDetailPage agent={agent} client:load />
-</ContentLayout>
+  <Section first>
+    <div class="text-center">
+      <a href="/agents/" class={eyebrow}><img src={agent.logoPath} alt="" class="size-3.5 object-contain" /> GitCMS + {agent.name}</a>
+      <h1 class:list={['mx-auto mt-5 max-w-3xl', h1]}>{agent.heroTitle}</h1>
+      <p class:list={['mx-auto mt-5 max-w-2xl', sub]}>{agent.description}</p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href="#setup" class={primaryButton}>Connect {agent.name} <ArrowRight className="size-4" /></a>
+        <CopyButton text={MCP_CONNECTOR_URL} label="Copy connector URL" copiedLabel="Connector URL copied" />
+      </div>
+    </div>
+    {agent.family === 'coding'
+      ? (
+        <AppWindow url={`${agent.name} · acme-roofing`} height={460} class="mx-auto mt-16 max-w-5xl">
+          <BuilderSessionMock
+            agent={{ name: agent.name, logo: agent.logoPath }}
+            prompt="Make the copy editable for my client and set up GitCMS. Keep the design exactly the same."
+            work={['Read 6 components with hardcoded copy', 'Moved hero, pricing and FAQs into content/pages/home.md', 'Ran npx create-gitcms@latest --yes', 'Pushed .gitcms/ and content/ to main']}
+            reply="Done. The site looks the same, and Jess can now edit the headline, prices and FAQs in GitCMS."
+            sync="git pull · 1 commit"
+            previewUrl="localhost:4321"
+          />
+        </AppWindow>
+      )
+      : (
+        <AppWindow url={chatUrls[agent.slug] ?? `${agent.name} · GitCMS connector`} height={460} class="mx-auto mt-16 max-w-5xl">
+          <div class="h-full"><AgentChatMock agent={agent.slug === 'claude' ? undefined : { name: agent.name, logo: agent.logoPath }} /></div>
+        </AppWindow>
+      )}
+  </Section>
+
+  <Section>
+    <div class="grid gap-5 md:grid-cols-2">
+      <div class:list={['p-8', card]}>
+        <span class="text-[13px] font-medium text-[#898989]">{AGENT_FAMILY_LABELS[agent.family]}</span>
+        <h2 class:list={['mt-3 text-[26px]', heading]}>What is {agent.name}?</h2>
+        <p class="mt-3 text-[15px] leading-relaxed text-[#898989]">{agent.whatIs}</p>
+      </div>
+      <div class:list={['p-8', card]}>
+        <span class="text-[13px] font-medium text-[#898989]">Why connect it</span>
+        <h2 class:list={['mt-3 text-[26px]', heading]}>Why use {agent.name} with GitCMS?</h2>
+        <p class="mt-3 text-[15px] leading-relaxed text-[#898989]">{agent.whyGitcms}</p>
+      </div>
+    </div>
+  </Section>
+
+  <Section id="setup">
+    <SectionHeading eyebrow="Setup" icon={Terminal} title={`How to connect ${agent.name} to GitCMS`} />
+    <div class="mt-16 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
+      <ol class:list={['min-w-0 space-y-8 p-6 sm:p-8', card]}>
+        {agent.setupSteps.map((step, index) => (
+          <li class="flex gap-4">
+            <span class="grid size-7 shrink-0 place-items-center rounded-full bg-neutral-900 text-[12px] font-semibold text-white">{index + 1}</span>
+            <div class="min-w-0 pt-0.5">
+              <h3 class="text-[16px] font-semibold tracking-tight">{step.title}</h3>
+              <p class="mt-1.5 text-[14.5px] leading-relaxed text-[#898989]">{step.body}</p>
+              {step.code && <pre class="mt-3 overflow-x-auto rounded-lg bg-neutral-950 px-4 py-3 font-mono text-[12.5px] text-neutral-100">{step.code}</pre>}
+              {step.showConnector && (
+                <div class="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-neutral-200 bg-neutral-50 py-1.5 pl-3 pr-1.5">
+                  <code class="font-mono text-[13px] text-neutral-900">{MCP_CONNECTOR_URL}</code>
+                  <CopyButton size="sm" text={MCP_CONNECTOR_URL} label="Copy" class="ml-auto" />
+                </div>
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+      <div class="min-w-0 lg:sticky lg:top-24 lg:self-start">
+        {guided?.videoSrc
+          ? <video src={guided.videoSrc} autoplay controls loop muted playsinline preload="metadata" class="aspect-video w-full rounded-2xl border border-neutral-200 bg-neutral-100">{guided.name} setup walkthrough</video>
+          : <ConnectionMethods current={agent.family} currentLabel={agent.name} />}
+        <p class="mt-4 flex items-start gap-2 text-[13px] leading-relaxed text-[#898989]">
+          <ShieldCheck className="mt-0.5 size-4 shrink-0 text-emerald-600" />
+          {agent.compatibilityNote ?? 'MCP requires a licensed GitCMS site. Preview mode does not unlock the connector.'}
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <Section>
+    <SectionHeading eyebrow="Example prompts" icon={Sparkles} title={`What you can ask ${agent.name} to do`} />
+    <div class="mt-16 grid gap-5 md:grid-cols-3">
+      {agent.prompts.map((prompt) => (
+        <div class:list={['flex flex-col p-7', card]}>
+          <h3 class="text-[16px] font-semibold tracking-tight">{prompt.title}</h3>
+          <p class="mt-3 flex-1 rounded-lg bg-neutral-50 p-4 font-mono text-[12.5px] leading-relaxed text-neutral-700">{prompt.prompt}</p>
+          <CopyButton size="sm" text={prompt.prompt} label="Copy prompt" class="mt-5 self-start" />
+        </div>
+      ))}
+    </div>
+    <div class="mt-8 text-center"><a href="/prompts/" class="inline-flex items-center gap-1.5 text-sm font-medium">Browse the prompt library <ArrowRight className="size-4" /></a></div>
+  </Section>
+
+  <Section>
+    <SectionHeading eyebrow="One workflow" icon={Workflow} title={`${agent.name} proposes. Your team publishes.`} description={`Whatever ${agent.name} drafts lands in a content task on your real site. On sites with review before publish, people review it, comment, and decide what goes live, with Git recording every change.`} />
+    <DemoWindow demo="review" class="mt-16" />
+    {agent.slug !== 'claude' && <p class="mt-3 text-center text-[13px] text-[#898989]">Example shown with Claude. Every agent uses the same content task and review.</p>}
+  </Section>
+
+  <Section>
+    <SectionHeading eyebrow="FAQ" icon={Quote} title={`${agent.name} and GitCMS, answered`} />
+    <div class:list={['mx-auto mt-16 max-w-3xl px-8 py-3 [&>div]:border-y-0', card]}><FaqList faqs={agent.faqs} /></div>
+  </Section>
+
+  <Section>
+    <SectionHeading title="One workflow, whichever agent you choose" />
+    <div class="mt-12"><LinkGrid links={others} /></div>
+    <div class="mt-8 text-center"><a href="/agents/" class="inline-flex items-center gap-1.5 text-sm font-medium">Compare all agents <ArrowRight className="size-4" /></a></div>
+  </Section>
+
+  <CtaBand title={`Give ${agent.name} a safe way into your website`} description="Keep the agent you already use. GitCMS gives it structured access to your content, and gives your team the final say." />
+</MarketingLayout>

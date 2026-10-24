@@ -9,7 +9,7 @@ export type Testimonial = {
   name: string
   role: string
   /** Customer site or company; linking customers is fine, never competitors. */
-  site?: { label: string; href: string }
+  site?: { label: string; href?: string }
   avatarSrc?: string
   /** Short context chip, e.g. the move they made. */
   context: string
@@ -25,6 +25,7 @@ export const testimonials: ReadonlyArray<Testimonial> = [
     id: 'phil',
     name: 'Phil Henry',
     role: 'Founder',
+    site: { label: 'WebSynergetics' },
     avatarSrc: '/images/landing/users/phil-henry.webp',
     context: 'Agency handoff',
     persona: 'agency',
@@ -72,6 +73,18 @@ export const testimonials: ReadonlyArray<Testimonial> = [
     persona: 'startup',
     highlight: 'GitCMS helps me visualize and simplify my editing process.',
     quote: 'GitCMS helps me visualize and simplify my editing process.',
+    approved: true,
+  },
+  {
+    id: 'chinmay',
+    name: 'Chinmay Joshi',
+    role: 'CTO',
+    site: { label: 'ACTUAL Inc' },
+    avatarSrc: '/images/landing/users/chinmay-joshi.webp',
+    context: 'Startup team',
+    persona: 'startup',
+    highlight: 'GitCMS’s Notion-like editor is super simple to work with.',
+    quote: 'GitCMS’s Notion-like editor is super simple to work with.',
     approved: true,
   },
 ]

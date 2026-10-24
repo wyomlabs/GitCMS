@@ -1,5 +1,7 @@
 ---
-import '@/styles/global.css'
+// Document shell only. Each layout imports its Tailwind entry: global.css for
+// marketing pages, docs.css for /docs.
+import MdxCopyButtons from '@/components/mdx/MdxCopyButtons.astro'
 import { getSeo, type SeoOptions } from '@/lib/seo'
 import { PRODUCT_DEFINITION, PRODUCT_NAME, SITE_URL } from '@/lib/positioning'
 import { absolutePublicUrl, markdownPathForHtmlPath } from '@/lib/public-resources'
@@ -9,9 +11,10 @@ interface Props extends SeoOptions {
   structuredData?: unknown
 }
 
-const seo = getSeo(Astro.props)
+const page = new URL(Astro.url.pathname, Astro.site)
+const seo = getSeo(page, Astro.props)
 const { structuredData } = Astro.props
-const markdownAlternate = absolutePublicUrl(markdownPathForHtmlPath(Astro.props.path ?? '/'))
+const markdownAlternate = absolutePublicUrl(markdownPathForHtmlPath(page.pathname))
 const llmsIndex = absolutePublicUrl('/llms.txt')
 const siteStructuredData = [
   {
@@ -22,6 +25,7 @@ const siteStructuredData = [
     url: SITE_URL,
     logo: `${SITE_URL}/logo512.png`,
     description: PRODUCT_DEFINITION,
+    parentOrganization: { '@type': 'Organization', name: 'Wyom Labs', url: 'https://wyomlabs.com' },
     sameAs: [
       'https://x.com/gitcms_app',
       SITE_REPOSITORY_URL,
@@ -44,7 +48,7 @@ const siteStructuredData = [
     <meta name="theme-color" content="#DCF986" />
     <title>{seo.title}</title>
     <meta name="description" content={seo.description} />
-    <link rel="canonical" href={seo.canonical} />
+    {!seo.noIndex && <link rel="canonical" href={seo.canonical} />}
     <link rel="alternate" type="text/markdown" href={markdownAlternate} />
     <link rel="describedby" type="text/plain" href={llmsIndex} />
     <meta property="og:type" content={seo.type} />
@@ -78,5 +82,6 @@ const siteStructuredData = [
   </head>
   <body class="min-h-screen bg-background font-sans antialiased">
     <slot />
+    <MdxCopyButtons />
   </body>
 </html>

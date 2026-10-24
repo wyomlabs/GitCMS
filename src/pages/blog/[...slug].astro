@@ -5,10 +5,16 @@ import { Callout } from 'fumadocs-ui/components/callout'
 import { Steps, Step } from 'fumadocs-ui/components/steps'
 import { Card, Cards } from 'fumadocs-ui/components/card'
 import { InlineTOC } from 'fumadocs-ui/components/inline-toc'
-import ContentLayout from '@/layouts/ContentLayout.astro'
-import { BlogPostHeader } from '@/components/blog/blog-post-header'
+import { Clock } from 'lucide-react'
+import MarketingLayout from '@/layouts/MarketingLayout.astro'
+import Section from '@/components/site/Section.astro'
+import Breadcrumbs from '@/components/site/Breadcrumbs.astro'
+import CtaBand from '@/components/site/CtaBand.astro'
+import PostCard from '@/components/blog/PostCard.astro'
 import { BlogTOCSidebar } from '@/components/blog/blog-toc'
-import { BlogPostFooter } from '@/components/blog/blog-post-footer'
+import { card, h1, heading, prose, sub } from '@/components/site/styles'
+import { blogCategoryLabels } from '@/lib/blog'
+import { formatDate } from '@/lib/format-date'
 import ImageZoom from '@/components/docs/image-zoom.astro'
 import { getPublishedPosts, getRelatedPosts, readingTimeFromStructuredData } from '@/lib/content'
 import { structure } from 'fumadocs-core/mdx-plugins'
@@ -18,16 +24,11 @@ export async function getStaticPaths() {
   for (const post of await getPublishedPosts()) {
     const slug = post.id.replace(/\.mdx?$/, '')
     paths.push({ params: { slug }, props: { post } })
-    for (const redirect of post.data.redirects ?? []) {
-      paths.push({ params: { slug: redirect.replace(/^\/+|\/+$/g, '') }, props: { redirectTo: `/blog/${slug}` } })
-    }
   }
   return paths
 }
 
-const { post, redirectTo } = Astro.props
-if (redirectTo) return Astro.redirect(redirectTo, 301)
-if (!post) throw new Error('Blog post route is missing its post')
+const { post } = Astro.props
 
 const { Content, headings } = await render(post)
 const slug = post.id.replace(/\.mdx?$/, '')
@@ -36,7 +37,7 @@ const toc = headings
   .map((heading) => ({ title: heading.text, url: `#${heading.slug}`, depth: heading.depth }))
 const readingTime = readingTimeFromStructuredData(structure(post.body ?? ''))
 const relatedPosts = await getRelatedPosts(slug, post.data.tags, post.data.category, 3)
-const postPath = `/blog/${slug}`
+const postPath = `/blog/${slug}/`
 const ogImage = `${postPath}/og.png`
 const structuredData = {
   '@context': 'https://schema.org',
@@ -47,53 +48,70 @@ const structuredData = {
   dateModified: post.data.updatedDate ?? post.data.date,
   author: { '@type': 'Person', name: post.data.authors[0], url: 'https://gitcms.dev' },
   publisher: { '@type': 'Organization', name: 'GitCMS', url: 'https://gitcms.dev' },
-  url: `https://gitcms.dev${postPath}`,
+  url: new URL(postPath, Astro.site).href,
   image: `https://gitcms.dev${ogImage}`,
-  mainEntityOfPage: { '@type': 'WebPage', '@id': `https://gitcms.dev${postPath}` },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': new URL(postPath, Astro.site).href },
 }
 const mdxComponents = { ...defaultMdxComponents, Callout, Steps, Step, Card, Cards, img: ImageZoom }
 ---
-<ContentLayout
+<MarketingLayout
   title={`${post.data.title} — GitCMS Blog`}
   description={post.data.description}
-  path={postPath}
   ogImage={ogImage}
   type="article"
   publishedTime={post.data.date}
   authors={post.data.authors}
   structuredData={structuredData}
 >
-  <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16">
-    <BlogPostHeader
-      title={post.data.title}
-      description={post.data.description}
-      date={post.data.date}
-      updatedDate={post.data.updatedDate}
-      authors={post.data.authors}
-      readingTime={readingTime}
-      category={post.data.category}
-      tags={post.data.tags}
-    />
+  <Section first>
+    <header class="mx-auto max-w-3xl text-center">
+      <div class="flex justify-center"><Breadcrumbs items={[{ label: 'Blog', href: '/blog/' }, { label: blogCategoryLabels[post.data.category] }]} /></div>
+      <h1 class:list={['mt-6', h1]}>{post.data.title}</h1>
+      <p class:list={['mx-auto mt-5 max-w-2xl', sub]}>{post.data.description}</p>
+      <div class="mt-8 flex items-center justify-center gap-3 text-left">
+        <img src="/images/founder-waishnav.jpg" alt={post.data.authors[0]} class="size-10 rounded-full bg-neutral-100 object-cover" />
+        <div class="text-[13px]">
+          <div class="font-medium text-neutral-900">{post.data.authors[0]}</div>
+          <div class="flex flex-wrap items-center gap-x-2 text-[#898989]">
+            <time datetime={post.data.date}>{formatDate(post.data.date, 'long')}</time>
+            {post.data.updatedDate && post.data.updatedDate !== post.data.date && <><span class="text-neutral-300">·</span><span>Updated {formatDate(post.data.updatedDate, 'long')}</span></>}
+            <span class="text-neutral-300">·</span>
+            <span class="inline-flex items-center gap-1"><Clock className="size-3.5" /> {readingTime} min read</span>
+          </div>
+        </div>
+      </div>
+    </header>
 
     {toc.length > 0 && (
-      <div class="mt-8 lg:hidden">
+      <div class="mx-auto mt-12 max-w-3xl lg:hidden">
         <InlineTOC items={toc} client:load>On this page</InlineTOC>
       </div>
     )}
 
-    <div class="mt-10 grid grid-cols-1 gap-16 lg:grid-cols-[1fr_260px]">
-      <article class="min-w-0">
-        <div class="prose prose-neutral prose-lg max-w-none prose-headings:font-logo prose-headings:font-medium prose-headings:tracking-tight prose-a:text-neutral-900 prose-a:underline-offset-2 [&_:is(h1,h2,h3,h4,h5,h6)_a]:no-underline">
+    <div class="mt-12 grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_220px]">
+      <article class:list={['min-w-0 px-6 py-10 sm:px-12 sm:py-14', card]}>
+        <div class={prose}>
           <Content components={mdxComponents} />
         </div>
+        {post.data.tags && post.data.tags.length > 0 && (
+          <div class="mt-12 flex flex-wrap gap-2 border-t border-neutral-200 pt-6">
+            {post.data.tags.map((tag) => <span class="rounded-full bg-neutral-100 px-2.5 py-0.5 text-[12px] text-neutral-500">{tag}</span>)}
+          </div>
+        )}
       </article>
       {toc.length > 0 && (
-        <aside class="hidden lg:block lg:-mt-20">
+        <aside class="hidden lg:block">
           <BlogTOCSidebar toc={toc} shareTitle={post.data.title} client:load />
         </aside>
       )}
     </div>
+  </Section>
 
-    <BlogPostFooter relatedPosts={relatedPosts} />
-  </div>
-</ContentLayout>
+  {relatedPosts.length > 0 && (
+    <Section>
+      <h2 class:list={['text-[26px]', heading]}>Related posts</h2>
+      <div class="mt-8 grid gap-5 md:grid-cols-3">{relatedPosts.map((related) => <PostCard post={related} compact />)}</div>
+    </Section>
+  )}
+  <CtaBand />
+</MarketingLayout>

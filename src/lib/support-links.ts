@@ -2,4 +2,4 @@
 export const DISCORD_INVITE_URL = 'https://discord.gg/BApDVvqW43'
 
 /** This website's public source, which GitCMS edits as its own dogfood site. */
-export const SITE_REPOSITORY_URL = 'https://github.com/waishnav/GitCMS'
+export const SITE_REPOSITORY_URL = 'https://github.com/wyomlabs/GitCMS'

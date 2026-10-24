@@ -1,0 +1,78 @@
+---
+// An agent working through the GitCMS MCP server. The prompt is typed into
+// the composer and sent with the cursor; Claude then runs its tool calls one
+// after another (each spins, then checks), streams its reply, and hands the
+// change to a person for review instead of publishing. The take ends on a
+// click on Open review, which the product tour follows into the review.
+import { ArrowUp, Check, LoaderCircle, Plus } from 'lucide-react'
+import { GitCMSLogo } from '@/components/gitcms-logo'
+import Cursor from './Cursor.astro'
+
+interface Props {
+  class?: string
+  prompt?: string
+  /** The agent in the chat; defaults to Claude. `model` and `accent` style the composer. */
+  agent?: { name: string; logo: string; model?: string; accent?: string }
+}
+const {
+  class: className = '',
+  prompt = 'Update our pricing to the Q4 rates and mention 24/7 emergency service everywhere it applies.',
+  agent = { name: 'Claude', logo: '/ai-logos/claude-orange.svg', model: 'Opus 5.5', accent: '#d97757' },
+} = Astro.props
+
+const tools = [
+  { name: 'search_entries', detail: '“pricing” in Pages, Services · 6 entries' },
+  { name: 'update_entry', detail: 'pages/pricing.mdx · 3 fields' },
+  { name: 'update_entry', detail: 'services/*.mdx · 5 entries' },
+  { name: 'submit_for_review', detail: 'Content task #57' },
+] as const
+// Step the message is sent; everything in the thread follows it. Tool calls
+// run one per step, so `data-ms` is the pace of the agent's work.
+const sent = 3
+const reply = 'I drafted the changes on 6 pages. Nothing is live yet; Jess can review them in GitCMS.'
+---
+<div data-seq={sent + 6} data-final={sent + 6} data-ms="550" data-hold={`${sent - 1}:850 ${sent}:600 ${sent + 6}:2000`} class:list={['relative flex h-full flex-col bg-[#faf9f5] text-[12.5px] text-neutral-800', className]}>
+  <div class="flex-1 space-y-3 overflow-hidden px-5 py-4">
+    <div class="ml-auto w-fit max-w-[78%] rounded-2xl bg-[#f0eee6] px-3.5 py-2 leading-snug" data-at={sent}>{prompt}</div>
+    <div class="space-y-1.5" data-at={sent + 1} data-fx="fade">
+      <div class="flex items-center gap-1.5 text-[11.5px] text-neutral-500">
+        <img src={agent.logo} alt="" class="size-3.5" /> Working in GitCMS · acme-roofing.com
+      </div>
+      {tools.map((tool, index) => (
+        <div class="flex items-center gap-2 rounded-lg border border-neutral-200 bg-white px-2.5 py-1.5" data-at={sent + 1 + index}>
+          <GitCMSLogo className="size-3.5 shrink-0" />
+          <code class="text-[11px] font-medium text-neutral-900">{tool.name}</code>
+          <span class="truncate text-[11px] text-neutral-500">{tool.detail}</span>
+          <LoaderCircle className="rd-spin ml-auto size-3.5 shrink-0 text-neutral-400" data-at={sent + 1 + index} data-until={sent + 2 + index} data-fx="collapse" />
+          <Check className="ml-auto size-3.5 shrink-0 text-emerald-600" data-at={sent + 2 + index} data-fx="collapse" />
+        </div>
+      ))}
+    </div>
+    <div class="leading-snug" data-type data-at={sent + 5} data-fx="fade" data-speed="9" data-text={reply}></div>
+    <div class="rounded-xl border border-neutral-200 bg-white p-3" data-at={sent + 6}>
+      <div class="flex items-center gap-2">
+        <span class="rounded border border-violet-200 bg-violet-50 px-1.5 py-0.5 text-[10.5px] font-medium text-violet-700">#57 · In review</span>
+        <span class="text-[11.5px] font-medium text-neutral-900">Q4 pricing update</span>
+      </div>
+      <div class="mt-2 flex items-center justify-between text-[11px] text-neutral-500">
+        <span>6 entries · 14 fields changed</span>
+        <span data-cursor-at={sent + 6} class="rounded-md bg-neutral-900 px-2 py-1 font-medium text-white">Open review</span>
+      </div>
+    </div>
+  </div>
+  <!-- Composer: the prompt is typed here, then sent. -->
+  <div class="m-3 mt-0 rounded-2xl border border-neutral-200 bg-white px-3 py-2" data-cursor-at="0">
+    <div class="min-h-[2.6em] text-[12.5px] leading-snug text-neutral-800">
+      <span class="text-neutral-400" data-at="0" data-until="1" data-fx="collapse">How can I help you today?</span>
+      <span data-type data-at="1" data-until={sent} data-fx="collapse" data-speed="16" data-text={prompt}></span>
+      <span class="text-neutral-400" data-at={sent} data-fx="collapse">Reply to {agent.name}…</span>
+    </div>
+    <div class="mt-2 flex items-center gap-2 text-neutral-400">
+      <Plus className="size-3.5" />
+      <span class="inline-flex items-center gap-1 rounded-md border border-neutral-200 px-1.5 py-0.5 text-[10.5px] text-neutral-600"><GitCMSLogo className="size-3" /> GitCMS</span>
+      <span class="ml-auto text-[10.5px]">{agent.model}</span>
+      <span data-at="1" data-until={sent} data-fx="enable" data-cursor-at={sent - 1} class="grid size-6 place-items-center rounded-full text-white" style={`background-color: ${agent.accent ?? '#171717'}`}><ArrowUp className="size-3.5" /></span>
+    </div>
+  </div>
+  <Cursor />
+</div>

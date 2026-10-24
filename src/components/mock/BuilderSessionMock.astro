@@ -1,0 +1,131 @@
+---
+// A site-building agent's workspace, the way Cursor, Claude Code, Codex,
+// Lovable or Bolt look: the agent session on the left, the site's live
+// preview on the right. One take: the builder asks the agent to make the
+// copy editable, the agent works through it while the preview reloads and
+// still looks the same, then Day Two arrives: the client publishes a new
+// headline in GitCMS, the commit comes back into the session, and the
+// preview updates. Chat assistants use AgentChatMock instead.
+import { ArrowUp, Check, CornerDownLeft, LoaderCircle, RotateCw } from 'lucide-react'
+import { GitCMSLogo } from '@/components/gitcms-logo'
+import Cursor from './Cursor.astro'
+
+interface Props {
+  class?: string
+  agent: { name: string; logo: string }
+  prompt: string
+  /** The agent's work, one row per step. */
+  work: ReadonlyArray<string>
+  reply: string
+  /** How the client's GitCMS commit reaches the builder, e.g. "Pulled 1 commit from GitHub". */
+  sync: string
+  /** Address in the preview pane's bar. */
+  previewUrl: string
+  /** From lg up, end the session pane where the first of three cards below ends. */
+  alignToThirds?: boolean
+}
+const { class: className = '', agent, prompt, work, reply, sync, previewUrl, alignToThirds = false } = Astro.props
+
+// Step the prompt is sent; the work runs one row per step after it.
+const sent = 3
+const workStart = sent + 1
+const replyAt = workStart + work.length
+const dayTwo = replyAt + 1
+// The preview reloads while the agent edits components (the second row).
+const reloadAt = workStart + 1
+
+const headline = 'Emergency roof repair, 24/7'
+const edited = 'Same-day roof repair, 24/7'
+---
+<div data-seq={dayTwo} data-final={dayTwo} data-ms="650" data-hold={`${sent - 1}:850 ${sent}:600 ${replyAt}:1400 ${dayTwo}:2800`} class:list={['relative grid h-full grid-cols-[380px_1fr] grid-rows-1 bg-white text-[12.5px] text-neutral-800', alignToThirds && 'builder-thirds', className]}>
+  <!-- Agent session -->
+  <div class="flex min-w-0 flex-col border-r border-neutral-200 bg-neutral-50/60">
+    <div class="flex items-center gap-2 border-b border-neutral-200 px-4 py-2.5 text-[11.5px]">
+      <img src={agent.logo} alt="" class="size-3.5 object-contain" />
+      <span class="font-medium text-neutral-900">{agent.name}</span>
+      <span class="ml-auto truncate text-neutral-400">acme-roofing</span>
+    </div>
+    <div class="min-h-0 flex-1 space-y-3 overflow-hidden px-4 py-4">
+      <div class="ml-auto w-fit max-w-[88%] rounded-2xl bg-neutral-200/70 px-3.5 py-2 leading-snug" data-at={sent}>{prompt}</div>
+      <div class="space-y-1.5" data-at={workStart} data-fx="fade">
+        {work.map((row, index) => (
+          <div class="flex items-start gap-2 text-[11.5px] leading-snug text-neutral-600" data-at={workStart + index}>
+            <LoaderCircle className="rd-spin mt-px size-3.5 shrink-0 text-neutral-400" data-at={workStart + index} data-until={workStart + index + 1} data-fx="collapse" />
+            <Check className="mt-px size-3.5 shrink-0 text-emerald-600" data-at={workStart + index + 1} data-fx="collapse" />
+            <span>{row}</span>
+          </div>
+        ))}
+      </div>
+      <div class="leading-snug" data-type data-at={replyAt} data-fx="fade" data-speed="9" data-text={reply}></div>
+      <div class="flex items-start gap-2 rounded-lg border border-[#B5D74E]/60 bg-[#DCF986]/30 px-2.5 py-2 text-[11px] leading-snug text-neutral-700" data-at={dayTwo}>
+        <GitCMSLogo className="mt-px size-3.5 shrink-0" />
+        <span class="min-w-0">
+          <span class="block"><span class="font-medium text-neutral-900">Jess</span> published a new headline in GitCMS</span>
+          <span class="block text-neutral-500">{sync} · content/pages/home.md</span>
+        </span>
+      </div>
+    </div>
+    <div class="m-3 mt-0 rounded-xl border border-neutral-200 bg-white px-3 py-2" data-cursor-at="0">
+      <div class="min-h-[2.6em] leading-snug">
+        <span class="text-neutral-400" data-at="0" data-until="1" data-fx="collapse">Ask {agent.name} to build…</span>
+        <span data-type data-at="1" data-until={sent} data-fx="collapse" data-speed="16" data-text={prompt}></span>
+        <span class="text-neutral-400" data-at={sent} data-fx="collapse">Ask {agent.name} to build…</span>
+      </div>
+      <div class="mt-1.5 flex items-center gap-2 text-[10.5px] text-neutral-400">
+        <CornerDownLeft className="size-3" /> to send
+        <span data-at="1" data-until={sent} data-fx="enable" data-cursor-at={sent - 1} class="ml-auto grid size-6 place-items-center rounded-full bg-neutral-900 text-white"><ArrowUp className="size-3.5" /></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live preview of the site -->
+  <div class="flex min-w-0 flex-col p-3">
+    <div class="flex items-center gap-2 rounded-t-lg border border-neutral-200 bg-neutral-50 px-2.5 py-1.5 text-[11px] text-neutral-500">
+      <RotateCw className="size-3.5" />
+      <span class="min-w-0 flex-1 truncate rounded-md border border-neutral-200 bg-white px-2 py-0.5">{previewUrl}</span>
+      <span class="inline-flex items-center gap-1 whitespace-nowrap text-emerald-700" data-at={reloadAt + 1} data-until={dayTwo} data-fx="fade"><Check className="size-3" /> Looks the same</span>
+    </div>
+    <div class="relative min-h-0 flex-1 overflow-hidden rounded-b-lg border border-t-0 border-neutral-200 bg-[#f7f4ee] p-6">
+      <div class="flex items-center justify-between text-[11px] text-neutral-500"><span class="font-semibold text-neutral-900">Acme Roofing</span><span>Services · Areas · Contact</span></div>
+      <div class="absolute right-6 top-16 h-32 w-48 overflow-hidden rounded-lg bg-gradient-to-br from-sky-200 to-slate-300"></div>
+      <div class="mt-6 max-w-[62%]">
+        <span class="mb-2 inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-2 py-1 text-[10.5px] text-neutral-700 shadow-sm" data-at={dayTwo}>
+          <GitCMSLogo className="size-3" /> Edited by Jess in GitCMS
+        </span>
+        <h4 class="relative font-logo text-[25px] leading-tight text-neutral-900">
+          <span data-at="0" data-until={dayTwo} data-fx="collapse">{headline}</span>
+          <span class="rounded bg-[#DCF986]/70 box-decoration-clone px-1 -mx-1" data-at={dayTwo} data-fx="collapse">{edited}</span>
+        </h4>
+        <p class="mt-2 text-[12.5px] text-neutral-600">Fast, insured repairs across Austin.</p>
+        <span class="mt-5 inline-flex rounded-md bg-neutral-900 px-3 py-1.5 text-[11px] font-medium text-white">Call (512) 555-0142</span>
+      </div>
+      <div class="mt-10 grid grid-cols-3 gap-3">
+        {['Inspection · $219', 'Repair · $649', 'Replacement · Quote'].map((plan) => (
+          <div class="rounded-lg border border-neutral-200/80 bg-white/70 px-3 py-2.5 text-[11px] text-neutral-700">{plan}</div>
+        ))}
+      </div>
+      <div class="mt-8 text-[11px] font-semibold text-neutral-900">Questions</div>
+      <div class="mt-2 divide-y divide-neutral-200/80 rounded-lg border border-neutral-200/80 bg-white/70 text-[11px] text-neutral-600">
+        {['Do you work weekends?', 'Is the inspection really free with a repair?', 'Do you handle insurance claims?'].map((question) => (
+          <div class="px-3 py-2">{question}</div>
+        ))}
+      </div>
+      <!-- Reload veil while the agent edits components. -->
+      <div class="absolute inset-0 grid place-items-center bg-[#f7f4ee]/70" data-at={reloadAt} data-until={reloadAt + 1} data-fx="fade">
+        <LoaderCircle className="rd-spin size-5 text-neutral-400" />
+      </div>
+    </div>
+  </div>
+  <Cursor />
+</div>
+
+<style is:global>
+  /* The window is scaled (--frame-scale) to the width of a three-card row
+     with 20px gaps (lg:gap-5). In design px the first card ends at
+     (width - 40px / scale) / 3, less the window's 1px border. */
+  @media (min-width: 1024px) {
+    .builder-thirds {
+      grid-template-columns: calc((var(--frame-w) - 40px / var(--frame-scale, tan(atan2(100cqw, var(--frame-w))))) / 3 - 1px) 1fr;
+    }
+  }
+</style>

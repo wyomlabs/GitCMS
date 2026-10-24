@@ -1,0 +1,54 @@
+---
+// The founding license: what people can buy today, sold only until the
+// monthly plans in PricingTable launch. The urgency is factual (one payment,
+// gone at launch, keeps working after), plus a year of the Team plan charted
+// against the one-time price. Prices read from LICENSE_PRICING via
+// pricing-plans.
+import { ArrowRight, Check, Clock } from 'lucide-react'
+import { FOUNDING_FEATURES, FOUNDING_LICENSE, getUpcomingPlan } from '@/lib/pricing-plans'
+import { loginUrl } from '@/lib/start-login'
+import { heading } from '@/components/site/styles'
+
+// A year of the Team plan, month by month, against the one-time price.
+const team = getUpcomingPlan('team')
+const MONTHS = 12
+const yearly = team.monthlyPrice * MONTHS
+const bars = Array.from({ length: MONTHS }, (_, index) => {
+  const total = team.monthlyPrice * (index + 1)
+  return { total, height: (total / yearly) * 100, over: total > FOUNDING_LICENSE.sitePrice }
+})
+const licenseLine = (FOUNDING_LICENSE.sitePrice / yearly) * 100
+// The first month in which the plan has cost more than the license.
+const firstMonthOver = bars.findIndex((bar) => bar.over) + 1
+---
+<div class="relative overflow-hidden rounded-2xl bg-neutral-950 p-6 text-white sm:p-10">
+  <!-- A soft lime glow in the corner, the only colour on the card. -->
+  <div aria-hidden="true" class="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-[#DCF986]/15 blur-3xl"></div>
+  <div class="relative grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:items-center">
+    <div>
+      <span class="inline-flex items-center gap-1.5 rounded-full bg-[#DCF986] px-2.5 py-1 text-[12px] font-semibold text-neutral-950"><Clock className="size-3.5" /> Founding license · until monthly plans launch</span>
+      <h3 class:list={['mt-5 text-[30px] leading-tight sm:text-[38px]', heading]}>${FOUNDING_LICENSE.sitePrice} once per site.<br /><span class="text-neutral-400">Yours to keep.</span></h3>
+      <p class="mt-4 max-w-[520px] text-[15px] leading-relaxed text-neutral-400">GitCMS is moving to monthly plans soon. Until then, a site license is a single payment (${FOUNDING_LICENSE.seatPrice} per extra seat). Founding license holders never have to move to a monthly plan: it keeps working, with every future update.</p>
+      <ul class="mt-6 grid gap-x-6 gap-y-2.5 text-[14px] text-neutral-300 sm:grid-cols-2">
+        {FOUNDING_FEATURES.map((feature) => <li class="flex items-start gap-2"><Check className="mt-0.5 size-4 shrink-0 text-[#DCF986]" />{feature}</li>)}
+      </ul>
+      <a href={loginUrl('/')} class="mt-8 inline-flex h-11 items-center gap-2 rounded-xl bg-[#DCF986] px-5 text-[14px] font-semibold text-neutral-950 hover:bg-[#d4f47a]">Get the founding license <ArrowRight className="size-4" /></a>
+    </div>
+    <figure class="rounded-xl border border-white/10 bg-white/[0.04] p-6">
+      <figcaption class="flex items-baseline justify-between gap-4">
+        <span class="text-[13px] text-neutral-400">{team.name} plan, first year</span>
+        <span class="text-[13px] text-neutral-400"><span class="text-[22px] font-semibold tracking-tight text-white">${yearly}</span> vs <span class="font-semibold text-[#DCF986]">${FOUNDING_LICENSE.sitePrice}</span></span>
+      </figcaption>
+      <div class="relative mt-6 h-40" role="img" aria-label={`${team.name} at ${team.priceLabel} costs $${yearly} in a year; the founding license is $${FOUNDING_LICENSE.sitePrice} once.`}>
+        <div class="flex h-full items-end gap-1.5">
+          {bars.map((bar) => <span class:list={['flex-1 rounded-t-sm', bar.over ? 'bg-white/25' : 'bg-white/10']} style={`height: ${bar.height}%`}></span>)}
+        </div>
+        <div class="absolute inset-x-0 border-t-2 border-dashed border-[#DCF986]" style={`bottom: ${licenseLine}%`}>
+          <span class="absolute -top-6 left-0 rounded bg-[#DCF986] px-1.5 py-0.5 text-[11px] font-semibold text-neutral-950">${FOUNDING_LICENSE.sitePrice} once</span>
+        </div>
+      </div>
+      <div class="mt-2 flex justify-between text-[11px] text-neutral-500"><span>Month 1</span><span>Month {MONTHS}</span></div>
+      <p class="mt-5 text-[13px] leading-relaxed text-neutral-400">By month {firstMonthOver}, monthly has cost more. The founding license never does.</p>
+    </figure>
+  </div>
+</div>

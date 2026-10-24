@@ -1,0 +1,57 @@
+---
+// Fumadocs' CodeBlock and Heading are React client components, but Astro
+// renders MDX content on the server, outside any island, so their copy
+// buttons arrive as static HTML that does nothing. One delegated listener
+// gives them Fumadocs' behaviour: copy, show the check icon for 1.5s, then
+// restore. Selectors follow the markup fumadocs-ui renders for the two.
+import { Check, CopyCheck } from 'lucide-react'
+---
+<template data-mdx-icon="code"><Check /></template>
+<template data-mdx-icon="heading"><CopyCheck /></template>
+
+<script>
+  const CHECKED_MS = 1500
+  const pending = new WeakMap<HTMLButtonElement, { timer: number; idle: Node }>()
+
+  // Mirrors fumadocs' CopyButton: copy the <pre>, with ignored nodes as newlines.
+  const codeText = (figure: Element) => {
+    const clone = figure.querySelector('pre')?.cloneNode(true)
+    if (!(clone instanceof HTMLElement)) return null
+    clone.querySelectorAll('.nd-copy-ignore').forEach((node) => node.replaceWith('\n'))
+    return clone.textContent ?? ''
+  }
+
+  const headingUrl = (heading: Element) => {
+    const url = new URL(window.location.href)
+    url.hash = heading.id
+    return url.href
+  }
+
+  const showChecked = (button: HTMLButtonElement, kind: 'code' | 'heading') => {
+    const checkIcon = document.querySelector<HTMLTemplateElement>(`template[data-mdx-icon="${kind}"]`)?.content.firstElementChild
+    const current = button.querySelector('svg')
+    if (!checkIcon || !current) return
+    const previous = pending.get(button)
+    if (previous) window.clearTimeout(previous.timer)
+    const idle = previous?.idle ?? current.cloneNode(true)
+    current.replaceWith(checkIcon.cloneNode(true))
+    button.dataset.checked = ''
+    const timer = window.setTimeout(() => {
+      button.querySelector('svg')?.replaceWith(idle)
+      delete button.dataset.checked
+      pending.delete(button)
+    }, CHECKED_MS)
+    pending.set(button, { timer, idle })
+  }
+
+  document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Element)) return
+    const button = event.target.closest('button[aria-live="polite"]')
+    if (!(button instanceof HTMLButtonElement)) return
+    const figure = button.closest('figure.shiki')
+    const heading = button.parentElement?.matches('.group\\/heading[id]') ? button.parentElement : null
+    const text = figure ? codeText(figure) : heading ? headingUrl(heading) : null
+    if (text === null) return
+    navigator.clipboard.writeText(text).then(() => showChecked(button, figure ? 'code' : 'heading'))
+  })
+</script>

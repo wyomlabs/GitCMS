@@ -1,0 +1,148 @@
+---
+// Yearly cost of running marketing sites: drag-and-drop builders and
+// WordPress versus a code-first site on free static hosting plus GitCMS.
+// List prices billed yearly, October 2026. WordPress plugins and upkeep are
+// estimates; the page says so.
+import { UPCOMING_PLANS } from '@/lib/pricing-plans'
+
+interface Props {
+  /** Starting slider values, so each audience sees its own numbers first. */
+  sites?: number
+  editors?: number
+}
+const { sites = 3, editors = 4 } = Astro.props
+
+const options = [
+  { key: 'wordpress', name: 'WordPress', logo: '/logos/wordpress.svg', note: 'Managed hosting $30, premium plugins ~$20, updates and security upkeep ~$50, per site' },
+  { key: 'webflow', name: 'Webflow', logo: '/logos/webflow.svg', note: 'Premium site plan $25 per site; workspace seats extra' },
+  { key: 'framer', name: 'Framer', logo: '/logos/framer.svg', note: 'Pro site plan $30 per site, plus $20 per extra editor' },
+  { key: 'gitcms', name: 'Code-first + GitCMS', logo: '/brand/gitcms-logo.svg', note: 'Static hosting on Cloudflare, Vercel or Netlify free tiers, plus the cheapest GitCMS plan' },
+] as const
+
+const sliders = [
+  { key: 'sites', label: 'Websites', unit: ['site', 'sites'], value: sites, max: 25, marks: [1, 5, 10, 15, 20, 25] },
+  { key: 'editors', label: 'People editing', unit: ['person', 'people'], value: editors, max: 20, marks: [1, 5, 10, 15, 20] },
+]
+---
+<div data-cost class="grid gap-5 lg:grid-cols-[320px_1fr]">
+  <div class="rounded-2xl border border-neutral-200 bg-white p-8">
+    {sliders.map((slider, index) => (
+      <div class:list={[index > 0 && 'mt-8']}>
+        <label class="flex items-baseline justify-between text-sm text-neutral-600" for={`cost-${slider.key}`}>
+          {slider.label}
+          <span class="text-[15px] font-semibold tabular-nums text-neutral-900"><span data-out={slider.key}>{slider.value}</span> <span data-unit={slider.key} data-one={slider.unit[0]} data-many={slider.unit[1]} class="font-normal text-neutral-500">{slider.value === 1 ? slider.unit[0] : slider.unit[1]}</span></span>
+        </label>
+        <input id={`cost-${slider.key}`} data-in={slider.key} type="range" min="1" max={slider.max} value={slider.value} class="cost-range mt-3" style={`--fill: ${((slider.value - 1) / (slider.max - 1)) * 100}%`} />
+        <div class="relative mt-2 h-4 text-[11px] tabular-nums text-neutral-400" aria-hidden="true">
+          {slider.marks.map((mark) => <span class="absolute -translate-x-1/2" style={`left: calc(11px + (100% - 22px) * ${(mark - 1) / (slider.max - 1)})`}>{mark}</span>)}
+        </div>
+      </div>
+    ))}
+    <p class="mt-6 text-[13px] leading-relaxed text-neutral-500">The site itself costs a coding agent an afternoon. What you pay for every month is running it.</p>
+  </div>
+  <div class="rounded-2xl border border-neutral-200 bg-white p-8">
+    <ul class="space-y-7">
+      {options.map((option) => (
+        <li data-option={option.key}>
+          <div class="flex items-center gap-2 text-sm">
+            <img src={option.logo} alt="" class="size-4 opacity-80" />
+            <span class="font-medium text-neutral-900">{option.name}</span>
+            <span class="ml-auto font-semibold tabular-nums text-neutral-900"><span data-yearly>$0</span><span class="font-normal text-neutral-400">/yr</span></span>
+          </div>
+          <div class="mt-2 h-2.5 overflow-hidden rounded-full bg-neutral-100">
+            <div data-bar class:list={['h-full rounded-full transition-[width] duration-500', option.key === 'gitcms' ? 'bg-[#DCF986] ring-1 ring-inset ring-[#B5D74E]' : 'bg-neutral-800']} style="width: 0%"></div>
+          </div>
+          <p class="mt-1.5 text-[12px] text-neutral-400">{option.note}</p>
+        </li>
+      ))}
+    </ul>
+    <p class="mt-6 border-t border-neutral-100 pt-4 text-[12px] text-neutral-400">List prices billed yearly, October 2026. WordPress plugin and upkeep figures are estimates; agency retainers usually cost more.</p>
+  </div>
+  <script type="application/json" data-cost-plans set:html={JSON.stringify(UPCOMING_PLANS)}></script>
+</div>
+
+<script>
+  import type { UpcomingPlan } from '@/lib/pricing-plans'
+  import { monthlyCost } from '@/lib/pricing-plans'
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-cost]')) {
+    const plans: UpcomingPlan[] = JSON.parse(root.querySelector('[data-cost-plans]')?.textContent ?? '[]')
+    const input = (name: string) => Number(root.querySelector<HTMLInputElement>(`[data-in="${name}"]`)?.value ?? 1)
+    const gitcmsMonthly = (sites: number, editors: number) => {
+      const eligible = plans.filter((plan) => plan.key !== 'preview' && (editors === 1 || plan.key !== 'solo'))
+      return Math.min(...eligible.map((plan) => monthlyCost(plan, sites)))
+    }
+    const monthly: Record<string, (sites: number, editors: number) => number> = {
+      wordpress: (sites) => sites * (30 + 20 + 50),
+      webflow: (sites) => sites * 25,
+      framer: (sites, editors) => sites * 30 + Math.max(0, editors - 1) * 20,
+      gitcms: gitcmsMonthly,
+    }
+    const render = () => {
+      const sites = input('sites')
+      const editors = input('editors')
+      for (const range of root.querySelectorAll<HTMLInputElement>('input[type="range"]')) {
+        const name = range.dataset.in ?? ''
+        const value = Number(range.value)
+        range.style.setProperty('--fill', `${((value - Number(range.min)) / (Number(range.max) - Number(range.min))) * 100}%`)
+        const out = root.querySelector(`[data-out="${name}"]`)
+        if (out) out.textContent = String(value)
+        const unit = root.querySelector<HTMLElement>(`[data-unit="${name}"]`)
+        if (unit) unit.textContent = (value === 1 ? unit.dataset.one : unit.dataset.many) ?? ''
+      }
+      const yearly = Object.fromEntries(Object.entries(monthly).map(([key, fn]) => [key, fn(sites, editors) * 12]))
+      const max = Math.max(...Object.values(yearly))
+      for (const row of root.querySelectorAll<HTMLElement>('[data-option]')) {
+        const value = yearly[row.dataset.option ?? ''] ?? 0
+        const label = row.querySelector('[data-yearly]')
+        if (label) label.textContent = `$${value.toLocaleString('en-US')}`
+        const bar = row.querySelector<HTMLElement>('[data-bar]')
+        if (bar) bar.style.width = `${Math.max(2, (value / max) * 100)}%`
+      }
+    }
+    for (const range of root.querySelectorAll('input[type="range"]')) range.addEventListener('input', render)
+    render()
+  }
+</script>
+
+<style>
+  /* Custom range: a filled track (--fill, kept in sync by the script) and a
+     white thumb that lifts on hover and drag. Both engines need their own
+     pseudo-elements, so the thumb rules are repeated. Tick labels assume the
+     22px thumb, whose centre travels from 11px to 100% - 11px. */
+  .cost-range {
+    --fill: 0%;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 9999px;
+    background: linear-gradient(to right, #171717 var(--fill), #e5e5e5 var(--fill));
+    cursor: pointer;
+    outline: none;
+  }
+  .cost-range::-webkit-slider-thumb {
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 9999px;
+    background: #fff;
+    border: 1px solid #d4d4d4;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 2px 6px rgb(0 0 0 / 0.08);
+    transition: transform 150ms ease-out, box-shadow 150ms ease-out;
+  }
+  .cost-range::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 9999px;
+    background: #fff;
+    border: 1px solid #d4d4d4;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.08), 0 2px 6px rgb(0 0 0 / 0.08);
+    transition: transform 150ms ease-out, box-shadow 150ms ease-out;
+  }
+  .cost-range:hover::-webkit-slider-thumb { transform: scale(1.08); }
+  .cost-range:hover::-moz-range-thumb { transform: scale(1.08); }
+  .cost-range:active::-webkit-slider-thumb { transform: scale(1.12); box-shadow: 0 0 0 6px rgb(220 249 134 / 0.6), 0 2px 6px rgb(0 0 0 / 0.12); }
+  .cost-range:active::-moz-range-thumb { transform: scale(1.12); box-shadow: 0 0 0 6px rgb(220 249 134 / 0.6), 0 2px 6px rgb(0 0 0 / 0.12); }
+  .cost-range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 4px rgb(23 23 23 / 0.15); }
+  .cost-range:focus-visible::-moz-range-thumb { box-shadow: 0 0 0 4px rgb(23 23 23 / 0.15); }
+</style>

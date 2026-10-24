@@ -16,7 +16,7 @@ It is useful when:
 Run from your repository root:
 
 ```bash
-npm init gitcms@latest
+npx create-gitcms@latest
 ```
 
 For non-interactive setup (accept inferred defaults):
@@ -51,7 +51,7 @@ Examples:
 
 ```bash
 # Auto mode (default)
-npm init gitcms@latest
+npx create-gitcms@latest
 
 # Force monorepo mode with explicit site roots
 npx create-gitcms@latest --mode monorepo --site-root apps/docs --site-root apps/blog
@@ -100,7 +100,7 @@ Use create-gitcms to generate `.gitcms` configuration for each real content site
 Inspect the repo first, then prefer the CLI over hand-writing config.
 
 Preferred commands from repo root:
-- Interactive: npm init gitcms@latest
+- Interactive: npx create-gitcms@latest
 - Agentic: npx create-gitcms@latest --yes [--mode ...] [--site-root ...] [--website-url ...] [--dry-run] [--force]
 
 Flag guidance:

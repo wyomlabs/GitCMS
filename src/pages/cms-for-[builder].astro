@@ -1,0 +1,162 @@
+---
+// One page per AI site builder that keeps projects in GitHub (Lovable, Bolt,
+// Emergent): the builder keeps building, one prompt moves copy into files,
+// and clients edit those files in GitCMS while their commits come back into
+// the builder. The prompt is the prompt-library entry, so the two never drift.
+import { getEntry } from 'astro:content'
+import { ArrowRight, Braces, FileCode2, FileText, Folder, GitBranch, Quote, RefreshCw, Sparkles, UserRound } from 'lucide-react'
+import MarketingLayout from '@/layouts/MarketingLayout.astro'
+import Section from '@/components/site/Section.astro'
+import SectionHeading from '@/components/site/SectionHeading.astro'
+import CopyButton from '@/components/site/CopyButton.astro'
+import CtaBand from '@/components/site/CtaBand.astro'
+import FaqList from '@/components/site/FaqList.astro'
+import ProductTour from '@/components/sections/ProductTour.astro'
+import AppWindow from '@/components/mock/AppWindow.astro'
+import BuilderSessionMock from '@/components/mock/BuilderSessionMock.astro'
+import LinkGrid from '@/components/sections/LinkGrid.astro'
+import { card, eyebrow, h1, heading, primaryButton, sub } from '@/components/site/styles'
+import { FRAMEWORK_LINKS } from '@/lib/site-nav'
+import { getBuilderDirectoryLinks, getSiteBuilderDescription, getSiteBuilderSyncLine, getSiteBuilderTitle, siteBuilders } from '@/lib/site-builders'
+import { promptText } from '@/lib/prompt-text'
+import { loginUrl } from '@/lib/start-login'
+import { faqStructuredData } from '@/lib/structured-data'
+
+export function getStaticPaths() {
+  return siteBuilders.map((builder) => ({ params: { builder: builder.slug }, props: { builder } }))
+}
+
+const { builder } = Astro.props
+const promptEntry = await getEntry('prompts', 'make-ai-built-site-editable')
+const prompt = promptText(promptEntry?.body)
+if (!prompt) throw new Error('The make-ai-built-site-editable prompt has no ```text block')
+
+const others = [
+  ...getBuilderDirectoryLinks().filter((link) => link.href !== `/cms-for-${builder.slug}/`),
+  ...FRAMEWORK_LINKS.filter((link) => ['Astro', 'Next.js'].includes(link.label)),
+]
+const steps = [
+  { icon: Sparkles, title: `Paste one prompt into ${builder.name}`, body: `${builder.name} moves the copy out of its components into Markdown and JSON files. The site looks exactly the same.` },
+  { icon: GitBranch, title: 'Connect the repository to GitCMS', body: `${builder.connect} In GitCMS, Add site finds your pages, posts and site data in it.` },
+  { icon: RefreshCw, title: builder.autoSync ? 'Clients edit, and it syncs back' : 'Clients edit, you pull and keep building', body: `Your client edits in GitCMS and every save is a commit. ${builder.syncBack}` },
+]
+const tree = [
+  { icon: FileText, path: 'content/pages/home.md', note: 'a page your client edits as a form' },
+  { icon: Folder, path: 'content/blog/', note: 'posts, one Markdown file each' },
+  { icon: Braces, path: 'data/site.json', note: 'navigation, footer and contact details' },
+  { icon: FileCode2, path: 'src/components/', note: 'your design, unchanged' },
+]
+const frontmatter = `---
+heroHeadline: Emergency roof repair, 24/7
+heroSubheading: Fast, insured repairs across Austin.
+plans:
+  - name: Inspection
+    price: $219
+  - name: Repair
+    price: $649
+faqs:
+  - question: Do you work weekends?
+    answer: Yes, crews are on call 24/7.
+---`
+const faqs = builder.faqs
+---
+<MarketingLayout
+  title={`${getSiteBuilderTitle(builder)} — GitCMS`}
+  description={getSiteBuilderDescription(builder)}
+  structuredData={faqStructuredData(faqs)}
+>
+  <Section first>
+    <div class="text-center">
+      <span class={eyebrow}><img src={builder.logo} alt="" class="size-3.5" /> GitCMS for {builder.name}</span>
+      <h1 class:list={['mx-auto mt-5 max-w-3xl', h1]}>Built it with {builder.name}? Let your client run it.</h1>
+      <p class:list={['mx-auto mt-5 max-w-2xl', sub]}>Keep building in {builder.name}. One prompt moves the site’s copy into files, and GitCMS gives your client a visual editor for them, with review before anything goes live. {getSiteBuilderSyncLine(builder)}</p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <CopyButton tone="lime" text={prompt} label={`Copy the ${builder.name} prompt`} copiedLabel={`Copied. Paste it into ${builder.name}`} />
+        <a href={loginUrl('/')} class={primaryButton}>Connect your site <ArrowRight className="size-4" /></a>
+      </div>
+    </div>
+    <AppWindow url={`${builder.name} · acme-roofing`} height={460} fill class="mt-16">
+      <BuilderSessionMock
+        agent={{ name: builder.name, logo: builder.logo }}
+        prompt="Make the copy editable for my client. Keep the design exactly the same."
+        work={['Read 6 components with hardcoded copy', 'Moved hero, pricing and FAQs into content/pages/home.md', 'Moved navigation and footer into data/site.json', builder.autoSync ? 'Synced to GitHub' : 'Saved to GitHub']}
+        reply="Done. The site looks the same. Add the repository in GitCMS and Jess can edit the headline, prices and FAQs."
+        sync={builder.autoSync ? 'Synced from GitHub' : 'Pulled from GitHub'}
+        previewUrl="Preview · /"
+        alignToThirds
+      />
+    </AppWindow>
+    <ol class="mt-8 grid gap-5 lg:grid-cols-3">
+      {steps.map(({ icon: Icon, title, body }, index) => (
+        <li class:list={['flex flex-col p-6 sm:p-7', card]}>
+          <span class="flex items-center gap-2 font-mono text-[12px] text-neutral-400"><Icon className="size-4 text-neutral-900" /> 0{index + 1}</span>
+          <h2 class="mt-4 text-[18px] font-semibold tracking-[-0.02em] text-neutral-900">{title}</h2>
+          <p class="mt-2 text-[14.5px] leading-relaxed text-[#898989]">{body}</p>
+        </li>
+      ))}
+    </ol>
+  </Section>
+
+  <Section>
+    <SectionHeading eyebrow="Two jobs, two tools" icon={UserRound} title={`${builder.name} for building. GitCMS for running.`} description={`${builder.name} is great at building ${builder.stack}. It isn’t made for the hundredth copy change: every edit costs a prompt, can move the layout, and needs your login. GitCMS takes that part.`} />
+    <div class="mt-16 grid gap-5 lg:grid-cols-2">
+      <div class:list={['p-6 sm:p-8', card]}>
+        <span class="flex items-center gap-2 text-[13px] font-medium text-neutral-900"><img src={builder.logo} alt="" class="size-4" /> You, in {builder.name}</span>
+        <ul class="mt-4 space-y-2.5 text-[15px] leading-relaxed text-neutral-600">
+          <li>New pages, sections and layout</li>
+          <li>Design changes and features</li>
+          <li>Anything that changes code</li>
+        </ul>
+      </div>
+      <div class="rounded-2xl border border-[#B5D74E]/50 bg-[#DCF986]/25 p-6 sm:p-8">
+        <span class="flex items-center gap-2 text-[13px] font-medium text-neutral-900"><UserRound className="size-4" /> Your client, in GitCMS</span>
+        <ul class="mt-4 space-y-2.5 text-[15px] leading-relaxed text-neutral-700">
+          <li>Headlines, prices, opening hours and FAQs</li>
+          <li>Blog posts and photos</li>
+          <li>The footer, menu and contact details</li>
+        </ul>
+      </div>
+    </div>
+  </Section>
+
+  <Section>
+    <SectionHeading eyebrow="What the prompt changes" icon={FileText} title="Copy in files, design in code" description={`The prompt tells ${builder.name} to keep every component as it is and only swap hardcoded text for values from content files. GitCMS reads those files and shows each page as a form.`} />
+    <div class="mt-16 grid gap-5 lg:grid-cols-2">
+      <div class:list={['p-6 sm:p-8', card]}>
+        <ul class="space-y-2 font-mono text-[13px]">
+          {tree.map(({ icon: Icon, path, note }) => (
+            <li class="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2.5">
+              <Icon className="size-4 shrink-0 text-neutral-400" />
+              <span class="text-neutral-900">{path}</span>
+              <span class="ml-auto font-sans text-[12px] text-[#898989]">{note}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="mt-5 text-[14px] leading-relaxed text-[#898989]">No database and no API. The files are bundled when the site builds, the same way the copy was before.</p>
+      </div>
+      <div class:list={['overflow-hidden', card]}>
+        <div class="border-b border-neutral-200 px-5 py-3 font-mono text-[12px] text-neutral-500">content/pages/home.md</div>
+        <pre class="overflow-x-auto px-5 py-4 font-mono text-[12.5px] leading-relaxed text-neutral-700">{frontmatter}</pre>
+        <p class="border-t border-neutral-200 px-5 py-3 text-[13px] text-[#898989]">In GitCMS: a headline field, a list of plans and a list of FAQs.</p>
+      </div>
+    </div>
+  </Section>
+
+  <Section id="product">
+    <SectionHeading eyebrow="After the handoff" icon={GitBranch} title="Edits, reviews and agents in one place" description={`Your client edits visually, you review before it goes live, and AI agents can draft changes too. Every published change lands in the repository you build ${builder.name} from.`} />
+    <div class="mt-16 text-left"><ProductTour /></div>
+  </Section>
+
+  <Section>
+    <SectionHeading eyebrow="FAQ" icon={Quote} title={`${builder.name} and GitCMS, answered`} />
+    <div class:list={['mx-auto mt-16 max-w-3xl px-8 py-3 [&>div]:border-y-0', card]}><FaqList faqs={faqs} /></div>
+    <p class="mt-8 text-center text-[14px] text-[#898989]">Setting it up? Follow the <a href="/docs/getting-started/ai-site-builders/" class="text-neutral-900 underline underline-offset-2">AI site builders guide</a>.</p>
+  </Section>
+
+  <Section>
+    <SectionHeading title="Built somewhere else?" description="GitCMS edits the files in your repository, whichever tool wrote the code." />
+    <div class="mt-12"><LinkGrid links={others} /></div>
+  </Section>
+
+  <CtaBand title={`Hand off your ${builder.name} site`} description={`Connect the repository behind your ${builder.name} project, invite your client, and keep building while they edit.`} />
+</MarketingLayout>

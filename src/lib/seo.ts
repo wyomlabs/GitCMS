@@ -14,7 +14,6 @@ const TWITTER_HANDLE = '@gitcms_app'
 export type SeoOptions = {
   title?: string
   description?: string
-  path?: string
   ogImage?: string
   type?: 'website' | 'article'
   publishedTime?: string
@@ -26,12 +25,16 @@ export function absoluteSiteUrl(path = '/') {
   return new URL(path, SITE_URL).toString()
 }
 
-export function getSeo(options: SeoOptions = {}) {
+/**
+ * `page` is the page's own URL (`Astro.url` against `Astro.site`). With
+ * `trailingSlash: 'always'` it ends in a slash, the address Cloudflare
+ * serves with a 200, so it is the canonical as is.
+ */
+export function getSeo(page: URL, options: SeoOptions = {}) {
   const title = options.title ?? DEFAULT_TITLE
   const description = options.description ?? DEFAULT_DESCRIPTION
-  const path = options.path ?? '/'
-  const canonical = absoluteSiteUrl(path)
-  const ogImage = absoluteSiteUrl(options.ogImage ?? ogPathForHtmlPath(path))
+  const canonical = page.toString()
+  const ogImage = absoluteSiteUrl(options.ogImage ?? ogPathForHtmlPath(page.pathname))
 
   return {
     title,

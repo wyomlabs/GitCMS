@@ -1,0 +1,17 @@
+---
+// Trail above a detail page's heading. The last item is the current page.
+import { ChevronRight } from 'lucide-react'
+
+interface Props {
+  items: ReadonlyArray<{ label: string; href?: string }>
+}
+const { items } = Astro.props
+---
+<nav aria-label="Breadcrumb" class="flex flex-wrap items-center gap-1.5 text-[13px] text-[#898989]">
+  {items.map((item, index) => (
+    <>
+      {index > 0 && <ChevronRight className="size-3.5 text-neutral-300" />}
+      {item.href ? <a href={item.href} class="transition-colors hover:text-neutral-900">{item.label}</a> : <span class="text-neutral-700">{item.label}</span>}
+    </>
+  ))}
+</nav>

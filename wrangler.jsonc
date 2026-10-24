@@ -17,7 +17,12 @@
     "run_worker_first": [
       "/docs.mdx",
       "/docs/*.mdx",
-      "/docs/**/*.mdx"
+      "/docs/**/*.mdx",
+      "/*.md",
+      "/**/*.md",
+      "/llms.txt",
+      "/llms-full.txt",
+      "/**/llms.txt"
     ]
   }
 }

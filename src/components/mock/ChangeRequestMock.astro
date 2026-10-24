@@ -1,0 +1,125 @@
+---
+// Change Requests, start to finish, as one continuous take: turn on Select
+// element, pin three pieces of feedback (typing each comment), copy the
+// prompt for a coding agent, watch the agent open a pull request and its
+// preview deploy, then switch to the preview and see each pin checked.
+// Mirrors DESIGN.md "Change Requests": one bordered site window, no shadow.
+// Steps 0–6 select and comment, 7–9 hand off, 10–12 verify (the homepage's
+// chapter cards jump to these).
+import { Check, Copy, LoaderCircle, MousePointerClick, RotateCw } from 'lucide-react'
+import Cursor from './Cursor.astro'
+
+const feedback = [
+  { ref: 'F1', who: 'Jess', role: 'Client', text: 'Make the phone number bigger on mobile', status: 'Changed on preview', at: 2 },
+  { ref: 'F2', who: 'Sam', role: 'Marketing', text: 'Use the new hail damage photo here', status: 'Changed on preview', at: 4 },
+  { ref: 'F3', who: 'Jess', role: 'Client', text: 'Add “Licensed & insured” under the headline', status: 'Still matches', at: 6 },
+] as const
+const [f1, f2, f3] = feedback
+const previewAt = 11
+
+const pin = 'absolute -right-2.5 -top-2.5 z-10 grid size-5 place-items-center rounded-full bg-violet-600 text-[9px] font-semibold text-white ring-[3px] ring-violet-200'
+const outline = 'pointer-events-none absolute -inset-1.5 rounded-lg border-2 border-dashed border-violet-400'
+const composer = 'absolute z-20 w-64 rounded-xl border border-neutral-200 bg-white p-2.5 text-left font-sans shadow-[0_12px_32px_-12px_rgba(0,0,0,0.35)]'
+---
+<div data-seq="12" data-ms="900" data-hold="8:1500 9:1600 11:1300 12:2600" data-final="12" class="relative grid h-full grid-cols-[1fr_300px] bg-white text-[12px]">
+  <div class="flex min-w-0 flex-col border-r border-neutral-200 p-3">
+    <!-- Site browser bar -->
+    <div class="flex items-center gap-2 rounded-t-lg border border-neutral-200 bg-neutral-50 px-2.5 py-1.5 text-[11px] text-neutral-500">
+      <span data-cursor-at="10" class="inline-flex overflow-hidden rounded-md border border-neutral-200 bg-white">
+        <span class="px-2 py-0.5" data-at="0" data-until={previewAt} data-fx="collapse">Live site</span>
+        <span class="px-2 py-0.5 text-neutral-400" data-at="0" data-until={previewAt} data-fx="collapse">Preview</span>
+        <span class="px-2 py-0.5 text-neutral-400" data-at={previewAt} data-fx="collapse">Live site</span>
+        <span class="bg-neutral-900 px-2 py-0.5 text-white" data-at={previewAt} data-fx="collapse">Preview</span>
+      </span>
+      <span class="min-w-0 flex-1 truncate rounded-md border border-neutral-200 bg-white px-2 py-0.5">
+        <span data-at="0" data-until={previewAt} data-fx="collapse">acme-roofing.com/services</span>
+        <span data-at={previewAt} data-fx="collapse">cr-62.acme-roofing.pages.dev/services</span>
+      </span>
+      <RotateCw className="size-3.5" />
+      <span data-cursor-at="0" data-at="1" data-until="7" data-fx="state" class="inline-flex items-center gap-1 rounded-md border border-neutral-200 bg-white px-1.5 py-0.5 [&.on]:border-violet-300 [&.on]:bg-violet-50 [&.on]:text-violet-700"><MousePointerClick className="size-3.5" /> Select element</span>
+    </div>
+    <!-- The site under review -->
+    <div class="relative flex-1 rounded-b-lg border border-t-0 border-neutral-200 bg-[#f7f4ee] p-6">
+      <div class="flex items-center justify-between text-[11px] text-neutral-500"><span class="font-semibold text-neutral-900">Acme Roofing</span><span>Services · Areas · Contact</span></div>
+      <div class="mt-8 max-w-[62%]">
+        <h4 data-cursor-at="5" class="relative inline-block font-logo text-[28px] leading-tight text-neutral-900">
+          Emergency roof repair, 24/7
+          <span class={outline} data-at={f3.at} data-until={f3.at + 1} data-fx="fade"></span>
+          <span class={pin} data-at={f3.at}>F3</span>
+          <span class:list={[composer, 'left-0 top-full mt-3']} data-at={f3.at} data-until={f3.at + 1}>
+            <span class="flex items-center gap-1.5 text-[10.5px] text-neutral-500"><span class="grid size-4 place-items-center rounded-full bg-neutral-900 text-[8px] font-semibold text-white">J</span>Jess</span>
+            <span class="mt-1.5 block min-h-[34px] rounded-md border border-neutral-200 px-2 py-1.5 text-[11.5px] leading-snug text-neutral-800" data-type data-at={f3.at} data-text={f3.text}></span>
+            <span class="mt-2 flex justify-end"><span data-cursor-at={f3.at} class="rounded-md bg-neutral-900 px-2 py-1 text-[10.5px] font-medium text-white">Comment</span></span>
+          </span>
+        </h4>
+        <p class="mt-2 text-[12px] text-neutral-600">Fast, insured repairs across Austin.</p>
+        <div class="mt-4">
+          <span data-cursor-at="1" class="relative inline-flex items-center gap-1 rounded-md bg-neutral-900 px-3 py-1.5 text-[11px] font-medium text-white">
+            Call
+            <span data-at="0" data-until={previewAt} data-fx="collapse">(512) 555-0142</span>
+            <span class="text-[14px] font-semibold" data-at={previewAt} data-fx="collapse">(512) 555-0142</span>
+            <span class={outline} data-at={f1.at} data-until={f1.at + 1} data-fx="fade"></span>
+            <span class={pin} data-at={f1.at}>F1</span>
+            <span class:list={[composer, 'left-0 top-full mt-3 font-normal']} data-at={f1.at} data-until={f1.at + 1}>
+              <span class="flex items-center gap-1.5 text-[10.5px] text-neutral-500"><span class="grid size-4 place-items-center rounded-full bg-neutral-900 text-[8px] font-semibold text-white">J</span>Jess</span>
+              <span class="mt-1.5 block min-h-[34px] rounded-md border border-neutral-200 px-2 py-1.5 text-[11.5px] leading-snug text-neutral-800" data-type data-at={f1.at} data-text={f1.text}></span>
+              <span class="mt-2 flex justify-end"><span data-cursor-at={f1.at} class="rounded-md bg-neutral-900 px-2 py-1 text-[10.5px] font-medium text-white">Comment</span></span>
+            </span>
+          </span>
+        </div>
+      </div>
+      <div data-cursor-at="3" class="absolute bottom-6 right-6 h-28 w-44">
+        <span class={outline} data-at={f2.at} data-until={f2.at + 1} data-fx="fade"></span>
+        <span class={pin} data-at={f2.at}>F2</span>
+        <div class="absolute inset-0 overflow-hidden rounded-md">
+          <div class="absolute inset-0 bg-gradient-to-br from-sky-200 to-slate-300" data-at="0" data-until={previewAt} data-fx="fade"></div>
+          <div class="absolute inset-0 bg-gradient-to-br from-amber-200 via-orange-300 to-rose-300" data-at={previewAt} data-fx="fade"></div>
+        </div>
+        <span class:list={[composer, 'bottom-0 right-full mr-4']} data-at={f2.at} data-until={f2.at + 1}>
+          <span class="flex items-center gap-1.5 text-[10.5px] text-neutral-500"><span class="grid size-4 place-items-center rounded-full bg-sky-600 text-[8px] font-semibold text-white">S</span>Sam</span>
+          <span class="mt-1.5 block min-h-[34px] rounded-md border border-neutral-200 px-2 py-1.5 text-[11.5px] leading-snug text-neutral-800" data-type data-at={f2.at} data-text={f2.text}></span>
+          <span class="mt-2 flex justify-end"><span data-cursor-at={f2.at} class="rounded-md bg-neutral-900 px-2 py-1 text-[10.5px] font-medium text-white">Comment</span></span>
+        </span>
+      </div>
+    </div>
+  </div>
+  <!-- Feedback panel -->
+  <div class="relative flex min-w-0 flex-col">
+    <div class="flex items-center gap-2 border-b border-neutral-200 px-3 py-2.5">
+      <span class="whitespace-nowrap text-[11px] text-neutral-500">
+        <span data-at="0" data-until="3" data-fx="collapse">No feedback yet</span>
+        <span data-at="3" data-until="5" data-fx="collapse">1 open</span>
+        <span data-at="5" data-until="7" data-fx="collapse">2 open</span>
+        <span data-at="7" data-fx="collapse">3 open</span>
+      </span>
+      <span data-cursor-at="7" class="ml-auto inline-flex items-center gap-1.5 whitespace-nowrap rounded-md border border-neutral-200 px-1.5 py-1 text-[10.5px] font-medium text-neutral-700">
+        <img src="/ai-logos/claude-orange.svg" alt="" class="size-3" /><img src="/brand-logos/openai.svg" alt="" class="size-3" /><img src="/ai-logos/cursor.svg" alt="" class="size-3" />
+        <span class="inline-flex items-center gap-1" data-at="0" data-until="8" data-fx="collapse"><Copy className="size-3" /> Copy prompt</span>
+        <span class="inline-flex items-center gap-1 text-emerald-700" data-at="8" data-fx="collapse"><Check className="size-3" /> Copied</span>
+      </span>
+    </div>
+    <div class="flex-1 space-y-2 overflow-hidden p-3">
+      {feedback.map((item) => (
+        <div class="rounded-lg border border-neutral-200 p-2.5" data-at={item.at + 1}>
+          <div class="flex items-center gap-1.5 text-[10.5px] text-neutral-500">
+            <span class="rounded bg-violet-50 px-1 font-semibold text-violet-700">{item.ref}</span>
+            <span class="font-medium text-neutral-800">{item.who}</span>{item.role}
+            <span class:list={['ml-auto inline-flex items-center gap-0.5', item.status === 'Changed on preview' ? 'text-emerald-700' : 'text-sky-700']} data-at={previewAt} data-fx="fade">
+              {item.status === 'Changed on preview' && <Check className="size-3" />}{item.status}
+            </span>
+          </div>
+          <p class="mt-1 text-[11.5px] leading-snug text-neutral-700">{item.text}</p>
+        </div>
+      ))}
+      <div class="rounded-lg border border-neutral-200 bg-neutral-50 p-2.5 text-[10.5px] leading-snug text-neutral-600" data-at="9">
+        <span class="flex items-center gap-1.5 font-medium text-neutral-800"><img src="/ai-logos/claude-orange.svg" alt="" class="size-3" /> Claude Code opened pull request #62</span>
+        <span class="mt-1 flex items-center gap-1.5 text-neutral-500" data-at="9" data-until="10" data-fx="collapse"><LoaderCircle className="rd-spin size-3" /> Building preview…</span>
+        <span class="mt-1 flex items-center gap-1.5 text-emerald-700" data-at="10" data-fx="collapse"><Check className="size-3" /> Preview ready. Pins are checked against it.</span>
+      </div>
+    </div>
+    <div class="pointer-events-none absolute inset-x-3 bottom-3 rounded-lg bg-neutral-900 px-3 py-2 text-[11px] text-white shadow-lg" data-at="8" data-until="9">
+      Prompt copied. Paste it into Claude Code, Codex or Cursor.
+    </div>
+  </div>
+  <Cursor />
+</div>

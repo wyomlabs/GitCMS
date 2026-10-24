@@ -3,38 +3,24 @@ import mdx from '@astrojs/mdx'
 import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
 import tailwindcss from '@tailwindcss/vite'
-import { unified } from '@astrojs/markdown-remark'
-import {
-  rehypeCode,
-  remarkCodeTab,
-  remarkHeading,
-  remarkNpm,
-  remarkStructure,
-} from 'fumadocs-core/mdx-plugins'
-
-const remarkPlugins = [
-  remarkHeading,
-  remarkCodeTab,
-  remarkNpm,
-  [remarkStructure, { exportAs: 'structuredData' }],
-]
-const rehypePlugins = [rehypeCode]
+import { rehypeTrailingSlash } from './src/lib/rehype-trailing-slash'
 
 export default defineConfig({
   site: 'https://gitcms.dev',
   output: 'static',
+  // Pages build to `<path>/index.html`, which Cloudflare serves at `<path>/`.
+  // Canonicals, the sitemap and internal links all use that address.
+  trailingSlash: 'always',
+  build: { format: 'directory' },
   markdown: {
-    processor: unified({
-      syntaxHighlight: false,
-      remarkPlugins,
-      rehypePlugins,
-    }),
+    // Shared by Markdown and MDX (`extendMarkdownConfig`).
+    rehypePlugins: [rehypeTrailingSlash],
   },
   integrations: [
     sitemap({
       filter: (page) => {
         const pathname = new URL(page).pathname.replace(/\/$/, '')
-        return pathname !== '/blog/git-based-cms-vs-db-based-cms'
+        return !pathname.startsWith('/redesign')
           && !pathname.endsWith('.md')
           && !pathname.endsWith('.txt')
           && !pathname.endsWith('.png')

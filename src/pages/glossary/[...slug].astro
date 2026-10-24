@@ -1,10 +1,12 @@
 ---
 import { getCollection, render } from 'astro:content'
-import ContentLayout from '@/layouts/ContentLayout.astro'
-import { LaunchCtaSection } from '@/components/landing/launch-cta-section'
+import MarketingLayout from '@/layouts/MarketingLayout.astro'
+import Section from '@/components/site/Section.astro'
+import ArticleHeader from '@/components/site/ArticleHeader.astro'
+import CtaBand from '@/components/site/CtaBand.astro'
+import { card, prose } from '@/components/site/styles'
 import {
   GLOSSARY_CATEGORY_LABELS,
-  proseClassName,
   resourceMdxComponents,
 } from '@/components/resources/resource-mdx-components'
 
@@ -35,23 +37,21 @@ const title = term.data.title.includes(' vs ')
   ? `${term.data.title}: Differences Explained — GitCMS Glossary`
   : `What Is ${term.data.title}? — GitCMS Glossary`
 ---
-<ContentLayout title={title} description={term.data.description} path={`/glossary/${slug}`} structuredData={structuredData}>
-  <article class="mx-auto max-w-3xl px-6 py-16">
-    <a href="/glossary" class="text-sm text-neutral-600 transition-colors hover:text-neutral-900">← Glossary</a>
-    <header class="mb-10 mt-8">
-      <span class="rounded-full bg-neutral-900 px-3 py-1 text-xs font-medium uppercase tracking-wider text-white">{GLOSSARY_CATEGORY_LABELS[term.data.category]}</span>
-      <h1 class="mt-5 font-logo text-3xl font-normal leading-tight tracking-tight text-neutral-900 sm:text-4xl md:text-[42px]">{term.data.title}</h1>
-      <p class="mt-5 border-l-2 border-violet-400 pl-4 text-lg leading-relaxed text-neutral-800 sm:text-xl">{term.data.definition}</p>
-    </header>
-    <div class={proseClassName}><Content components={resourceMdxComponents} /></div>
-    {related.length > 0 && (
-      <aside class="mt-14 border-t border-neutral-200 pt-8">
-        <h2 class="text-sm font-medium uppercase tracking-widest text-neutral-500">Related terms</h2>
-        <div class="mt-4 flex flex-wrap gap-2">
-          {related.map((item) => <a href={`/glossary/${item.slug}`} class="rounded-full border border-neutral-200 px-4 py-1.5 text-sm text-neutral-700 transition-colors hover:border-neutral-400 hover:text-neutral-900">{item.title}</a>)}
-        </div>
-      </aside>
-    )}
-  </article>
-  <LaunchCtaSection heading="Your AI built the website." highlightedHeading="Give your team a way to run it." body="Connect your repository and explore GitCMS on your real site in preview mode." landingPath="/glossary" landingVariant="glossary" />
-</ContentLayout>
+<MarketingLayout title={title} description={term.data.description} structuredData={structuredData}>
+  <Section first>
+    <ArticleHeader breadcrumbs={[{ label: 'Glossary', href: '/glossary/' }, { label: GLOSSARY_CATEGORY_LABELS[term.data.category], href: `/glossary/#${term.data.category}` }]} title={term.data.title} />
+    <article class:list={['mx-auto mt-12 max-w-3xl px-6 py-10 sm:px-12 sm:py-14', card]}>
+      <p class="rounded-xl bg-[#DCF986]/30 px-5 py-4 text-[17px] leading-relaxed text-neutral-800 ring-1 ring-[#B5D74E]/40">{term.data.definition}</p>
+      <div class:list={['mt-10', prose]}><Content components={resourceMdxComponents} /></div>
+      {related.length > 0 && (
+        <aside class="mt-14 border-t border-neutral-200 pt-8">
+          <h2 class="text-[13px] font-medium text-[#898989]">Related terms</h2>
+          <div class="mt-3 flex flex-wrap gap-2">
+            {related.map((item) => <a href={`/glossary/${item.slug}/`} class="rounded-full border border-neutral-200 px-3.5 py-1.5 text-[13px] text-neutral-700 transition-colors hover:border-neutral-400 hover:text-neutral-900">{item.title}</a>)}
+          </div>
+        </aside>
+      )}
+    </article>
+  </Section>
+  <CtaBand title="Your AI built the website. Give your team a way to run it." description="Connect your repository and explore GitCMS on your real site in preview mode." />
+</MarketingLayout>
