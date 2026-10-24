@@ -15,6 +15,7 @@ import { BlogTOCSidebar } from '@/components/blog/blog-toc'
 import { card, h1, heading, prose, sub } from '@/components/site/styles'
 import { blogCategoryLabels } from '@/lib/blog'
 import { formatDate } from '@/lib/format-date'
+import { ogPathForHtmlPath } from '@/lib/public-resources'
 import ImageZoom from '@/components/docs/image-zoom.astro'
 import { getPublishedPosts, getRelatedPosts, readingTimeFromStructuredData } from '@/lib/content'
 import { structure } from 'fumadocs-core/mdx-plugins'
@@ -38,7 +39,10 @@ const toc = headings
 const readingTime = readingTimeFromStructuredData(structure(post.body ?? ''))
 const relatedPosts = await getRelatedPosts(slug, post.data.tags, post.data.category, 3)
 const postPath = `/blog/${slug}/`
-const ogImage = `${postPath}/og.png`
+const ogImage = ogPathForHtmlPath(postPath)
+// Search results cut titles past ~70 characters; drop the brand suffix before the post's own words.
+const pageTitle = [`${post.data.title} — GitCMS Blog`, `${post.data.title} — GitCMS`, post.data.title]
+  .find((title) => title.length <= 70) ?? post.data.title
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
@@ -55,7 +59,7 @@ const structuredData = {
 const mdxComponents = { ...defaultMdxComponents, Callout, Steps, Step, Card, Cards, img: ImageZoom }
 ---
 <MarketingLayout
-  title={`${post.data.title} — GitCMS Blog`}
+  title={pageTitle}
   description={post.data.description}
   ogImage={ogImage}
   type="article"

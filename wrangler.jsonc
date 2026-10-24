@@ -8,6 +8,9 @@
     }
   ],
   "compatibility_date": "2025-09-02",
+  // Workers Builds runs `wrangler preview` for non-main branches, which requires this
+  // block. The site has no bindings beyond assets, so previews need no overrides.
+  "previews": {},
   "main": "src/worker.ts",
   "assets": {
     "directory": "dist",

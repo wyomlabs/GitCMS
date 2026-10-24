@@ -49,6 +49,7 @@ const siteStructuredData = [
     <title>{seo.title}</title>
     <meta name="description" content={seo.description} />
     {!seo.noIndex && <link rel="canonical" href={seo.canonical} />}
+    <link rel="alternate" type="application/rss+xml" title="GitCMS Blog" href="/blog/rss.xml" />
     <link rel="alternate" type="text/markdown" href={markdownAlternate} />
     <link rel="describedby" type="text/plain" href={llmsIndex} />
     <meta property="og:type" content={seo.type} />
