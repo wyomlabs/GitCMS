@@ -28,6 +28,14 @@ export type PublicResourceKind =
   | 'page'
   | 'index'
 
+/** The product scene on a page's OG image; pages without one get a default for their kind. */
+export type OgScene =
+  | { type: 'text' }
+  | { type: 'published' }
+  | { type: 'agent'; logo: string }
+  | { type: 'files'; logo: string; files: 'data' | 'markdown' }
+  | { type: 'versus'; competitor: string }
+
 export type PublicResource = {
   id: string
   kind: PublicResourceKind
@@ -40,6 +48,7 @@ export type PublicResource = {
   listed?: boolean
   noIndex?: boolean
   updatedAt?: string
+  og?: OgScene
 }
 
 export function normalizeHtmlPath(path: string) {
@@ -311,6 +320,7 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       description: entry.data.description,
       htmlPath: `/compare/${slug}`,
       body: entry.body ?? '',
+      og: { type: 'versus', competitor: entry.data.competitor },
       updatedAt: entry.data.lastReviewed,
     }))
   }
@@ -388,6 +398,7 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       description: getAgentLandingDescription(agent),
       htmlPath: `/agents/${agent.slug}`,
       body: agentBody(agent),
+      og: { type: 'agent', logo: agent.logoPath },
     }))
   }
 
@@ -421,6 +432,7 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       description: getFrameworkLandingDescription(framework),
       htmlPath: `/git-based-cms-for-${framework.slug}`,
       body: frameworkBody(framework),
+      og: { type: 'files', logo: framework.logo, files: 'markdown' },
     }))
   }
 
@@ -432,6 +444,7 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       description: getSiteBuilderDescription(builder),
       htmlPath: `/cms-for-${builder.slug}`,
       body: builderBody(builder),
+      og: { type: 'files', logo: builder.logo, files: 'data' },
     }))
   }
 
@@ -463,7 +476,7 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
     resource({
       id: 'index:agents', kind: 'index', title: 'GitCMS for AI Agents',
       description: 'Connect ChatGPT, Claude, coding agents, and personal agents to website content through GitCMS.',
-      htmlPath: '/agents', body: listBody('Agents', 'Agents draft website changes through GitCMS while people keep control of publishing.', byKind('agent')),
+      htmlPath: '/agents', og: { type: 'agent', logo: '/ai-logos/claude-orange.svg' }, body: listBody('Agents', 'Agents draft website changes through GitCMS while people keep control of publishing.', byKind('agent')),
     }),
     resource({
       id: 'index:for', kind: 'index', title: 'Who GitCMS Is For',
