@@ -15,6 +15,7 @@ import { BlogTOCSidebar } from '@/components/blog/blog-toc'
 import { card, h1, heading, prose, sub } from '@/components/site/styles'
 import { blogCategoryLabels } from '@/lib/blog'
 import { formatDate } from '@/lib/format-date'
+import { ogPathForHtmlPath } from '@/lib/public-resources'
 import ImageZoom from '@/components/docs/image-zoom.astro'
 import { getPublishedPosts, getRelatedPosts, readingTimeFromStructuredData } from '@/lib/content'
 import { structure } from 'fumadocs-core/mdx-plugins'
@@ -38,7 +39,7 @@ const toc = headings
 const readingTime = readingTimeFromStructuredData(structure(post.body ?? ''))
 const relatedPosts = await getRelatedPosts(slug, post.data.tags, post.data.category, 3)
 const postPath = `/blog/${slug}/`
-const ogImage = `${postPath}/og.png`
+const ogImage = ogPathForHtmlPath(postPath)
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
