@@ -40,6 +40,9 @@ const readingTime = readingTimeFromStructuredData(structure(post.body ?? ''))
 const relatedPosts = await getRelatedPosts(slug, post.data.tags, post.data.category, 3)
 const postPath = `/blog/${slug}/`
 const ogImage = ogPathForHtmlPath(postPath)
+// Search results cut titles past ~70 characters; drop the brand suffix before the post's own words.
+const pageTitle = [`${post.data.title} — GitCMS Blog`, `${post.data.title} — GitCMS`, post.data.title]
+  .find((title) => title.length <= 70) ?? post.data.title
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
@@ -56,7 +59,7 @@ const structuredData = {
 const mdxComponents = { ...defaultMdxComponents, Callout, Steps, Step, Card, Cards, img: ImageZoom }
 ---
 <MarketingLayout
-  title={`${post.data.title} — GitCMS Blog`}
+  title={pageTitle}
   description={post.data.description}
   ogImage={ogImage}
   type="article"

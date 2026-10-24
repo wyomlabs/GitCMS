@@ -10,7 +10,7 @@ import { formatDate } from '@/lib/format-date'
 const entries = await getChangelogs()
 const slugOf = (filePath: string | undefined) => (filePath ?? '').split('/').at(-1)?.replace(/\.mdx?$/, '') ?? ''
 ---
-<MarketingLayout title="Changelog — GitCMS" description="Product updates and release notes for GitCMS.">
+<MarketingLayout title="Changelog — GitCMS" description="Release notes for GitCMS: new editor features, MCP tools for AI agents, publishing and review improvements, and fixes.">
   <Section first>
     <SectionHeading level={1} eyebrow="Changelog" title="What shipped" description="Product updates and release notes." />
     {entries.length === 0 && <p class="mt-16 text-center text-[#898989]">No releases yet. Check back soon.</p>}

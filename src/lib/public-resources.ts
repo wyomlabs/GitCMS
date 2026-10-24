@@ -465,7 +465,7 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       htmlPath: '/blog', body: listBody('Posts', 'GitCMS writing about code-first website operations and content workflows.', byKind('blog')),
     }),
     resource({
-      id: 'index:changelog', kind: 'index', title: 'GitCMS Changelog', description: 'Product updates and release notes for GitCMS.',
+      id: 'index:changelog', kind: 'index', title: 'GitCMS Changelog', description: 'Release notes for GitCMS: new editor features, MCP tools for AI agents, publishing and review improvements, and fixes.',
       htmlPath: '/changelog', body: listBody('Releases', 'GitCMS product updates and release notes.', byKind('changelog')),
     }),
     resource({
