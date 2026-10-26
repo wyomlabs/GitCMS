@@ -6,8 +6,40 @@ interface Env {
 
 const APP_ORIGIN = 'https://app.gitcms.dev'
 
+// Advertised on the homepage for agent discovery (RFC 8288, RFC 9727 §3).
+const HOMEPAGE_LINKS = [
+  '</.well-known/api-catalog>; rel="api-catalog"',
+  '</docs/>; rel="service-doc"',
+  '</llms.txt>; rel="describedby"; type="text/plain"',
+  '</index.md>; rel="alternate"; type="text/markdown"',
+].join(', ')
+
+/** Pages have a Markdown copy at `<path>.md`; agents can ask for it with `Accept: text/markdown`. */
+function markdownCopyUrl(request: Request, url: URL) {
+  if (request.method !== 'GET' && request.method !== 'HEAD') return null
+  if (!url.pathname.endsWith('/')) return null
+  if (!request.headers.get('Accept')?.includes('text/markdown')) return null
+  const target = new URL(url)
+  target.pathname = url.pathname === '/' ? '/index.md' : `${url.pathname.slice(0, -1)}.md`
+  return target
+}
+
+function withPageHeaders(url: URL, response: Response) {
+  if (!url.pathname.endsWith('/') || response.status >= 400) return response
+  const headers = new Headers(response.headers)
+  headers.append('Vary', 'Accept')
+  if (url.pathname === '/') headers.append('Link', HOMEPAGE_LINKS)
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  })
+}
+
 function withMachineReadableHeaders(requestUrl: URL, response: Response) {
+  // SKILL.md and other discovery documents aren't copies of a page.
   const isMarkdown = requestUrl.pathname.endsWith('.md')
+    && !requestUrl.pathname.startsWith('/.well-known/')
   const isLlms = requestUrl.pathname === '/llms.txt'
     || requestUrl.pathname === '/llms-full.txt'
     || requestUrl.pathname.endsWith('/llms.txt')
@@ -47,7 +79,16 @@ export default {
       target.pathname = `${url.pathname.slice(0, -'.mdx'.length)}.md`
       return Response.redirect(target, 308)
     }
-    const assetResponse = withMachineReadableHeaders(url, await env.ASSETS.fetch(request))
+    const markdownUrl = markdownCopyUrl(request, url)
+    if (markdownUrl) {
+      const markdown = await env.ASSETS.fetch(new Request(markdownUrl, request))
+      if (markdown.ok) return withPageHeaders(url, withMachineReadableHeaders(markdownUrl, markdown))
+    }
+
+    const assetResponse = withPageHeaders(
+      url,
+      withMachineReadableHeaders(url, await env.ASSETS.fetch(request)),
+    )
     if (
       assetResponse.status !== 404
       || (request.method !== 'GET' && request.method !== 'HEAD')
