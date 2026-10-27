@@ -1,4 +1,7 @@
 User-agent: *
+# Content Signals (https://contentsignals.org): the public site may be indexed,
+# quoted in AI answers, and used for training.
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
 
 Disallow: /api/

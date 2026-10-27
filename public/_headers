@@ -1,0 +1,6 @@
+# Agent discovery documents (src/pages/.well-known) are public metadata.
+/.well-known/*
+  Access-Control-Allow-Origin: *
+
+/.well-known/api-catalog
+  Content-Type: application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"
