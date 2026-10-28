@@ -53,6 +53,7 @@ function kindLabel(resource: PublicResource) {
     blog: 'Blog',
     changelog: 'Changelog',
     comparison: 'Comparison',
+    alternative: 'Alternatives',
     docs: 'Documentation',
     glossary: 'Glossary',
     prompt: 'Prompt library',
@@ -68,6 +69,7 @@ function kindLabel(resource: PublicResource) {
   const indexLabels: Record<string, string> = {
     'index:agents': 'AI agents',
     'index:compare': 'Comparisons',
+    'index:alternatives': 'Alternatives',
     'index:for': 'Who it’s for',
     'index:tools': 'Free tools',
   }

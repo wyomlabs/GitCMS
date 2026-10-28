@@ -45,6 +45,19 @@ const comparisons = defineCollection({
   }),
 })
 
+// "X alternatives" pages: options by situation for people leaving a tool.
+// The slug is the competitor's, matching `/compare/gitcms-vs-<slug>/`.
+const alternatives = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './content/alternatives' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    competitor: z.string(),
+    lastReviewed: dateSchema,
+    order: z.number().int().optional(),
+  }),
+})
+
 const glossaryCategories = [
   'building',
   'rendering',
@@ -135,6 +148,7 @@ export const collections = {
   blog,
   changelog,
   comparisons,
+  alternatives,
   glossary,
   prompts,
   tools,

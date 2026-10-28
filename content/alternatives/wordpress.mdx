@@ -1,0 +1,184 @@
+---
+title: 'WordPress Alternatives for Code-First and AI-Built Websites'
+description: 'Leaving WordPress? Options by situation: visual builders, Ghost, headless CMS, or a code-first site built with Claude Code and a Git-based CMS.'
+competitor: 'WordPress'
+lastReviewed: '2026-10-28'
+order: 1
+---
+
+The best WordPress alternative depends on what you're leaving for. If you want to keep building visually without code, pick a site builder like Webflow or Framer. If you mostly publish and sell newsletters, Ghost fits. If content feeds several apps, use a headless CMS. If you build sites in code with Claude Code, Codex, or Cursor and only miss the admin, pair the code-first site with a Git-based CMS like GitCMS, CloudCannon, or TinaCMS.
+
+A disclosure: I build GitCMS, which sits in that last group. This page isn't a ranking with us at the top. It's a map, sorted by situation, with the downsides of each option, ours included. Check pricing on each vendor's site before you decide; it changes often.
+
+## Should you leave WordPress at all?
+
+Not necessarily. WordPress runs [39.5% of all websites and 58.3% of sites with a known CMS](https://w3techs.com/technologies/details/cm-wordpress), according to W3Techs in October 2026. It's still the default for a reason, and "WordPress is dead" is not an argument anyone running a WooCommerce store should take seriously.
+
+The quick map:
+
+| Your situation | Look at |
+|---|---|
+| You sell products, memberships, or courses, and plugins do the heavy lifting | Stay on WordPress |
+| No developer, and you want to design pages visually | Webflow, Framer |
+| Small business that wants an all-in-one, hosted builder | Wix, Squarespace |
+| Writer or publisher with newsletters and paid subscriptions | Ghost |
+| Content shared across a website, an app, and other channels | Sanity, Payload, Strapi |
+| An agency or startup that builds the site in code, often with a coding agent | A code-first site plus GitCMS, CloudCannon, or TinaCMS |
+
+## Why are teams leaving WordPress in 2026?
+
+### Plugin and PHP maintenance never ends
+
+A typical WordPress site is core, a theme, and a dozen plugins, each with its own update schedule. Most of the security work is in that plugin layer. Patchstack's [State of WordPress Security in 2026](https://patchstack.com/whitepaper/state-of-wordpress-security-in-2026/) counted 11,334 new WordPress vulnerabilities in 2025, up 42% on the year before. Plugins accounted for 91% of them, and only six were in core. 46% had no developer fix when they were disclosed, and about half of the high-impact ones were exploited within 24 hours.
+
+Then there's the runtime underneath. On October 21, 2026, PHP shipped an emergency release fixing [CVE-2026-109618 and CVE-2026-109619](https://www.php.net/archive/2026.php#2026-10-21-5), two flaws that can allow unauthenticated remote code execution, both rated CVSS v4.0 9.2. People call the pair PHP2Shell. Updating WordPress doesn't fix them: the patch is a new PHP build on the server, plus a restart of every PHP worker. If you run WordPress sites, [here's what to do about PHP2Shell now](/blog/php2shell-wordpress/).
+
+None of this means WordPress is careless. It means a PHP application with third-party plugins is a server you're responsible for, forever, even when the pages rarely change.
+
+### Performance and hosting cost
+
+Unless it's cached, every WordPress page view runs PHP and queries MySQL. Making that fast means caching plugins, a CDN, and managed hosting that costs more as traffic grows. A pre-rendered Astro or Next.js site serves files from a CDN, and Vercel, Netlify, Cloudflare, or GitHub Pages host small sites for little or nothing.
+
+### Coding agents made custom sites cheap
+
+This is the new reason, and the one agencies talk about. For twenty years, WordPress won because a custom site in code was slow and expensive to build, and WordPress let clients run the site themselves.
+
+Coding agents broke the first half of that trade. With Claude Code, Codex, or Cursor, a custom Astro or Next.js site ships in hours, with no theme to fight and no plugin stack. What it doesn't come with is the second half: an admin where the client changes the opening hours or publishes a post without emailing the developer.
+
+That's what most teams leaving WordPress actually miss. Not the theme marketplace, not the plugins. The admin.
+
+## When should you stay on WordPress?
+
+Stay if any of these describe your site:
+
+- **E-commerce runs on WooCommerce.** Products, checkout, inventory, and taxes are a whole application. Moving them is a re-platforming project, not a CMS swap.
+- **Memberships, courses, or gated content.** Logins, payments, and access rules are dynamic features WordPress plugins handle well. A static site needs a separate service for each.
+- **Workflows depend on specific plugins.** Booking, forms feeding a CRM, LMS, multilingual. List each one and price its replacement before planning a migration.
+- **No developer, and the team designs pages visually.** If the people running the site build new layouts themselves, WordPress with a page builder (or Webflow or Framer) suits them better than a code-first site.
+- **It works, and it's maintained.** A patched, fast WordPress site with a happy client doesn't need rescuing.
+
+## What are the best WordPress alternatives?
+
+Grouped by situation. Pricing is as of October 2026 and describes the model, not a quote.
+
+### If you want to build visually without code: Webflow or Framer
+
+**Webflow** is a visual site builder with a built-in CMS and hosting. Designers lay out pages on a canvas that maps closely to HTML and CSS.
+
+- **Best for:** design-led teams and agencies who want pixel control without writing code.
+- **Watch out for:** the site and its content live on Webflow's platform, and you pay for site plans and for workspace plans for the people who build.
+- **Pricing model:** a free Starter site plan; paid site plans from $15/month billed yearly (Basic, no CMS) and $25/month for the Premium plan with CMS. Workspace plans for freelancers and agencies start at $16/month billed yearly. Site plans include Webflow AI and an MCP server.
+
+**Framer** is a visual builder that started with designers and now does full marketing sites, with a CMS, AI tools, and hosting.
+
+- **Best for:** startups and designers who want a polished marketing site fast.
+- **Watch out for:** CMS collections and items are capped per plan, and extra editors are billed per seat. Content lives in Framer.
+- **Pricing model:** a free plan; paid site plans from $10/month (Basic) and $30/month (Pro). Additional editors cost $20/month, or $10/month for content-only editors.
+
+For the detail on how these compare to a code-first site, see [GitCMS vs Webflow](/compare/gitcms-vs-webflow/) and [GitCMS vs Framer](/compare/gitcms-vs-framer/).
+
+### If you want an all-in-one hosted builder: Wix or Squarespace
+
+**Wix** and **Squarespace** are hosted website builders with templates, hosting, domains, forms, and commerce in one subscription. Both now offer AI website builders that generate a starting site from a prompt.
+
+- **Best for:** a small business owner who wants to build and run the site alone, with no developer involved.
+- **Watch out for:** you're renting the whole stack. Moving away later usually means rebuilding the site. Agencies get less control over code and performance than with a framework.
+- **Pricing model:** tiered monthly plans with discounts for annual billing; prices vary by region. Wix has a free plan; Squarespace offers a 14-day free trial.
+
+They're good tools for their audience, but not a fit for an agency that wants to own the code.
+
+### If you publish and sell subscriptions: Ghost
+
+**Ghost** is an open-source (MIT) publishing platform built on Node.js, with newsletters and paid memberships built in. You can self-host it or use the managed Ghost(Pro).
+
+- **Best for:** writers, newsletters, and independent publishers.
+- **Watch out for:** Ghost is focused on publishing. A marketing site with custom pages, product sections, and integrations is outside what it's built for.
+- **Pricing model:** self-hosting is free. Ghost(Pro) starts at $18/month billed yearly for one staff user; paid subscriptions start on the Publisher plan ($29/month billed yearly), and Ghost takes 0% of subscription revenue (payment processor fees still apply).
+
+More detail in [GitCMS vs Ghost](/compare/gitcms-vs-ghost/).
+
+### If content feeds several channels: Sanity, Payload, or Strapi
+
+A headless CMS stores structured content in a database and serves it over an API to whatever front ends you build: a website, an app, a kiosk.
+
+**Sanity** is a hosted content platform with a customizable editing studio and a hosted Content Lake.
+
+- **Best for:** product teams with structured content reused across many surfaces.
+- **Watch out for:** content lives in Sanity's database, not your repository, and developers model the schema before editors can work. Usage-based charges apply above plan quotas.
+- **Pricing model:** a free plan for up to 20 seats; Growth at $15 per seat per month, plus pay-as-you-go usage. Includes AI features such as a Content Agent with monthly AI credits.
+
+**Payload** is an open-source (MIT) CMS that installs into a Next.js app and needs a database (MongoDB, Postgres, or SQLite). Payload has joined Figma.
+
+- **Best for:** Next.js teams who want the CMS and the app in one codebase and full control over the backend.
+- **Watch out for:** you run and maintain a database and an admin app. It's closer to building an application than adding an editor.
+- **Pricing model:** free to self-host; Enterprise pricing on request.
+
+**Strapi** is an open-source (MIT) headless CMS you self-host or run on Strapi Cloud.
+
+- **Best for:** teams that want a self-hosted content API with a familiar admin.
+- **Watch out for:** like WordPress, it's a server and database you keep patched, plus a separate front end.
+- **Pricing model:** the open-source edition is free to self-host; Strapi Cloud plans start at $35/month per project.
+
+Notice the trade: you leave a PHP server and MySQL for a Node server and a database, or a hosted one. If your content is a website's pages and posts, [a Git-based CMS is often simpler](/blog/git-based-cms-vs-headless-cms/). Compare: [Sanity](/compare/gitcms-vs-sanity/), [Payload](/compare/gitcms-vs-payload/), [Strapi](/compare/gitcms-vs-strapi/).
+
+### If you build the site in code: a code-first site plus a Git-based CMS
+
+This is the path for agencies and startups replacing WordPress with a site built by a coding agent. The site is an Astro, Next.js, Hugo, or similar project in a Git repository. Content is Markdown, MDX, and data files in that repository. A Git-based CMS gives editors a visual admin on top of those files, so there's no database and no sync layer.
+
+**GitCMS** is the CMS for code-first and AI-built websites. It gives your team, your clients, and AI agents one safe place to edit, review, and publish website changes, while everything stays in your site's repository.
+
+- **What it does:** connects to an existing GitHub repository; your coding agent runs `create-gitcms` to write the configuration. Editors get a [visual document-style editor](/features/visual-editor/) and forms for menus, footers, and other site data, and sign in with Google, no GitHub account needed. Sites can [review before publish](/features/editorial-workflow/), with inline comments and approvals, or publish directly. ChatGPT, Claude, and other MCP clients draft and submit for review; people publish. Every save is a Git commit.
+- **Best for:** agencies handing code-first client sites to non-technical editors, and startups whose website is code and whose AI agents shouldn't publish unreviewed.
+- **Watch out for:** GitCMS edits content, not layout. New pages, sections, and design changes are still work for a developer or a coding agent. It doesn't host your site, and it has no forms, e-commerce, or memberships. GitHub is the only Git provider today.
+- **Pricing model:** free to connect your site and try it; paid per site. [See pricing](/#pricing).
+
+**CloudCannon** is a mature Git-based CMS with visual editing, hosting included, and an agency partner program.
+
+- **Best for:** agencies that want visual editing on the rendered page, built-in hosting, or GitLab and Bitbucket support, which GitCMS doesn't offer.
+- **Watch out for:** per-user pricing adds up for larger client teams; editing setup is configured per site.
+- **Pricing model:** Standard at $55/month ($49/month billed annually) with 3 users and unlimited sites; extra users $10/month. A $10/month Lite plan is available to partner agencies for their clients.
+
+**TinaCMS** is an open-source (Apache-2.0) Git-backed CMS with visual editing, used with a hosted backend called TinaCloud.
+
+- **Best for:** React and Next.js developers who want inline visual editing and don't mind adding Tina's schema and setup to the codebase.
+- **Watch out for:** Tina is part of your code, so the setup is a developer task and stays in the project.
+- **Pricing model:** TinaCloud is free for 2 users; Team is $29 per project per month ($24 billed annually).
+
+Head to head: [GitCMS vs CloudCannon](/compare/gitcms-vs-cloudcannon/), [GitCMS vs TinaCMS](/compare/gitcms-vs-tinacms/). For more options in this group, see [the best CMS for AI-built websites](/blog/best-cms-for-ai-built-websites/).
+
+## WordPress alternatives compared
+
+| Option | Best for | Where content lives | Who edits | Pricing model (Oct 2026) |
+|---|---|---|---|---|
+| WordPress | Plugin-heavy sites, WooCommerce, memberships | MySQL database on your server | Anyone, in the WordPress admin | Free software; you pay for hosting and plugins |
+| Webflow | Visual design without code | Webflow's platform | Designers and editors in Webflow | Free Starter; site plans from $15/mo yearly, plus workspace plans |
+| Framer | Fast, polished marketing sites | Framer's platform | Designers and editors in Framer | Free plan; site plans from $10/mo, paid editor seats |
+| Wix | Small businesses building alone | Wix's platform | Owner in the Wix editor | Free plan; tiered monthly plans |
+| Squarespace | Small businesses building alone | Squarespace's platform | Owner in the Squarespace editor | Free trial; tiered monthly plans |
+| Ghost | Newsletters and paid publishing | Ghost's database (self-hosted or Ghost(Pro)) | Writers and staff users | Free self-hosted; Ghost(Pro) from $18/mo yearly |
+| Sanity | Structured content across channels | Sanity's hosted Content Lake | Editors in a developer-built studio | Free up to 20 seats; $15/seat/mo plus usage |
+| Payload | Next.js apps with a built-in CMS | Your database (MongoDB, Postgres, SQLite) | Editors in Payload's admin | Free self-hosted; Enterprise on request |
+| Strapi | Self-hosted content API | Your database | Editors in Strapi's admin | Free self-hosted; Cloud from $35/mo per project |
+| GitCMS | Code-first and AI-built sites handed to clients | Files in your GitHub repository | Clients, marketers, and AI agents, with review | Free to connect; paid per site ([see pricing](/#pricing)) |
+| CloudCannon | Agencies wanting visual editing and hosting | Files in your Git repository | Editors in CloudCannon | From $55/mo with 3 users |
+| TinaCMS | Developers wanting inline editing in React | Files in your Git repository | Editors in Tina's visual editor | Free for 2 users; Team $29/project/mo |
+
+## What should agencies replace WordPress with?
+
+If you already build with Claude Code, Codex, or Cursor, usually a code-first site plus a Git-based CMS. You keep what made WordPress work for clients, an admin they can log into, and drop what made it expensive: plugin updates, PHP patching, the 2 a.m. security emails.
+
+The handoff decides it. Clients edit copy, images, and posts; you and your coding agent keep layout, components, and features. With review before publish, nothing a client or an AI agent changes goes live until someone approves it. More on [the agencies page](/for-agencies/) and in [GitCMS vs WordPress](/compare/gitcms-vs-wordpress/).
+
+## How do you move a WordPress site to code?
+
+Here's the practical path. Each step has a prompt you can hand to Claude Code, Codex, or Cursor.
+
+1. **Export the content.** In the WordPress admin, go to Tools → Export and download everything as a WXR (XML) file. Download the media library too, or let the agent fetch images from the live site.
+2. **Convert posts to Markdown.** Turn the export into one Markdown file per post, with title, date, slug, categories, featured image, and meta description in frontmatter. Use the [convert WordPress posts to Markdown prompt](/prompts/convert-wordpress-posts-to-markdown/), and match field names to your framework's content schema first.
+3. **Rebuild the site with a coding agent.** Recreate the design and templates in Astro (or your framework), keep every existing URL, and generate redirects for any that must change. The [migrate WordPress to Astro prompt](/prompts/migrate-wordpress-to-astro/) spells out the parts that matter for search: URLs, redirects, metadata, and the sitemap.
+4. **Make the site client-editable.** Agents tend to write copy straight into components. Move headlines, opening hours, prices, and contact details into content files so a CMS can edit them safely. Use the [make a site client-editable prompt](/prompts/make-site-client-editable/).
+5. **Give the client back an admin.** Connect the repository to a Git-based CMS, invite the client to their site only, and decide whether changes publish directly or wait for review. The [Claude Code client handoff guide](/blog/hand-off-claude-code-website-to-client/) walks through the whole handoff.
+
+Before you switch DNS, check every template, a sample of posts, and the redirects against the old site's URLs. Lost rankings after a migration usually come from broken URLs, not the new framework.
+
+<CompareCTA description="The admin WordPress gave you, for a website that stays code." />

@@ -1,0 +1,82 @@
+---
+import { getCollection, render } from 'astro:content'
+import MarketingLayout from '@/layouts/MarketingLayout.astro'
+import Section from '@/components/site/Section.astro'
+import ArticleHeader from '@/components/site/ArticleHeader.astro'
+import CtaBand from '@/components/site/CtaBand.astro'
+import { card, prose } from '@/components/site/styles'
+import { formatDate } from '@/lib/format-date'
+import { comparisonMdxComponents } from '@/components/comparison/mdx-components'
+
+export async function getStaticPaths() {
+  const comparisonSlugs = new Set((await getCollection('comparisons')).map((entry) => entry.id.replace(/\.mdx?$/, '')))
+  return (await getCollection('alternatives')).map((alternative) => {
+    const slug = alternative.id.replace(/\.mdx?$/, '')
+    const comparisonSlug = `gitcms-vs-${slug}`
+    return {
+      params: { slug },
+      props: { alternative, comparisonSlug: comparisonSlugs.has(comparisonSlug) ? comparisonSlug : null },
+    }
+  })
+}
+const { alternative, comparisonSlug } = Astro.props
+const { Content } = await render(alternative)
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: alternative.data.title,
+      description: alternative.data.description,
+      dateModified: alternative.data.lastReviewed,
+      url: canonicalUrl,
+      mainEntityOfPage: canonicalUrl,
+      publisher: {
+        '@type': 'Organization',
+        name: 'GitCMS',
+        url: 'https://gitcms.dev',
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Alternatives',
+          item: new URL('/alternatives/', Astro.site).href,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: alternative.data.title,
+          item: canonicalUrl,
+        },
+      ],
+    },
+  ],
+}
+---
+<MarketingLayout
+  title={`${alternative.data.title} — GitCMS`}
+  description={alternative.data.description}
+  structuredData={structuredData}
+>
+  <Section first>
+    <ArticleHeader breadcrumbs={[{ label: 'Alternatives', href: '/alternatives/' }, { label: alternative.data.competitor }]} title={alternative.data.title} description={alternative.data.description}>
+      <div class="mt-5 flex flex-wrap items-center justify-center gap-2 text-[13px] text-[#898989]">
+        <span>Last reviewed {formatDate(alternative.data.lastReviewed, 'long')}</span>
+        {comparisonSlug && (
+          <a href={`/compare/${comparisonSlug}/`} class="font-medium text-neutral-900 underline underline-offset-2">GitCMS vs {alternative.data.competitor}, head to head</a>
+        )}
+      </div>
+    </ArticleHeader>
+    <article class:list={['mx-auto mt-12 max-w-4xl px-6 py-10 sm:px-12 sm:py-14', card]}>
+      <div class={prose}>
+        <Content components={comparisonMdxComponents} />
+      </div>
+    </article>
+  </Section>
+  <CtaBand />
+</MarketingLayout>

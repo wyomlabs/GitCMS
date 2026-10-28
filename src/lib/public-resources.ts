@@ -16,6 +16,7 @@ export type PublicResourceKind =
   | 'blog'
   | 'changelog'
   | 'comparison'
+  | 'alternative'
   | 'docs'
   | 'glossary'
   | 'prompt'
@@ -242,10 +243,11 @@ function builderBody(builder: (typeof siteBuilders)[number]) {
 }
 
 export async function getPublicResources(): Promise<Array<PublicResource>> {
-  const [blog, changelog, comparisons, docs, glossary, prompts, tools, pages] = await Promise.all([
+  const [blog, changelog, comparisons, alternatives, docs, glossary, prompts, tools, pages] = await Promise.all([
     getCollection('blog'),
     getCollection('changelog'),
     getCollection('comparisons'),
+    getCollection('alternatives'),
     getCollection('docs'),
     getCollection('glossary'),
     getCollection('prompts'),
@@ -321,6 +323,19 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       htmlPath: `/compare/${slug}`,
       body: entry.body ?? '',
       og: { type: 'versus', competitor: entry.data.competitor },
+      updatedAt: entry.data.lastReviewed,
+    }))
+  }
+
+  for (const entry of alternatives) {
+    const slug = slugFromId(entry.id)
+    resources.push(resource({
+      id: `alternative:${slug}`,
+      kind: 'alternative',
+      title: entry.data.title,
+      description: entry.data.description,
+      htmlPath: `/alternatives/${slug}`,
+      body: entry.body ?? '',
       updatedAt: entry.data.lastReviewed,
     }))
   }
@@ -472,6 +487,11 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       id: 'index:compare', kind: 'index', title: 'GitCMS Comparisons',
       description: 'Honest comparisons between GitCMS and website builders, headless CMSs, Git-based CMSs, and publishing platforms.',
       htmlPath: '/compare', body: listBody('Comparisons', 'Every comparison says where the other tool is genuinely better.', byKind('comparison')),
+    }),
+    resource({
+      id: 'index:alternatives', kind: 'index', title: 'Alternatives',
+      description: 'Honest guides to the alternatives for WordPress and popular CMSs, by situation, for teams running code-first and AI-built websites.',
+      htmlPath: '/alternatives', body: listBody('Alternatives', 'Each guide says which option fits which situation, including when GitCMS is the wrong choice.', byKind('alternative')),
     }),
     resource({
       id: 'index:agents', kind: 'index', title: 'GitCMS for AI Agents',

@@ -76,3 +76,10 @@ export async function getComparisons() {
     return order || a.data.competitor.localeCompare(b.data.competitor)
   })
 }
+
+export async function getAlternatives() {
+  return (await getCollection('alternatives')).sort((a, b) => {
+    const order = (a.data.order ?? Number.MAX_SAFE_INTEGER) - (b.data.order ?? Number.MAX_SAFE_INTEGER)
+    return order || a.data.competitor.localeCompare(b.data.competitor)
+  })
+}

@@ -9,12 +9,17 @@ import { formatDate } from '@/lib/format-date'
 import { comparisonMdxComponents } from '@/components/comparison/mdx-components'
 
 export async function getStaticPaths() {
-  return (await getCollection('comparisons')).map((comparison) => ({
-    params: { slug: comparison.id.replace(/\.mdx?$/, '') },
-    props: { comparison },
-  }))
+  const alternativeSlugs = new Set((await getCollection('alternatives')).map((entry) => entry.id.replace(/\.mdx?$/, '')))
+  return (await getCollection('comparisons')).map((comparison) => {
+    const slug = comparison.id.replace(/\.mdx?$/, '')
+    const alternativeSlug = slug.replace(/^gitcms-vs-/, '')
+    return {
+      params: { slug },
+      props: { comparison, alternativeSlug: alternativeSlugs.has(alternativeSlug) ? alternativeSlug : null },
+    }
+  })
 }
-const { comparison } = Astro.props
+const { comparison, alternativeSlug } = Astro.props
 const { Content } = await render(comparison)
 const slug = comparison.id.replace(/\.mdx?$/, '')
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href
@@ -64,6 +69,9 @@ const structuredData = {
       <div class="mt-5 flex flex-wrap items-center justify-center gap-2 text-[13px] text-[#898989]">
         <span class="rounded-full bg-white px-2.5 py-0.5 text-[12px] font-medium text-neutral-700 ring-1 ring-neutral-200">{comparison.data.category}</span>
         <span>Last reviewed {formatDate(comparison.data.lastReviewed, 'long')}</span>
+        {alternativeSlug && (
+          <a href={`/alternatives/${alternativeSlug}/`} class="font-medium text-neutral-900 underline underline-offset-2">All {comparison.data.competitor} alternatives</a>
+        )}
       </div>
     </ArticleHeader>
     <article class:list={['mx-auto mt-12 max-w-4xl px-6 py-10 sm:px-12 sm:py-14', card]}>
