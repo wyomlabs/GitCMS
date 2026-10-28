@@ -3,15 +3,15 @@ title: 'GitCMS vs Ghost'
 description: 'Ghost is an open-source platform for blogs and newsletters. GitCMS is the CMS for code-first websites, with content in your repo. Here''s when each fits.'
 competitor: 'Ghost'
 category: 'Docs and publishing platforms'
-lastReviewed: '2026-04-16'
+lastReviewed: '2026-10-28'
 order: 10
 ---
 
-Ghost is a focused, opinionated publishing platform. It does blogs, newsletters, and paid memberships well. If you are a creator, publication, or content team that wants a clean writing experience with built-in email and monetization, Ghost is a solid choice.
+Ghost is a focused, opinionated publishing platform. It does blogs, newsletters, and paid memberships well, and Ghost 6.0 added native analytics and distribution to the social web through ActivityPub, so readers on Bluesky, Mastodon, Threads, and Flipboard can follow a publication. If you are a creator, publication, or content team that wants a clean writing experience with built-in email and monetization, Ghost is a strong choice.
 
-But Ghost is still a **Node.js application backed by a database**. It runs a server, manages its own content storage, and handles email delivery. That is the right architecture when publishing and monetization are tightly coupled.
+But Ghost is still a **Node.js application backed by a database**. It runs a server, stores its own content, and handles email delivery. That is the right architecture when publishing and monetization are tightly coupled.
 
-For teams whose content is part of a broader site — docs alongside a blog, changelog alongside marketing pages — GitCMS offers a simpler model: markdown files in a repo, with a workflow that works for both humans and AI agents.
+For teams whose content is part of a broader site (docs alongside a blog, a changelog alongside marketing pages) GitCMS offers a simpler model: Markdown files in your repository, with one workflow for people and AI agents.
 
 ## What changed in 2026
 
@@ -25,7 +25,7 @@ What that site still needs is **the admin**: an editor for the people who write,
   <VerdictCompetitor title="Ghost">
     - You want a dedicated publishing platform with a beautiful writing experience
     - You need built-in newsletters, email delivery, and paid memberships
-    - Your primary use case is a standalone blog or publication
+    - Your primary product is a standalone blog or publication
     - You want a managed platform that handles hosting, email, and member management
   </VerdictCompetitor>
   <VerdictGitCMS>
@@ -38,64 +38,40 @@ What that site still needs is **the admin**: an editor for the people who write,
 
 ## Why this choice matters more than it looks
 
-Ghost runs a Node.js server backed by MySQL. Whether you self-host or use Ghost Pro, content lives in a database and is served dynamically:
+Ghost runs a Node.js server backed by MySQL. Whether you self-host or use Ghost(Pro), content lives in a database and is served dynamically:
 
-- **Server dependency** — Ghost needs a running Node.js application and MySQL database. Self-hosting means managing uptime, updates, and backups.
-- **Platform coupling** — Ghost bundles content, email, membership, and analytics into one system. That is convenient when you need all of it, but means lock-in when you only need content publishing.
-- **Content in a database** — blog posts live in Ghost's internal format in MySQL. Exporting means using Ghost's JSON export, which is not markdown.
-- **Standalone by design** — Ghost is a publication platform, not a docs/changelog/marketing workflow tool. Running your docs in Ghost alongside your blog is not its intended use case.
+- **Server dependency.** Self-hosting means running Node.js and MySQL, with uptime, updates, and backups on you.
+- **Platform coupling.** Ghost bundles content, email, membership, and analytics into one system. That's convenient when you need all of it, and lock-in when you only need publishing.
+- **Content in a database.** Posts are stored in Ghost's own Lexical JSON format, not Markdown. Exporting means Ghost's JSON export and a conversion step.
+- **Standalone by design.** Ghost is a publication, not a site. Your docs, changelog, and product pages live somewhere else, usually on a different domain or behind a proxy.
 
-With markdown files in the repo, content is already on disk. It deploys statically. And it shares a workflow with everything else in your repo — docs, changelog, marketing pages, blog posts — all in one system.
+With Markdown files in the repo, content is already on disk and deploys with the rest of the site. Docs, changelog, marketing pages, and blog posts all share one design and one workflow.
 
-<CaseStudy
-  title="When Cursor moved from CMS to markdown-in-code"
-  logo={{ src: '/ai-logos/cursor.svg', alt: 'Cursor' }}
-  source="Lee Robinson — Coding Agents & Complexity Budgets"
-  sourceUrl="https://leerob.com/agents"
-  stats={[
-    { label: 'Migration cost', value: '$260' },
-    { label: 'Build speed improvement', value: '2x faster' },
-    { label: 'CDN savings (prior spend)', value: '$56,848' },
-    { label: 'Commits in one weekend', value: '67' },
-  ]}
->
-  <p>
-    Cursor's engineering team migrated their content site — engineering blog, product changelog, and docs — from an API-based CMS back to markdown files in their codebase. The migration took one weekend using AI agents, cost $260 in tokens, and resulted in 2x faster builds.
-  </p>
-  <p>
-    The abstraction layer was adding real cost: separate user management, draft preview plumbing, CDN bills that reached $56,848, and dependency bloat that made the codebase harder to reason about.
-  </p>
-  <p>
-    For teams using Ghost for a blog that is part of a larger site, the same pattern applies: the content platform adds complexity when the content could live alongside the rest of the codebase.
-  </p>
-</CaseStudy>
+The split shows up in day-to-day work. A blog on Ghost usually means a second theme to keep in sync with the main site's design, a second set of logins, and a second place to look when someone asks "where do I change this?" When the blog is just another collection in the site's repository, there's one design system, one set of editors, and one place to look.
 
 ## Content as code
 
-When content lives in markdown files inside a Git repository:
+When content lives in Markdown files inside a Git repository:
 
 - **`grep` works.** Search your entire content library with standard dev tools.
 - **`git log` works.** Every content change has a commit, an author, a timestamp, and a diff.
 - **`git blame` works.** Trace any sentence to the person or agent that wrote it.
-- **Code review works.** Content changes go through the same PR process as code changes.
+- **Review works.** With review before publish, edits wait as a draft until someone approves them.
 - **Deploys are atomic.** Content and code ship together. No database state to sync.
 
-Ghost's writing experience is clean and focused — one of the best in any CMS. But the content lives in Ghost's database, not in your repo. You cannot review a blog post in a pull request, and your content is not portable without export tooling.
+Ghost's writing experience is clean and focused, one of the best in any CMS, and its post history lets you restore earlier versions. But the content lives in Ghost's database, not in your repo, and it isn't portable without export tooling.
 
 ## AI agents and markdown
 
-AI coding agents — Claude Code, Cursor, Windsurf, GitHub Copilot — work natively with files in a repository. When your content is markdown:
+AI coding agents (Claude Code, Codex, Cursor) work natively with files in a repository. When your content is Markdown:
 
-- Agents can **read, write, search, and diff** content with zero special tooling
-- No Ghost API, no database queries, no platform abstraction to navigate
-- Content is **inspectable** — an agent can open the file and understand the structure immediately
-- Every agent edit lands in a Git commit, reviewable by humans before it ships
+- Agents can **read, write, search, and diff** content with no API in between
+- Content is **inspectable**: an agent opens the file and understands the structure
+- Every agent edit lands in a Git commit, reviewable by people before it ships
 
-Ghost has an Admin API, but it is designed for platform integrations, not for AI agent content workflows.
+Ghost has an Admin API, and you can connect agents to it with integrations. But an agent working through it writes straight into the live publication's database.
 
-GitCMS takes this further with its **MCP app** — a structured interface that turns AI assistants like ChatGPT, Claude, and other MCP-compatible agents into content agents. Agents can create drafts, edit posts, manage collections, and submit changes for review through MCP. GitCMS handles the git workflow underneath.
-
-This matters more as AI coding agents like **v0**, **Lovable**, **Bolt**, and **Cursor** let anyone build and maintain real sites from a description. For teams whose blog is part of a broader site — not a standalone publication — the content and the site can both live in the same repo, both managed with AI assistance. No publishing platform needed.
+GitCMS has an **MCP app** for content agents. ChatGPT, Claude, and other MCP clients read and edit entries and site data, draft inside content tasks, and submit for review. A person publishes. GitCMS sells no AI credits; you bring the agent you already use.
 
 ## Feature comparison
 
@@ -104,81 +80,70 @@ This matters more as AI coding agents like **v0**, **Lovable**, **Bolt**, and **
   rows={[
     {
       category: 'Content storage',
-      gitcms: 'Markdown files in Git',
+      gitcms: 'Markdown, MDX, and data files in Git',
       competitor: 'MySQL database',
       note: 'Where does your content actually live?',
     },
     {
-      category: 'Version control',
-      gitcms: 'native',
-      competitor: 'not-core',
-      note: 'Git history vs no built-in content versioning',
+      category: 'Version history',
+      gitcms: 'Full Git history',
+      competitor: 'Post history',
     },
     {
-      category: 'Branching and drafts',
-      gitcms: 'native',
-      competitor: 'Draft/publish states',
-      note: 'GitCMS uses Git branches. Ghost has draft/published toggles.',
+      category: 'Drafts and review',
+      gitcms: 'Content tasks; reviews in the editor with approve or request changes',
+      competitor: 'Draft and published states; contributors draft, editors publish',
     },
     {
       category: 'Writing experience',
-      gitcms: 'Notion-like editor',
+      gitcms: 'Document-style visual editor',
       competitor: 'Focused writing editor (very polished)',
       note: 'Ghost has one of the best writing experiences in any CMS',
     },
     {
       category: 'Markdown / MDX support',
       gitcms: 'native',
-      competitor: 'Mobiledoc / Lexical editor (not markdown)',
-      note: 'Ghost uses its own rich text format internally',
+      competitor: 'Lexical editor (stored as JSON, not Markdown)',
     },
     {
       category: 'Content delivery',
-      gitcms: 'Pre-rendered static files',
+      gitcms: 'Whatever your framework builds, often static',
       competitor: 'Dynamic Node.js server',
     },
     {
       category: 'Built-in newsletters',
-      gitcms: 'not-core',
+      gitcms: 'no',
       competitor: 'native',
-      note: 'Ghost has built-in email newsletters and delivery',
     },
     {
       category: 'Paid memberships',
-      gitcms: 'not-core',
+      gitcms: 'no',
+      competitor: 'Native (Stripe), on Publisher and above',
+    },
+    {
+      category: 'Social web (ActivityPub)',
+      gitcms: 'no',
       competitor: 'native',
-      note: 'Ghost has built-in Stripe-powered memberships',
+      note: 'Added in Ghost 6.0',
     },
     {
       category: 'Content scope',
-      gitcms: 'Docs, blog, changelog, marketing — unified',
-      competitor: 'Blog and publication focused',
-      note: 'Ghost is designed for publications, not broader site content',
+      gitcms: 'Docs, blog, changelog, marketing, site data',
+      competitor: 'Blog and publication',
     },
     {
-      category: 'Infrastructure required',
-      gitcms: 'None (files in repo)',
-      competitor: 'Node.js server + MySQL (or Ghost Pro)',
+      category: 'Hosting',
+      gitcms: 'Your existing host (Vercel, Netlify, Cloudflare, …)',
+      competitor: 'Ghost(Pro), or self-hosted Node.js + MySQL',
     },
     {
-      category: 'Collaboration model',
-      gitcms: 'Git-based (PRs, branches, review)',
-      competitor: 'Staff roles in admin panel',
+      category: 'AI agents',
+      gitcms: 'MCP for ChatGPT, Claude, and other clients; coding agents work in the repo',
+      competitor: 'Via Admin API integrations',
     },
     {
-      category: 'AI agent workflow',
-      gitcms: 'Native + MCP app for ChatGPT/Claude',
-      competitor: 'Via Admin API',
-      note: 'GitCMS turns AI assistants into content agents via MCP',
-    },
-    {
-      category: 'Vendor lock-in',
-      gitcms: 'Low (markdown files are portable)',
-      competitor: 'Medium (content in database, Ghost-specific format)',
-    },
-    {
-      category: 'Migration complexity',
-      gitcms: 'Low (content is already files)',
+      category: 'Portability',
+      gitcms: 'High (plain files in your repo)',
       competitor: 'Medium (JSON export + format conversion)',
     },
   ]}
@@ -189,16 +154,16 @@ This matters more as AI coding agents like **v0**, **Lovable**, **Bolt**, and **
 <PricingCompare
   competitorName="Ghost"
   gitcms={{
-    note: 'No server to host. No member limits. Content lives in your repo.',
+    note: 'No CMS server to host. No member limits. Content lives in your repo.',
   }}
   competitor={{
     free: 'Self-hosted: free (you pay for hosting)',
-    paid: 'Ghost Pro: $18/mo Starter, $29/mo Publisher, $199/mo Business',
-    note: 'Starter is limited to 1 staff user and 1,000 members. Publisher allows 3 staff. Business allows 15 staff and 10K members.',
+    paid: 'Ghost(Pro): $18/mo Starter, $29/mo Publisher, $199/mo Business, billed yearly (as of October 2026)',
+    note: 'Starter: 1 staff user, 1,000 members, no paid subscriptions. Publisher: 3 staff users. Business: 15 staff users and 10,000 members. Prices rise with audience size.',
   }}
 />
 
-Ghost Pro pricing is reasonable for what you get — hosting, email delivery, and member management included. But it is a publishing platform price, not a content workflow price. If you do not need newsletters or paid memberships, you are paying for features you do not use.
+Ghost(Pro) pricing is fair for what you get: hosting, email delivery, analytics, and member management. But it's a publishing platform price, scaled by staff users and members. If you don't need newsletters or paid memberships, you're paying for features you don't use. See [GitCMS pricing](/#pricing) for the current plans.
 
 ## Where Ghost is genuinely better
 
@@ -208,49 +173,50 @@ If your team needs:
 
 - A clean, distraction-free writing experience purpose-built for long-form content
 - Built-in email newsletters with delivery, analytics, and subscriber management
-- Paid membership and subscription management via Stripe
-- A standalone publication or blog as the primary product
+- Paid memberships and subscriptions via Stripe
+- Distribution to the social web without extra tools
+- A standalone publication as the primary product
 - A managed platform that handles hosting, email, and scaling
 
-Then Ghost is solving a specific problem very well. Its focus is its strength.
+Then Ghost solves a specific problem very well. Its focus is its strength, and it's open source if you want to run it yourself.
 
 ## Where GitCMS is better
 
-GitCMS is better when your blog is **part of a broader content site, not the whole product**.
+GitCMS is better when your blog is **part of a broader site, not the whole product**.
 
-Most startup and product teams do not run standalone publications. They have:
+Most startup, product, and agency sites aren't standalone publications. They have:
 
-- Docs and blog in the same repo
-- Changelog alongside marketing pages
+- Docs and a blog on the same site
+- A changelog alongside marketing pages
+- Menus, footers, and team pages that also need editing (GitCMS edits these as [site data](/docs/features/site-data/) forms)
 - Content that should ship with the code
-- A workflow that includes code review, not just content publishing
 
-Ghost is designed for publications. GitCMS is designed for content-heavy sites where docs, blog, changelog, and marketing pages share one repo-native workflow — and where both humans and AI agents contribute.
+GitCMS covers all of it in one admin: a visual editor, reviews in the editor, Google sign-in for invited editors, and AI agents that draft through the same review workflow. Ghost is designed for publications. GitCMS is designed for websites.
 
 <Tradeoffs>
-  <p>Choosing markdown-in-git over Ghost is a real tradeoff:</p>
+  <p>Choosing a code-first site with GitCMS over Ghost is a real tradeoff:</p>
   <ul>
-    <li>Ghost's writing experience is one of the best. It is purpose-built for long-form content creation.</li>
-    <li>If you need built-in newsletters and email delivery, Ghost handles it natively. GitCMS does not.</li>
-    <li>Paid memberships and subscriptions are built into Ghost. You would need a separate solution with GitCMS.</li>
-    <li>Ghost Pro is a managed platform — no infrastructure to worry about. GitCMS requires you to handle deployment of your static site.</li>
+    <li>Ghost's writing experience is one of the best, purpose-built for long-form publishing.</li>
+    <li>Newsletters and email delivery are built into Ghost. With GitCMS, you need a separate email tool.</li>
+    <li>Paid memberships and subscriptions are built into Ghost. GitCMS doesn't do memberships.</li>
+    <li>Ghost(Pro) is fully managed. With GitCMS, you deploy the site on your own host.</li>
   </ul>
-  <p>For teams whose content is part of a broader site and does not need newsletter or membership features, these tradeoffs are usually worth it. You get unified content workflow, simpler architecture, full portability, and a system that works equally well for humans and AI agents.</p>
+  <p>For teams whose content is part of a broader site and doesn't need newsletters or memberships, these tradeoffs are usually worth it. You get one workflow for all content, full portability, and a system that works for people and AI agents alike.</p>
 </Tradeoffs>
 
 ## Decision by use case
 
 **Standalone publication with newsletters and paid memberships:** Ghost is the better fit.
 
-**Docs, blog, changelog, and marketing pages in one repo:** GitCMS is the better fit.
+**Docs, blog, changelog, and marketing pages on one site:** GitCMS is the better fit.
 
-**Creator or publication team that wants managed hosting with email delivery:** Ghost is the better fit.
+**Creator who wants managed hosting, email delivery, and a social web presence:** Ghost is the better fit.
 
-**Developer-led team that wants content as portable markdown files:** GitCMS is the better fit.
+**Developer-led team that wants content as portable Markdown files:** GitCMS is the better fit.
 
 **Blog as the primary product with subscriber management:** Ghost is the better fit.
 
-**Startup or small team that wants AI agents and humans collaborating in Git:** GitCMS is the better fit.
+**Startup or agency that wants AI agents and people working through one review workflow:** GitCMS is the better fit.
 
 <CompareCTA
   description="Blog, docs, and changelog in one admin, on the site you already own."

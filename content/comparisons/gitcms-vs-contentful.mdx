@@ -3,7 +3,7 @@ title: 'GitCMS vs Contentful'
 description: 'Contentful stores content in a managed API. GitCMS keeps it as files in your repo, editable by your team, clients, and AI agents. Here''s when each fits.'
 competitor: 'Contentful'
 category: 'Headless CMS'
-lastReviewed: '2026-04-15'
+lastReviewed: '2026-10-28'
 order: 4
 ---
 
@@ -17,9 +17,11 @@ Both are valid. But the tradeoffs are real, and for content-heavy sites, they ar
 
 ## What changed in 2026
 
-Headless CMSs solved a real problem: structured content for developers through an API, and a dashboard for editors. But in 2026, more and more websites are built and maintained by coding agents working directly in a repository.
+Two things changed this year, and they pull in opposite directions.
 
-That changes the math on an API-first content platform. Content in Contentful is a second source of truth: your coding agent can't see it in the repo, your Git history doesn't record it, and every page has to fetch it. When an agent builds or changes a page, it has to work across two systems.
+Contentful became part of Salesforce: the acquisition closed on September 1, 2026, and Salesforce plans to make Contentful the content layer across Customer 360 and Agentforce. For companies already running on Salesforce, that makes Contentful an even more natural choice.
+
+Meanwhile, more and more websites are built and maintained by coding agents working directly in a repository. For those sites, content in Contentful is a second source of truth: it isn't in the repo, your Git history doesn't record it, and every page has to fetch it. Contentful's hosted MCP server lets agents reach that content, but an agent building or changing a page still works across two systems.
 
 For sites whose content is mostly pages and posts, keeping content as files in the repo is simpler. The agent sees everything, every change is a commit, and GitCMS gives clients and marketers the editor and review workflow the headless dashboard used to provide. That's Day Two: running the site after it ships.
 
@@ -29,7 +31,7 @@ For sites whose content is mostly pages and posts, keeping content as files in t
   <VerdictCompetitor title="Contentful">
     - You need content as an API for multiple apps, surfaces, or channels
     - Your content model is deeply structured and relational
-    - Your team wants a managed content platform with enterprise workflows
+    - Your company runs on Salesforce and wants content inside that stack
     - Personalization, experimentation, or large-scale content ops matter
   </VerdictCompetitor>
   <VerdictGitCMS>
@@ -46,71 +48,48 @@ When a headless CMS manages your content, every page build or server render need
 
 - **Build-time network I/O** — for static sites, every page generation makes API calls to Contentful. A 500-page site means hundreds of API round-trips during build.
 - **Runtime latency** — for server-rendered pages, content fetching adds network hops before the HTML response. Cache layers help, but they add their own complexity.
-- **CDN and API costs at scale** — the more traffic and content you have, the more you pay for API calls and CDN bandwidth.
+- **Usage-based costs** — paid plans include a quota of API calls and CDN bandwidth, and usage beyond it is billed as overage.
 
-With markdown files in the repo, content is already on disk. No network hop. The parser runs locally. Pre-rendering is pure CPU, no I/O wait.
+With Markdown files in the repo, content is already on disk. No network hop. The parser runs locally. Pre-rendering is pure CPU, no I/O wait.
 
-For content sites that are fundamentally readonly for end users, this is not a minor optimization. It is a fundamentally simpler architecture.
+For content sites that are fundamentally read-only for end users, this is not a minor optimization. It is a simpler architecture.
 
-<CaseStudy
-  title="When Cursor moved from CMS to markdown-in-code"
-  logo={{ src: '/ai-logos/cursor.svg', alt: 'Cursor' }}
-  source="Lee Robinson — Coding Agents & Complexity Budgets"
-  sourceUrl="https://leerob.com/agents"
-  stats={[
-    { label: 'Migration cost', value: '$260' },
-    { label: 'Build speed improvement', value: '2x faster' },
-    { label: 'CDN savings (prior spend)', value: '$56,848' },
-    { label: 'Commits in one weekend', value: '67' },
-  ]}
->
-  <p>
-    Cursor's engineering team migrated their content site — engineering blog, product changelog, and docs — from an API-based CMS back to markdown files in their codebase. The migration took one weekend using AI agents, cost $260 in tokens, and resulted in 2x faster builds.
-  </p>
-  <p>
-    The motivation was not that their CMS was bad. It was that the abstraction layer was adding real cost: separate user management, draft preview plumbing, CDN bills that reached $56,848, and dependency bloat that made the codebase harder to reason about.
-  </p>
-  <p>
-    Their conclusion: for content-heavy sites, markdown in the repo is a simpler and more durable operating model — especially when AI agents are part of the workflow.
-  </p>
-</CaseStudy>
+## Who edits, and how they sign in
+
+A headless CMS also brings its own account system. Contentful's plans are partly defined by how many users they include, so every marketer, client, and freelancer becomes a seat in another tool.
+
+GitCMS keeps the edit path short. Invited editors sign in with Google, never need a GitHub account, and only see the sites they were given access to. Their saves become commits made through GitCMS, so the repo stays the record without asking anyone to learn Git.
 
 ## Content as code
 
 This is the core thesis behind GitCMS, and it is worth spelling out.
 
-When content lives in markdown files inside a Git repository:
+When content lives in Markdown files inside a Git repository:
 
 - **`grep` works.** You can search your entire content library with standard dev tools.
 - **`git log` works.** Every content change has a commit, an author, a timestamp, and a diff.
 - **`git blame` works.** You can trace any sentence to the person or agent that wrote it.
-- **Code review works.** Content changes go through the same PR process as code changes.
+- **Code review works.** Content changes and code changes live in the same history.
 - **Deploys are atomic.** Content and code ship together. No stale cache, no API version mismatch.
 
 With an API-based CMS, content lives in a separate system. You need an SDK to read it, a webhook to trigger builds, a preview mode to see drafts, and a sync layer to keep everything aligned. Each of those is a moving part that can break, lag, or cost money.
 
-For content sites — where the content *is* the product — the cost of that abstraction compounds over time.
+The same goes for site data. In GitCMS, menus, footers, team lists, and theme settings stay in the JSON, YAML, or TOML files your site already reads, edited as forms, with only changed values written back.
 
-## AI agents and markdown
+## AI agents and Markdown
 
-This angle is less obvious but increasingly important.
-
-AI coding agents — Claude Code, Cursor, Windsurf, GitHub Copilot — work natively with files in a repository. When your content is markdown:
+Coding agents — Claude Code, Codex, Cursor — work natively with files in a repository. When your content is Markdown:
 
 - Agents can **read, write, search, and diff** content with zero special tooling
 - No API authentication, no CMS SDK, no content model abstraction to navigate
 - Content is **inspectable** — an agent can open the file and understand the structure immediately
-- Every agent edit lands in a Git commit, reviewable by humans before it ships
+- Every agent edit lands in a Git commit
 
-When content lives behind an API, agents hit a wall. They cannot just look at the code and see what the navigation items are, what the blog post structure looks like, or how content relates across pages. The network boundary is costly — not just in latency, but in cognitive overhead for the agent.
+Contentful has invested heavily on the platform side. Its remote MCP server, generally available since July 2026, lets AI assistants read and write entries, manage content models, and invoke AI Actions, with admins controlling which tools agents get. If your content lives in Contentful, that is the right way to bring agents to it.
 
-As Lee Robinson put it: *"The cost of abstractions with AI is very high."*
+GitCMS takes the other route: content stays in files, and the **MCP app** gives ChatGPT, Claude, and other MCP clients structured access to it. Agents read and edit entries and site data, draft inside a content task, and submit for review. People approve and publish. Bring your own agent; GitCMS sells no AI credits.
 
-GitCMS takes this further with its **MCP app** — a structured interface that turns AI assistants like ChatGPT, Claude, and other MCP-compatible agents into content agents. Instead of agents needing to know git commands or file paths, they can create drafts, edit posts, manage collections, and submit changes for review through MCP. GitCMS handles the git workflow underneath.
-
-The result: non-technical team members can ask an AI assistant to "write a blog post about our new feature" or "update the changelog for v2.3" and the content lands in the right place, in the right format, ready for human review — all without leaving the conversation.
-
-This matters beyond content workflows. In 2026, AI coding agents — **v0**, **Lovable**, **Bolt**, **Cursor**, **Claude Code**, **Codex** — let anyone build real sites from a description. The site itself becomes code in a repo, built and maintained with AI assistance. When both the site and its content live in the same repo as inspectable files, the entire stack is AI-native. No API layer between the agent and the content. No separate platform to authenticate against. The abstraction cost that Lee Robinson warned about disappears.
+The result: a marketer can ask an AI assistant to "update the changelog for v2.3," and the change lands in the right file, in the right format, waiting for review.
 
 ## Feature comparison
 
@@ -130,21 +109,25 @@ This matters beyond content workflows. In 2026, AI coding agents — **v0**, **L
       note: 'Git history vs CMS-managed versions',
     },
     {
-      category: 'Branching and drafts',
-      gitcms: 'native',
-      competitor: 'partial',
-      note: 'GitCMS uses Git branches. Contentful has environments (paid tiers).',
+      category: 'Drafts and review',
+      gitcms: 'Content tasks with reviews in the editor',
+      competitor: 'Draft states, environments, and workflows',
     },
     {
       category: 'Markdown / MDX support',
       gitcms: 'native',
-      competitor: 'Rich text (non-markdown)',
-      note: 'Contentful uses its own rich text format, not markdown',
+      competitor: 'Markdown and rich text fields (no MDX files)',
+      note: 'Content is stored as entries, not files',
     },
     {
-      category: 'Visual editing',
-      gitcms: 'Notion-like editor',
+      category: 'Editing experience',
+      gitcms: 'Visual document editor',
       competitor: 'Structured field editor',
+    },
+    {
+      category: 'Site data (menus, footers, settings)',
+      gitcms: 'JSON / YAML / TOML files edited as forms',
+      competitor: 'Modeled as entries',
     },
     {
       category: 'Content delivery',
@@ -154,7 +137,7 @@ This matters beyond content workflows. In 2026, AI coding agents — **v0**, **L
     {
       category: 'Build performance',
       gitcms: 'Fast (local file reads)',
-      competitor: 'Slower (network-bound fetches)',
+      competitor: 'Network-bound fetches',
       note: 'Impact grows with content volume',
     },
     {
@@ -170,25 +153,19 @@ This matters beyond content workflows. In 2026, AI coding agents — **v0**, **L
       note: 'Contentful has a deeper content modeling system',
     },
     {
-      category: 'Collaboration model',
-      gitcms: 'Git-based (PRs, branches, review)',
-      competitor: 'Platform-based (roles, workflows)',
+      category: 'Personalization',
+      gitcms: 'no',
+      competitor: 'native',
     },
     {
-      category: 'AI agent workflow',
-      gitcms: 'Native + MCP app for ChatGPT/Claude',
-      competitor: 'not-core',
-      note: 'GitCMS turns AI assistants into content agents via MCP',
+      category: 'AI agents',
+      gitcms: 'Bring your own via MCP; agents draft for review',
+      competitor: 'Remote MCP server and AI Actions',
     },
     {
       category: 'Vendor lock-in',
-      gitcms: 'Low (markdown files are portable)',
-      competitor: 'Higher (proprietary content format)',
-    },
-    {
-      category: 'Self-hosting option',
-      gitcms: 'yes',
-      competitor: 'no',
+      gitcms: 'Low (Markdown files are portable)',
+      competitor: 'Higher (content lives in the platform)',
     },
     {
       category: 'Migration complexity',
@@ -206,13 +183,13 @@ This matters beyond content workflows. In 2026, AI coding agents — **v0**, **L
     note: 'No per-record limits. No API call metering. Content lives in your repo.',
   }}
   competitor={{
-    free: 'Free: 5 users, 1M API calls/mo',
-    paid: 'Basic starts at $300/mo',
-    note: 'Scales with records, environments, and API usage. Enterprise pricing is custom.',
+    free: 'Free: 10 users, 100K API calls/mo',
+    paid: 'Lite: $300/mo',
+    note: 'As of October 2026. Lite raises users and API limits, with paid overages. Enterprise pricing is custom.',
   }}
 />
 
-For content-heavy sites, the pricing model difference matters. Contentful charges based on content records, API calls, and environments. As your site grows, costs scale with it. GitCMS does not meter your content — it lives in your repo. You pay for the workflow tooling, not the content storage.
+For content-heavy sites, the pricing model difference matters. Contentful prices by users, API calls, bandwidth, and spaces. As your team and traffic grow, costs grow with them. GitCMS does not meter your content — it lives in your repo. You pay for the editing and review workflow, not content storage. See [pricing](/#pricing) for current plans.
 
 ## Where Contentful is genuinely better
 
@@ -224,7 +201,7 @@ If you need:
 - Rich, deeply relational content models that go beyond "files in a repo"
 - Enterprise content operations with roles, workflows, and approval chains
 - Personalization and experimentation at scale
-- An ecosystem of integrations for large content teams
+- Content that plugs into Salesforce, Agentforce, and the rest of a large martech stack
 
 Then Contentful is playing a bigger game, and that bigger game may be exactly what your business needs.
 
@@ -235,24 +212,24 @@ GitCMS is better when a headless CMS would mostly be **extra abstraction**.
 That happens more often than teams realize. If the real setup is:
 
 - Marketing site in a repo
-- Docs in markdown
-- Changelog in markdown
-- Blog posts in markdown
+- Docs in Markdown
+- Changelog in Markdown
+- Blog posts in Markdown
 - Deployment already tied to Git
 
 Then introducing a separate content platform creates more moving parts than value: separate auth, SDK dependencies, webhook plumbing, preview mode, cache invalidation, and a content format that does not live in your codebase.
 
-GitCMS keeps the source of truth in the repo. Review happens in Git. Both humans and AI agents work on the same files. The architecture is simpler because it does not need to be more complex.
+GitCMS keeps the source of truth in the repo. Clients and marketers edit visually, reviewers comment and approve beside the text, and one repository can hold several separately configured sites. Both humans and AI agents work on the same files.
 
 <Tradeoffs>
-  <p>Choosing markdown-in-git over a headless CMS is a real tradeoff. Be honest about it:</p>
+  <p>Choosing Markdown-in-Git over a headless CMS is a real tradeoff. Be honest about it:</p>
   <ul>
     <li>Content changes require a build and deploy step. They are not instant like publishing from a CMS dashboard.</li>
     <li>If you need the same content powering five different apps via API, a repo-native model is not the right fit.</li>
-    <li>Non-technical editors need to be comfortable with a Git-based workflow (GitCMS's editor abstracts most of this, but the underlying model is still Git).</li>
     <li>Rich structured content with deep relationships is harder to model in frontmatter than in a purpose-built schema builder.</li>
+    <li>There is no personalization or experimentation layer. GitCMS manages website content, not audiences.</li>
   </ul>
-  <p>For content-heavy sites that are fundamentally readonly for end users, these tradeoffs are usually worth it. You get simpler architecture, faster builds, lower costs, full portability, and a workflow that works equally well for humans and AI agents.</p>
+  <p>For content-heavy sites that are fundamentally read-only for end users, these tradeoffs are usually worth it. You get simpler architecture, faster builds, no content metering, full portability, and a workflow that works equally well for humans and AI agents.</p>
 </Tradeoffs>
 
 ## Decision by use case
@@ -261,9 +238,9 @@ GitCMS keeps the source of truth in the repo. Review happens in Git. Both humans
 
 **Docs, blog, changelog, and marketing pages in one repo:** GitCMS is the better fit.
 
-**Team wants content as a managed API platform:** Contentful is the better fit.
+**Company standardized on Salesforce that wants content in the same stack:** Contentful is the better fit.
 
-**Team wants content as portable markdown files with a better editing and review workflow:** GitCMS is the better fit.
+**Team wants content as portable Markdown files with a visual editor and review before publish:** GitCMS is the better fit.
 
 **Content operations at enterprise scale with roles, automation, and approval chains:** Contentful is the better fit.
 
