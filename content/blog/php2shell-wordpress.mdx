@@ -1,0 +1,189 @@
+---
+title: "PHP2Shell: What WordPress Site Owners Should Do Now"
+description: |
+  PHP2Shell is a bug in PHP itself, so updating WordPress won't fix it. Check your PHP version, ask your host the right questions, and restart PHP today.
+date: "2026-10-28"
+category: guides
+authors:
+  - Waishnav
+tags:
+  - wordpress
+  - security
+  - php
+---
+
+PHP2Shell is a pair of critical PHP vulnerabilities, CVE-2026-109618 and CVE-2026-109619, that can let an unauthenticated attacker run code on the server. Both are rated CVSS v4.0 9.2. The PHP project fixed them on October 21, 2026 in PHP 8.5.12, 8.4.27, 8.3.36, and 8.2.35.
+
+If you run WordPress, here's the part that matters: **updating WordPress, plugins, or themes does not fix PHP2Shell.** The bug is in the PHP runtime underneath WordPress. The fix is a patched PHP package, followed by a restart of every PHP worker so the old code stops running.
+
+Your WordPress dashboard can say "everything is up to date" while the server behind it is still exposed.
+
+## Is my WordPress site affected by PHP2Shell?
+
+Probably, until you've confirmed otherwise. The [PHP security advisory](https://www.php.net/archive/2026.php#2026-10-21-5) says the risk covers all PHP installations serving web requests: PHP-FPM, Apache with mod_php, php-cgi, FrankenPHP, and LiteSpeed. PHP considers mod_php the highest-risk setup, because it has a demonstrated exploit where an unauthenticated request triggers the attack before any application code runs. Before WordPress loads, there is nothing for WordPress or a plugin to block.
+
+The two bugs, in PHP's own words:
+
+| CVE | What goes wrong |
+|---|---|
+| CVE-2026-109618 | Out-of-memory handling interrupts PHP while request data is only partly initialized, and cleanup then treats that data as valid. |
+| CVE-2026-109619 | Request-owned state survives after its memory is freed, and a later request on the same worker uses it. |
+
+Your site is affected if the PHP serving it is older than the fixed release for its branch, and your host or Linux vendor hasn't confirmed a backported fix.
+
+## The checklist
+
+Work through these in order. Most WordPress owners only need steps 1 to 3.
+
+### 1. Find the PHP version that actually serves your site
+
+The version your website uses is the one that counts, and it isn't always the one your terminal reports.
+
+- **WordPress dashboard:** go to **Tools → Site Health → Info → Server**. This shows the PHP version the website runs on.
+- **Hosting panel:** cPanel, Plesk, and most managed hosts show a PHP version selector per site.
+- **phpinfo():** if you have file access, upload a one-line file, load it in a browser, and delete it right away. It shows the version and the loaded configuration.
+
+```php
+<?php phpinfo();
+```
+
+- **Command line:** `php -v` tells you the CLI version. A server can run a different version for web requests, so check the FPM binary for your branch too:
+
+```bash
+php -v
+php-fpm8.3 -v          # Debian/Ubuntu naming; adjust to your branch
+php-fpm -v             # RHEL, Alma, Rocky
+```
+
+### 2. Compare it against the fixed versions
+
+| PHP branch | Fixed in | Status |
+|---|---|---|
+| 8.5 | 8.5.12 | Supported |
+| 8.4 | 8.4.27 | Supported |
+| 8.3 | 8.3.36 | Security fixes only |
+| 8.2 | 8.2.35 | Security fixes until December 31, 2026 |
+| 8.1, 8.0, 7.4 | No official release | End of life |
+
+One catch: Linux distributions often backport security fixes without changing the upstream version number. An Ubuntu package can say 8.3.x and still contain the fix. If your package comes from a distribution, check its changelog for the CVE IDs:
+
+```bash
+# Debian / Ubuntu
+zcat /usr/share/doc/php8.3-fpm/changelog.Debian.gz | grep -m5 -E 'CVE-2026-10961[89]'
+
+# RHEL / Alma / Rocky
+rpm -q --changelog php-fpm | grep -m5 -E 'CVE-2026-10961[89]'
+```
+
+No match doesn't prove you're vulnerable, but it means you should ask whoever ships the package.
+
+### 3. On managed hosting, ask your host three specific questions
+
+On most shared and managed WordPress hosting, you can't patch PHP yourself. Your host can. A vague "are we safe?" gets a vague answer, so ask exactly this:
+
+```text
+1. Is the PHP service serving my site patched for CVE-2026-109618 and
+   CVE-2026-109619? Which version or package revision is it running?
+2. Were all PHP workers (PHP-FPM, Apache/mod_php, LiteSpeed) restarted
+   after the update?
+3. Has session.upload_progress.enabled been set to 0 for my site?
+```
+
+The third question covers the follow-up issue in the next section. Many hosts have also posted status updates about PHP2Shell, so check their status page first.
+
+### 4. On your own server, update and restart
+
+If you run a VPS, dedicated server, or containers, the patch is yours to apply. Take a backup first, then update from the same source your PHP came from:
+
+```bash
+# Debian / Ubuntu
+sudo apt update && sudo apt install --only-upgrade 'php8.3*'
+sudo systemctl restart php8.3-fpm     # or: sudo systemctl restart apache2 (mod_php)
+
+# RHEL / Alma / Rocky
+sudo dnf upgrade 'php*'
+sudo systemctl restart php-fpm        # or: sudo systemctl restart httpd (mod_php)
+```
+
+The restart isn't optional. PHP workers are long-lived processes, and CVE-2026-109619 is specifically about state that survives between requests on the same worker. Until every worker restarts, the old code keeps serving traffic.
+
+For Docker, pull the patched base image and rebuild. Restarting an old container does nothing:
+
+```bash
+docker pull php:8.4-fpm
+docker compose build --pull && docker compose up -d
+```
+
+Agencies: check every environment, not just the main site. Staging sites, old preview servers, and forgotten containers run PHP too.
+
+### 5. Turn off session upload progress
+
+On October 23, PHP published an [informational advisory](https://www.php.net/archive/2026.php#2026-10-23-1) for a third, lower-risk issue, CVE-2026-115560. It's only reachable when an application sets `session.serialize_handler` to `php_binary` or `php_serialize` in configuration and then switches it to `php` at runtime before `session_start()`. PHP calls this "unlikely in practice" and is fixing it in the next regular release, not an emergency one. As of October 28, that release hasn't shipped.
+
+The workaround is the same setting PHP already recommended as a CVE-2026-109619 mitigation, so it's worth applying everywhere:
+
+```ini
+; php.ini, then restart every PHP worker
+session.upload_progress.enabled = 0
+```
+
+Or in a PHP-FPM pool file:
+
+```ini
+php_admin_flag[session.upload_progress.enabled] = off
+```
+
+PHP's advisory warns that `ini_set()` and FPM `.user.ini` files are not enough, because the setting has to apply before PHP parses the request. Disabling it turns off upload progress bars that rely on PHP sessions. Most WordPress sites won't notice.
+
+### 6. If you can't patch today
+
+PHP's advisory lists partial mitigations, and it's blunt that they "do not make an installation safe." For CVE-2026-109618, the main ones are setting `memory_limit=-1` in a way applications can't override, and lowering `post_max_size` (8M if you don't need uploads, 32M if you do). Read the advisory before applying them: an unlimited memory limit can exhaust server memory, so it needs a container or cgroup limit around it.
+
+Treat these as hours-long measures, not a fix.
+
+### 7. Get off end-of-life PHP
+
+If Site Health shows PHP 7.4, 8.0, or 8.1, there is no official fixed release for you. The PHP security team published minimal source backports for those branches, and some Linux and LTS vendors ship backported packages. That's a lifeline for people building from source, not a plan for a business website.
+
+Ask your host to move you to PHP 8.3 or 8.4. Test on staging first, because older plugins and themes can break on newer PHP. And put PHP 8.2 on your calendar: it stops getting security fixes on December 31, 2026.
+
+## Is PHP2Shell being exploited?
+
+The honest answer is that sources disagree, and you shouldn't wait for them to agree.
+
+- **Wordfence**, which protects more than 5 million WordPress sites, said on October 22 that its firewall had [intercepted over 74,000 exploit or probing attempts](https://www.wordfence.com/blog/2026/10/attacks-on-php2shell-continue-but-no-known-compromises-as-a-result-yet/), and that it had not observed any confirmed compromise. The payloads it saw tried to read `wp-config.php` and `.env` and drop a PHP shell into upload, plugin, and theme folders. Wordfence also notes that no confirmed compromise in its telemetry doesn't mean an unpatched server is safe, because parts of the attack happen outside WordPress and its logs.
+- **Sansec** [reported](https://sansec.io/research/php2shell) that a researcher who tested the public proof-of-concept exploits found they don't work against a default PHP installation, and that mass exploitation looks less likely than it first expected.
+- **CISA** added both CVEs to its [Known Exploited Vulnerabilities catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) on October 26, with a patch deadline of October 29 for US federal agencies.
+
+So: plenty of attackers are trying, public exploits look unreliable, and a lab-quality exploit is a different thing from a public one. None of that changes the action. Patch, restart, verify.
+
+## Why a PHP bug is a WordPress bug
+
+This is the part worth thinking about after the patch is in.
+
+A WordPress site is a program. Every uncached page view starts a PHP request, and the runtime parses the request body, sets up sessions, and allocates memory before WordPress code runs. PHP2Shell lives in exactly that layer. A fully updated WordPress install with zero risky plugins was still exposed, because the attack surface was the interpreter, not the application.
+
+That's not a WordPress failing. It's what a dynamic site is: you're running a server-side runtime on every request, so you inherit that runtime's bugs and its patch schedule.
+
+A static or code-first site works differently. Astro, Hugo, Eleventy, or a Next.js static export builds HTML at deploy time, and a CDN serves files. There's no PHP interpreter in the request path, so a bug like PHP2Shell has nothing to hit. When the CDN's own software needs patching, that's the host's job, not a ticket for you.
+
+That doesn't make static sites safe by default. They have their own risks:
+
+- **Supply chain.** A static build pulls hundreds of npm packages. A compromised dependency runs during your build, with access to your build secrets.
+- **Accounts.** Whoever gets into your GitHub, Vercel, Netlify, or Cloudflare account can change the site. Use 2FA and least-privilege access.
+- **Build pipeline.** CI secrets and deploy tokens are now the keys to the site.
+- **Dynamic features move elsewhere.** Forms, search, comments, and memberships need a service or a serverless function, and each of those has its own runtime, even if someone else patches it.
+
+And WordPress is still the better tool for plenty of sites: when you depend on plugins for e-commerce or memberships, or your editors want a page builder.
+
+The tradeoff is about where your exposure lives. A WordPress site has a runtime you, or your host, must patch. A static site moves most of that risk to build time and to accounts, where it's narrower and easier to reason about.
+
+## Moving off WordPress without losing the editor
+
+The usual objection to moving a content site off WordPress isn't technical. It's the editors. They know wp-admin, and nobody wants to send a marketer a Markdown file and a Git tutorial.
+
+If PHP2Shell has you reconsidering, two things help. First, a coding agent can do most of the migration: our [WordPress to Astro migration prompt](/prompts/migrate-wordpress-to-astro/) walks Claude Code or Codex through moving posts, pages, and media into a static Astro site.
+
+Second, the editors keep an admin. GitCMS is the CMS for code-first and AI-built websites. It gives your team, your clients, and AI agents one safe place to edit, review, and publish website changes, while everything stays in your site's repository. Editors get a visual editor and a review step. Nothing in the request path runs PHP. We compare the two honestly, including where WordPress wins, in [GitCMS vs WordPress](/compare/gitcms-vs-wordpress/). If you're doing this for a client, [here's how to hand the site off](/blog/hand-off-claude-code-website-to-client/) so routine edits stop coming back to you.
+
+But first: open Site Health, check the PHP version, and send your host those three questions.
