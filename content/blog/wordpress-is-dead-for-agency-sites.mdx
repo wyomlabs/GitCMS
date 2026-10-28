@@ -1,0 +1,121 @@
+---
+title: "WordPress Is Dead for the Agency Content Site"
+description: |
+  WordPress lost 3.5 points of share in ten months of 2026, and a third of its sites can't patch PHP2Shell. Why the agency content site moved to code this year.
+date: "2026-10-28"
+category: engineering
+authors:
+  - Waishnav
+tags:
+  - wordpress
+  - agencies
+  - security
+  - astro
+  - claude-code
+---
+
+On October 21, PHP shipped an emergency release for two remote code execution bugs, and every agency with WordPress clients got the same email: "Are we affected?"
+
+For most of those sites, the honest answer was "I have to ask your host." Not because the agency was sloppy. Because [PHP2Shell](/blog/php2shell-wordpress/) is a bug in PHP, not in WordPress, and on shared or managed hosting the agency doesn't control PHP. The dashboard said everything was up to date. The interpreter underneath was still last week's.
+
+Then the number that made the week worse. As of October 28, [33.5% of WordPress sites run PHP 8.1 or older](https://wordpress.org/about/stats/), according to WordPress.org's own stats (15.0% on 7.4, 3.5% on 8.0, 9.5% on 8.1, 5.4% older still). Those branches get no releases from the PHP project. For a third of WordPress sites, there was no patch to ask the host for. The fix is a PHP major upgrade, with the plugin compatibility testing that implies.
+
+I build GitCMS and run gitcms.dev on Astro, so I have a side. But I'm not going to tell you WordPress is dying. The data says something narrower and, if you run an agency, more useful: for the site agencies build most, WordPress stopped being the default this year. PHP2Shell didn't cause that. It's the week the maintenance bill became visible to clients.
+
+## Dead for whom
+
+Let me be exact, because "WordPress is dead" is only worth saying if I can show for whom.
+
+This post is about the bread-and-butter agency deliverable. The marketing site for a dentist, a law firm, a startup. The blog. The docs site. The five-to-fifty page brochure site where the client changes the opening hours, publishes a post a month, and swaps a team photo. That is the site I'm arguing WordPress has lost.
+
+It is not about:
+
+- **WooCommerce stores.** Checkout, inventory, tax, shipping, and payment plugins are an application. Moving them is re-platforming, not a CMS swap.
+- **Membership and course sites.** Logins, gated content, and recurring billing are dynamic features that WordPress plugins handle well and a static site needs a separate service for.
+- **Businesses that run on specific plugins.** Booking, LMS, multilingual, forms wired into a CRM. If three plugins are the business, the CMS underneath is the least of it.
+- **Teams with no developer who design pages visually.** If the client builds layouts themselves, a page builder suits them better than a code-first site, on WordPress or anywhere else.
+
+WordPress is alive and the right call for all of those. [The WordPress alternatives hub](/alternatives/wordpress/) covers when to stay in more detail. If your business is WooCommerce builds, you can close this tab.
+
+If your business is content sites, keep reading, because the numbers moved this year, and they moved fast.
+
+## The share went to "no CMS"
+
+[W3Techs](https://w3techs.com/technologies/history_overview/content_management/all) has tracked CMS usage for years, and the WordPress line was flat for most of them: 43.1% of all websites on January 1, 2023, 43.1% a year later, a peak of 43.6% on January 1, 2025. Then this:
+
+| Date | WordPress | No detectable CMS | Shopify | Wix | Squarespace |
+|---|---|---|---|---|---|
+| 1 Jan 2025 | 43.6% | 29.6% | 4.7% | 3.3% | 2.2% |
+| 1 Jan 2026 | 43.0% | 28.6% | 5.0% | 4.2% | 2.4% |
+| 1 Oct 2026 | 40.2% | 31.5% | 5.4% | 4.2% | 2.4% |
+| 28 Oct 2026 | 39.5% | 32.1% | 5.3% | 4.2% | 2.4% |
+
+Source: W3Techs [yearly](https://w3techs.com/technologies/history_overview/content_management/all/y) and [monthly](https://w3techs.com/technologies/history_overview/content_management/all) history, checked October 28, 2026.
+
+Two things in that table matter more than the headline.
+
+**The pace changed.** WordPress lost 0.6 points across all of 2025. It lost 3.5 points in the first ten months of 2026. That's six times the rate, and the monthly series shows it accelerating: 0.1 to 0.3 points a month through spring and summer, 0.5 in September, 0.7 in the first four weeks of October.
+
+**The share didn't go to a competitor.** Shopify gained 0.3 points since January. Wix and Squarespace gained nothing. The only bucket that grew is "no detectable CMS": up 3.5 points, the same 3.5 points WordPress lost. And that bucket had been shrinking for years, from 32.3% in January 2023 to 28.6% in January 2026. In 2026 it reversed.
+
+The honest caveat: W3Techs fingerprints software on a site. "No CMS" is a catch-all that includes static sites, custom code, framework apps whose CMS can't be detected, and parked or abandoned sites. It cannot tell you that a given site left WordPress for Astro. What it can tell you is that the sites leaving WordPress are not arriving at another detectable CMS. They are arriving at the bucket where a code-first site lands: Astro, Next.js, Hugo, content in files, nothing to fingerprint in the request path.
+
+## The security math an agency carries
+
+Here's what a WordPress portfolio costs to keep patched, in numbers rather than feelings.
+
+Patchstack's [State of WordPress Security in 2026](https://patchstack.com/whitepaper/state-of-wordpress-security-in-2026/) counted 11,334 new WordPress vulnerabilities in 2025, up 42% on 2024. 91% were in plugins, 9% in themes, and six were in core. 46% had no fix available when they were disclosed. For the vulnerabilities attackers actually went after, the weighted median time from disclosure to first exploit was 5 hours, and about half of the high-impact ones were exploited within 24 hours.
+
+Now put that against an agency with 20 client sites, each with a typical 15 plugins. That's 300 plugin installs, each on its own release schedule. If plugin vulnerabilities were spread evenly across the [77,000+ plugins](https://wordpress.org/plugins/) in the directory (they aren't; popular plugins draw more researchers and more attackers, so this is a rough model, not a forecast), 10,314 plugin vulnerabilities a year across 300 installs works out to about 40 disclosures a year that touch your portfolio. Roughly three a month. 46% of those, around 18 a year, arrive with no fix, so the only move is to disable or replace the plugin before the client notices the feature is gone.
+
+That is the real job description. Not "update plugins on Tuesday." A five-hour response window across 300 moving parts, on a retainer the client thinks is for hosting.
+
+PHP2Shell is a different kind of problem, and that's why it matters more than its exploit status. A plugin CVE is fixed from wp-admin. A runtime CVE is fixed by a new PHP package on the server plus a restart of every PHP worker, and on managed hosting the agency can't do either. It files a ticket and waits. For the 20-site agency, the stats above say about seven of those sites are on PHP 8.1 or older, where the ticket comes back with "we'll need to upgrade your PHP," which means retesting every plugin on every one of them. And PHP 8.2, which runs another 23.1% of WordPress sites, stops receiving security fixes on December 31, 2026. Unless those sites move, 56.6% of WordPress sites will be on a PHP branch without security updates by January.
+
+Was PHP2Shell exploited at scale? The sources disagree, and I'll report that rather than pick a side. [Wordfence](https://www.wordfence.com/blog/2026/10/attacks-on-php2shell-continue-but-no-known-compromises-as-a-result-yet/) said on October 22 that its firewall had intercepted over 74,000 exploit or probing attempts and that it had observed no confirmed compromise across the 5 million sites it protects. [Sansec](https://sansec.io/research/php2shell) found that the public proof-of-concept exploits don't work against a default PHP installation and called mass exploitation "now less likely." [CISA](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) added both CVEs to its Known Exploited Vulnerabilities catalog on October 26 anyway, with an October 29 deadline for federal agencies.
+
+I'm not claiming WordPress sites were broken into. The point is narrower. For a week, no agency could tell a client "you're fine" without a host ticket, and for a third of sites the ticket's answer was a migration project. That is the cost that was invisible until October 21.
+
+## What changed on the build side
+
+For twenty years the WordPress trade made sense: a custom site in code was slow and expensive, and WordPress let the client run the site afterward. Agencies didn't pick WordPress for its architecture. They picked it because the alternative cost more to build and left the client dependent on the developer.
+
+Coding agents broke the first half of that trade. Claude Code shipped as a research preview on [February 24, 2025](https://www.anthropic.com/news/claude-3-7-sonnet); OpenAI's Codex followed on May 16, 2025. By May to July 2026, JetBrains' [Developer Ecosystem Survey](https://blog.jetbrains.com/research/2026/08/ai-coding-agent-adoption-2026/) of more than 15,000 professional developers found 39% using Claude Code at work, up from 18% in January, and 90% using an AI coding agent at least weekly.
+
+The framework those agents reach for on a content site is Astro. Its npm downloads went from 2.9 million in August 2025 to 20.1 million in August 2026, a 6.85x increase per the [npm download API](https://api.npmjs.org/downloads/range/2026-08-01:2026-08-31/astro). Treat the raw number with suspicion: agents and CI runners inflate downloads, and an agent running `npm install` forty times a day counts forty times. The survey data is cleaner. In [State of JS 2025](https://2025.stateofjs.com/en-US/libraries/meta-frameworks/), Astro's usage among respondents rose from 19% in 2023 to 27% in 2025, with 94% retention two years running, the top satisfaction ranking in its category.
+
+What I can't give you is a controlled build-time number, and I don't trust anyone who claims one. What I can tell you is what agency operators in r/ClaudeCode, r/agency and the agency coaching communities have been reporting all year, self-reported and unaudited: standardized client sites that took about a week now ship in a day or two, sometimes hours, with no theme to fight and no plugin stack to assemble. The bottleneck they describe has moved to sales, QA, and handoff. That matches what the download and survey curves above are showing.
+
+The performance gap is measurable, with a caveat. In the HTTP Archive dataset from August 1, 2026, as [compiled by WPForged](https://wpforged.com/reports/state-of-astro-and-wordpress-2026/), 71.0% of Astro origins passed all three Core Web Vitals on mobile against 48.7% of WordPress origins, with all origins at 53.0%. Good mobile time-to-first-byte: 64.2% of Astro origins, 23.5% of WordPress. The populations are nothing alike (43,850 Astro origins versus 2,752,367 WordPress ones, newer sites versus two decades of them), so this is field data, not a controlled experiment. But the sales conversation is simple: "your site will pass Core Web Vitals out of the box" is an easy promise on Astro and a hard one on a theme.
+
+## The counterargument, taken seriously
+
+The strongest case for staying on WordPress for content sites goes like this.
+
+**The ecosystem.** 77,000 plugins means any feature a client asks for already exists. True. For a content site, though, the list is short: a form, analytics, SEO metadata, maybe search. Each is a service or a few lines of code, and none of them needs a database in the request path.
+
+**Clients know wp-admin.** This is the real objection, and for a long time it was decisive. Nobody is going to teach a dentist Git. The answer is not Markdown files and a tutorial; it's that the code-first site needs an admin of its own. Until recently it didn't have a good one, which is why agencies kept going back to WordPress even after the build-cost argument flipped.
+
+**WordPress is not standing still.** WordPress 7.0, released on May 20, 2026, ships "AI abilities directly in your website, all managed from a central hub." The Abilities API has been in core since 6.9, an official MCP Adapter plugin reached WordPress.org on October 7, 2026 (version 0.7.0, labeled experimental), and native MCP is targeted for 7.3. Agents can drive a WordPress site now. But that's agents on top of the same PHP runtime and the same plugin stack. An MCP adapter doesn't patch PHP for you.
+
+**Static sites have risks too.** They do. A build pulls hundreds of npm packages, and a compromised dependency runs with your build secrets. Whoever gets into the GitHub, Vercel, or Cloudflare account controls the site. Forms and search move to third-party services with runtimes of their own. The difference is where the exposure lives. On WordPress it's in every request, on a server you or your host patch. On a code-first site it's at build time and in accounts, which is narrower, and not a per-client server you babysit.
+
+Why I still think the default flipped: defaults are set by the cost of the common case. Three costs decide a content site. Build cost, which coding agents have pushed to parity or below. Maintenance cost, which this month made visible for every WordPress client at once. And handoff cost, the one thing WordPress had won outright. That last one is now solvable, and it's the only reason the first two hadn't already decided it.
+
+## The agency deliverable from here
+
+What the agency maintains for a client content site, before and after:
+
+| | WordPress site | Code-first site |
+|---|---|---|
+| Runtime in the request path | PHP and MySQL, patched by you or the host | None; a CDN serves files |
+| Third-party code to keep patched | Core, a theme, and ~15 plugins, each on its own schedule | npm dependencies, updated in the repository at build time |
+| Where a critical CVE lands | Every request, live, on every client's server | The build pipeline and the hosting account |
+| Who edits content | The client, in wp-admin | The client, if the site has an admin |
+| Hosting | A managed WordPress host per client | Vercel, Netlify, Cloudflare, or GitHub Pages |
+
+That right-hand column is the 2027 deliverable: the site in Git, built with an agent, deployed to a CDN host, content as Markdown, MDX, and data files, so the client's copy, posts, and menus are files in their own repository and the agency's maintenance list is dependency updates and a 2FA policy.
+
+The row that was missing is the fourth one. That's the problem I built GitCMS for: the client gets a visual editor and a review step, the agency keeps the repository, and every save is a commit. If you're moving a client site this quarter, [here's how to hand off a Claude Code website](/blog/hand-off-claude-code-website-to-client/) so routine edits stop coming back to you, and [the alternatives hub](/alternatives/wordpress/) if you're still deciding where to go.
+
+WordPress is not dead. The default is. The next time a client asks "are we affected?", the right answer isn't "I'll ask the host." It's "there's no PHP under your site to patch."
