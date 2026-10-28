@@ -1,14 +1,14 @@
 import type { ReactNode } from 'react'
 import { Check, Minus, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { loginUrl } from '@/lib/start-login'
 import { LICENSE_PRICE_SUMMARY } from '@/lib/positioning'
 
 /**
- * Breakout wrapper — widens tables and case studies to the edges of the
- * white article card, cancelling its `px-6 sm:px-12` padding.
+ * Comparison blocks are wider than the article card and overlap its edges,
+ * centred on the viewport so they never cause horizontal scroll. Blocks need
+ * an opaque background so the card's border doesn't show through.
  */
-const breakout = '-mx-6 sm:-mx-12'
+const breakout = 'relative left-1/2 w-[min(68rem,calc(100vw-2rem))] -translate-x-1/2'
 
 /* ─── Verdict Cards ─── */
 
@@ -54,7 +54,7 @@ function VerdictCard({
 
 export function Verdict({ children }: { children: ReactNode }) {
   return (
-    <div className="not-prose my-10 grid gap-4 sm:grid-cols-2">{children}</div>
+    <div className={cn('not-prose my-10 grid gap-4 sm:grid-cols-2', breakout)}>{children}</div>
   )
 }
 
@@ -214,7 +214,7 @@ export function FeatureTable({
 }) {
   return (
     <div className={cn('not-prose my-10', breakout)}>
-      <div className="overflow-x-auto rounded-xl border border-neutral-200">
+      <div className="overflow-x-auto rounded-xl border border-neutral-200 bg-white">
         <table className="w-full min-w-[580px] text-left">
           <thead>
             <tr className="border-b border-neutral-200 bg-neutral-50">
@@ -268,7 +268,7 @@ export function Tradeoffs({ children }: { children: ReactNode }) {
   return (
     <div
       className={cn(
-        'not-prose my-10 rounded-xl border border-amber-200 bg-amber-50/50 p-6 sm:p-8 md:p-10',
+        'not-prose my-10 rounded-xl border border-amber-200 bg-amber-50 p-6 sm:p-8 md:p-10',
         breakout,
       )}
     >
@@ -295,7 +295,7 @@ export function PricingCompare({
   competitorName: string
 }) {
   return (
-    <div className="not-prose my-10 grid gap-4 sm:grid-cols-2">
+    <div className={cn('not-prose my-10 grid gap-4 sm:grid-cols-2', breakout)}>
       <div className="rounded-xl border border-neutral-900 bg-neutral-950 p-5 sm:p-7">
         <p className="text-sm font-semibold uppercase tracking-widest text-neutral-400">
           GitCMS
@@ -326,30 +326,6 @@ export function PricingCompare({
   )
 }
 
-/* ─── CTA ─── */
-
-export function CompareCTA({
-  description,
-}: {
-  description?: string
-  /** @deprecated Use description only. Heading and accent are now hardcoded. */
-  heading?: string
-  /** @deprecated Use description only. Heading and accent are now hardcoded. */
-  accent?: string
-}) {
-  return (
-    <div className="not-prose my-12 flex flex-col items-start justify-between gap-6 rounded-2xl bg-neutral-950 px-8 py-10 text-white sm:px-10 md:flex-row md:items-center">
-      <div>
-        <p className="text-[26px] font-semibold leading-tight tracking-[-0.03em]">Give your website a control plane</p>
-        {description && <p className="mt-2 max-w-md text-[15px] leading-relaxed text-neutral-400">{description}</p>}
-      </div>
-      <a href={loginUrl('/')} className="inline-flex h-10 shrink-0 items-center gap-2 rounded-xl bg-[#DCF986] px-5 text-sm font-semibold text-neutral-950 hover:bg-[#d4f47a]">
-        Connect your site, free
-      </a>
-    </div>
-  )
-}
-
 /* ─── Component map for MDX ─── */
 
 export const comparisonMdxComponents = {
@@ -360,5 +336,4 @@ export const comparisonMdxComponents = {
   FeatureTable,
   Tradeoffs,
   PricingCompare,
-  CompareCTA,
 }

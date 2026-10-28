@@ -92,6 +92,11 @@
           "label": "Category"
         },
         {
+          "name": "cta",
+          "type": "text",
+          "label": "CTA line"
+        },
+        {
           "name": "lastReviewed",
           "type": "datetime",
           "label": "Last Reviewed"
@@ -124,6 +129,11 @@
           "name": "competitor",
           "type": "text",
           "label": "Competitor"
+        },
+        {
+          "name": "cta",
+          "type": "text",
+          "label": "CTA line"
         },
         {
           "name": "lastReviewed",

@@ -40,6 +40,8 @@ const comparisons = defineCollection({
     description: z.string(),
     competitor: z.string(),
     category: z.string(),
+    // Closing call-to-action line, shown in the page's CTA band.
+    cta: z.string().optional(),
     lastReviewed: dateSchema,
     order: z.number().int().optional(),
   }),
@@ -53,6 +55,7 @@ const alternatives = defineCollection({
     title: z.string(),
     description: z.string(),
     competitor: z.string(),
+    cta: z.string().optional(),
     lastReviewed: dateSchema,
     order: z.number().int().optional(),
   }),
