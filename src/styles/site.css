@@ -352,10 +352,7 @@
   letter-spacing: -0.02em;
 }
 
-/* Public editorial pages stay light even when the saved docs theme is dark.
-   Shiki still switches token colors from `.dark`, which paints pale syntax on
-   these white cards. Keep the light tokens. Changelog blocks opt out because
-   they use a dark code treatment. */
+/* Public editorial pages stay light even when the saved docs theme is dark. */
 .prose-neutral {
   --color-fd-card: var(--color-white);
   --color-fd-card-foreground: var(--color-neutral-900);
@@ -364,13 +361,20 @@
   --color-fd-border: var(--color-neutral-200);
 }
 
-.dark
-  .prose-neutral:not(.changelog-content)
-  .shiki:not(.not-fumadocs-codeblock *)
-  code
-  span {
-  color: var(--shiki-light);
-  font-style: var(--shiki-light-font-style);
+/* Code on editorial pages is a dark block in either theme, so it always uses
+   Shiki's dark tokens. Docs keep Fumadocs' theme-following code blocks. */
+.prose-neutral figure.shiki {
+  --color-fd-card: var(--color-neutral-950);
+  --color-fd-muted-foreground: var(--color-neutral-400);
+  --color-fd-accent-foreground: var(--color-white);
+  --border: var(--color-neutral-800);
+  border-color: var(--color-neutral-800);
+  background-color: var(--color-neutral-950);
+}
+
+.prose-neutral figure.shiki code span {
+  color: var(--shiki-dark);
+  font-style: var(--shiki-dark-font-style);
 }
 
 .prose-neutral
@@ -428,20 +432,6 @@
   border-color: var(--color-neutral-700);
   background: var(--color-neutral-800);
   color: var(--color-neutral-100);
-}
-
-.changelog-content pre.shiki {
-  --shiki-light: white !important;
-  --shiki-dark: white !important;
-  --shiki-light-bg: var(--color-neutral-950) !important;
-  --shiki-dark-bg: var(--color-neutral-950) !important;
-  background-color: var(--color-neutral-950) !important;
-  color: white !important;
-}
-
-.changelog-content pre.shiki code,
-.changelog-content pre.shiki span {
-  color: white !important;
 }
 
 /* Make fumadocs docs layout flush to viewport edges (no centering gutters).

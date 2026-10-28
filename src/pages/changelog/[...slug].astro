@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content'
+import defaultMdxComponents from 'fumadocs-ui/mdx'
 import { Callout } from 'fumadocs-ui/components/callout'
 import MarketingLayout from '@/layouts/MarketingLayout.astro'
 import Section from '@/components/site/Section.astro'
@@ -33,8 +34,8 @@ const slug = slugOf(entry.filePath)
       </div>
     </ArticleHeader>
     <article class:list={['mx-auto mt-12 max-w-3xl px-6 py-10 sm:px-12 sm:py-14', card]}>
-      <div class:list={['changelog-content', prose, 'prose-h1:hidden prose-pre:border prose-pre:border-neutral-800 prose-pre:bg-neutral-950 prose-code:text-neutral-900']}>
-        <Content components={{ Callout }} />
+      <div class:list={['changelog-content', prose, 'prose-h1:hidden prose-code:text-neutral-900']}>
+        <Content components={{ ...defaultMdxComponents, Callout }} />
       </div>
     </article>
   </Section>
