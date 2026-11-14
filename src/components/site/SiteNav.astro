@@ -24,8 +24,8 @@ const menus: ReadonlyArray<Menu> = [
 const link = 'transition-colors hover:text-neutral-950'
 const columnTitle = 'px-3 text-[13px] text-neutral-500'
 ---
-<!-- Same outer width as the homepage hero card: the 1200px column, minus its 1px border and the hero's 16px (20px from sm) gutter. -->
-<header class="pointer-events-none fixed inset-x-0 top-2 z-40 mx-auto max-w-[1200px] px-[17px] sm:px-[21px]">
+<!-- Inset 8px inside the homepage hero card on each side: the 1200px column, minus its 1px border, the hero's 12px gutter and an 8px margin. -->
+<header class="pointer-events-none fixed inset-x-0 top-2 z-40 mx-auto max-w-[1200px] px-[21px]">
   <div data-nav class="pointer-events-auto relative flex h-[57px] items-center gap-8 rounded-xl border border-transparent px-5 transition-[background-color,border-color] duration-200 data-[scrolled=true]:border-neutral-200 data-[scrolled=true]:bg-white sm:px-7">
     <a href="/" class="flex items-center gap-2">
       <GitCMSLogo className="size-8" />
