@@ -1,0 +1,206 @@
+---
+title: 'GitCMS vs Squarespace'
+description: 'Squarespace is an all-in-one website builder with hosting, commerce, and a client-friendly editor. GitCMS is the CMS for code-first websites you own in Git. Here''s when each fits.'
+competitor: 'Squarespace'
+category: 'Website builders and traditional CMS'
+cta: 'Build the client site in code. Hand it off with an editor they can use.'
+lastReviewed: '2026-11-14'
+order: 3
+---
+
+Most designers and small agencies don't pick Squarespace for its templates. They pick it because of what happens after launch: the client can log in, change a headline, publish a blog post, and never call them about a typo. Squarespace bundles the build, the hosting, and that editor into one subscription per site, and for a decade that bundle was the sensible default for small-business websites.
+
+GitCMS starts from where client sites get built now: **in code**, often by a coding agent like Claude Code, Codex, or Cursor. GitCMS is the CMS for code-first and AI-built websites. It gives your team, your clients, and AI agents one safe place to edit, review, and publish website changes, while everything stays in your site's repository.
+
+So the question for a Squarespace designer isn't "which builder is better." It's whether you still need a builder to give your client an editor.
+
+## What changed in 2026
+
+The expensive part of a client website used to be the build. A custom site meant days of development, so a template you could restyle in a visual editor was the efficient way to deliver. That math has flipped. A coding agent can build a fast, custom marketing site in an afternoon, and keep changing it whenever you ask.
+
+What a code-first site didn't come with is the part Squarespace is best at: **an editor the client can use without you**. That's Day Two, and it's the main reason many designers still deliver on a builder. GitCMS adds that editor to a site that lives in code, so you can build with an agent and still hand the site off.
+
+Squarespace sees the same shift. At its Circle Day partner event in October 2026, it announced:
+
+- **Forma**, an AI builder for websites and apps, in early alpha with a waitlist.
+- A custom code block for **React components**, with a coding agent planned for later.
+- A **Squarespace MCP server** for AI tools, which searches domains today, with commerce and website-editing tools announced as coming.
+- **Drafts and autosave** for the editor, announced as in development.
+- Developer documentation rebuilt so that people and **coding agents** can read it.
+
+Squarespace is moving towards code and agents too. The difference is where the site lives when they get there.
+
+## The short verdict
+
+<Verdict>
+  <VerdictCompetitor title="Squarespace">
+    - The client wants one subscription for site, hosting, domain, store, and email campaigns
+    - The site sells products, books appointments, or runs memberships
+    - Nobody involved wants to touch code or a coding agent, ever
+    - You'd rather restyle a template than build a site
+  </VerdictCompetitor>
+  <VerdictGitCMS>
+    - You build client sites in code, often with Claude Code, Codex, or Cursor
+    - Clients need to edit copy and publish posts without learning anything technical
+    - You want client edits and agent changes reviewed before they go live
+    - You want to own the code and host it anywhere, without a per-site builder plan
+  </VerdictGitCMS>
+</Verdict>
+
+## Builder vs codebase
+
+### Squarespace: the site is a subscription
+
+A Squarespace site is built in Squarespace's editor, stored by Squarespace, and served by Squarespace's hosting. Each site needs its own plan. That's what makes it simple: design, hosting, domains, commerce, and editing are one product, and Squarespace keeps it running.
+
+It also means the site only exists inside that subscription. Squarespace's own export produces a WordPress XML file, and its help center lists what it leaves behind: store, portfolio, album, and other page types, product blocks, video and audio blocks, drafts, any blog after the first one, and every style setting and line of custom CSS. Rebuilding is the migration plan.
+
+### GitCMS: the site is a repository
+
+With GitCMS, the website is an ordinary Astro, Next.js, or similar project in a Git repository on GitHub. You or a coding agent build and change the design in code. The client changes content through GitCMS, in a visual editor. Every save is a real commit, and publishing puts it on the live branch for your existing host to deploy.
+
+If you or the client stop using GitCMS, nothing moves. The pages, posts, and images are already plain files in the repository.
+
+## Handing the site to a client
+
+This is the part a Squarespace designer cares about most, so here's how the two compare.
+
+On Squarespace, you invite the client as a contributor and pick a role. The **Website editor** role is the closest thing to "edit content, don't break the design": it can add and edit content on existing pages, blog posts, and events, but can't add pages, change styles, add code injection, or manage SEO. The Basic plan allows two contributors, including the owner. Core and Advanced allow unlimited contributors.
+
+On GitCMS, you invite the client to the site, and they sign in with Google. They edit content and [site data](/docs/features/site-data/) like menus and footers, and they never see components or styles, because those live in code. That's the same boundary the Website editor role draws, enforced by how the site is built rather than by a permission setting.
+
+## Review: the Day Two question
+
+Here's the difference that matters once a client, a teammate, or an AI agent starts making changes.
+
+On Squarespace, saving a page publishes it. Blog posts can be set to **Needs Review**, so a writer can hand a post to an editor, but page edits have no review step, and the drafts and autosave announced at Circle Day are still in development.
+
+On GitCMS, review before publish is built in. With the editorial workflow on, a change stays in a draft until someone approves it, whether a client made it in the visual editor or an AI agent drafted it over MCP. If you'd rather let a trusted client publish directly, switch the site to direct publish. With [Change Requests](/features/change-requests/) (beta), clients can also pin feedback on the live site, and you hand it to your coding agent.
+
+## The agent question
+
+Squarespace meters AI by plan. Its AI features draw on monthly credits: 10 one-time credits on Basic, 20 a month on Core, and 120 a month on Advanced. Its MCP server is the first step towards outside agents working on Squarespace sites, still in Squarespace's format.
+
+GitCMS takes the opposite bet: **bring your own agent**. The coding agent you already pay for builds and improves the site in the repository. ChatGPT, Claude, and other MCP clients connect to GitCMS, draft content inside content tasks, and submit it for review. You don't buy AI credits from your CMS, and the agent works on plain code and Markdown, the formats it's best at.
+
+## Feature comparison
+
+<FeatureTable
+  competitor="Squarespace"
+  rows={[
+    {
+      category: 'Where the site lives',
+      gitcms: 'Your Git repository',
+      competitor: 'Squarespace platform',
+      note: 'Own the code, or subscribe per site',
+    },
+    {
+      category: 'Who builds the site',
+      gitcms: 'Developers and coding agents, in code',
+      competitor: 'Designers, in the template editor',
+    },
+    {
+      category: 'Visual layout editing',
+      gitcms: 'not-core',
+      competitor: 'native',
+      note: 'Squarespace edits layout visually. GitCMS edits content; layout lives in code.',
+    },
+    {
+      category: 'Content editing for clients',
+      gitcms: 'native',
+      competitor: 'native',
+    },
+    {
+      category: 'Client editor role',
+      gitcms: 'Invites with Google sign-in and per-site access',
+      competitor: 'Website editor contributor role; 2 contributors on Basic',
+    },
+    {
+      category: 'Review before publish',
+      gitcms: 'native',
+      competitor: 'Needs Review status for blog posts; page edits publish on save',
+    },
+    {
+      category: 'Commerce, scheduling, email campaigns',
+      gitcms: 'not-core',
+      competitor: 'native',
+      note: 'Use a separate service on a code-first site',
+    },
+    {
+      category: 'Hosting',
+      gitcms: 'Your existing host (Vercel, Netlify, Cloudflare, …)',
+      competitor: 'Included (Squarespace hosting)',
+    },
+    {
+      category: 'AI agents',
+      gitcms: 'Bring your own (ChatGPT, Claude, MCP clients); coding agents work in the repo',
+      competitor: 'Built-in AI on monthly credits; MCP server for domain search',
+    },
+    {
+      category: 'Version history',
+      gitcms: 'Full Git history',
+      competitor: 'Announced as in development',
+    },
+    {
+      category: 'Leaving',
+      gitcms: 'Nothing to export; the files are already yours',
+      competitor: 'WordPress XML export of basic pages and one blog; no styles or store pages',
+    },
+  ]}
+/>
+
+## Pricing
+
+<PricingCompare
+  competitorName="Squarespace"
+  gitcms={{
+    note: 'Unlimited content edits. Host the site wherever you already host.',
+  }}
+  competitor={{
+    free: 'No free plan; a free trial before you pay',
+    paid: 'Basic, Core, and Advanced plans, billed per site (as of November 2026)',
+    note: 'Basic allows 2 contributors and no code injection. Annual prices rose by up to 26% in July 2026.',
+  }}
+/>
+
+Squarespace prices each site as its own subscription, and that subscription covers hosting, the editor, and the platform's AI credits. For an agency with twenty client sites, that's twenty plans, usually billed to twenty clients. With GitCMS, hosting stays with your existing provider, usually on a free tier for a marketing site, and you pay for the admin. See [GitCMS pricing](/#pricing) for the current plans.
+
+## Where Squarespace is genuinely better
+
+- **Everything in one bill.** Site, hosting, domain, store, scheduling, and email campaigns, with nobody to call when the server needs patching.
+- **Commerce and bookings.** Selling products, taking appointments, and running memberships work out of the box.
+- **No code, ever.** A non-technical owner can build and run the whole site alone.
+- **A big designer ecosystem.** Templates, plugins, and a community of designers who know the platform well.
+
+If your client wants a store, appointments, or a site they can build and restyle themselves, Squarespace is a strong choice.
+
+## Where GitCMS is better
+
+GitCMS is better when the site is **already code**, or when you'd rather build it that way.
+
+- **You own the site.** Code, content, and history live in a repository, not in a builder subscription.
+- **Clients can't break the design.** They edit content in a visual editor; layout and styles live in code.
+- **Review for every change.** Client edits and agent drafts wait for approval before they go live.
+- **Agents do their best work.** Coding agents build and improve the site in code, and content agents draft through GitCMS with review.
+
+<Tradeoffs>
+  <p>Moving client sites from Squarespace to code with GitCMS is a real tradeoff:</p>
+  <ul>
+    <li>Clients can edit content, but nobody gets a visual layout editor. New sections and pages are built in code, by you or a coding agent.</li>
+    <li>You run the hosting and deployment yourself (usually a few clicks on Vercel, Netlify, or Cloudflare).</li>
+    <li>A store, booking calendar, or newsletter means picking a separate service and connecting it.</li>
+  </ul>
+  <p>For designers who already build with coding agents, these are usually the right trades: a site you own, faster changes, and a client who can still edit without calling you.</p>
+</Tradeoffs>
+
+## Decision by use case
+
+**Small business that needs a store, bookings, or email campaigns in one place:** Squarespace is the better fit.
+
+**Owner who wants to build and restyle the site alone:** Squarespace is the better fit.
+
+**Designer or agency building client sites with Claude Code and handing them off:** GitCMS is the better fit.
+
+**Client who edits content but should never touch the design:** GitCMS is the better fit.
+
+**AI agents drafting website changes with human review before publishing:** GitCMS is the better fit.
