@@ -7,6 +7,7 @@ import CtaBand from '@/components/site/CtaBand.astro'
 import { card, prose } from '@/components/site/styles'
 import { formatDate } from '@/lib/format-date'
 import { comparisonMdxComponents } from '@/components/comparison/mdx-components'
+import CostComparator from '@/components/sections/CostComparator.astro'
 
 export async function getStaticPaths() {
   const alternativeSlugs = new Set((await getCollection('alternatives')).map((entry) => entry.id.replace(/\.mdx?$/, '')))
@@ -76,7 +77,7 @@ const structuredData = {
     </ArticleHeader>
     <article class:list={['mx-auto mt-12 max-w-4xl px-6 py-10 sm:px-12 sm:py-14', card]}>
       <div class={prose}>
-        <Content components={comparisonMdxComponents} />
+        <Content components={{ ...comparisonMdxComponents, CostComparator }} />
       </div>
     </article>
   </Section>

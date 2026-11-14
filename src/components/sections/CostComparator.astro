@@ -1,30 +1,39 @@
 ---
 // Yearly cost of running marketing sites: drag-and-drop builders and
 // WordPress versus a code-first site on free static hosting plus GitCMS.
-// List prices billed yearly, October 2026. WordPress plugins and upkeep are
-// estimates; the page says so.
-import { UPCOMING_PLANS } from '@/lib/pricing-plans'
+// Prices live in `@/lib/competitor-costs`. Totals for the starting values are
+// rendered at build time, so the figures are in the HTML before the script runs.
+import {
+  COMPETITOR_COSTS,
+  COMPETITOR_COSTS_AS_OF,
+  competitorMonthly,
+  gitcmsMonthly,
+  type CompetitorCostKey,
+} from '@/lib/competitor-costs'
 
 interface Props {
   /** Starting slider values, so each audience sees its own numbers first. */
   sites?: number
   editors?: number
+  /** Show only this competitor against GitCMS, for its comparison page. */
+  compare?: CompetitorCostKey
 }
-const { sites = 3, editors = 4 } = Astro.props
+const { sites = 3, editors = 4, compare } = Astro.props
 
+const competitors = COMPETITOR_COSTS.filter((cost) => !compare || cost.key === compare)
 const options = [
-  { key: 'wordpress', name: 'WordPress', logo: '/logos/wordpress.svg', note: 'Managed hosting $30, premium plugins ~$20, updates and security upkeep ~$50, per site' },
-  { key: 'webflow', name: 'Webflow', logo: '/logos/webflow.svg', note: 'Premium site plan $25 per site; workspace seats extra' },
-  { key: 'framer', name: 'Framer', logo: '/logos/framer.svg', note: 'Pro site plan $30 per site, plus $20 per extra editor' },
-  { key: 'gitcms', name: 'Code-first + GitCMS', logo: '/brand/gitcms-logo.svg', note: 'Static hosting on Cloudflare, Vercel or Netlify free tiers, plus the cheapest GitCMS plan' },
-] as const
+  ...competitors.map((cost) => ({ ...cost, yearly: competitorMonthly(cost, sites, editors) * 12 })),
+  { key: 'gitcms', name: 'Code-first + GitCMS', logo: '/brand/gitcms-logo.svg', note: 'Static hosting on Cloudflare, Vercel or Netlify free tiers, plus the cheapest GitCMS plan', yearly: gitcmsMonthly(sites, editors) * 12 },
+]
+const maxYearly = Math.max(...options.map((option) => option.yearly))
+const hasEstimates = competitors.some((cost) => cost.key === 'wordpress')
 
 const sliders = [
   { key: 'sites', label: 'Websites', unit: ['site', 'sites'], value: sites, max: 25, marks: [1, 5, 10, 15, 20, 25] },
   { key: 'editors', label: 'People editing', unit: ['person', 'people'], value: editors, max: 20, marks: [1, 5, 10, 15, 20] },
 ]
 ---
-<div data-cost class="grid gap-5 lg:grid-cols-[320px_1fr]">
+<div data-cost class="not-prose grid gap-5 lg:grid-cols-[320px_1fr]">
   <div class="rounded-2xl border border-neutral-200 bg-white p-8">
     {sliders.map((slider, index) => (
       <div class:list={[index > 0 && 'mt-8']}>
@@ -47,37 +56,29 @@ const sliders = [
           <div class="flex items-center gap-2 text-sm">
             <img src={option.logo} alt="" class="size-4 opacity-80" />
             <span class="font-medium text-neutral-900">{option.name}</span>
-            <span class="ml-auto font-semibold tabular-nums text-neutral-900"><span data-yearly>$0</span><span class="font-normal text-neutral-400">/yr</span></span>
+            <span class="ml-auto font-semibold tabular-nums text-neutral-900"><span data-yearly>${option.yearly.toLocaleString('en-US')}</span><span class="font-normal text-neutral-400">/yr</span></span>
           </div>
           <div class="mt-2 h-2.5 overflow-hidden rounded-full bg-neutral-100">
-            <div data-bar class:list={['h-full rounded-full transition-[width] duration-500', option.key === 'gitcms' ? 'bg-[#DCF986] ring-1 ring-inset ring-[#B5D74E]' : 'bg-neutral-800']} style="width: 0%"></div>
+            <div data-bar class:list={['h-full rounded-full transition-[width] duration-500', option.key === 'gitcms' ? 'bg-[#DCF986] ring-1 ring-inset ring-[#B5D74E]' : 'bg-neutral-800']} style={`width: ${Math.max(2, (option.yearly / maxYearly) * 100)}%`}></div>
           </div>
           <p class="mt-1.5 text-[12px] text-neutral-400">{option.note}</p>
         </li>
       ))}
     </ul>
-    <p class="mt-6 border-t border-neutral-100 pt-4 text-[12px] text-neutral-400">List prices billed yearly, October 2026. WordPress plugin and upkeep figures are estimates; agency retainers usually cost more.</p>
+    <p class="mt-6 border-t border-neutral-100 pt-4 text-[12px] text-neutral-400">List prices billed yearly, {COMPETITOR_COSTS_AS_OF}.{hasEstimates && ' WordPress plugin and upkeep figures are estimates; agency retainers usually cost more.'}</p>
   </div>
-  <script type="application/json" data-cost-plans set:html={JSON.stringify(UPCOMING_PLANS)}></script>
 </div>
 
 <script>
-  import type { UpcomingPlan } from '@/lib/pricing-plans'
-  import { monthlyCost } from '@/lib/pricing-plans'
+  import { COMPETITOR_COSTS, competitorMonthly, gitcmsMonthly } from '@/lib/competitor-costs'
+
+  const monthly: Record<string, (sites: number, editors: number) => number> = {
+    ...Object.fromEntries(COMPETITOR_COSTS.map((cost) => [cost.key, (sites: number, editors: number) => competitorMonthly(cost, sites, editors)])),
+    gitcms: gitcmsMonthly,
+  }
 
   for (const root of document.querySelectorAll<HTMLElement>('[data-cost]')) {
-    const plans: UpcomingPlan[] = JSON.parse(root.querySelector('[data-cost-plans]')?.textContent ?? '[]')
     const input = (name: string) => Number(root.querySelector<HTMLInputElement>(`[data-in="${name}"]`)?.value ?? 1)
-    const gitcmsMonthly = (sites: number, editors: number) => {
-      const eligible = plans.filter((plan) => plan.key !== 'preview' && (editors === 1 || plan.key !== 'solo'))
-      return Math.min(...eligible.map((plan) => monthlyCost(plan, sites)))
-    }
-    const monthly: Record<string, (sites: number, editors: number) => number> = {
-      wordpress: (sites) => sites * (30 + 20 + 50),
-      webflow: (sites) => sites * 25,
-      framer: (sites, editors) => sites * 30 + Math.max(0, editors - 1) * 20,
-      gitcms: gitcmsMonthly,
-    }
     const render = () => {
       const sites = input('sites')
       const editors = input('editors')
@@ -90,10 +91,11 @@ const sliders = [
         const unit = root.querySelector<HTMLElement>(`[data-unit="${name}"]`)
         if (unit) unit.textContent = (value === 1 ? unit.dataset.one : unit.dataset.many) ?? ''
       }
-      const yearly = Object.fromEntries(Object.entries(monthly).map(([key, fn]) => [key, fn(sites, editors) * 12]))
-      const max = Math.max(...Object.values(yearly))
-      for (const row of root.querySelectorAll<HTMLElement>('[data-option]')) {
-        const value = yearly[row.dataset.option ?? ''] ?? 0
+      const rows = [...root.querySelectorAll<HTMLElement>('[data-option]')]
+      const yearly = rows.map((row) => (monthly[row.dataset.option ?? '']?.(sites, editors) ?? 0) * 12)
+      const max = Math.max(...yearly)
+      for (const [index, row] of rows.entries()) {
+        const value = yearly[index]
         const label = row.querySelector('[data-yearly]')
         if (label) label.textContent = `$${value.toLocaleString('en-US')}`
         const bar = row.querySelector<HTMLElement>('[data-bar]')
