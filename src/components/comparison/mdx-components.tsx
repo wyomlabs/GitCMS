@@ -324,6 +324,96 @@ export function PricingCompare({
   )
 }
 
+/* ─── Ranked alternatives (alternatives guides) ─── */
+
+/**
+ * One entry in an alternatives guide's ranked list. The body is ordinary
+ * Markdown, with `<Strengths>` and `<Limits>` around its two lists, so the
+ * `.md` copy reads the same as the page.
+ */
+export function AlternativePick({
+  rank,
+  name,
+  logo,
+  bestFor,
+  pricing,
+  pick,
+  compareHref,
+  children,
+}: {
+  rank: number
+  name: string
+  logo?: string
+  bestFor: string
+  pricing: string
+  /** Badge for the recommended entry, e.g. "Our pick for code-first teams". */
+  pick?: string
+  compareHref?: string
+  children: ReactNode
+}) {
+  return (
+    <section
+      className={cn(
+        'not-prose my-8 rounded-xl border p-6 sm:p-8',
+        pick ? 'border-neutral-900 ring-1 ring-neutral-900' : 'border-neutral-200',
+      )}
+    >
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="text-sm font-semibold tabular-nums text-neutral-400">#{rank}</span>
+        {logo ? (
+          <img src={logo} alt="" className="size-7 shrink-0 object-contain" />
+        ) : (
+          <span className="grid size-7 shrink-0 place-items-center rounded-md bg-neutral-100 text-sm font-semibold text-neutral-700">{name.charAt(0)}</span>
+        )}
+        <h3 className="text-xl font-semibold tracking-[-0.02em] text-neutral-900">{name}</h3>
+        {pick && <span className="rounded-full bg-[#DCF986] px-2.5 py-0.5 text-xs font-semibold text-neutral-900">{pick}</span>}
+      </div>
+      <p className="mt-2 text-[15px] text-neutral-500">
+        <span className="font-medium text-neutral-700">Best for:</span> {bestFor}
+      </p>
+      <div className="mt-4 text-base leading-relaxed text-neutral-700 [&_a]:font-medium [&_a]:text-neutral-900 [&_a]:underline [&_a]:underline-offset-2 [&_img]:my-5 [&_img]:w-full [&_img]:rounded-lg [&_img]:border [&_img]:border-neutral-200 [&>p]:mt-3 [&>p:first-child]:mt-0">
+        {children}
+      </div>
+      <div className="mt-5 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-t border-neutral-100 pt-4 text-sm">
+        <p className="text-neutral-500">
+          <span className="font-medium text-neutral-700">Pricing:</span> {pricing}
+        </p>
+        {compareHref && (
+          <a href={compareHref} className="font-medium text-neutral-900 underline underline-offset-2">
+            GitCMS vs {name}
+          </a>
+        )}
+      </div>
+    </section>
+  )
+}
+
+function PickList({ title, tone, children }: { title: string; tone: 'strength' | 'limit'; children: ReactNode }) {
+  return (
+    <div className="mt-4">
+      <p className="text-sm font-semibold text-neutral-900">{title}</p>
+      <div
+        className={cn(
+          'mt-2 [&>ul]:list-none [&>ul]:space-y-1.5 [&>ul]:pl-0 [&_li]:flex [&_li]:items-start [&_li]:gap-2',
+          tone === 'strength'
+            ? "[&_li]:before:text-emerald-600 [&_li]:before:content-['✓']"
+            : "[&_li]:before:text-neutral-400 [&_li]:before:content-['–']",
+        )}
+      >
+        {children}
+      </div>
+    </div>
+  )
+}
+
+export function Strengths({ children }: { children: ReactNode }) {
+  return <PickList title="What it does well" tone="strength">{children}</PickList>
+}
+
+export function Limits({ children }: { children: ReactNode }) {
+  return <PickList title="Where it falls short" tone="limit">{children}</PickList>
+}
+
 /* ─── Component map for MDX ─── */
 
 export const comparisonMdxComponents = {
@@ -334,4 +424,7 @@ export const comparisonMdxComponents = {
   FeatureTable,
   Tradeoffs,
   PricingCompare,
+  AlternativePick,
+  Strengths,
+  Limits,
 }

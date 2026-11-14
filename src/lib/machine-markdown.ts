@@ -80,6 +80,29 @@ function convertCostComparators(input: string) {
   })
 }
 
+/** Ranked alternatives become headed sections with their facts as lines. */
+function convertAlternativePicks(input: string) {
+  return input
+    .replace(/<AlternativePick\b([\s\S]*?)>/g, (_whole, props: string) => {
+      const rank = props.match(/rank\s*=\s*\{(\d+)\}/)?.[1] ?? ''
+      const name = parseQuotedProp(props, 'name')
+      const pick = parseQuotedProp(props, 'pick')
+      return [
+        '',
+        `### ${rank}. ${name}${pick ? ` (${pick})` : ''}`,
+        '',
+        `**Best for:** ${parseQuotedProp(props, 'bestFor')}`,
+        '',
+        `**Pricing:** ${parseQuotedProp(props, 'pricing')}`,
+        '',
+      ].join('\n')
+    })
+    .replace(/<\/AlternativePick>/g, '\n')
+    .replace(/<Strengths>/g, '\n**What it does well:**\n')
+    .replace(/<Limits>/g, '\n**Where it falls short:**\n')
+    .replace(/<\/(Strengths|Limits)>/g, '\n')
+}
+
 function convertCaseStudies(input: string) {
   return input.replace(/<CaseStudy\b([\s\S]*?)>([\s\S]*?)<\/CaseStudy>/g, (_whole, props: string, children: string) => {
     const title = parseQuotedProp(props, 'title')
@@ -129,6 +152,7 @@ function convertMdxChunk(input: string) {
   output = convertFeatureTables(output)
   output = convertPricing(output)
   output = convertCostComparators(output)
+  output = convertAlternativePicks(output)
 
   output = output
     .replace(/<VerdictCompetitor\b([^>]*)>/g, (_whole, attrs: string) => `\n### Choose ${parseQuotedProp(attrs, 'title') || 'the competitor'} if\n`)
