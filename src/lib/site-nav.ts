@@ -1,6 +1,6 @@
 /** Site-wide navigation, shared by the header and the footer. */
 import type { LucideIcon } from 'lucide-react'
-import { BookA, Bot, Building2, GitCompareArrows, History, Laptop, Newspaper, PenLine, Puzzle, Rocket, SearchCheck, SquareTerminal, Wrench } from 'lucide-react'
+import { BookA, Bot, Building2, GitCompareArrows, History, Laptop, Newspaper, PenLine, Puzzle, Rocket, SearchCheck, Signpost, SquareTerminal, Wrench } from 'lucide-react'
 import { features } from '@/lib/features'
 import { frameworkList } from '@/lib/framework-data'
 import type { UseCaseSlug } from '@/lib/use-cases'
@@ -36,6 +36,7 @@ export const LEARN_LINKS: ReadonlyArray<NavLink> = [
   { label: 'Prompt library', href: '/prompts/', blurb: 'Copy-paste prompts for your coding agent', icon: SquareTerminal },
   { label: 'Glossary', href: '/glossary/', blurb: 'Website and CMS terms, explained', icon: BookA },
   { label: 'Compare', href: '/compare/', blurb: 'GitCMS next to the tools you’re weighing', icon: GitCompareArrows },
+  { label: 'Alternatives', href: '/alternatives/', blurb: 'Where to go from WordPress and others, by situation', icon: Signpost },
 ]
 
 export const UPDATE_LINKS: ReadonlyArray<NavLink> = [
