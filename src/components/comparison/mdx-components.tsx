@@ -4,11 +4,11 @@ import { cn } from '@/lib/utils'
 import { LICENSE_PRICE_SUMMARY } from '@/lib/positioning'
 
 /**
- * Comparison blocks are wider than the article card and overlap its edges,
- * centred on the viewport so they never cause horizontal scroll. Blocks need
- * an opaque background so the card's border doesn't show through.
+ * The feature table runs to the article card's edges, cancelling its
+ * `px-6 sm:px-12` padding. It drops its own side borders there, so it reads
+ * as a band of the card instead of a box on top of the card's border.
  */
-const breakout = 'relative left-1/2 w-[min(68rem,calc(100vw-2rem))] -translate-x-1/2'
+const cardBleed = '-mx-6 sm:-mx-12'
 
 /* ─── Verdict Cards ─── */
 
@@ -54,7 +54,7 @@ function VerdictCard({
 
 export function Verdict({ children }: { children: ReactNode }) {
   return (
-    <div className={cn('not-prose my-10 grid gap-4 sm:grid-cols-2', breakout)}>{children}</div>
+    <div className="not-prose my-10 grid gap-4 sm:grid-cols-2">{children}</div>
   )
 }
 
@@ -101,7 +101,6 @@ export function CaseStudy({
     <aside
       className={cn(
         'not-prose my-10 rounded-xl border border-neutral-200 bg-neutral-50 p-6 sm:p-8 md:p-10',
-        breakout,
       )}
     >
       <div className="flex items-center gap-3">
@@ -213,18 +212,18 @@ export function FeatureTable({
   }>
 }) {
   return (
-    <div className={cn('not-prose my-10', breakout)}>
-      <div className="overflow-x-auto rounded-xl border border-neutral-200 bg-white">
+    <div className={cn('not-prose my-10', cardBleed)}>
+      <div className="overflow-x-auto border-y border-neutral-200">
         <table className="w-full min-w-[580px] text-left">
           <thead>
             <tr className="border-b border-neutral-200 bg-neutral-50">
-              <th className="px-5 py-3.5 text-sm font-semibold uppercase tracking-widest text-neutral-500 sm:px-6">
+              <th className="py-3.5 pr-5 text-sm font-semibold uppercase tracking-widest text-neutral-500 first:pl-6 last:pr-6 sm:pr-6 sm:first:pl-12 sm:last:pr-12">
                 Capability
               </th>
-              <th className="px-5 py-3.5 text-sm font-semibold uppercase tracking-widest text-neutral-500 sm:px-6">
+              <th className="py-3.5 pr-5 text-sm font-semibold uppercase tracking-widest text-neutral-500 first:pl-6 last:pr-6 sm:pr-6 sm:first:pl-12 sm:last:pr-12">
                 GitCMS
               </th>
-              <th className="px-5 py-3.5 text-sm font-semibold uppercase tracking-widest text-neutral-500 sm:px-6">
+              <th className="py-3.5 pr-5 text-sm font-semibold uppercase tracking-widest text-neutral-500 first:pl-6 last:pr-6 sm:pr-6 sm:first:pl-12 sm:last:pr-12">
                 {competitor}
               </th>
             </tr>
@@ -237,7 +236,7 @@ export function FeatureTable({
                   i !== rows.length - 1 && 'border-b border-neutral-100',
                 )}
               >
-                <td className="px-5 py-3.5 sm:px-6">
+                <td className="py-3.5 pr-5 first:pl-6 last:pr-6 sm:pr-6 sm:first:pl-12 sm:last:pr-12">
                   <span className="text-[15px] font-medium text-neutral-900">
                     {row.category}
                   </span>
@@ -247,10 +246,10 @@ export function FeatureTable({
                     </p>
                   )}
                 </td>
-                <td className="px-5 py-3.5 sm:px-6">
+                <td className="py-3.5 pr-5 first:pl-6 last:pr-6 sm:pr-6 sm:first:pl-12 sm:last:pr-12">
                   <CellContent value={row.gitcms} />
                 </td>
-                <td className="px-5 py-3.5 sm:px-6">
+                <td className="py-3.5 pr-5 first:pl-6 last:pr-6 sm:pr-6 sm:first:pl-12 sm:last:pr-12">
                   <CellContent value={row.competitor} />
                 </td>
               </tr>
@@ -268,8 +267,7 @@ export function Tradeoffs({ children }: { children: ReactNode }) {
   return (
     <div
       className={cn(
-        'not-prose my-10 rounded-xl border border-amber-200 bg-amber-50 p-6 sm:p-8 md:p-10',
-        breakout,
+        'not-prose my-10 rounded-xl border border-amber-200 bg-amber-50/50 p-6 sm:p-8 md:p-10',
       )}
     >
       <p className="text-xl font-semibold tracking-[-0.02em] text-neutral-900">
@@ -295,7 +293,7 @@ export function PricingCompare({
   competitorName: string
 }) {
   return (
-    <div className={cn('not-prose my-10 grid gap-4 sm:grid-cols-2', breakout)}>
+    <div className="not-prose my-10 grid gap-4 sm:grid-cols-2">
       <div className="rounded-xl border border-neutral-900 bg-neutral-950 p-5 sm:p-7">
         <p className="text-sm font-semibold uppercase tracking-widest text-neutral-400">
           GitCMS
