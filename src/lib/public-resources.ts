@@ -469,7 +469,7 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
     title: 'GitCMS Browser Extension for Chrome and Firefox',
     description: 'Open GitHub repositories, Markdown files, and folders directly in GitCMS. A free browser companion for managing code-first websites.',
     htmlPath: '/extension',
-    body: 'The GitCMS browser extension opens GitHub repositories, Markdown files, and folders in GitCMS from a right-click, the current GitHub location, or the address bar (type `gitcms`). It is a shortcut to the GitCMS web app, not an embedded editor. Install it from the Chrome Web Store; a Firefox add-on is in review. See /docs/features/chrome-extension.',
+    body: 'The GitCMS browser extension opens GitHub repositories, Markdown files, and folders in GitCMS from a right-click, the current GitHub location, or the address bar (type `gitcms`). It is a shortcut to the GitCMS web app, not an embedded editor. Install it from the Chrome Web Store or Firefox Add-ons. See /docs/features/chrome-extension.',
   }))
 
   const byKind = (kind: PublicResourceKind) => resources.filter((entry) => entry.kind === kind)

@@ -24,7 +24,7 @@ export const FEATURE_LINKS: ReadonlyArray<NavLink> = [
 export const PLATFORM_LINKS: ReadonlyArray<NavLink> = [
   { label: 'Agents & MCP', href: '/agents/', blurb: 'ChatGPT, Claude and coding agents draft for review', icon: Bot },
   { label: 'One-prompt setup', href: '/docs/getting-started/cli-onboarding/', blurb: 'Your coding agent runs create-gitcms', icon: SquareTerminal },
-  { label: 'Chrome extension', href: '/extension/', blurb: 'Open any GitHub repo or file in GitCMS', icon: Puzzle },
+  { label: 'Browser extension', href: '/extension/', blurb: 'Open any GitHub repo or file in GitCMS', icon: Puzzle },
 ]
 
 export const USE_CASE_LINKS: ReadonlyArray<NavLink> = useCases.map((useCase) => ({ label: useCase.name, href: useCase.path, blurb: useCase.blurb, icon: USE_CASE_ICONS[useCase.slug] }))

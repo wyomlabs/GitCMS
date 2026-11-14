@@ -1,12 +1,12 @@
 ---
-import { ArrowRight, ExternalLink, FileText, Github, MousePointerClick } from 'lucide-react'
+import { ArrowRight, FileText, Github, MousePointerClick } from 'lucide-react'
 import MarketingLayout from '@/layouts/MarketingLayout.astro'
 import Section from '@/components/site/Section.astro'
 import SectionHeading from '@/components/site/SectionHeading.astro'
 import CtaBand from '@/components/site/CtaBand.astro'
-import { card, primaryButton, secondaryButton } from '@/components/site/styles'
+import StoreBadges from '@/components/site/StoreBadges.astro'
+import { card } from '@/components/site/styles'
 
-const chromeStoreUrl = 'https://chromewebstore.google.com/detail/gitcms-headless-cms-for-y/pemglpclheejlbobifgdbjjofdhmiafm'
 const shortcuts = [
   { icon: MousePointerClick, title: 'Right-click to open', description: 'Open a GitHub repository or Markdown link directly in GitCMS.' },
   { icon: FileText, title: 'Keep your place', description: 'Pass the selected GitHub file or folder location to GitCMS.' },
@@ -19,11 +19,8 @@ const shortcuts = [
 >
   <Section first>
     <SectionHeading level={1} eyebrow="Browser companion" title="From GitHub to GitCMS in a click" description="Open GitHub repositories, Markdown files, and folders in GitCMS, the visual CMS for code-first websites. Keep the editor, review, and publishing experience on the web, right where your team needs it.">
-      <div class="mt-8 flex flex-wrap justify-center gap-3">
-        <a href={chromeStoreUrl} target="_blank" rel="noopener noreferrer" class={primaryButton}>Chrome Web Store <ExternalLink className="size-4" /></a>
-        <a href="/docs/features/chrome-extension/" class={secondaryButton}>How it works <ArrowRight className="size-4" /></a>
-      </div>
-      <p class="mt-4 text-[14px] text-[#898989]">Free to install. Firefox add-on submission in progress.</p>
+      <StoreBadges class="mt-8" />
+      <p class="mt-4 text-[14px] text-[#898989]">Free to install. <a href="/docs/features/chrome-extension/" class="inline-flex items-center gap-1 font-medium text-neutral-900 underline underline-offset-2">How it works <ArrowRight className="size-3.5" /></a></p>
     </SectionHeading>
     <div class="mt-16 grid gap-5 sm:grid-cols-3">
       {shortcuts.map(({ icon: Icon, title, description }) => (
