@@ -490,8 +490,8 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
     }),
     resource({
       id: 'index:alternatives', kind: 'index', title: 'Alternatives',
-      description: 'Honest guides to the alternatives for WordPress and popular CMSs, by situation, for teams running code-first and AI-built websites.',
-      htmlPath: '/alternatives', body: listBody('Alternatives', 'Each guide says which option fits which situation, including when GitCMS is the wrong choice.', byKind('alternative')),
+      description: 'Ranked alternatives to WordPress and popular CMSs for teams running code-first and AI-built websites, with stated criteria and tradeoffs.',
+      htmlPath: '/alternatives', body: listBody('Alternatives', 'Each guide ranks the alternatives on stated criteria, lists every option’s tradeoffs, GitCMS included, and says when to stay.', byKind('alternative')),
     }),
     resource({
       id: 'index:agents', kind: 'index', title: 'GitCMS for AI Agents',

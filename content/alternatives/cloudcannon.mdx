@@ -1,21 +1,15 @@
 ---
-title: 'CloudCannon Alternatives in 2026'
-description: 'CloudCannon alternatives by situation: keep your hosting, cut the per-user bill, or keep visual editing. Includes when CloudCannon is still the right call.'
+title: 'The Best CloudCannon Alternatives for Client Sites'
+description: 'Six CloudCannon alternatives, ranked on client editing, review before publish, keeping your own hosting, and AI agents. GitCMS is our pick for agencies.'
 competitor: 'CloudCannon'
 cta: 'Keep the hosting you already have. Give clients an editor and put every change, human or agent, through review.'
-lastReviewed: '2026-10-28'
+lastReviewed: '2026-11-14'
 order: 4
 ---
 
+**The short answer:** if your site already deploys on Vercel, Netlify, or Cloudflare and clients or AI agents change it, the best CloudCannon alternative is **GitCMS**. Hosting stays where it is, editors sign in with Google, and review before publish is built in rather than a Team-plan upgrade. If click-to-edit on a React site is the feature you'd miss, look at **TinaCMS**. If you're on GitLab or Bitbucket, **Decap CMS** with Decap Turbo.
+
 CloudCannon is the most complete commercial Git-backed CMS: visual editing on the rendered page, builds, hosting, and support for GitHub, GitLab, and Bitbucket. People look for CloudCannon alternatives for two reasons. The first is the bill: there's no free plan, and the per-user price adds up on small client sites. The second is coupling: the visual editor, the feature most teams chose CloudCannon for, depends on CloudCannon building the site.
-
-The short map, by situation:
-
-- **Your site already deploys on Vercel, Netlify, or Cloudflare, and clients, marketers, or AI agents need to change it with review:** GitCMS.
-- **You need on-page visual editing on a React or Next.js site, at a lower starting price:** TinaCMS.
-- **The budget is zero:** Sveltia CMS, Decap CMS, or Pages CMS.
-- **Developers want the content schema in TypeScript:** Keystatic.
-- **Editors want to build pages visually, not edit files:** a visual headless CMS such as Storyblok.
 
 ## Why teams leave CloudCannon
 
@@ -41,6 +35,174 @@ Visual editing needs configuration: Editable Regions in your templates, or Cloud
 
 CloudCannon describes itself as visual editing "on the stack AI already knows," argues that agents work best on plain files in Git, and publishes agent skills that help migrate Astro projects onto CloudCannon. All of that is true, and the plain-files point applies to every tool on this page. Its AI story is about agents building and migrating the site. If your next problem is agents drafting content changes that a person reviews before they go live, check that CloudCannon covers that workflow before assuming it does.
 
+## How we ranked them
+
+A disclosure first: I build GitCMS, so treat the ranking as an informed opinion. Every option here keeps your content as files in Git. The ranking rewards what decides whether a CloudCannon replacement works for client sites:
+
+1. **Clients edit without Git accounts.** Editors shouldn't need a GitHub login.
+2. **Review before publish.** Client edits and AI drafts should be able to wait for approval, without a plan jump.
+3. **Your hosting stays yours.** The CMS works with the host and pipeline you already have.
+4. **It works with agents.** Content agents can draft, and coding agents can change the site.
+
+Facts and prices were checked on November 14, 2026. Check each vendor's site before you commit.
+
+| | Clients edit without Git accounts | Review before publish | Keeps your hosting | Agents |
+|---|---|---|---|---|
+| **1. GitCMS** | ✓ Google sign-in | ✓ Built in | ✓ Builds and hosts nothing | ✓ MCP for content agents |
+| **2. TinaCMS** | ✓ Invited editors | Team plan and up, per project | ✓ Tina code in your app | AI features listed as coming soon |
+| **3. Decap CMS** | With Decap Turbo | ✓ Editorial workflow | ✓ An `/admin` page in your site | ✗ None listed |
+| **4. Sveltia CMS** | ✗ Git accounts with write access | ✓ Editorial workflow | ✓ An `/admin` page in your site | Agent skill for setup; no MCP |
+| **5. Pages CMS** | ✓ Email invites | ✗ Not documented | ✓ Hosted admin only | ✗ None listed |
+| **6. Keystatic** | With Keystatic Cloud | Branches in GitHub mode | ✓ Admin inside your app | ✗ None listed |
+
+## The best CloudCannon alternatives, ranked
+
+<AlternativePick rank={1} name="GitCMS" logo="/brand/gitcms-logo.svg" pick="Our pick for client sites" bestFor="Agencies and freelancers who build with Astro, Next.js, or a coding agent and deploy on Vercel, Netlify, or Cloudflare" pricing="Paid plans; connect a site and try it free">
+
+GitCMS is the CMS for code-first and AI-built websites. It gives your team, your clients, and AI agents one safe place to edit, review, and publish website changes, while everything stays in your site's repository.
+
+It's the opposite trade from CloudCannon. GitCMS doesn't build or host anything. You connect the GitHub repository behind a site that already deploys, and hosting stays wherever it is. Editors get a document-style editor for Markdown and MDX, plus forms for menus, footers, and other site data. With review before publish, drafts stay isolated until someone approves them, and preview deployments (in beta) let reviewers see a draft on the real site first.
+
+![The GitCMS content board: ideas, drafts, reviews, and published changes for a site](/images/docs/screenshots/content-board-1280.webp)
+
+<Strengths>
+
+- No second build pipeline: your existing host keeps deploying.
+- Review before publish without a jump to a $350 plan.
+- Editors sign in with Google; no GitHub account needed.
+- ChatGPT, Claude, and other MCP clients draft in the same flow, and a person publishes.
+
+</Strengths>
+
+<Limits>
+
+- No on-page visual editing and no page building, so CloudCannon is better for layout-heavy pages.
+- GitHub only, so it's the wrong pick on GitLab or Bitbucket.
+- No hosting, and not open source or self-hostable.
+
+</Limits>
+
+**Choose it if** clients mostly change words, images, and site data on a site you already host. [See pricing](/#pricing).
+
+</AlternativePick>
+
+<AlternativePick rank={2} name="TinaCMS" logo="/logos/tina.svg" bestFor="Next.js sites where click-to-edit on the live page is non-negotiable" pricing="Free for 2 users; Team $29 per project per month; Business $299 per project per month" compareHref="/compare/gitcms-vs-tinacms/">
+
+TinaCMS is Apache-2.0 open source with a hosted backend, TinaCloud. Its contextual editing is documented through the `useTina` React hook, and it works with the host you already use.
+
+<Strengths>
+
+- Click-to-edit on the live page, without CloudCannon's build.
+- A lower starting price for one or two sites.
+- Schema in TypeScript with a GraphQL data layer.
+
+</Strengths>
+
+<Limits>
+
+- Billing is per project, the reverse of CloudCannon's unlimited sites, so it gets expensive across many client sites.
+- TinaCloud supports GitHub only.
+- Self-hosting means running your own auth, database adapter, and Git provider module.
+
+</Limits>
+
+**Choose it if** the site is React and on-page editing is the reason editors are happy. More in [TinaCMS alternatives](/alternatives/tinacms/).
+
+</AlternativePick>
+
+<AlternativePick rank={3} name="Decap CMS" bestFor="Teams on GitLab or Bitbucket who want a free admin" pricing="Free (MIT); Decap Turbo free for 1 site and 1 seat, Pro €19/mo" compareHref="/compare/gitcms-vs-decap-cms/">
+
+Decap CMS, formerly Netlify CMS, supports the most Git providers of anything here. Its hosted backend, Decap Turbo, lets editors sign in without a Git account.
+
+<Strengths>
+
+- GitHub, GitLab, Bitbucket, Azure, and Gitea/Forgejo.
+- Editorial workflow built in.
+- Free, with a cheap hosted login option.
+
+</Strengths>
+
+<Limits>
+
+- Form-based editing; editors go from a visual page to a form per entry.
+- Without Turbo, editors need Git accounts and you run an OAuth proxy.
+
+</Limits>
+
+**Choose it if** GitLab or Bitbucket is what kept you on CloudCannon. More in [Decap CMS alternatives](/alternatives/decap-cms/).
+
+</AlternativePick>
+
+<AlternativePick rank={4} name="Sveltia CMS" bestFor="Developers who want the fastest free form-based admin" pricing="Free and open source (MIT)" compareHref="/compare/gitcms-vs-sveltia-cms/">
+
+Sveltia CMS is the fastest and most modern of the Decap family, configured with a YAML file.
+
+<Strengths>
+
+- Fast, with strong internationalization.
+- Editorial workflow compatible with Decap's.
+- GitHub, GitLab, and Gitea/Forgejo.
+
+</Strengths>
+
+<Limits>
+
+- Still labeled beta, at v0.253.
+- Editors need a Git account with write access.
+
+</Limits>
+
+**Choose it if** the budget is zero and your editors are comfortable with Git accounts.
+
+</AlternativePick>
+
+<AlternativePick rank={5} name="Pages CMS" bestFor="A quick free admin for small GitHub sites" pricing="Free (MIT), hosted or self-hosted" compareHref="/compare/gitcms-vs-pages-cms/">
+
+Pages CMS is a hosted admin for GitHub repositories, configured with a `.pages.yml` file. Collaborators can be invited by email.
+
+<Strengths>
+
+- The quickest to set up of anything here.
+- Editors join by email.
+
+</Strengths>
+
+<Limits>
+
+- GitHub only.
+- No review or approval step described in its docs.
+
+</Limits>
+
+**Choose it if** changes can go live directly and the budget is zero.
+
+</AlternativePick>
+
+<AlternativePick rank={6} name="Keystatic" bestFor="Developer-led Astro or Next.js sites with structured content" pricing="Free (MIT); Keystatic Cloud free for 3 users, Pro from $10/mo plus $5 per extra user" compareHref="/compare/gitcms-vs-keystatic/">
+
+Keystatic, from Thinkmill, defines content in TypeScript and mounts its admin inside your Astro, Next.js, or Remix app. It reads and writes files locally or in GitHub.
+
+<Strengths>
+
+- A typed content schema next to the code.
+- Free and open source.
+
+</Strengths>
+
+<Limits>
+
+- No visual editing.
+- GitHub mode requires every editor to have a GitHub account unless you add Keystatic Cloud.
+- Still 0.x.
+
+</Limits>
+
+**Choose it if** developers own both the schema and the content.
+
+</AlternativePick>
+
+If what your editors loved about CloudCannon was assembling pages from components, a visual headless CMS like Storyblok may fit better than any Git-backed tool, at the cost of moving content out of your repository and into its database. See [GitCMS vs Storyblok](/compare/gitcms-vs-storyblok/).
+
 ## When to stay on CloudCannon
 
 Stay if on-page visual editing is the reason your editors are happy. For Hugo, Jekyll, or Eleventy sites with component-heavy marketing pages, it's one of the best visual editing setups available for Git content.
@@ -51,68 +213,6 @@ Stay if you're on GitLab or Bitbucket, or need self-hosted GitLab or GitHub Ente
 
 And stay if you run many sites with a small team. Unlimited sites per plan is hard to beat for that shape of agency.
 
-## CloudCannon alternatives, by situation
-
-Pricing is as of October 2026. Check each vendor's current pricing before you commit.
-
-### Keep your hosting, add an editorial layer: GitCMS
-
-GitCMS is the CMS for code-first and AI-built websites. It gives your team, your clients, and AI agents one safe place to edit, review, and publish website changes, while everything stays in your site's repository.
-
-It's the opposite trade from CloudCannon. GitCMS doesn't build or host anything. You connect the GitHub repository behind a site that already deploys, and hosting stays wherever it is. Editors get a document-style editor for Markdown and MDX, plus forms for site data such as menus, footers, and team lists in JSON, YAML, or TOML. Changes move through content tasks; with review before publish, drafts stay isolated until someone approves them. Preview deployments (in beta) find your Vercel or Netlify-style preview builds, so reviewers can see a draft on the real site before it ships. ChatGPT, Claude, and other MCP clients can draft in the same flow, and a person publishes.
-
-- **Best for:** agencies and freelancers who build with Astro, Next.js, or a coding agent and deploy on Vercel, Netlify, or Cloudflare, where clients mostly change words, images, and site data.
-- **Watch out for:** no on-page visual editing and no page building, so CloudCannon is better for layout-heavy pages. GitHub only, so it's the wrong pick on GitLab or Bitbucket. No hosting. It's a hosted, paid product, not open source or self-hostable.
-- **Pricing model:** paid plans; you can connect a site and try it free. [See pricing](/#pricing).
-
-See [GitCMS vs CloudCannon](/compare/gitcms-vs-cloudcannon/) for the head-to-head.
-
-### Visual editing on a React site: TinaCMS
-
-TinaCMS is the main alternative if click-to-edit on the live page is non-negotiable and your site is React or Next.js. It's Apache-2.0 open source with a hosted backend, TinaCloud, and its contextual editing is documented through the `useTina` React hook.
-
-- **Best for:** Next.js sites with a developer who's happy to define the schema in `tina/config.ts` and query content through Tina's GraphQL layer.
-- **Watch out for:** billing is per project, the reverse of CloudCannon's unlimited sites, so it gets expensive across many client sites. TinaCloud supports GitHub only. Self-hosting means running your own auth, database adapter, and Git provider module.
-- **Pricing model:** free for two users. Team is $29 per project per month billed monthly, with three users and up to ten. Business is $299 per project per month.
-
-See [GitCMS vs TinaCMS](/compare/gitcms-vs-tinacms/) or our [TinaCMS alternatives](/alternatives/tinacms/) guide.
-
-### The budget is zero: Sveltia CMS, Decap CMS, or Pages CMS
-
-All three are MIT-licensed, free, and form-based. None of them hosts your site or edits on the rendered page. They differ in who can log in.
-
-- **Sveltia CMS** is the fastest and most modern of the Decap family, configured with a YAML file. Editors need a GitHub, GitLab, or Gitea/Forgejo account with write access. It's still labeled beta, at v0.253.
-- **Decap CMS** (formerly Netlify CMS) supports the most Git providers, including GitLab and Bitbucket, which matters if that kept you on CloudCannon. Its new hosted backend, Decap Turbo, lets editors sign in without a Git account: free for one site and one seat, €19 a month for Pro.
-- **Pages CMS** is a hosted admin for GitHub repositories, configured with a `.pages.yml` file. Collaborators can be invited by email. It's the quickest to set up, and GitHub only.
-
-The tradeoff against CloudCannon is the editing experience. Your editors go from a visual page to a form per entry.
-
-See [Decap CMS alternatives](/alternatives/decap-cms/), [GitCMS vs Sveltia CMS](/compare/gitcms-vs-sveltia-cms/), and [GitCMS vs Pages CMS](/compare/gitcms-vs-pages-cms/).
-
-### Developers own the schema: Keystatic
-
-Keystatic, from Thinkmill, defines content in TypeScript and mounts its admin inside your Astro, Next.js, or Remix app. It reads and writes files locally or in GitHub.
-
-- **Best for:** developer-led Astro or Next.js sites with structured content.
-- **Watch out for:** no visual editing; GitHub mode requires every editor to have a GitHub account with write access; still 0.x.
-- **Pricing model:** free and MIT-licensed. Optional Keystatic Cloud is free for up to three users per team, then Pro from $10 a month plus $5 per extra user.
-
-### Editors want to build pages: a visual headless CMS
-
-If what your editors loved about CloudCannon was assembling pages from components, a visual headless CMS may fit better than any Git-backed tool. Storyblok is the common pick: a free Starter plan with one seat, Growth at $99 a month with five seats, and Growth Plus at $349 a month. The cost is architectural. Content moves out of your repository and into Storyblok's database, and your site fetches it through an API. See [GitCMS vs Storyblok](/compare/gitcms-vs-storyblok/).
-
-## Summary
-
-| Option | Best for | Open source? | Git providers | Who edits | Pricing model (Oct 2026) |
-|---|---|---|---|---|---|
-| GitCMS | Clients, marketers, and agents on a site you already host, with review | No | GitHub | Invited editors (Google sign-in) and AI agents | Paid; [see pricing](/#pricing) |
-| TinaCMS | Visual editing on React sites | Yes (Apache-2.0) | GitHub (TinaCloud) | Invited editors | Free for 2 users; Team $29/project/mo |
-| Sveltia CMS | Free, modern form-based admin | Yes (MIT) | GitHub, GitLab, Gitea/Forgejo | People with Git accounts | Free |
-| Decap CMS | Free admin on GitLab or Bitbucket | Yes (MIT) | GitHub, GitLab, Bitbucket, Azure, Gitea/Forgejo | Git accounts, or Turbo accounts | Free; Turbo Pro €19/mo |
-| Pages CMS | Quick free admin for small GitHub sites | Yes (MIT) | GitHub | Invited collaborators | Free |
-| Keystatic | Developer-owned TypeScript schema | Yes (MIT) | GitHub, local files | GitHub users, or Keystatic Cloud users | Free; Cloud Pro from $10/mo |
-| Storyblok | Visual page building, content via API | No | None (content in a database) | Invited editors | Free for 1 seat; Growth $99/mo |
-
 ## Migrating off CloudCannon
 
 CloudCannon commits content to your repository, so your Markdown and data files are already where any Git-backed alternative expects them. What you unwind depends on how much of CloudCannon you used.
@@ -122,3 +222,17 @@ CloudCannon commits content to your repository, so your Markdown and data files 
 3. **Use `cloudcannon.config.yml` as your checklist.** Its collections and inputs describe the fields each content type needs, and its data files map to what your new CMS should expose as site data.
 
 To move to GitCMS, connect the repository and run `npx create-gitcms@latest`, or ask Claude Code, Codex, or Cursor to run it. The CLI scans the repository, infers collections and content paths, and writes them to `.gitcms/`. Compare the result with your CloudCannon config, then invite editors. The [quick start](/docs/getting-started/quick-start/) walks through it, and the [site data docs](/docs/features/site-data/) cover menus, footers, and other data files. If the site came from a coding agent, [the best CMS for AI-built websites](/blog/best-cms-for-ai-built-websites/) compares the wider field.
+
+## FAQ
+
+### Does CloudCannon have a free plan?
+
+No. As of November 2026 there's a 21-day trial, then Standard at $55 a month ($49 billed annually) with three users and unlimited sites. Partners can put client sites on a $10-a-month Lite plan.
+
+### Can I use CloudCannon's visual editor with Vercel or Netlify hosting?
+
+Not fully. The Visual Editor needs a successful build on CloudCannon. Headless Mode keeps content editing without CloudCannon's build or hosting, but without the visual editor.
+
+### What's the best CloudCannon alternative for agencies?
+
+For agencies whose sites already deploy on Vercel, Netlify, or Cloudflare, GitCMS: it adds the editor and review step without taking over builds or hosting. For agencies on GitLab or Bitbucket, Decap CMS.

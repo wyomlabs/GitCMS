@@ -1,25 +1,15 @@
 ---
-title: 'Decap CMS (Netlify CMS) Alternatives in 2026'
-description: 'Leaving Decap CMS, formerly Netlify CMS? Pick by situation: a drop-in rewrite, a free hosted admin, a TypeScript CMS, or client editing with review.'
+title: 'The Best Decap CMS (Netlify CMS) Alternatives for Client Sites'
+description: 'Seven Decap CMS alternatives, ranked on client editing without Git accounts, review before publish, nothing to host, and AI agents. GitCMS is our pick.'
 competitor: 'Decap CMS'
 cta: 'Keep your Markdown where it is. Give editors a real editor, and put agent changes through review.'
-lastReviewed: '2026-10-28'
+lastReviewed: '2026-11-14'
 order: 2
 ---
 
+**The short answer:** if clients or marketers edit the site, or AI agents draft for it, the best Decap CMS alternative is **GitCMS**. Editors sign in with Google instead of a Git account, every change can wait for review, and there's no `/admin` page or OAuth proxy to run. If you just want a faster Decap that reads your existing `config.yml`, pick **Sveltia CMS**. And if login is your only problem, look at Decap Turbo before migrating anything.
+
 Most people searching for Decap CMS alternatives, or Netlify CMS alternatives (Decap is the same project, renamed in 2023), hit one of three walls. Login broke or is about to, because Netlify deprecated Git Gateway. A client found the editor hard to use. Or they looked at the repository and wondered whether the project would still be around next year.
-
-The short map, by situation:
-
-- **You like Decap and want it faster and more modern:** Sveltia CMS. It reads your existing `config.yml`.
-- **You want a free hosted admin for a small GitHub site:** Pages CMS.
-- **Developers own the content model and want it in TypeScript:** Keystatic.
-- **Clients or marketers edit, AI agents draft, and someone reviews before publish:** GitCMS.
-- **You write in VS Code and nobody else touches the content:** Front Matter CMS.
-- **Editors want to click on the rendered page and edit it there:** CloudCannon or TinaCMS.
-- **Your content has outgrown files in a repository:** a headless CMS.
-
-And one option people miss: staying on Decap. October 2026 changed that answer, so read that section before you migrate anything.
 
 ## Why teams leave Decap CMS
 
@@ -45,6 +35,203 @@ Decap's own release notes for Decap Turbo describe the problem: without a cache,
 
 The "Decap is abandoned" story is out of date. Releases went from 3.10.0 in January 2026 to 3.17.3 on October 26, 2026, roughly one minor release a month, and the repository has about 400 open issues. Many releases are fixes and dependency updates, but this year also brought the rich text widget and a commercial hosted backend. That's a project with a funding plan, not one in decline.
 
+## How we ranked them
+
+A disclosure first: I build GitCMS, so treat the ranking as an informed opinion. Every option here keeps your content as files in Git, so the ranking rewards what decides whether a Decap replacement works once a client or an agent is involved:
+
+1. **Clients edit without Git accounts.** A restaurant owner shouldn't need a GitHub login to change the opening hours.
+2. **Review before publish.** Client edits and AI drafts should be able to wait for approval.
+3. **Nothing to host or maintain.** No OAuth proxy, auth server, or backend of your own.
+4. **It works with agents.** Content agents like ChatGPT and Claude can draft, and coding agents can change the site.
+
+Facts and prices were checked on November 14, 2026. Check each vendor's site before you commit.
+
+| | Clients edit without Git accounts | Review before publish | Nothing to host | Agents |
+|---|---|---|---|---|
+| **1. GitCMS** | ✓ Google sign-in | ✓ Built in | ✓ Hosted app | ✓ MCP for content agents |
+| **2. Sveltia CMS** | ✗ Git accounts with write access | ✓ Editorial workflow | ✗ OAuth helper you deploy | Agent skill for setup; no MCP |
+| **3. Pages CMS** | ✓ Email invites | ✗ Not documented | ✓ Hosted app | ✗ None listed |
+| **4. CloudCannon** | ✓ Invited editors | Team plan and up | ✓ Hosted, builds your site | Plain files for coding agents |
+| **5. TinaCMS** | ✓ Invited editors | Team plan and up | TinaCloud, plus Tina code in your app | AI features listed as coming soon |
+| **6. Keystatic** | With Keystatic Cloud | Branches in GitHub mode | Admin runs inside your app | ✗ None listed |
+| **7. Front Matter CMS** | ✗ VS Code only | ✗ | ✓ Local extension | ✗ None listed |
+
+## The best Decap CMS alternatives, ranked
+
+<AlternativePick rank={1} name="GitCMS" logo="/brand/gitcms-logo.svg" pick="Our pick for client sites" bestFor="Agencies and freelancers handing a code-first or AI-built site to a client, and startups whose marketers publish without an engineer" pricing="Paid plans; connect a site and try it free">
+
+GitCMS is the CMS for code-first and AI-built websites. It gives your team, your clients, and AI agents one safe place to edit, review, and publish website changes, while everything stays in your site's repository.
+
+Compared with Decap, there's no `/admin` page in your site and no OAuth proxy to run. You connect a GitHub repository, and invited editors sign in with Google. Writers get a document-style editor for Markdown and MDX, with frontmatter as form fields. Work moves through content tasks on a board, and with review before publish, drafts stay isolated until someone approves them.
+
+![The GitCMS content board: ideas, drafts, reviews, and published changes for a site](/images/docs/screenshots/content-board-1280.webp)
+
+<Strengths>
+
+- Editors don't need a Git account, and nothing runs in your site or on your servers.
+- A document-style editor instead of a stack of widgets.
+- Review before publish, with comments and inline changes shown in the editor.
+- ChatGPT, Claude, and other MCP clients draft inside the same tasks, and a person publishes.
+
+</Strengths>
+
+<Limits>
+
+- GitHub only, so it's the wrong pick on GitLab, Bitbucket, or Gitea.
+- A hosted, paid product, not something you can self-host for free.
+- Not a visual page builder.
+
+</Limits>
+
+**Choose it if** someone other than a developer edits the site, or you want agents' drafts reviewed. [See pricing](/#pricing).
+
+</AlternativePick>
+
+<AlternativePick rank={2} name="Sveltia CMS" bestFor="Existing Decap sites where developers like the config approach and editors want a faster UI" pricing="Free and open source (MIT), funded by donations" compareHref="/compare/gitcms-vs-sveltia-cms/">
+
+Sveltia CMS is a rewrite of Decap that reads the same configuration. In most cases you swap one script tag and your `config.yml` keeps working. In September 2026 its maintainer announced that it covers every Decap feature they plan to support, including editorial workflow and nested collections.
+
+<Strengths>
+
+- The cheapest migration: same config, one script tag.
+- Fast, handles large collections well, and strong internationalization.
+- Supports GitHub, GitLab, and Gitea/Forgejo.
+
+</Strengths>
+
+<Limits>
+
+- Still labeled beta at v0.253, with possible breaking changes before 1.0.
+- No Git Gateway or Netlify Identity: editors sign in with a Git account that has write access, through a token or an OAuth helper you deploy.
+- An agent skill for setup, but no MCP server yet.
+
+</Limits>
+
+**Choose it if** your editors are developers and you want Decap without its slow spots.
+
+</AlternativePick>
+
+<AlternativePick rank={3} name="Pages CMS" bestFor="Small sites and freelancers who want a free admin running in an evening" pricing="Free (MIT), hosted or self-hosted" compareHref="/compare/gitcms-vs-pages-cms/">
+
+Pages CMS is an open source admin for GitHub repositories. You add a `.pages.yml` file, sign in at its hosted app, and edit. Collaborators can be invited by email and sign in with a one-time code.
+
+<Strengths>
+
+- Nothing to deploy, and it's free.
+- Editors join by email, without a GitHub account.
+- A rich-text editor and form fields.
+
+</Strengths>
+
+<Limits>
+
+- GitHub only.
+- Its docs don't describe a review step before changes publish; scheduling, granular permissions, and comments are listed as coming soon.
+- Self-hosting needs PostgreSQL and a GitHub App.
+
+</Limits>
+
+**Choose it if** the site is small, the budget is zero, and changes can go live directly.
+
+</AlternativePick>
+
+<AlternativePick rank={4} name="CloudCannon" bestFor="Agencies that want on-page visual editing, builds, and hosting in one product" pricing="Standard $55/mo for 3 users ($49 billed yearly); extra users $10/mo" compareHref="/compare/gitcms-vs-cloudcannon/">
+
+CloudCannon is a commercial platform that builds and can host your site, with a visual editor on the rendered page across many static site generators.
+
+<Strengths>
+
+- Editors click on the page and edit it there.
+- Supports GitHub, GitLab, and Bitbucket.
+- Mature, with an agency partner program.
+
+</Strengths>
+
+<Limits>
+
+- No free plan, and per-user pricing adds up on small client sites.
+- Visual editing depends on CloudCannon building the site.
+- Branching review workflows start on the Team plan.
+
+</Limits>
+
+**Choose it if** editors' real complaint is "I can't see what I'm changing." More in [CloudCannon alternatives](/alternatives/cloudcannon/).
+
+</AlternativePick>
+
+<AlternativePick rank={5} name="TinaCMS" logo="/logos/tina.svg" bestFor="React and Next.js sites that want click-to-edit on the page" pricing="Free for 2 users; Team $29 per project per month" compareHref="/compare/gitcms-vs-tinacms/">
+
+TinaCMS is open source (Apache-2.0) with a hosted backend, TinaCloud. Its click-to-edit visual editing is documented for React.
+
+<Strengths>
+
+- Live, on-page editing.
+- Content stays as Markdown, MDX, and data files in Git.
+- Schema in TypeScript with a GraphQL data layer.
+
+</Strengths>
+
+<Limits>
+
+- Tina's schema, queries, and setup live in your codebase.
+- Per-project pricing adds up across client sites.
+- AI features are listed as coming soon.
+
+</Limits>
+
+**Choose it if** the site is React and on-page editing matters more than setup cost. More in [TinaCMS alternatives](/alternatives/tinacms/).
+
+</AlternativePick>
+
+<AlternativePick rank={6} name="Keystatic" bestFor="Developer-led Astro or Next.js sites where the schema belongs in TypeScript" pricing="Free (MIT); Keystatic Cloud free for 3 users, Pro from $10/mo plus $5 per extra user" compareHref="/compare/gitcms-vs-keystatic/">
+
+Keystatic, from Thinkmill, defines collections in TypeScript and mounts an admin UI inside your Astro, Next.js, or Remix app. It edits local files or GitHub, and gives your site a typed reader for the content.
+
+<Strengths>
+
+- A typed content schema next to the code.
+- Local mode edits the filesystem directly during development.
+- Branches in GitHub mode for staged changes.
+
+</Strengths>
+
+<Limits>
+
+- The admin lives in your app, so it's limited to supported frameworks.
+- Editors need GitHub accounts unless you add Keystatic Cloud.
+- Still 0.x; the latest core release was 0.6.9 in August 2026.
+
+</Limits>
+
+**Choose it if** developers are the editors and want types for their content.
+
+</AlternativePick>
+
+<AlternativePick rank={7} name="Front Matter CMS" bestFor="Developers and technical writers who already work in VS Code" pricing="Free (MIT), with GitHub sponsorship">
+
+Front Matter CMS is a VS Code extension that turns the editor into a content dashboard, with SEO checks and support for Hugo, Astro, Eleventy, Jekyll, Docusaurus, Next.js, and others.
+
+<Strengths>
+
+- Writing, previews, and SEO checks without leaving the editor.
+- Works with almost any static site generator.
+- Actively maintained; v10.13.0 shipped in October 2026.
+
+</Strengths>
+
+<Limits>
+
+- No web admin, so it doesn't help a client or marketer at all.
+- No review step or agent features.
+
+</Limits>
+
+**Choose it if** nobody but you touches the content.
+
+</AlternativePick>
+
+If several apps read the same content, or you need a content API, files in a repository may be the wrong foundation altogether. A headless CMS like Sanity or Payload moves content into a database, a much bigger migration than anything above. See [GitCMS vs Sanity](/compare/gitcms-vs-sanity/) and [GitCMS vs Payload](/compare/gitcms-vs-payload/).
+
 ## When to stay on Decap CMS
 
 Stay if Decap works for your editors and your login path isn't Git Gateway.
@@ -55,81 +242,6 @@ And look at **Decap Turbo** before you leave over login. It became generally ava
 
 If Turbo solves your problem, the cheapest migration is no migration.
 
-## Decap CMS alternatives, by situation
-
-Pricing is as of October 2026. Check each vendor's current pricing before you commit.
-
-### You want Decap, but better: Sveltia CMS
-
-Sveltia CMS is an MIT-licensed rewrite of Decap that reads the same configuration. In most cases you swap one script tag and your `config.yml` keeps working. It's fast, handles large collections well, and has strong internationalization support. In September 2026 its maintainer announced that it covers every Decap feature they plan to support, including editorial workflow and nested collections.
-
-- **Best for:** existing Decap sites where developers are happy with the config approach and editors want a faster, cleaner UI.
-- **Watch out for:** it's still labeled beta at v0.253, with possible breaking changes before 1.0. It doesn't support Git Gateway, the Netlify Identity widget, Bitbucket, or Azure. Editors sign in with a GitHub, GitLab, or Gitea/Forgejo account that has write access, using a token or an OAuth helper you deploy (the project offers one for Cloudflare Workers). It has an official agent skill for setup, but no MCP server yet.
-- **Pricing model:** free and open source, funded by donations.
-
-[GitCMS vs Sveltia CMS](/compare/gitcms-vs-sveltia-cms/) covers the head-to-head.
-
-### A free hosted admin for a GitHub site: Pages CMS
-
-Pages CMS is an open source admin for GitHub repositories. You add a `.pages.yml` file, sign in at its hosted app, and edit. There's nothing to deploy unless you want to self-host it, which needs PostgreSQL and a GitHub App. Collaborators can be invited by email and sign in with a one-time code.
-
-- **Best for:** small sites and freelancers who want something running in an evening, at no cost.
-- **Watch out for:** GitHub only. Its docs don't describe a review or approval step before changes are published, and scheduling, granular permissions, and inline comments are listed as coming soon. The last tagged release was 2.1.8 in June 2026, though commits continued into October.
-- **Pricing model:** free, MIT-licensed, hosted or self-hosted.
-
-See [GitCMS vs Pages CMS](/compare/gitcms-vs-pages-cms/).
-
-### Developers own the schema: Keystatic
-
-Keystatic, from Thinkmill, defines collections and singletons in TypeScript and mounts an admin UI inside your Astro, Next.js, or Remix app. It edits files on your local disk or in GitHub, and gives your site a typed reader for the content.
-
-- **Best for:** developer-led Astro or Next.js sites with structured content, where the schema belongs next to the code.
-- **Watch out for:** the admin lives in your app, so your framework choice is limited to the supported ones. In GitHub mode every editor needs a GitHub account with write access. It's still 0.x; the latest core release was 0.6.9 in August 2026.
-- **Pricing model:** free and MIT-licensed. Optional Keystatic Cloud handles sign-in and images: free for up to three users per team, Pro from $10 a month plus $5 per extra user.
-
-See [GitCMS vs Keystatic](/compare/gitcms-vs-keystatic/).
-
-### Clients edit, agents draft, someone reviews: GitCMS
-
-GitCMS is the CMS for code-first and AI-built websites. It gives your team, your clients, and AI agents one safe place to edit, review, and publish website changes, while everything stays in your site's repository.
-
-Compared with Decap, there's no `/admin` page in your site and no OAuth proxy to run. You connect a GitHub repository, and invited editors can sign in with Google. Writers get a document-style editor for Markdown and MDX, with frontmatter as form fields. Work moves through content tasks on a board, and with review before publish, drafts stay isolated until someone approves them, with comments and inline changes shown in the editor. ChatGPT, Claude, and other MCP clients can draft inside the same tasks, and a person publishes.
-
-- **Best for:** agencies and freelancers handing a code-first or AI-built site to a client, and startups whose marketers shouldn't need an engineer to publish.
-- **Watch out for:** GitHub only, so it's the wrong pick if you're on GitLab, Bitbucket, or Gitea. It's a hosted, paid product, not something you can self-host for free. It isn't a visual page builder.
-- **Pricing model:** paid plans; you can connect a site and try it free. [See pricing](/#pricing).
-
-### Writers live in VS Code: Front Matter CMS
-
-Front Matter CMS is a free, MIT-licensed extension that turns VS Code into a content dashboard, with SEO checks and support for Hugo, Astro, Eleventy, Jekyll, Docusaurus, Next.js, and others. It shipped v10.13.0 in October 2026.
-
-- **Best for:** developers and technical writers who already work in the editor.
-- **Watch out for:** there's no web admin, so it doesn't help a client or marketer at all.
-- **Pricing model:** free, with GitHub sponsorship.
-
-### Editors want on-page visual editing: CloudCannon or TinaCMS
-
-If your editors' real complaint is "I can't see what I'm changing," look at tools that edit on the rendered page. **CloudCannon** is a commercial platform that builds and can host your site, with a visual editor across many static site generators and support for GitHub, GitLab, and Bitbucket. Standard is $55 a month billed monthly for three users. **TinaCMS** is open source with a hosted backend, TinaCloud; its click-to-edit visual editing is documented for React. The free plan covers two users, and Team is $29 per project per month billed monthly.
-
-Our [CloudCannon alternatives](/alternatives/cloudcannon/) and [TinaCMS alternatives](/alternatives/tinacms/) guides go deeper.
-
-### Content outgrew files: a headless CMS
-
-If several apps read the same content, or you need a content API, files in a repository may be the wrong foundation. Sanity has a free plan for up to 20 seats and Growth at $15 per seat per month. Payload is MIT-licensed and you host it yourself. Either way your content moves out of the repository and into a database, which is a much bigger migration than anything else here. See [GitCMS vs Sanity](/compare/gitcms-vs-sanity/) and [GitCMS vs Payload](/compare/gitcms-vs-payload/).
-
-## Summary
-
-| Option | Best for | Open source? | Git providers | Who edits | Pricing model (Oct 2026) |
-|---|---|---|---|---|---|
-| Sveltia CMS | Drop-in Decap upgrade | Yes (MIT) | GitHub, GitLab, Gitea/Forgejo | People with Git accounts | Free |
-| Pages CMS | Free hosted admin, small sites | Yes (MIT) | GitHub | Invited collaborators | Free |
-| Keystatic | Developer-owned TypeScript schema | Yes (MIT) | GitHub, local files | GitHub users, or Keystatic Cloud users | Free; Cloud Pro from $10/mo |
-| GitCMS | Client and marketer editing with review, MCP agents | No | GitHub | Invited editors (Google sign-in) and AI agents | Paid; [see pricing](/#pricing) |
-| Front Matter CMS | Writing inside VS Code | Yes (MIT) | Any (local files) | Developers | Free |
-| CloudCannon | On-page visual editing plus hosting | No | GitHub, GitLab, Bitbucket | Invited editors | From $55/mo |
-| TinaCMS | Visual editing on React sites | Yes (Apache-2.0) | GitHub (TinaCloud) | Invited editors | Free for 2 users; Team $29/project/mo |
-| Decap + Turbo (stay) | Keep Decap, drop Git Gateway | Yes (MIT); Turbo is hosted | GitHub, GitLab | Turbo accounts | Free for 1 site and 1 seat; Pro €19/mo |
-
 ## Migrating off Decap CMS
 
 The good news: your content doesn't move. Decap already stores entries as Markdown and data files in your repository, and so do every Git-backed option above. The work is in configuration and login.
@@ -139,3 +251,17 @@ The good news: your content doesn't move. Decap already stores entries as Markdo
 **To GitCMS:** there's no content import. Connect the repository, then run `npx create-gitcms@latest`, or ask Claude Code, Codex, or Cursor to run it. The CLI scans the repository itself, not your `config.yml`, and writes collections to `.gitcms/`. Compare what it found with the collections in `config.yml` and adjust any fields it missed. Keep your `/admin` folder until editors are working in GitCMS, then delete it along with the OAuth proxy or Git Gateway setup. The [quick start](/docs/getting-started/quick-start/) walks through it, and [GitCMS vs Decap CMS](/compare/gitcms-vs-decap-cms/) covers the deeper differences.
 
 If your site was built with a coding agent and you're choosing from scratch, [the best CMS for AI-built websites](/blog/best-cms-for-ai-built-websites/) covers the wider field.
+
+## FAQ
+
+### Is Decap CMS the same as Netlify CMS?
+
+Yes. Netlify CMS was renamed Decap CMS in 2023. Same project, same `config.yml`.
+
+### Is Decap CMS still maintained?
+
+Yes. Releases went from 3.10.0 in January 2026 to 3.17.3 in October 2026, and Decap Turbo, a hosted backend, became generally available in October.
+
+### What replaces Git Gateway for Decap CMS?
+
+Inside Decap, Decap Turbo: editors sign in with a Turbo account, no Git account needed. Outside it, GitCMS (Google sign-in) or Pages CMS (email invites) give editors access without a Git account or an auth server of your own.
