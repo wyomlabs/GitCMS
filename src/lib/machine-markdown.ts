@@ -1,5 +1,6 @@
 import { AGENT_SETUP_PROMPT } from '@/lib/agent-setup-prompt'
 import { codeFirstTeams } from '@/lib/code-first-teams'
+import { COMPETITOR_COSTS, COMPETITOR_COSTS_AS_OF, competitorMonthly, gitcmsMonthly } from '@/lib/competitor-costs'
 import { LICENSE_PRICE_SUMMARY, SITE_URL } from '@/lib/positioning'
 import { pageUrlPath } from '@/lib/public-resources'
 
@@ -59,6 +60,49 @@ function convertPricing(input: string) {
   })
 }
 
+/** The interactive comparator becomes its starting totals, matching the HTML. */
+function convertCostComparators(input: string) {
+  return input.replace(/<CostComparator\b([\s\S]*?)\/>/g, (_whole, props: string) => {
+    const compare = parseQuotedProp(props, 'compare')
+    const sites = Number(props.match(/sites\s*=\s*\{(\d+)\}/)?.[1] ?? 3)
+    const editors = Number(props.match(/editors\s*=\s*\{(\d+)\}/)?.[1] ?? 4)
+    const yearly = (monthly: number) => `$${(monthly * 12).toLocaleString('en-US')}/yr`
+    return [
+      '',
+      `Yearly cost for ${sites} sites and ${editors} editors (list prices billed yearly, ${COMPETITOR_COSTS_AS_OF}):`,
+      '',
+      ...COMPETITOR_COSTS.filter((cost) => !compare || cost.key === compare).map(
+        (cost) => `- **${cost.name}:** ${yearly(competitorMonthly(cost, sites, editors))} — ${cost.note}`,
+      ),
+      `- **Code-first + GitCMS:** ${yearly(gitcmsMonthly(sites, editors))} — free static hosting plus the cheapest GitCMS plan`,
+      '',
+    ].join('\n')
+  })
+}
+
+/** Ranked alternatives become headed sections with their facts as lines. */
+function convertAlternativePicks(input: string) {
+  return input
+    .replace(/<AlternativePick\b([\s\S]*?)>/g, (_whole, props: string) => {
+      const rank = props.match(/rank\s*=\s*\{(\d+)\}/)?.[1] ?? ''
+      const name = parseQuotedProp(props, 'name')
+      const pick = parseQuotedProp(props, 'pick')
+      return [
+        '',
+        `### ${rank}. ${name}${pick ? ` (${pick})` : ''}`,
+        '',
+        `**Best for:** ${parseQuotedProp(props, 'bestFor')}`,
+        '',
+        `**Pricing:** ${parseQuotedProp(props, 'pricing')}`,
+        '',
+      ].join('\n')
+    })
+    .replace(/<\/AlternativePick>/g, '\n')
+    .replace(/<Strengths>/g, '\n**What it does well:**\n')
+    .replace(/<Limits>/g, '\n**Where it falls short:**\n')
+    .replace(/<\/(Strengths|Limits)>/g, '\n')
+}
+
 function convertCaseStudies(input: string) {
   return input.replace(/<CaseStudy\b([\s\S]*?)>([\s\S]*?)<\/CaseStudy>/g, (_whole, props: string, children: string) => {
     const title = parseQuotedProp(props, 'title')
@@ -107,6 +151,8 @@ function convertMdxChunk(input: string) {
   output = convertCaseStudies(output)
   output = convertFeatureTables(output)
   output = convertPricing(output)
+  output = convertCostComparators(output)
+  output = convertAlternativePicks(output)
 
   output = output
     .replace(/<VerdictCompetitor\b([^>]*)>/g, (_whole, attrs: string) => `\n### Choose ${parseQuotedProp(attrs, 'title') || 'the competitor'} if\n`)

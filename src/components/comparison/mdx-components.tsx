@@ -1,14 +1,14 @@
 import type { ReactNode } from 'react'
 import { Check, Minus, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { loginUrl } from '@/lib/start-login'
 import { LICENSE_PRICE_SUMMARY } from '@/lib/positioning'
 
 /**
- * Breakout wrapper — widens tables and case studies to the edges of the
- * white article card, cancelling its `px-6 sm:px-12` padding.
+ * The feature table runs to the article card's edges, cancelling its
+ * `px-6 sm:px-12` padding. It drops its own side borders there, so it reads
+ * as a band of the card instead of a box on top of the card's border.
  */
-const breakout = '-mx-6 sm:-mx-12'
+const cardBleed = '-mx-6 sm:-mx-12'
 
 /* ─── Verdict Cards ─── */
 
@@ -101,7 +101,6 @@ export function CaseStudy({
     <aside
       className={cn(
         'not-prose my-10 rounded-xl border border-neutral-200 bg-neutral-50 p-6 sm:p-8 md:p-10',
-        breakout,
       )}
     >
       <div className="flex items-center gap-3">
@@ -213,18 +212,18 @@ export function FeatureTable({
   }>
 }) {
   return (
-    <div className={cn('not-prose my-10', breakout)}>
-      <div className="overflow-x-auto rounded-xl border border-neutral-200">
+    <div className={cn('not-prose my-10', cardBleed)}>
+      <div className="overflow-x-auto border-y border-neutral-200">
         <table className="w-full min-w-[580px] text-left">
           <thead>
             <tr className="border-b border-neutral-200 bg-neutral-50">
-              <th className="px-5 py-3.5 text-sm font-semibold uppercase tracking-widest text-neutral-500 sm:px-6">
+              <th className="py-3.5 pr-5 text-sm font-semibold uppercase tracking-widest text-neutral-500 first:pl-6 last:pr-6 sm:pr-6 sm:first:pl-12 sm:last:pr-12">
                 Capability
               </th>
-              <th className="px-5 py-3.5 text-sm font-semibold uppercase tracking-widest text-neutral-500 sm:px-6">
+              <th className="py-3.5 pr-5 text-sm font-semibold uppercase tracking-widest text-neutral-500 first:pl-6 last:pr-6 sm:pr-6 sm:first:pl-12 sm:last:pr-12">
                 GitCMS
               </th>
-              <th className="px-5 py-3.5 text-sm font-semibold uppercase tracking-widest text-neutral-500 sm:px-6">
+              <th className="py-3.5 pr-5 text-sm font-semibold uppercase tracking-widest text-neutral-500 first:pl-6 last:pr-6 sm:pr-6 sm:first:pl-12 sm:last:pr-12">
                 {competitor}
               </th>
             </tr>
@@ -237,7 +236,7 @@ export function FeatureTable({
                   i !== rows.length - 1 && 'border-b border-neutral-100',
                 )}
               >
-                <td className="px-5 py-3.5 sm:px-6">
+                <td className="py-3.5 pr-5 first:pl-6 last:pr-6 sm:pr-6 sm:first:pl-12 sm:last:pr-12">
                   <span className="text-[15px] font-medium text-neutral-900">
                     {row.category}
                   </span>
@@ -247,10 +246,10 @@ export function FeatureTable({
                     </p>
                   )}
                 </td>
-                <td className="px-5 py-3.5 sm:px-6">
+                <td className="py-3.5 pr-5 first:pl-6 last:pr-6 sm:pr-6 sm:first:pl-12 sm:last:pr-12">
                   <CellContent value={row.gitcms} />
                 </td>
-                <td className="px-5 py-3.5 sm:px-6">
+                <td className="py-3.5 pr-5 first:pl-6 last:pr-6 sm:pr-6 sm:first:pl-12 sm:last:pr-12">
                   <CellContent value={row.competitor} />
                 </td>
               </tr>
@@ -269,7 +268,6 @@ export function Tradeoffs({ children }: { children: ReactNode }) {
     <div
       className={cn(
         'not-prose my-10 rounded-xl border border-amber-200 bg-amber-50/50 p-6 sm:p-8 md:p-10',
-        breakout,
       )}
     >
       <p className="text-xl font-semibold tracking-[-0.02em] text-neutral-900">
@@ -326,28 +324,94 @@ export function PricingCompare({
   )
 }
 
-/* ─── CTA ─── */
+/* ─── Ranked alternatives (alternatives guides) ─── */
 
-export function CompareCTA({
-  description,
+/**
+ * One entry in an alternatives guide's ranked list. The body is ordinary
+ * Markdown, with `<Strengths>` and `<Limits>` around its two lists, so the
+ * `.md` copy reads the same as the page.
+ */
+export function AlternativePick({
+  rank,
+  name,
+  logo,
+  bestFor,
+  pricing,
+  pick,
+  compareHref,
+  children,
 }: {
-  description?: string
-  /** @deprecated Use description only. Heading and accent are now hardcoded. */
-  heading?: string
-  /** @deprecated Use description only. Heading and accent are now hardcoded. */
-  accent?: string
+  rank: number
+  name: string
+  logo?: string
+  bestFor: string
+  pricing: string
+  /** Badge for the recommended entry, e.g. "Our pick for code-first teams". */
+  pick?: string
+  compareHref?: string
+  children: ReactNode
 }) {
   return (
-    <div className="not-prose my-12 flex flex-col items-start justify-between gap-6 rounded-2xl bg-neutral-950 px-8 py-10 text-white sm:px-10 md:flex-row md:items-center">
-      <div>
-        <p className="text-[26px] font-semibold leading-tight tracking-[-0.03em]">Give your website a control plane</p>
-        {description && <p className="mt-2 max-w-md text-[15px] leading-relaxed text-neutral-400">{description}</p>}
+    <section
+      className={cn(
+        'not-prose my-8 rounded-xl border p-6 sm:p-8',
+        pick ? 'border-neutral-900 ring-1 ring-neutral-900' : 'border-neutral-200',
+      )}
+    >
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="text-sm font-semibold tabular-nums text-neutral-400">#{rank}</span>
+        {logo ? (
+          <img src={logo} alt="" className="size-7 shrink-0 object-contain" />
+        ) : (
+          <span className="grid size-7 shrink-0 place-items-center rounded-md bg-neutral-100 text-sm font-semibold text-neutral-700">{name.charAt(0)}</span>
+        )}
+        <h3 className="text-xl font-semibold tracking-[-0.02em] text-neutral-900">{name}</h3>
+        {pick && <span className="rounded-full bg-[#DCF986] px-2.5 py-0.5 text-xs font-semibold text-neutral-900">{pick}</span>}
       </div>
-      <a href={loginUrl('/')} className="inline-flex h-10 shrink-0 items-center gap-2 rounded-xl bg-[#DCF986] px-5 text-sm font-semibold text-neutral-950 hover:bg-[#d4f47a]">
-        Connect your site, free
-      </a>
+      <p className="mt-2 text-[15px] text-neutral-500">
+        <span className="font-medium text-neutral-700">Best for:</span> {bestFor}
+      </p>
+      <div className="mt-4 text-base leading-relaxed text-neutral-700 [&_a]:font-medium [&_a]:text-neutral-900 [&_a]:underline [&_a]:underline-offset-2 [&_img]:my-5 [&_img]:w-full [&_img]:rounded-lg [&_img]:border [&_img]:border-neutral-200 [&>p]:mt-3 [&>p:first-child]:mt-0">
+        {children}
+      </div>
+      <div className="mt-5 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-t border-neutral-100 pt-4 text-sm">
+        <p className="text-neutral-500">
+          <span className="font-medium text-neutral-700">Pricing:</span> {pricing}
+        </p>
+        {compareHref && (
+          <a href={compareHref} className="font-medium text-neutral-900 underline underline-offset-2">
+            GitCMS vs {name}
+          </a>
+        )}
+      </div>
+    </section>
+  )
+}
+
+function PickList({ title, tone, children }: { title: string; tone: 'strength' | 'limit'; children: ReactNode }) {
+  return (
+    <div className="mt-4">
+      <p className="text-sm font-semibold text-neutral-900">{title}</p>
+      <div
+        className={cn(
+          'mt-2 [&>ul]:list-none [&>ul]:space-y-1.5 [&>ul]:pl-0 [&_li]:flex [&_li]:items-start [&_li]:gap-2',
+          tone === 'strength'
+            ? "[&_li]:before:text-emerald-600 [&_li]:before:content-['✓']"
+            : "[&_li]:before:text-neutral-400 [&_li]:before:content-['–']",
+        )}
+      >
+        {children}
+      </div>
     </div>
   )
+}
+
+export function Strengths({ children }: { children: ReactNode }) {
+  return <PickList title="What it does well" tone="strength">{children}</PickList>
+}
+
+export function Limits({ children }: { children: ReactNode }) {
+  return <PickList title="Where it falls short" tone="limit">{children}</PickList>
 }
 
 /* ─── Component map for MDX ─── */
@@ -360,5 +424,7 @@ export const comparisonMdxComponents = {
   FeatureTable,
   Tradeoffs,
   PricingCompare,
-  CompareCTA,
+  AlternativePick,
+  Strengths,
+  Limits,
 }

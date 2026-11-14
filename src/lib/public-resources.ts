@@ -16,6 +16,7 @@ export type PublicResourceKind =
   | 'blog'
   | 'changelog'
   | 'comparison'
+  | 'alternative'
   | 'docs'
   | 'glossary'
   | 'prompt'
@@ -242,10 +243,11 @@ function builderBody(builder: (typeof siteBuilders)[number]) {
 }
 
 export async function getPublicResources(): Promise<Array<PublicResource>> {
-  const [blog, changelog, comparisons, docs, glossary, prompts, tools, pages] = await Promise.all([
+  const [blog, changelog, comparisons, alternatives, docs, glossary, prompts, tools, pages] = await Promise.all([
     getCollection('blog'),
     getCollection('changelog'),
     getCollection('comparisons'),
+    getCollection('alternatives'),
     getCollection('docs'),
     getCollection('glossary'),
     getCollection('prompts'),
@@ -321,6 +323,19 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       htmlPath: `/compare/${slug}`,
       body: entry.body ?? '',
       og: { type: 'versus', competitor: entry.data.competitor },
+      updatedAt: entry.data.lastReviewed,
+    }))
+  }
+
+  for (const entry of alternatives) {
+    const slug = slugFromId(entry.id)
+    resources.push(resource({
+      id: `alternative:${slug}`,
+      kind: 'alternative',
+      title: entry.data.title,
+      description: entry.data.description,
+      htmlPath: `/alternatives/${slug}`,
+      body: entry.body ?? '',
       updatedAt: entry.data.lastReviewed,
     }))
   }
@@ -454,7 +469,7 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
     title: 'GitCMS Browser Extension for Chrome and Firefox',
     description: 'Open GitHub repositories, Markdown files, and folders directly in GitCMS. A free browser companion for managing code-first websites.',
     htmlPath: '/extension',
-    body: 'The GitCMS browser extension opens GitHub repositories, Markdown files, and folders in GitCMS from a right-click, the current GitHub location, or the address bar (type `gitcms`). It is a shortcut to the GitCMS web app, not an embedded editor. Install it from the Chrome Web Store; a Firefox add-on is in review. See /docs/features/chrome-extension.',
+    body: 'The GitCMS browser extension opens GitHub repositories, Markdown files, and folders in GitCMS from a right-click, the current GitHub location, or the address bar (type `gitcms`). It is a shortcut to the GitCMS web app, not an embedded editor. Install it from the Chrome Web Store or Firefox Add-ons. See /docs/features/chrome-extension.',
   }))
 
   const byKind = (kind: PublicResourceKind) => resources.filter((entry) => entry.kind === kind)
@@ -472,6 +487,11 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       id: 'index:compare', kind: 'index', title: 'GitCMS Comparisons',
       description: 'Honest comparisons between GitCMS and website builders, headless CMSs, Git-based CMSs, and publishing platforms.',
       htmlPath: '/compare', body: listBody('Comparisons', 'Every comparison says where the other tool is genuinely better.', byKind('comparison')),
+    }),
+    resource({
+      id: 'index:alternatives', kind: 'index', title: 'Alternatives',
+      description: 'Ranked alternatives to WordPress and popular CMSs for teams running code-first and AI-built websites, with stated criteria and tradeoffs.',
+      htmlPath: '/alternatives', body: listBody('Alternatives', 'Each guide ranks the alternatives on stated criteria, lists every option’s tradeoffs, GitCMS included, and says when to stay.', byKind('alternative')),
     }),
     resource({
       id: 'index:agents', kind: 'index', title: 'GitCMS for AI Agents',

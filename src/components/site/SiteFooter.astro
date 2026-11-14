@@ -1,7 +1,7 @@
 ---
 // Footer on the page background inside the framed column (cal.com): brand
 // and the canonical definition on the left, four link columns on the right,
-// then a directory of agent, framework, site builder and comparison pages. The directory
+// then a directory of agent, site builder, comparison, alternatives and framework pages. The directory
 // is the site-wide internal link to those pages, so keep it complete.
 import { GitCMSLogo } from '@/components/gitcms-logo'
 import { PRODUCT_DEFINITION } from '@/lib/positioning'
@@ -10,19 +10,20 @@ import { DISCORD_INVITE_URL, SITE_REPOSITORY_URL } from '@/lib/support-links'
 import { directoryAgentList } from '@/lib/agent-data'
 import { frameworkList } from '@/lib/framework-data'
 import { getBuilderDirectoryLinks } from '@/lib/site-builders'
-import { getComparisons } from '@/lib/content'
+import { getAlternatives, getComparisons } from '@/lib/content'
 
 const columns = [
-  { title: 'Product', links: [['Docs', '/docs/'], ...FEATURE_LINKS.filter((item) => item.badge !== 'Soon').map((item) => [item.label, item.href]), ['Agents and MCP', '/agents/'], ['Pricing', '/#pricing'], ['Chrome extension', '/extension/'], ['Changelog', '/changelog/']] },
+  { title: 'Product', links: [['Docs', '/docs/'], ...FEATURE_LINKS.filter((item) => item.badge !== 'Soon').map((item) => [item.label, item.href]), ['Agents and MCP', '/agents/'], ['Pricing', '/#pricing'], ['Browser extension', '/extension/'], ['Changelog', '/changelog/']] },
   { title: 'Use cases', links: USE_CASE_LINKS.map((item) => [item.label, item.href]) },
   { title: 'Resources', links: RESOURCE_LINKS.filter((item) => item.href !== '/changelog/').map((item) => [item.label, item.href]) },
   { title: 'Company', links: [['Manifesto', '/manifesto/'], ['GitHub', SITE_REPOSITORY_URL], ['Discord', DISCORD_INVITE_URL], ['Terms', '/terms/'], ['Privacy', '/privacy/']] },
 ]
 const directory = [
   { title: 'Agents', links: directoryAgentList.map((agent) => ({ label: agent.name, href: `/agents/${agent.slug}/`, logo: agent.logoPath })) },
-  { title: 'Frameworks', links: frameworkList.map((framework) => ({ label: framework.name, href: `/git-based-cms-for-${framework.slug}/`, logo: framework.logo })) },
   { title: 'AI site builders', links: getBuilderDirectoryLinks() },
   { title: 'Comparisons', links: (await getComparisons()).map((entry) => ({ label: `vs ${entry.data.competitor}`, href: `/compare/${entry.id.replace(/\.mdx?$/, '')}/`, logo: undefined })) },
+  { title: 'Alternatives', links: (await getAlternatives()).map((entry) => ({ label: `${entry.data.competitor} alternatives`, href: `/alternatives/${entry.id.replace(/\.mdx?$/, '')}/`, logo: undefined })) },
+  { title: 'Frameworks', links: frameworkList.map((framework) => ({ label: framework.name, href: `/git-based-cms-for-${framework.slug}/`, logo: framework.logo })) },
 ]
 ---
 <footer class="grid gap-14 border-t border-neutral-200 px-6 pb-24 pt-20 lg:grid-cols-[1fr_2fr] lg:px-16">

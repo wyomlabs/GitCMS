@@ -1,23 +1,24 @@
 ---
 title: 'GitCMS vs Payload CMS'
-description: 'Payload is a self-hosted headless CMS built on Next.js. GitCMS keeps content as files in your repo, with no CMS server to run. Here''s when each fits.'
+description: 'Payload is an open-source, Next.js-native headless CMS, now part of Figma. GitCMS keeps content as files in your repo, with no CMS server to run.'
 competitor: 'Payload CMS'
 category: 'Headless CMS'
-lastReviewed: '2026-04-16'
-order: 8
+cta: 'Same repo-first mindset. No database to host. Content stays in your repo.'
+lastReviewed: '2026-10-28'
+order: 9
 ---
 
-Payload is one of the most exciting CMSs to emerge in recent years. It is TypeScript-native, built on Next.js, open-source, and genuinely developer-friendly. If you want a self-hosted headless CMS that feels modern and lives close to your code, Payload is a strong choice.
+Payload is one of the most exciting CMSs to emerge in recent years. It is TypeScript-native, installs into a Next.js app, MIT-licensed, and genuinely developer-friendly. If you want a headless CMS that feels modern and lives close to your code, Payload is a strong choice.
 
-But Payload is still a **database-backed application CMS**. It runs a server, talks to a database (MongoDB or PostgreSQL), and delivers content through an API. That is the right architecture when your content model is complex and relational.
+But Payload is still a **database-backed application CMS**. It runs a server, talks to a database (MongoDB, PostgreSQL, or SQLite), and delivers content through an API. That is the right architecture when your content model is complex and relational.
 
-For content-heavy sites where the content is fundamentally text — docs, blogs, changelogs, marketing pages — GitCMS asks: why run a content server when the content could just be markdown files in the repo?
+For content-heavy sites where the content is fundamentally text — docs, blogs, changelogs, marketing pages — GitCMS asks: why run a content server when the content could just be Markdown files in the repo?
 
 ## What changed in 2026
 
-Headless CMSs solved a real problem: structured content for developers through an API, and a dashboard for editors. But in 2026, more and more websites are built and maintained by coding agents working directly in a repository.
+Payload's own story changed. Figma acquired Payload in June 2025, and the team says Payload remains open source and self-hostable. New Payload Cloud projects are paused, so new projects host Payload themselves, anywhere a Next.js app runs. In October 2026, Figma started bringing Payload into Figma Make, so prompt-built sites there can come with a CMS and admin panel that Figma hosts.
 
-That changes the math on a database-backed application CMS. Content in Payload is a second source of truth: your coding agent can't see it in the repo, your Git history doesn't record it, and every page has to fetch it. When an agent builds or changes a page, it has to work across two systems.
+Meanwhile, more and more websites are built and maintained by coding agents working directly in a repository. Content in Payload is a second source of truth: it lives in a database, your Git history doesn't record it, and every page has to query it. Payload's MCP plugin lets agents reach it, but an agent building or changing a page still works across code and a database.
 
 For sites whose content is mostly pages and posts, keeping content as files in the repo is simpler. The agent sees everything, every change is a commit, and GitCMS gives clients and marketers the editor and review workflow the headless dashboard used to provide. That's Day Two: running the site after it ships.
 
@@ -27,12 +28,12 @@ For sites whose content is mostly pages and posts, keeping content as files in t
   <VerdictCompetitor title="Payload CMS">
     - You want a TypeScript-native CMS that lives alongside your Next.js app
     - Your content model is relational and needs a real database
-    - You need a content API for multiple frontends or applications
-    - You want full control over a self-hosted, open-source CMS
+    - You need a content API or app backend for multiple frontends
+    - You build in Figma Make and want the CMS to come with the site
   </VerdictCompetitor>
   <VerdictGitCMS>
     - Your site lives in a repo, often built or maintained with coding agents
-    - Content and code should share one source of truth and ship together
+    - Your site isn't Next.js, or you don't want a CMS inside your app
     - Clients and marketers need a visual editor and review before publish
     - You want to avoid running a server and database for website content
   </VerdictGitCMS>
@@ -40,66 +41,47 @@ For sites whose content is mostly pages and posts, keeping content as files in t
 
 ## Why this choice matters more than it looks
 
-Payload runs inside your Next.js app, which is a more elegant architecture than most headless CMSs. But it still needs a database (MongoDB or PostgreSQL) and a server runtime. That means:
+Payload runs inside your Next.js app, which is a more elegant architecture than most headless CMSs. But it still needs a database and a server runtime. That means:
 
 - **Infrastructure to maintain** — even embedded in Next.js, you need a database running, backed up, and scaled.
 - **Build-time queries** — static pages still fetch content from the database at build time. Every page is a database query.
 - **Runtime dependency** — the CMS and the site share a runtime. If the database is down, the admin panel and potentially the site are affected.
-- **Database migrations** — content model changes require database migrations, which can be tricky in production.
+- **Database migrations** — content model changes on SQL databases require migrations, which can be tricky in production.
 
-With markdown files in the repo, content is already on disk. No database. No runtime dependency. No migrations. Pre-rendering reads files locally — pure CPU, no I/O wait.
+With Markdown files in the repo, content is already on disk. No database. No runtime dependency. No migrations. Pre-rendering reads files locally — pure CPU, no I/O wait.
 
-For text-heavy content sites, the database layer is solving a problem that does not exist.
+For text-heavy content sites, the database layer is often solving a problem they don't have.
 
-<CaseStudy
-  title="When Cursor moved from CMS to markdown-in-code"
-  logo={{ src: '/ai-logos/cursor.svg', alt: 'Cursor' }}
-  source="Lee Robinson — Coding Agents & Complexity Budgets"
-  sourceUrl="https://leerob.com/agents"
-  stats={[
-    { label: 'Migration cost', value: '$260' },
-    { label: 'Build speed improvement', value: '2x faster' },
-    { label: 'CDN savings (prior spend)', value: '$56,848' },
-    { label: 'Commits in one weekend', value: '67' },
-  ]}
->
-  <p>
-    Cursor's engineering team migrated their content site — engineering blog, product changelog, and docs — from an API-based CMS back to markdown files in their codebase. The migration took one weekend using AI agents, cost $260 in tokens, and resulted in 2x faster builds.
-  </p>
-  <p>
-    The abstraction layer was adding real cost: separate user management, draft preview plumbing, CDN bills that reached $56,848, and dependency bloat that made the codebase harder to reason about.
-  </p>
-  <p>
-    Their conclusion: for content-heavy sites, markdown in the repo is a simpler and more durable operating model — especially when AI agents are part of the workflow.
-  </p>
-</CaseStudy>
+## Framework fit
+
+Payload is built for Next.js. If your site is Next.js and you also need app features — users, uploads, access control — that is a genuine advantage: one codebase, one deploy. Other frontends can use Payload as a headless API, but then you run a separate Next.js app just for the CMS.
+
+Most content sites built with coding agents aren't only Next.js, though. GitCMS works with Astro, Next.js, Hugo, Eleventy, Docusaurus, Nuxt, SvelteKit, and similar frameworks, reads the Markdown and data files they already use, and leaves hosting wherever the site already deploys. One repository can even hold several separately configured sites.
 
 ## Content as code
 
-When content lives in markdown files inside a Git repository:
+When content lives in Markdown files inside a Git repository:
 
 - **`grep` works.** Search your entire content library with standard dev tools.
 - **`git log` works.** Every content change has a commit, an author, a timestamp, and a diff.
 - **`git blame` works.** Trace any sentence to the person or agent that wrote it.
-- **Code review works.** Content changes go through the same PR process as code changes.
+- **Code review works.** Content changes and code changes live in the same history.
 - **Deploys are atomic.** Content and code ship together. No database state to sync.
 
-Payload's TypeScript-native approach is a genuine improvement over PHP-based CMSs. But the content still lives in a database. You cannot grep it, diff it in a PR, or review it alongside code changes. Payload's admin panel is the primary interface for content — not Git.
+Payload's TypeScript-native approach is a genuine improvement over older CMSs. But the content still lives in a database. You cannot grep it or review it alongside code changes. Payload's admin panel is the primary interface for content — not Git.
 
-## AI agents and markdown
+## AI agents and Markdown
 
-AI coding agents — Claude Code, Cursor, Windsurf, GitHub Copilot — work natively with files in a repository. When your content is markdown:
+Coding agents — Claude Code, Codex, Cursor — work natively with files in a repository. When your content is Markdown:
 
 - Agents can **read, write, search, and diff** content with zero special tooling
 - No database queries, no API calls, no admin panel to navigate
 - Content is **inspectable** — an agent can open the file and understand the structure immediately
-- Every agent edit lands in a Git commit, reviewable by humans before it ships
+- Every agent edit lands in a Git commit
 
-Payload has a well-designed REST and GraphQL API, but agents still need to authenticate, format requests, and make round-trips for every content operation. With markdown files, agents just read and write files.
+Payload has its own answer: an open-source MCP plugin that exposes find, create, update, and delete operations per collection, with each operation allowed or blocked in config. For an app that already runs Payload, that is a clean way to give agents access.
 
-GitCMS takes this further with its **MCP app** — a structured interface that turns AI assistants like ChatGPT, Claude, and other MCP-compatible agents into content agents. Agents can create drafts, edit posts, manage collections, and submit changes for review through MCP. GitCMS handles the git workflow underneath.
-
-This shift matters more than it appears. AI coding agents like **v0**, **Lovable**, **Bolt**, and **Cursor** now let anyone build real sites from a description. When both the site and the content live in a repo as files, agents can reason about the entire system — no database to query, no API to authenticate against. The application CMS layer becomes unnecessary for text-heavy content.
+GitCMS takes the other route: content stays in files, and the **MCP app** gives ChatGPT, Claude, and other MCP clients structured access to it. Agents read and edit entries and site data, draft inside a content task, and submit for review. People approve and publish. Bring your own agent; GitCMS sells no AI credits.
 
 ## Feature comparison
 
@@ -109,20 +91,19 @@ This shift matters more than it appears. AI coding agents like **v0**, **Lovable
     {
       category: 'Content storage',
       gitcms: 'Markdown files in Git',
-      competitor: 'MongoDB or PostgreSQL',
+      competitor: 'MongoDB, PostgreSQL, or SQLite',
       note: 'Where does your content actually live?',
     },
     {
       category: 'Version control',
       gitcms: 'native',
-      competitor: 'Versions collection (opt-in)',
+      competitor: 'Versions (opt-in, stored in the database)',
       note: 'Git history vs database-stored versions',
     },
     {
-      category: 'Branching and drafts',
-      gitcms: 'native',
+      category: 'Drafts and review',
+      gitcms: 'Content tasks with reviews in the editor',
       competitor: 'Draft/publish states',
-      note: 'GitCMS uses Git branches. Payload has draft/published toggles.',
     },
     {
       category: 'Content modeling',
@@ -134,12 +115,17 @@ This shift matters more than it appears. AI coding agents like **v0**, **Lovable
       category: 'Markdown / MDX support',
       gitcms: 'native',
       competitor: 'Rich text editor (Lexical-based)',
-      note: 'Payload uses its own rich text format, not markdown',
+      note: 'Payload stores rich text as JSON, not Markdown files',
     },
     {
-      category: 'Visual editing',
-      gitcms: 'Notion-like editor',
+      category: 'Editing experience',
+      gitcms: 'Visual document editor',
       competitor: 'Admin panel + live preview',
+    },
+    {
+      category: 'Framework fit',
+      gitcms: 'Astro, Next.js, Hugo, Nuxt, SvelteKit, and more',
+      competitor: 'Runs in Next.js; other frontends use its API',
     },
     {
       category: 'Content delivery',
@@ -148,40 +134,29 @@ This shift matters more than it appears. AI coding agents like **v0**, **Lovable
       note: 'Payload co-locates with your app, which is better than external API calls',
     },
     {
-      category: 'Build performance',
-      gitcms: 'Fast (local file reads)',
-      competitor: 'Database queries at build time',
-    },
-    {
       category: 'Infrastructure required',
       gitcms: 'None (files in repo)',
-      competitor: 'Database (MongoDB/PostgreSQL)',
-    },
-    {
-      category: 'TypeScript native',
-      gitcms: 'yes',
-      competitor: 'yes',
-      note: 'Both are TypeScript-first',
+      competitor: 'Database + Next.js runtime',
     },
     {
       category: 'Open source',
-      gitcms: 'yes',
-      competitor: 'yes',
+      gitcms: 'no',
+      competitor: 'Yes (MIT)',
+      note: 'GitCMS is a hosted product; your content stays as plain files in your repo',
     },
     {
-      category: 'Collaboration model',
-      gitcms: 'Git-based (PRs, branches, review)',
-      competitor: 'Admin panel (access control)',
+      category: 'App features (auth, uploads, access control)',
+      gitcms: 'not-core',
+      competitor: 'native',
     },
     {
-      category: 'AI agent workflow',
-      gitcms: 'Native + MCP app for ChatGPT/Claude',
-      competitor: 'Via REST/GraphQL API',
-      note: 'GitCMS turns AI assistants into content agents via MCP',
+      category: 'AI agents',
+      gitcms: 'Bring your own via MCP; agents draft for review',
+      competitor: 'MCP plugin with per-collection permissions',
     },
     {
       category: 'Vendor lock-in',
-      gitcms: 'Low (markdown files are portable)',
+      gitcms: 'Low (Markdown files are portable)',
       competitor: 'Low (open-source, but content in database)',
     },
   ]}
@@ -195,13 +170,13 @@ This shift matters more than it appears. AI coding agents like **v0**, **Lovable
     note: 'No server to host. No database to maintain. Content lives in your repo.',
   }}
   competitor={{
-    free: 'Self-hosted: free forever (you pay for hosting + database)',
-    paid: 'Payload Cloud pricing varies by compute and storage needs',
-    note: 'Self-hosting means paying for database hosting, server compute, and your team\'s time maintaining infrastructure.',
+    free: 'Open source (MIT): free to self-host',
+    paid: 'Payload Cloud is closed to new projects; Enterprise via sales demo',
+    note: 'As of October 2026. Self-hosting means paying for database hosting, server compute, and your team\'s time maintaining infrastructure.',
   }}
 />
 
-Payload is free to self-host, which is a real advantage. But you still pay for database hosting, server compute, and the operational overhead of maintaining infrastructure. For a content site that could be static markdown files, that infrastructure cost exists to solve a problem that does not need solving.
+Payload is free to self-host, which is a real advantage. But you still pay for database hosting, server compute, and the operational overhead of maintaining infrastructure. With new Payload Cloud projects paused, that hosting is on you or your platform. For a content site that could be Markdown files, that cost buys little. See [pricing](/#pricing) for GitCMS plans.
 
 ## Where Payload is genuinely better
 
@@ -209,7 +184,7 @@ Payload is the stronger choice when you need a **TypeScript-native application C
 
 If your team needs:
 
-- A CMS that lives inside your Next.js app with zero external dependencies
+- A CMS that lives inside your Next.js app, deployed with it
 - Rich, relational content models defined in TypeScript
 - A polished admin panel with field-level access control
 - Upload management, authentication, and content workflows built in
@@ -222,7 +197,7 @@ Then Payload is excellent. It is one of the best developer experiences in the CM
 
 GitCMS is better when the content does not need an application CMS.
 
-If the real job is publishing docs, blog posts, changelogs, and marketing pages — Payload's powerful admin panel, database, and API are all infrastructure for a problem that markdown files already solve.
+If the real job is publishing docs, blog posts, changelogs, and marketing pages — Payload's powerful admin panel, database, and API are all infrastructure for a problem that Markdown files already solve.
 
 GitCMS removes the entire application layer:
 
@@ -231,17 +206,17 @@ GitCMS removes the entire application layer:
 - No API to secure or cache
 - Content ships with the code in the same deploy
 
-Both products are TypeScript-first and open-source. The difference is where the content lives — in a database, or in files.
+Editors still get a real admin: a visual document editor, site data as forms, reviews beside the text, and Google sign-in instead of a user table you maintain.
 
 <Tradeoffs>
-  <p>Choosing markdown-in-git over Payload is a real tradeoff:</p>
+  <p>Choosing Markdown-in-Git over Payload is a real tradeoff:</p>
   <ul>
     <li>Payload's content modeling is richer — relational data, field validation, conditional logic. Frontmatter is simpler.</li>
-    <li>Payload's admin panel is polished and customizable. Non-technical editors may prefer it.</li>
-    <li>Payload embeds in your Next.js app — no external service to manage. That is a cleaner architecture than most headless CMSs.</li>
+    <li>Payload's admin panel is polished and customizable in code. GitCMS's editor is opinionated.</li>
+    <li>Payload is open source and runs on your infrastructure. GitCMS's admin is a hosted service, even though your content never leaves your repo.</li>
     <li>If your project needs both content management and application features (auth, uploads, access control), Payload handles it in one system.</li>
   </ul>
-  <p>For text-heavy content sites that are fundamentally readonly for end users, these tradeoffs are usually worth it. You get simpler architecture, faster builds, zero database overhead, full portability, and a workflow that works equally well for humans and AI agents.</p>
+  <p>For text-heavy content sites that are fundamentally read-only for end users, these tradeoffs are usually worth it. You get simpler architecture, faster builds, zero database overhead, full portability, and a workflow that works equally well for humans and AI agents.</p>
 </Tradeoffs>
 
 ## Decision by use case
@@ -252,12 +227,8 @@ Both products are TypeScript-first and open-source. The difference is where the 
 
 **Relational content models with admin panel and access control:** Payload is the better fit.
 
-**Content as portable markdown files without running a database:** GitCMS is the better fit.
+**Astro, Hugo, or another non-Next.js site whose clients need to edit content:** GitCMS is the better fit.
 
 **CMS that also handles auth, uploads, and application features:** Payload is the better fit.
 
 **Startup or small team that wants AI agents and humans collaborating in Git:** GitCMS is the better fit.
-
-<CompareCTA
-  description="Same TypeScript stack. No database to host. Content stays in your repo."
-/>

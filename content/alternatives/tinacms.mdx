@@ -1,0 +1,241 @@
+---
+title: 'The Best TinaCMS Alternatives for Client Sites'
+description: 'Six TinaCMS alternatives, ranked on client editing, review before publish, keeping your codebase clean, and AI agents. GitCMS is our pick for agencies.'
+competitor: 'TinaCMS'
+cta: 'No SDK in your site and no GraphQL layer. Your files, a real editor, and review for every change.'
+lastReviewed: '2026-11-14'
+order: 3
+---
+
+**The short answer:** if you hand sites to clients or let AI agents draft, the best TinaCMS alternative is **GitCMS**. It adds nothing to your codebase but a config folder, editors sign in with Google, review before publish is built in, and there's no per-project TinaCloud bill. If on-page visual editing is the feature you'd miss, **CloudCannon** keeps it on any static site generator. If developers want the schema in TypeScript, **Keystatic**.
+
+TinaCMS is the most ambitious open source Git CMS around: schema in TypeScript, a GraphQL layer over your files, and click-to-edit on the live page. People look for TinaCMS alternatives when that ambition costs more than it returns. Usually that's TinaCloud's per-project bill multiplied across client sites, a frontend that now depends on Tina's data layer, or editors who can't change anything without a developer touching `tina/config.ts`.
+
+## Why teams leave TinaCMS
+
+Tina itself is healthy. It's Apache-2.0, developed by the Australian consultancy SSW, and ships constantly: `tinacms` 3.15.0 landed on October 19, 2026, and new CLI and GraphQL packages followed on October 27. Nobody leaves Tina because it's abandoned. They leave because of how it's built and billed.
+
+### TinaCloud bills per project
+
+TinaCloud is Tina's hosted backend: it handles sign-in and serves the content API. As of October 2026 the free plan covers two users. Team is $29 per project per month billed monthly ($290 a year), with three users included, a ceiling of ten, and $9 per extra user. Business is $299 per project per month with twenty users. Editorial workflow, Tina's branch-based drafting and review, starts at Team.
+
+For one company site, that's reasonable. For an agency running fifteen client sites that each need review before publish, the "per project" part is the line item that starts the search.
+
+### Self-hosting means running a backend
+
+You can skip TinaCloud. Tina's self-hosting docs describe three modules you then own: an auth provider (Auth.js by default), a database adapter such as MongoDB or Postgres for indexing, and a Git provider that saves content. The docs also say some features aren't available when self-hosting. "Free and open source" is true, but you're now operating a database to edit Markdown files.
+
+### Tina lives inside your codebase
+
+Content models are defined in `tina/config.{ts,js,tsx}` with `defineConfig`, and content is queried through Tina's GraphQL Content API. That's a feature if your developers like typed queries. It also means adding a field, changing a collection, or swapping frameworks is code work, and your site's data fetching is tied to Tina's layer.
+
+### Visual editing is React-first
+
+Tina's contextual editing re-hydrates page data as you type, and its docs show that through the `useTina` React hook, with support for other frameworks such as Vue still in progress. If your site is Hugo, Jekyll, or mostly static Astro, the headline feature is harder to get.
+
+### GitHub only, and AI is "coming soon"
+
+Tina's FAQ says GitHub is the Git provider TinaCloud integrates with, and GitHub Enterprise support sits on the Enterprise plan. Its pricing page lists AI Assist as "coming soon" on every tier.
+
+## How we ranked them
+
+A disclosure first: I build GitCMS, so treat the ranking as an informed opinion. Every option here keeps your content as files in Git. The ranking rewards what decides whether a Tina replacement works for client sites:
+
+1. **Clients edit without Git accounts.** Editors shouldn't need a GitHub login.
+2. **Review before publish.** Client edits and AI drafts should be able to wait for approval, without a per-project upgrade.
+3. **Nothing in your codebase.** No SDK, data layer, or backend for your site to depend on.
+4. **It works with agents.** Content agents can draft, and coding agents can change the site.
+
+Facts and prices were checked on November 14, 2026. Check each vendor's site before you commit.
+
+| | Clients edit without Git accounts | Review before publish | Nothing in your codebase | Agents |
+|---|---|---|---|---|
+| **1. GitCMS** | ✓ Google sign-in | ✓ Built in | ✓ Only a `.gitcms/` config folder | ✓ MCP for content agents |
+| **2. CloudCannon** | ✓ Invited editors | Team plan and up | Editable markup in templates; builds on CloudCannon | Plain files for coding agents |
+| **3. Keystatic** | With Keystatic Cloud | Branches in GitHub mode | ✗ Admin and schema in your app | ✗ None listed |
+| **4. Pages CMS** | ✓ Email invites | ✗ Not documented | ✓ Only a `.pages.yml` file | ✗ None listed |
+| **5. Sveltia CMS** | ✗ Git accounts with write access | ✓ Editorial workflow | An `/admin` page, plus an OAuth helper | Agent skill for setup; no MCP |
+| **6. Decap CMS** | With Decap Turbo | ✓ Editorial workflow | An `/admin` page, plus Turbo or your own auth | ✗ None listed |
+
+## The best TinaCMS alternatives, ranked
+
+<AlternativePick rank={1} name="GitCMS" logo="/brand/gitcms-logo.svg" pick="Our pick for client sites" bestFor="Agencies and freelancers handing Astro, Next.js, or AI-built sites to clients and AI agents" pricing="Paid plans; connect a site and try it free">
+
+GitCMS is the CMS for code-first and AI-built websites. It gives your team, your clients, and AI agents one safe place to edit, review, and publish website changes, while everything stays in your site's repository.
+
+The contrast with Tina is where the CMS lives. GitCMS adds nothing to your codebase except a `.gitcms/` config folder: no SDK, no GraphQL client, no change to how your site loads content. Editors get a document-style editor for Markdown and MDX, with frontmatter as form fields and MDX components kept intact (in beta). Changes move through content tasks, and with review before publish nothing merges until someone approves it.
+
+![The GitCMS content board: ideas, drafts, reviews, and published changes for a site](/images/docs/screenshots/content-board-1280.webp)
+
+<Strengths>
+
+- Your framework keeps reading files the way it already does.
+- Editors sign in with Google, no GitHub account needed.
+- Review before publish without a per-project upgrade.
+- ChatGPT, Claude, and other MCP clients draft inside the same tasks.
+
+</Strengths>
+
+<Limits>
+
+- No click-on-the-page visual editing; for a React site where that's the main requirement, Tina is better.
+- GitHub only, like TinaCloud.
+- A hosted paid product, not open source, and not a page builder.
+
+</Limits>
+
+**Choose it if** the editor and the review flow matter more than in-page editing. [See pricing](/#pricing).
+
+</AlternativePick>
+
+<AlternativePick rank={2} name="CloudCannon" bestFor="Teams whose editors need to see the rendered page, especially on non-React static site generators" pricing="Standard $55/mo ($49 billed yearly) with 3 users; Team $350/mo; extra users $10/mo; unlimited sites" compareHref="/compare/gitcms-vs-cloudcannon/">
+
+If visual editing is the part you'd miss, CloudCannon is the commercial option that isn't tied to React. It builds your site and can host it, and its visual editor works with Hugo, Jekyll, Eleventy, Astro, Next.js, and others. You mark up what's editable with Editable Regions or its Bookshop component system.
+
+<Strengths>
+
+- On-page visual editing on almost any static site generator.
+- Unlimited sites on every plan, the opposite of Tina's per-project billing.
+- GitHub, GitLab, and Bitbucket.
+
+</Strengths>
+
+<Limits>
+
+- The visual editor needs a successful build on CloudCannon, so you adopt its pipeline too.
+- Not open source, and no free plan, only a 21-day trial.
+- Branching review workflows start on the Team plan.
+
+</Limits>
+
+**Choose it if** on-page editing is non-negotiable and the site isn't React. More in [CloudCannon alternatives](/alternatives/cloudcannon/).
+
+</AlternativePick>
+
+<AlternativePick rank={3} name="Keystatic" bestFor="Developer-led sites that liked Tina’s schema-as-code but not the infrastructure behind it" pricing="Free (MIT); Keystatic Cloud free for 3 users, Pro from $10/mo plus $5 per extra user" compareHref="/compare/gitcms-vs-keystatic/">
+
+Keystatic is the closest in spirit for developers. Collections are defined in TypeScript and the admin mounts inside your Astro, Next.js, or Remix app. The difference is underneath: no GraphQL server and no content database. Keystatic edits the files on disk or in GitHub, and your site reads them through a typed reader.
+
+<Strengths>
+
+- Typed schema without a hosted data layer.
+- Local mode for editing during development.
+- Free and open source.
+
+</Strengths>
+
+<Limits>
+
+- No on-page visual editing.
+- In GitHub mode, every editor needs a GitHub account unless you add Keystatic Cloud.
+- Still 0.x; the latest core release was 0.6.9 in August 2026.
+
+</Limits>
+
+**Choose it if** your developers are the editors and want types, not a backend.
+
+</AlternativePick>
+
+<AlternativePick rank={4} name="Pages CMS" bestFor="Small GitHub sites where the goal is “the client can fix a typo” and the budget is zero" pricing="Free (MIT), hosted or self-hosted" compareHref="/compare/gitcms-vs-pages-cms/">
+
+Pages CMS is a free admin for GitHub repositories. Add a `.pages.yml` file, sign in at the hosted app, and invite collaborators by email. There's no build step, no SDK, and nothing in your frontend.
+
+<Strengths>
+
+- Zero setup and zero cost.
+- Editors join by email.
+- Nothing added to your site's code.
+
+</Strengths>
+
+<Limits>
+
+- GitHub only, with no on-page editing.
+- No review or approval step described in its docs.
+
+</Limits>
+
+**Choose it if** changes can go live directly and the site is small.
+
+</AlternativePick>
+
+<AlternativePick rank={5} name="Sveltia CMS" bestFor="Developers who want a free, modern, config-only admin" pricing="Free and open source (MIT)" compareHref="/compare/gitcms-vs-sveltia-cms/">
+
+Sveltia CMS is a modern rewrite of Decap CMS: a single-page admin that reads a YAML config, with a faster UI and strong internationalization.
+
+<Strengths>
+
+- Free, fast, and config-only.
+- Editorial workflow compatible with Decap's.
+- GitHub, GitLab, and Gitea/Forgejo.
+
+</Strengths>
+
+<Limits>
+
+- Still labeled beta (v0.253).
+- Editors sign in with a Git account that has write access.
+- Form-based editing with no live preview on your real site.
+
+</Limits>
+
+**Choose it if** you want the opposite of Tina: no code in your site and no backend.
+
+</AlternativePick>
+
+<AlternativePick rank={6} name="Decap CMS" bestFor="Free admin with the widest Git provider support" pricing="Free (MIT); Decap Turbo free for 1 site and 1 seat, Pro €19/mo" compareHref="/compare/gitcms-vs-decap-cms/">
+
+Decap CMS is the original config-driven Git CMS, now on a roughly monthly release cadence. In October 2026 it added Decap Turbo, a hosted backend where editors don't need Git accounts.
+
+<Strengths>
+
+- Supports GitHub, GitLab, Bitbucket, Azure, and Gitea/Forgejo.
+- Editorial workflow built in.
+- Decap Turbo removes the auth plumbing for a small fee.
+
+</Strengths>
+
+<Limits>
+
+- Form-based editing, with a new rich text widget still in beta.
+- Without Turbo, editors need Git accounts and you run an OAuth proxy.
+
+</Limits>
+
+**Choose it if** you're on a Git provider nothing else supports. More in [Decap CMS alternatives](/alternatives/decap-cms/).
+
+</AlternativePick>
+
+Some teams pick Tina for the GraphQL layer, then realize that what they want is structured content served to several apps. That's what headless CMSs like Sanity and Payload are for, at the cost of moving content out of your repository and into a database. See [GitCMS vs Sanity](/compare/gitcms-vs-sanity/) and [GitCMS vs Payload](/compare/gitcms-vs-payload/).
+
+## When to stay on TinaCMS
+
+Stay if your site is React or Next.js and click-to-edit on the real page is why your editors like the CMS. Few tools on this list do that as directly.
+
+Stay if your developers use the GraphQL layer on purpose: references between documents, typed queries, generated clients. Replacing that with file reads is a real rewrite, not a config change.
+
+And stay if the bill fits. One project on Team for a small team is cheaper than an engineer's afternoon each month. Leaving only pays off when the per-project cost or the backend work keeps adding up.
+
+## Migrating off TinaCMS
+
+Your content is already Markdown, MDX, or JSON in your repository, so nothing has to be exported. The work is in your code, because Tina is part of it.
+
+1. **Find every place the site queries Tina.** Pages that load content through Tina's generated client or GraphQL need to read files directly instead, for example through Astro content collections or your framework's own loaders. This is the biggest job, and a good one to hand to a coding agent with the list of files.
+2. **Check your MDX.** If your editors used custom components inside Tina's rich text, those live in your MDX files. Any Git-backed editor you move to has to preserve them. GitCMS keeps MDX components intact (in beta), and it's worth testing a few of your most complex entries early.
+3. **Remove Tina last.** Once nothing imports it, delete the `tina/` folder, the Tina packages, and any Tina commands in your build scripts, then cancel the TinaCloud project.
+
+To move to GitCMS, connect the repository and run `npx create-gitcms@latest`, or ask Claude Code, Codex, or Cursor to run it. It scans your content folders and writes collections to `.gitcms/`. Your `tina/config.ts` is a useful checklist for the fields each collection should have. The [quick start](/docs/getting-started/quick-start/) covers the rest, and [the best CMS for AI-built websites](/blog/best-cms-for-ai-built-websites/) compares the wider field if your site came from a coding agent.
+
+## FAQ
+
+### Is TinaCMS free?
+
+The open source CMS is. TinaCloud, its hosted backend, is free for two users; Team is $29 per project per month, and editorial workflow starts there. Self-hosting avoids TinaCloud but means running an auth provider, a database adapter, and a Git provider yourself.
+
+### What's a TinaCMS alternative without GraphQL?
+
+Any of the Git-based options above. GitCMS, Pages CMS, Sveltia CMS, and Decap CMS read and write your files directly, so your site loads content with its own framework tools. Keystatic adds a typed reader instead of a GraphQL layer.
+
+### Which TinaCMS alternative keeps visual editing?
+
+CloudCannon, with on-page editing across most static site generators. GitCMS gives editors a document-style editor rather than on-page editing.

@@ -12,6 +12,7 @@ const GROUPS: ReadonlyArray<{
   { title: 'Frameworks', kinds: ['framework'] },
   { title: 'AI site builders', kinds: ['builder'] },
   { title: 'Comparisons', kinds: ['comparison'] },
+  { title: 'Alternatives', kinds: ['alternative'] },
   { title: 'Blog', kinds: ['blog'] },
   { title: 'Prompt library', kinds: ['prompt'] },
   { title: 'Free tools', kinds: ['tool'] },

@@ -1,0 +1,30 @@
+---
+import MarketingLayout from '@/layouts/MarketingLayout.astro'
+import Section from '@/components/site/Section.astro'
+import SectionHeading from '@/components/site/SectionHeading.astro'
+import CtaBand from '@/components/site/CtaBand.astro'
+import { card } from '@/components/site/styles'
+import { getAlternatives } from '@/lib/content'
+const alternatives = await getAlternatives()
+---
+<MarketingLayout
+  title="Alternatives to WordPress and Popular CMSs — GitCMS"
+  description="Leaving WordPress, Decap, TinaCMS, or CloudCannon? Ranked alternatives for agencies and code-first teams, with the criteria, the tradeoffs, and when to stay."
+>
+  <Section first>
+    <SectionHeading level={1} eyebrow="Alternatives" title="Leaving a CMS? Here’s what to pick" description="Each guide starts from why people leave a tool, ranks the alternatives on criteria it states up front, and says when staying is the better call." />
+  </Section>
+  <Section>
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {alternatives.map((alternative) => (
+        <a href={`/alternatives/${alternative.id.replace(/\.mdx?$/, '')}/`} class:list={['group flex flex-col p-6 transition-colors hover:border-neutral-300', card]}>
+          <h2 class="text-[20px] font-semibold tracking-[-0.02em] text-neutral-900 group-hover:text-neutral-600">{alternative.data.competitor} alternatives</h2>
+          <p class="mt-2 flex-1 text-[14.5px] leading-relaxed text-[#898989]">{alternative.data.description}</p>
+          <div class="mt-5 text-[13px] font-medium text-neutral-900">Read guide →</div>
+        </a>
+      ))}
+    </div>
+    <p class="mt-10 text-center text-[14.5px] text-[#898989]">Already down to two options? <a href="/compare/" class="font-medium text-neutral-900 underline underline-offset-2">See the head-to-head comparisons</a>.</p>
+  </Section>
+  <CtaBand />
+</MarketingLayout>

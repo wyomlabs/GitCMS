@@ -3,7 +3,8 @@ title: 'GitCMS vs Webflow'
 description: 'Webflow is a visual website platform with hosting, a CMS, and AI. GitCMS is the CMS for code-first websites you own in Git. Here''s when each fits.'
 competitor: 'Webflow'
 category: 'Website builders and traditional CMS'
-lastReviewed: '2026-10-10'
+cta: 'Keep the code. Give your team the admin Webflow gave you.'
+lastReviewed: '2026-10-28'
 order: 1
 ---
 
@@ -88,7 +89,12 @@ If your team wants agents to do serious work on the website, a codebase is the f
     {
       category: 'Review before publish',
       gitcms: 'native',
-      competitor: 'Plan-dependent',
+      competitor: 'Publishing workflows on Team and Enterprise plans',
+    },
+    {
+      category: 'Client editors',
+      gitcms: 'Invites with Google sign-in and per-site access',
+      competitor: 'Limited seats, billed per editor; free reviewer seats',
     },
     {
       category: 'Hosting',
@@ -122,12 +128,16 @@ If your team wants agents to do serious work on the website, a codebase is the f
   }}
   competitor={{
     free: 'Free starter site on a webflow.io domain',
-    paid: 'Site plans plus workspace seats; full and limited editor seats are billed separately',
-    note: 'Editors and collaborators are billed as workspace seats on top of the site plan.',
+    paid: 'Site plans from $15/mo billed yearly, plus seats: $39/mo full, $15/mo limited (as of October 2026)',
+    note: 'Reviewers and commenters get free seats. Publishing workflows start on the Team plan at $2,500/mo.',
   }}
 />
 
-Webflow prices a site plan for hosting and CMS, and workspace seats for the people who build and edit. That makes sense for a platform that hosts your site. With GitCMS, hosting stays with your existing provider, and the license covers the admin for the site.
+Webflow prices a site plan for hosting and CMS, and workspace seats for the people who build and edit. That makes sense for a platform that hosts your site. With GitCMS, hosting stays with your existing provider, and you pay for the admin, not for hosting. See [GitCMS pricing](/#pricing) for the current plans.
+
+Here's what that adds up to over a year. The chart counts only the Premium site plan, not Webflow's workspace seats, so the Webflow figure is the lowest it can be. Drag the sliders to match your sites and the people who edit them.
+
+<CostComparator compare="webflow" sites={5} editors={3} />
 
 ## Where Webflow is genuinely better
 
@@ -144,7 +154,8 @@ GitCMS is better when the site is **already code**, or when you'd rather it be.
 
 - **You own everything.** Code, content, and history live in your repository, on your host.
 - **Agents do their best work.** Coding agents build and improve the site in code; content agents draft through GitCMS with review.
-- **Clients edit without touching design.** Clients change content, not components, which is exactly the boundary most agencies want.
+- **Clients edit without touching design.** Clients change content and [site data](/docs/features/site-data/) like menus and footers, not components, which is exactly the boundary most agencies want. Invited editors sign in with Google.
+- **Feedback that reaches your agent.** With [Change Requests](/features/change-requests/) (beta), clients pin feedback on the live site and you hand it to Claude Code, Codex, or Cursor.
 
 <Tradeoffs>
   <p>Choosing a code-first site with GitCMS over Webflow is a real tradeoff:</p>
@@ -167,7 +178,3 @@ GitCMS is better when the site is **already code**, or when you'd rather it be.
 **Startup whose site is a Next.js or Astro codebase and marketing needs to edit it:** GitCMS is the better fit.
 
 **AI agents drafting website changes with human review before publishing:** GitCMS is the better fit.
-
-<CompareCTA
-  description="Keep the code. Give your team the admin Webflow gave you."
-/>

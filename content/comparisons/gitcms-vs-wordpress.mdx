@@ -1,120 +1,95 @@
 ---
 title: 'GitCMS vs WordPress'
-description: 'WordPress powers about 40% of the web. GitCMS gives code-first websites the admin WordPress users expect, without a PHP/MySQL stack. Here''s when each fits.'
+description: 'WordPress runs about 40% of the web. GitCMS gives code-first websites the admin WordPress users expect, without a PHP/MySQL stack. Here''s when each fits.'
 competitor: 'WordPress'
 category: 'Website builders and traditional CMS'
-lastReviewed: '2026-04-16'
-order: 3
+cta: 'The admin WordPress gave you, for a website that stays code.'
+lastReviewed: '2026-10-28'
+order: 4
 ---
 
-WordPress is the most successful CMS ever built. It powers over 40% of the web. It has a massive ecosystem of plugins, themes, and hosting providers. If you are reading this, you already know what WordPress is.
+WordPress is the most successful CMS ever built. [W3Techs](https://w3techs.com/technologies/details/cm-wordpress) counts it on 39.5% of all websites as of October 2026, with over 77,000 free plugins in its directory and a hosting and agency market around it. If you are reading this, you already know what WordPress is.
 
 So the question is not whether WordPress is proven. It is whether you still need it in 2026, when an agent can build the site in code and the only thing missing is an admin.
 
-For many content-heavy sites — docs, engineering blogs, changelogs, product marketing — WordPress means running a PHP application, a MySQL database, a plugin stack, and a security surface area that requires ongoing maintenance. All to serve content that could live as markdown files in a Git repo.
+For many content-heavy sites (marketing pages, blogs, docs, changelogs) WordPress means running a PHP application, a MySQL database, a plugin stack, and a security surface that needs ongoing maintenance. All to serve content that could live as Markdown files in a Git repository.
 
 ## What changed in 2026
 
 For two decades, choosing WordPress made sense for one reason: building a custom website in code was slow and expensive, and WordPress gave non-developers a way to run the site.
 
-That trade has flipped. Coding agents like Claude Code, Codex, and Cursor now build custom sites in hours, and designers, growth teams, and agencies iterate on pages directly in code. The result is faster, fully owned, and keeps improving because an agent can keep working on it. Even WordPress's share of the web is shrinking: [W3Techs](https://w3techs.com/technologies/details/cm-wordpress) measured it falling from 43.4% to 40.7% of all websites between September 2025 and September 2026.
+That trade has flipped. Coding agents like Claude Code, Codex, and Cursor now build custom sites in hours, and designers, growth teams, and agencies iterate on pages directly in code. The result is faster, fully owned, and keeps improving because an agent can keep working on it. WordPress's share of the web is shrinking too: [W3Techs](https://w3techs.com/technologies/history_overview/content_management/all/y) measured it at 43.0% of all websites on 1 January 2026 and 39.5% on 28 October 2026.
 
-What a code-first site doesn't come with is **the admin**: a safe place for clients and marketers to change copy, publish posts, and review what agents changed. That's Day Two, and for most teams it's the main thing they still need WordPress for. GitCMS gives a code-first site that admin, so you can keep the code and still hand the website to the people who run it.
+What a code-first site doesn't come with is **the admin**: a safe place for clients and marketers to change copy, publish posts, update the menu, and review what agents changed. That's Day Two, and for most agencies it's the main thing they still need WordPress for. GitCMS is the CMS for code-first and AI-built websites. It gives your team, your clients, and AI agents one safe place to edit, review, and publish website changes, while everything stays in your site's repository.
 
 ## The short verdict
 
 <Verdict>
   <VerdictCompetitor title="WordPress">
-    - You need a mature ecosystem with thousands of plugins and themes
-    - Non-technical editors need a familiar, fully visual editing experience
-    - Your site needs e-commerce, membership, forms, or other dynamic features
-    - You want the widest possible pool of developers and agencies
+    - Your site sells products, runs memberships, or depends on a stack of plugins
+    - Non-technical editors already know wp-admin and want to build pages visually
+    - You need forms, comments, logins, or other dynamic features out of the box
+    - You want the widest possible pool of developers, themes, and agencies
   </VerdictCompetitor>
   <VerdictGitCMS>
     - You build the site in code, often with Claude Code, Codex, or Cursor
-    - Clients and marketers need to edit copy and publish posts without Git
+    - Clients and marketers need to edit copy, menus, and posts without Git
     - You want AI agents' changes reviewed before they go live
-    - You'd rather own a fast, code-first site than maintain a PHP/MySQL stack and plugins
+    - You'd rather own a fast, code-first site than patch a PHP/MySQL stack and plugins
   </VerdictGitCMS>
 </Verdict>
 
 ## Why this choice matters more than it looks
 
-WordPress is a dynamic application. Every page request (unless cached) executes PHP, queries MySQL, and assembles HTML at runtime. That means:
+WordPress is a dynamic application. Every uncached page request executes PHP, queries MySQL, and assembles HTML at runtime. That means:
 
-- **Server infrastructure** — WordPress needs a PHP hosting environment, a MySQL database, and usually a caching layer (Varnish, Redis, or a CDN plugin) to perform well.
-- **Security surface area** — WordPress and its plugins are the most targeted CMS in the world. Keeping it patched, updated, and secure is ongoing work.
-- **Plugin dependency** — most WordPress sites depend on a stack of plugins for SEO, caching, security, backups, and forms. Each is a potential compatibility or security issue.
-- **Database-bound content** — your content lives in MySQL. Exporting it means dealing with WordPress's XML export format or database dumps. It is not portable.
+- **Server infrastructure.** WordPress needs PHP hosting, a MySQL database, and usually a caching layer to perform well.
+- **A runtime to keep patched.** WordPress core, every plugin, every theme, and the PHP runtime underneath them all need updates.
+- **Plugin dependency.** Most WordPress sites rely on plugins for SEO, caching, security, backups, and forms. Each is a compatibility and security decision.
+- **Database-bound content.** Posts live in MySQL as block markup. Getting them out means the WordPress XML export or a database dump, then conversion.
 
-With markdown files in the repo, content is already on disk. No server to run. No database to manage. No plugins to update. Pre-rendered pages are static HTML — fast, secure, and cacheable at the edge with zero server-side compute.
+That runtime is a real exposure, not a theoretical one. On 21 October 2026, the PHP project [shipped PHP 8.5.12, 8.4.27, 8.3.36, and 8.2.35](https://www.php.net/archive/2026.php#2026-10-21-5) to fix two critical remote code execution bugs, CVE-2026-109618 and CVE-2026-109619, known as PHP2Shell. They sit in PHP itself, so a WordPress dashboard can report "everything is up to date" while the server is still vulnerable. Well-run hosts patched quickly. But every WordPress site depends on someone doing that. If you run one, [here's what to check](/blog/php2shell-wordpress/).
 
-For content sites that are fundamentally readonly for end users, WordPress is a dynamic application solving a static problem.
-
-<CaseStudy
-  title="When Cursor moved from CMS to markdown-in-code"
-  logo={{ src: '/ai-logos/cursor.svg', alt: 'Cursor' }}
-  source="Lee Robinson — Coding Agents & Complexity Budgets"
-  sourceUrl="https://leerob.com/agents"
-  stats={[
-    { label: 'Migration cost', value: '$260' },
-    { label: 'Build speed improvement', value: '2x faster' },
-    { label: 'CDN savings (prior spend)', value: '$56,848' },
-    { label: 'Commits in one weekend', value: '67' },
-  ]}
->
-  <p>
-    Cursor's engineering team migrated their content site — engineering blog, product changelog, and docs — from an API-based CMS back to markdown files in their codebase. The migration took one weekend using AI agents, cost $260 in tokens, and resulted in 2x faster builds.
-  </p>
-  <p>
-    The abstraction layer was adding real cost: separate user management, draft preview plumbing, CDN bills that reached $56,848, and dependency bloat that made the codebase harder to reason about.
-  </p>
-  <p>
-    The same pattern applies to WordPress sites where the content is fundamentally text. The database, the server, the plugin stack — it is all overhead when the content could be markdown files.
-  </p>
-</CaseStudy>
+A prebuilt Astro or Next.js site served from Vercel, Netlify, or Cloudflare has no PHP runtime or site database to patch. For content that's read-only for visitors, WordPress is a dynamic application solving a mostly static problem.
 
 ## Content as code
 
-When content lives in markdown files inside a Git repository:
+When content lives in Markdown files inside a Git repository:
 
 - **`grep` works.** Search your entire content library from the terminal.
 - **`git log` works.** Every content change has a commit, an author, a timestamp, and a diff.
 - **`git blame` works.** Trace any sentence to the person or agent that wrote it.
-- **Code review works.** Content changes go through the same PR process as code changes.
+- **Review works.** With review before publish, edits wait as a draft until someone approves them.
 - **Deploys are atomic.** Content and code ship together. No database state to sync.
 
-WordPress stores content in MySQL as HTML blobs. You cannot meaningfully diff a WordPress post in a pull request. You cannot grep your content library from the terminal. Content and code live in entirely separate systems with no shared review workflow.
+WordPress keeps revisions for each post, and WordPress 7.0 added a visual view of them. But content and code still live in separate systems: your theme is in Git (if you're lucky), and your posts are in a database your developers rarely see.
 
-## AI agents and markdown
+## AI agents and WordPress
 
-AI coding agents — Claude Code, Cursor, Windsurf, GitHub Copilot — work natively with files in a repository. When your content is markdown:
+WordPress is moving here too. WordPress 7.0 added an AI Client and Connectors for OpenAI, Anthropic, and Google, plus a client-side Abilities API. In October 2026 the WordPress AI team put the official MCP Adapter plugin in the directory, so MCP clients like Claude can call the abilities a site exposes. It's a real step, and if you're staying on WordPress, it's worth installing.
 
-- Agents can **read, write, search, and diff** content with zero special tooling
-- No WordPress API, no database queries, no plugin abstractions to navigate
-- Content is **inspectable** — an agent can open the file and understand the structure immediately
-- Every agent edit lands in a Git commit, reviewable by humans before it ships
+The difference is what the agent touches. On WordPress, an agent works through abilities that each plugin chooses to expose, against a live database. On a code-first site:
 
-WordPress has a REST API, but it was designed for applications, not for AI agent workflows. The overhead of authenticating, querying, and posting through the WordPress API is significant compared to an agent simply editing a markdown file.
+- **Coding agents** (Claude Code, Codex, Cursor) read and edit the actual components and content files, with no API in between.
+- **Content agents** (ChatGPT, Claude, and other MCP clients) connect to GitCMS, read and edit entries and site data, draft inside content tasks, and submit for review. A person publishes. GitCMS sells no AI credits; you bring the agent you already use.
 
-GitCMS takes this further with its **MCP app** — a structured interface that turns AI assistants like ChatGPT, Claude, and other MCP-compatible agents into content agents. Agents can create drafts, edit posts, manage collections, and submit changes for review through MCP. GitCMS handles the git workflow underneath.
+Every agent edit lands as a Git commit, so you can see exactly what changed and undo it.
 
 ## The plugin and theme ecosystem matters less than it used to
 
-WordPress's moat has always been its ecosystem — 60,000+ plugins, thousands of themes, and a global network of agencies. Need a feature? There is a plugin for it. Need a design? There is a theme for it.
+WordPress's moat has always been its ecosystem. Need a feature? There is a plugin for it. Need a design? There is a theme for it.
 
-But in 2026, that moat is eroding. AI coding agents — **v0**, **Lovable**, **Bolt**, **Cursor**, **Claude Code**, **Codex** — let anyone describe what they want and get real, shipping code. A founder can say "build me a marketing site with a pricing page and blog" and get an Astro or Next.js project in minutes. No theme marketplace, no plugin compatibility issues, no PHP.
+In 2026 that moat is narrower for content sites. Agents like Claude Code, Codex, Cursor, Lovable, and Bolt turn "build me a marketing site with a pricing page and blog" into an Astro or Next.js project in an afternoon. No theme marketplace, no plugin compatibility matrix, no PHP. And the person who built it owns the code.
 
-The output is better, too. Real components in a real framework are more portable, more customizable, and more performant than a WordPress theme with a stack of plugins. And the person who built it owns the code — no vendor lock-in, no theme license renewals.
+For agencies, that changes the handoff. The site stays code, and the admin your client expects comes from GitCMS:
 
-**What this means for content sites:**
+- A **visual editor** for pages and posts, with frontmatter as form fields
+- **Site data forms** for menus, footers, team lists, and theme settings, so clients don't need you to change a nav link
+- **Google sign-in** for invited editors, so clients never need a GitHub account
+- **Reviews in the editor**: inline comments, changes marked inline, approve or request changes
+- **Multiple sites in one repository**, each configured separately
 
-- The site itself can be built and maintained with AI assistance — no WordPress needed
-- The **content** (blog posts, docs, changelogs) lives as markdown files in the same repo
-- **GitCMS** handles the content workflow — editing, review, publishing, AI-assisted drafting via MCP
-- No PHP runtime, no MySQL database, no plugin updates, no security patches
-
-For teams that chose WordPress because "we need a website and do not want to write code" — the new answer is "AI writes the code, and GitCMS manages the content." Both produce portable, reviewable artifacts. No platform lock-in on either side.
+Moving an existing site? Start with the [WordPress to Astro migration prompt](/prompts/migrate-wordpress-to-astro/), or [convert just the posts to Markdown](/prompts/convert-wordpress-posts-to-markdown/) first.
 
 ## Feature comparison
 
@@ -123,81 +98,71 @@ For teams that chose WordPress because "we need a website and do not want to wri
   rows={[
     {
       category: 'Content storage',
-      gitcms: 'Markdown files in Git',
+      gitcms: 'Markdown, MDX, and data files in Git',
       competitor: 'MySQL database',
       note: 'Where does your content actually live?',
     },
     {
-      category: 'Version control',
-      gitcms: 'native',
-      competitor: 'Post revisions (limited)',
-      note: 'Git history vs WordPress revision system',
+      category: 'Version history',
+      gitcms: 'Full Git history',
+      competitor: 'Post revisions',
     },
     {
-      category: 'Branching and drafts',
-      gitcms: 'native',
-      competitor: 'Draft status only',
-      note: 'GitCMS uses Git branches. WordPress has draft/publish toggles.',
-    },
-    {
-      category: 'Markdown / MDX support',
-      gitcms: 'native',
-      competitor: 'via-plugin',
-      note: 'WordPress uses its block editor (Gutenberg) by default',
+      category: 'Drafts and review',
+      gitcms: 'Content tasks with review before publish',
+      competitor: 'Draft and pending statuses; more via plugins',
     },
     {
       category: 'Visual editing',
-      gitcms: 'Notion-like editor',
-      competitor: 'Block editor (Gutenberg)',
-      note: 'WordPress has a mature visual block editor',
+      gitcms: 'Document-style editor for content',
+      competitor: 'Block editor and Site Editor',
+      note: 'WordPress also lets editors build page layouts',
+    },
+    {
+      category: 'Menus, footers, site settings',
+      gitcms: 'Site data forms (JSON, YAML, TOML)',
+      competitor: 'native',
+    },
+    {
+      category: 'Client feedback on the live site',
+      gitcms: 'Change Requests (beta)',
+      competitor: 'via-plugin',
+      note: 'GitCMS turns pinned feedback into a GitHub issue for your coding agent',
     },
     {
       category: 'Content delivery',
-      gitcms: 'Pre-rendered static files',
+      gitcms: 'Whatever your framework builds, often static',
       competitor: 'Dynamic PHP + MySQL (unless cached)',
     },
     {
-      category: 'Build performance',
-      gitcms: 'Fast (local file reads)',
-      competitor: 'Depends on hosting + caching',
-    },
-    {
-      category: 'Security',
-      gitcms: 'Static output (minimal attack surface)',
-      competitor: 'Requires active maintenance',
-      note: 'WordPress + plugins are the #1 CMS target for attacks',
+      category: 'Runtime to patch',
+      gitcms: 'None from GitCMS; your site has no PHP or CMS database',
+      competitor: 'PHP, WordPress core, plugins, themes',
     },
     {
       category: 'Plugin ecosystem',
       gitcms: 'not-core',
-      competitor: 'Massive (60,000+ plugins)',
-      note: 'WordPress has an unmatched plugin and theme ecosystem',
+      competitor: 'Over 77,000 free plugins',
     },
     {
-      category: 'Infrastructure required',
-      gitcms: 'None (files in repo)',
-      competitor: 'PHP hosting + MySQL database',
+      category: 'E-commerce, memberships, forms',
+      gitcms: 'no',
+      competitor: 'Via plugins (WooCommerce and others)',
     },
     {
-      category: 'Collaboration model',
-      gitcms: 'Git-based (PRs, branches, review)',
-      competitor: 'Admin panel (user roles)',
+      category: 'Hosting',
+      gitcms: 'Your existing host (Vercel, Netlify, Cloudflare, …)',
+      competitor: 'PHP hosting + MySQL, or WordPress.com',
     },
     {
-      category: 'AI agent workflow',
-      gitcms: 'Native + MCP app for ChatGPT/Claude',
-      competitor: 'Via REST API or plugins',
-      note: 'GitCMS turns AI assistants into content agents via MCP',
+      category: 'AI agents',
+      gitcms: 'MCP for ChatGPT, Claude, and other clients; coding agents work in the repo',
+      competitor: 'AI Client in core; MCP via the official MCP Adapter plugin',
     },
     {
-      category: 'Vendor lock-in',
-      gitcms: 'Low (markdown files are portable)',
+      category: 'Portability',
+      gitcms: 'High (plain files in your repo)',
       competitor: 'Medium (content in MySQL, theme-dependent)',
-    },
-    {
-      category: 'Migration complexity',
-      gitcms: 'Low (content is already files)',
-      competitor: 'Medium (WordPress XML export + HTML-to-markdown conversion)',
     },
   ]}
 />
@@ -207,74 +172,68 @@ For teams that chose WordPress because "we need a website and do not want to wri
 <PricingCompare
   competitorName="WordPress"
   gitcms={{
-    note: 'No server to host. No database to maintain. Content lives in your repo.',
+    note: 'No CMS server or database to run. Host the site wherever you already host.',
   }}
   competitor={{
     free: 'Software is free (self-hosted)',
-    paid: 'Hosting: $5-100+/mo depending on provider and traffic',
-    note: 'WordPress.com plans range from $4/mo to $45/mo. Self-hosted costs vary with hosting, plugins, and maintenance.',
+    paid: 'WordPress.com plans from $4/mo to $45/mo billed yearly (as of October 2026)',
+    note: 'Self-hosted costs depend on hosting, premium plugins, and maintenance time.',
   }}
 />
 
-WordPress the software is free. But running it is not. Hosting, managed WordPress plans, premium plugins, security monitoring, and ongoing maintenance all add up. For a content-heavy site with real traffic, the total cost of ownership often exceeds what it looks like on paper.
+WordPress the software is free. Running it is not. Managed hosting, premium plugins, security monitoring, and the hours someone spends on updates all add up, and for agencies they usually turn into a maintenance retainer.
 
-GitCMS does not require a server. Content lives in your repo and deploys as static files to any CDN.
+With GitCMS, the site deploys to the host you already use, and there's no CMS server to keep alive. See [pricing](/#pricing) for the current plans.
+
+Here's a rough yearly total. The WordPress figures are estimates for a managed host, a few premium plugins, and someone's time on updates. Drag the sliders to match your sites and the people who edit them.
+
+<CostComparator compare="wordpress" sites={5} editors={3} />
 
 ## Where WordPress is genuinely better
 
-WordPress is the stronger choice when you need a **mature, full-featured web platform**.
+WordPress is still the right choice for a lot of websites. Choose it when the site is more than content:
 
-If your team needs:
+- **E-commerce.** WooCommerce and its extensions are a complete store. GitCMS doesn't do commerce.
+- **Memberships, logins, and gated content.** WordPress handles them with mature plugins.
+- **Plugin-heavy sites.** If the site depends on forms, bookings, LMS, directories, or a dozen other plugins, rebuilding all of that in code isn't worth it.
+- **Visual page building by editors.** The block editor and Site Editor let non-developers create layouts. GitCMS edits content, not layout.
+- **Open source, with the biggest ecosystem.** You can run it anywhere, and more than 20 years of themes, tutorials, and agencies come with it.
 
-- An ecosystem of 60,000+ plugins for nearly any feature
-- E-commerce (WooCommerce), membership, forms, or other dynamic functionality
-- A visual block editor that non-technical editors already know
-- The widest possible pool of developers, designers, and agencies
-- A proven platform with 20+ years of community support
-
-Then WordPress is not just a CMS — it is a platform. And for sites that need dynamic features beyond content publishing, it remains the default choice for good reasons.
+If any of those describe your site, keep WordPress, and keep it patched.
 
 ## Where GitCMS is better
 
-GitCMS is better when WordPress is **overkill for the actual problem**.
+GitCMS is better when WordPress is **more runtime than the job needs**.
 
-If the real job is publishing text content — docs, blog posts, changelogs, marketing pages — WordPress brings an entire application runtime, a database, a plugin stack, and a security surface area to a problem that does not need any of it.
+If the real job is publishing pages, posts, docs, and changelogs, and the site is (or could be) code, GitCMS gives you:
 
-GitCMS gives you:
+- Content as files in your repository, with every save a Git commit
+- A visual editor and site data forms clients can use without training
+- Review before publish, with reviews in the editor and preview deployments (beta)
+- [Change Requests](/features/change-requests/) (beta): clients pin feedback on the live site, and you hand it to Claude Code, Codex, or Cursor
+- AI agents that draft through the same review workflow as people
 
-- Markdown files as the source of truth
-- A Notion-like editor for writing
-- Git branches for drafts and review
-- Static output that is fast, secure, and cheap to host
-- AI agents that can work on the same files as humans
-
-No PHP. No MySQL. No plugins to update. No security patches to chase.
+No PHP. No MySQL. No plugin updates.
 
 <Tradeoffs>
-  <p>Choosing markdown-in-git over WordPress is a real tradeoff:</p>
+  <p>Moving from WordPress to a code-first site with GitCMS is a real tradeoff:</p>
   <ul>
-    <li>WordPress has a massive plugin ecosystem for features like e-commerce, forms, membership, and SEO tooling. GitCMS does not.</li>
-    <li>Non-technical editors may find WordPress's familiar admin panel easier than a Git-based workflow.</li>
-    <li>WordPress has 20+ years of community content, tutorials, and agency support. GitCMS is newer.</li>
-    <li>If you need dynamic server-side functionality, WordPress handles it natively. Static markdown sites do not.</li>
+    <li>No plugin ecosystem. E-commerce, memberships, forms, and comments need a separate service or code.</li>
+    <li>No visual page builder. New layouts are built in code, by a developer or a coding agent.</li>
+    <li>Your clients already know wp-admin. GitCMS is a new tool for them, even if they never see Git.</li>
+    <li>You run your own hosting and deployment (usually a few clicks on Vercel, Netlify, or Cloudflare).</li>
   </ul>
-  <p>For text-heavy content sites that are fundamentally readonly for end users, these tradeoffs are usually worth it. You trade the WordPress ecosystem for simpler architecture, faster performance, better security, lower costs, and a workflow built for humans and AI agents.</p>
+  <p>For content sites built and maintained with coding agents, these are usually the right trades: a smaller attack surface, a faster site, and an admin for the people who run it.</p>
 </Tradeoffs>
 
 ## Decision by use case
 
-**Full-featured website with e-commerce, membership, or dynamic features:** WordPress is the better fit.
+**Online store, membership site, or a site built on plugins:** WordPress is the better fit.
 
-**Docs, blog, changelog, and marketing pages in one repo:** GitCMS is the better fit.
+**Agency rebuilding client sites in Astro or Next.js with Claude Code:** GitCMS is the better fit.
 
-**Non-technical team that needs the widest plugin and theme ecosystem:** WordPress is the better fit.
+**Non-technical team that builds new page layouts itself every week:** WordPress is the better fit.
 
-**Developer-led team that wants content as portable markdown files:** GitCMS is the better fit.
+**Marketing site, blog, and docs where clients edit copy, menus, and posts:** GitCMS is the better fit.
 
-**Site needs dynamic server-side functionality beyond content publishing:** WordPress is the better fit.
-
-**Startup or small team that wants AI agents and humans collaborating in Git:** GitCMS is the better fit.
-
-<CompareCTA
-  description="The admin WordPress gave you, for a website that stays code."
-/>
+**Team that wants AI agents drafting changes with review before publish:** GitCMS is the better fit.

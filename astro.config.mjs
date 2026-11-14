@@ -3,6 +3,7 @@ import mdx from '@astrojs/mdx'
 import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
 import tailwindcss from '@tailwindcss/vite'
+import { rehypeCode } from 'fumadocs-core/mdx-plugins'
 import { rehypeTrailingSlash } from './src/lib/rehype-trailing-slash'
 
 export default defineConfig({
@@ -13,8 +14,11 @@ export default defineConfig({
   trailingSlash: 'always',
   build: { format: 'directory' },
   markdown: {
-    // Shared by Markdown and MDX (`extendMarkdownConfig`).
-    rehypePlugins: [rehypeTrailingSlash],
+    // Shared by Markdown and MDX (`extendMarkdownConfig`). Fumadocs' Shiki
+    // highlighter emits the line markup its CodeBlock styles and copies;
+    // Astro's own highlighter is off so code isn't highlighted twice.
+    syntaxHighlight: false,
+    rehypePlugins: [rehypeCode, rehypeTrailingSlash],
   },
   integrations: [
     sitemap({
@@ -29,7 +33,6 @@ export default defineConfig({
     react(),
     mdx({
       extendMarkdownConfig: true,
-      syntaxHighlight: false,
     }),
   ],
   vite: {

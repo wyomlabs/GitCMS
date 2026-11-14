@@ -1,0 +1,268 @@
+---
+title: 'The Best WordPress Alternatives for Agencies and Code-First Sites'
+description: 'Seven WordPress alternatives for teams that build sites in code, ranked on client editing, review before publish, owning the code, and AI agents. GitCMS is our pick.'
+competitor: 'WordPress'
+cta: 'The admin WordPress gave you, for a website that stays code.'
+lastReviewed: '2026-11-14'
+order: 1
+---
+
+**The short answer:** if you build websites in code, often with Claude Code, Codex, or Cursor, the best WordPress alternative is a code-first site with **GitCMS** as its admin. Your clients and marketers still get a place to edit and publish, every change can wait for review, and the site stays in your own repository. If nobody on the team writes code, pick **Webflow**. If the site runs WooCommerce or memberships, stay on WordPress.
+
+This guide is for agencies, freelancers, and startups that build sites in code and hand them to people who don't. It ranks seven tools for that job. If that isn't you, skip to [when to stay on WordPress](#when-should-you-stay-on-wordpress) or [options outside this list](#not-building-in-code).
+
+## How we ranked them
+
+A disclosure first: I build GitCMS, so treat the ranking as an informed opinion, not a neutral review. What I can do is show exactly what it rewards. These are the four things that decide whether a WordPress replacement works for a team that builds in code:
+
+1. **Clients edit without Git or a developer.** The reason teams stayed on WordPress was wp-admin. A replacement has to give non-technical people a place to change copy and publish posts.
+2. **Review before publish.** Clients, teammates, and now AI agents all change the site. A change should be able to wait for approval before it goes live.
+3. **The code and content stay yours.** The site and its content live in your repository, so you can change hosts, tools, or agencies without a migration.
+4. **It works with agents.** Coding agents build and change the site; content agents like ChatGPT and Claude draft posts and updates. Both should fit the workflow.
+
+Price matters too, so there's a yearly cost calculator [after the list](#what-it-costs-to-run). Facts and prices were checked on November 14, 2026; pricing changes often, so confirm on each vendor's site.
+
+| | Clients edit without Git | Review before publish | Code and content in your repo | Agents |
+|---|---|---|---|---|
+| **1. GitCMS** | ✓ Visual editor, Google sign-in | ✓ Built in, on every site | ✓ Files in your GitHub repo | ✓ MCP for content agents; plain files for coding agents |
+| **2. CloudCannon** | ✓ Visual editor on the page | Team plan and up | ✓ Files in your Git repo | Plain files for coding agents |
+| **3. TinaCMS** | ✓ Live-preview editor | Team plan and up | Partly: files in Git, Tina code in your app | AI features listed as coming soon |
+| **4. Webflow** | ✓ Webflow editor | Team plan ($2,500/mo) and up | ✗ Webflow's platform | Built-in AI and an MCP integration |
+| **5. Framer** | ✓ Paid editor seats | Staging and branches on Pro | ✗ Framer's platform | Built-in Agents on credits; MCP in preview |
+| **6. Sanity** | After developers build the studio | Drafts and releases | ✗ Sanity's hosted Content Lake | Hosted MCP server and Content Agent |
+| **7. Ghost** | ✓ For posts | Contributors draft, editors publish | ✗ Ghost's database | Through the Admin API |
+
+## The best WordPress alternatives, ranked
+
+<AlternativePick rank={1} name="GitCMS" logo="/brand/gitcms-logo.svg" pick="Our pick for code-first teams" bestFor="Agencies and startups that build sites in code and hand them to clients, marketers, and AI agents" pricing="Free to connect and try; paid per site">
+
+GitCMS is the CMS for code-first and AI-built websites. It gives your team, your clients, and AI agents one safe place to edit, review, and publish website changes, while everything stays in your site's repository.
+
+It's the closest thing to wp-admin for a site that's code. Your coding agent builds the site and runs `create-gitcms` to configure it. Clients sign in with Google, edit pages and posts in a [visual editor](/features/visual-editor/), and change menus and footers through forms, without a GitHub account. With [review before publish](/features/editorial-workflow/), their changes and your AI agents' drafts wait on a content board until someone approves them.
+
+![The GitCMS content board: ideas, drafts, reviews, and published changes for a site](/images/docs/screenshots/content-board-1280.webp)
+
+<Strengths>
+
+- Clients edit content, never components, so they can't break the design.
+- Review before publish on every site, with inline comments and approvals.
+- ChatGPT, Claude, and other MCP clients draft into the same review flow.
+- Every save is a Git commit, so there's no database or sync layer to run.
+- Hosts anywhere: Vercel, Netlify, Cloudflare, or GitHub Pages.
+
+</Strengths>
+
+<Limits>
+
+- It edits content, not layout. New pages and sections are work for a developer or a coding agent.
+- It doesn't host the site, and it has no forms, e-commerce, or memberships.
+- GitHub is the only Git provider today.
+
+</Limits>
+
+**Choose it if** you build with a coding agent and want to hand the site off without becoming the client's copy editor. [See pricing](/#pricing).
+
+</AlternativePick>
+
+<AlternativePick rank={2} name="CloudCannon" bestFor="Agencies that want visual page building, built-in hosting, or GitLab and Bitbucket" pricing="Standard $55/mo ($49 billed yearly) with 3 users and unlimited sites; extra users $10/mo" compareHref="/compare/gitcms-vs-cloudcannon/">
+
+CloudCannon is a mature Git-based CMS with a visual editor on the rendered page, component-based page building, and hosting included. It has an agency partner program, with a $10/month Lite plan for partners' clients.
+
+<Strengths>
+
+- Editors build pages from your components, not just edit content.
+- Hosting is included, and it supports GitHub, GitLab, and Bitbucket.
+- Content stays as Markdown and data files in your repository.
+
+</Strengths>
+
+<Limits>
+
+- Branching review workflows start on the Team plan.
+- Per-user pricing adds up for larger client teams.
+- No MCP integration for content agents.
+
+</Limits>
+
+**Choose it if** clients need to assemble pages from components, or you're not on GitHub.
+
+</AlternativePick>
+
+<AlternativePick rank={3} name="TinaCMS" logo="/logos/tina.svg" bestFor="React and Next.js developers who want inline visual editing" pricing="TinaCloud free for 2 users; Team $29 per project per month ($24 billed yearly)" compareHref="/compare/gitcms-vs-tinacms/">
+
+TinaCMS is an open-source (Apache-2.0) Git-backed CMS with a live-preview editor, used with a hosted backend called TinaCloud or self-hosted.
+
+<Strengths>
+
+- Editors see changes on the page as they type.
+- Open source, with content kept as Markdown, MDX, and data files in Git.
+- Schema-as-code in TypeScript, with a GraphQL data layer.
+
+</Strengths>
+
+<Limits>
+
+- Tina is part of your app: its schema, queries, and setup stay in the codebase.
+- The editorial workflow starts on the Team plan.
+- AI features are listed as coming soon.
+
+</Limits>
+
+**Choose it if** your team writes React and wants editing that happens on the page itself.
+
+</AlternativePick>
+
+<AlternativePick rank={4} name="Webflow" logo="/logos/webflow.svg" bestFor="Design-led teams that want to build visually without code" pricing="Free Starter; site plans from $15/mo billed yearly (Basic, no CMS) and $25/mo (Premium, with CMS), plus workspace seats" compareHref="/compare/gitcms-vs-webflow/">
+
+Webflow is the strongest visual website builder: a canvas that maps closely to HTML and CSS, with a CMS, hosting, and AI built in.
+
+<Strengths>
+
+- Designers build and restyle pages without code.
+- Hosting, forms, CMS, and design in one product.
+- Built-in AI features and an MCP integration.
+
+</Strengths>
+
+<Limits>
+
+- The site and its content live on Webflow's platform; leaving means rebuilding.
+- Review before publish starts on the Team plan at $2,500/month.
+- Site plans and editor seats are billed per site and per person.
+
+</Limits>
+
+**Choose it if** nobody on the team writes code and design changes every week.
+
+</AlternativePick>
+
+<AlternativePick rank={5} name="Framer" logo="/logos/framer.svg" bestFor="Startups and designers who want a polished marketing site fast" pricing="Free plan; site plans from $10/mo (Basic) and $30/mo (Pro); $20/mo per extra editor, or $10/mo per content editor" compareHref="/compare/gitcms-vs-framer/">
+
+Framer is a design-first website builder with a CMS, AI Agents that generate pages, and hosting.
+
+<Strengths>
+
+- The fastest way for a designer to ship a good-looking site.
+- Staging and branches with previews on Pro.
+- Built-in Agents and an MCP server in preview.
+
+</Strengths>
+
+<Limits>
+
+- Content lives in Framer, and CMS collections and items are capped per plan.
+- Every extra editor is a paid seat.
+- AI usage draws on workspace credits.
+
+</Limits>
+
+**Choose it if** a designer owns the site end to end and no one needs the code.
+
+</AlternativePick>
+
+<AlternativePick rank={6} name="Sanity" logo="/logos/sanity.svg" bestFor="Product teams that reuse structured content across a website, apps, and other channels" pricing="Free for up to 20 seats; Growth $15 per seat per month, plus usage" compareHref="/compare/gitcms-vs-sanity/">
+
+Sanity is a hosted content platform: developers model content as code, editors work in a customizable studio, and the content is served over an API.
+
+<Strengths>
+
+- Very flexible content modeling and real-time co-editing.
+- Drafts, releases, and datasets for staged changes.
+- A hosted MCP server and a Content Agent.
+
+</Strengths>
+
+<Limits>
+
+- Content lives in Sanity's Content Lake, not your repository.
+- Developers have to build and maintain the studio before editors can work.
+- Usage-based charges above plan quotas.
+
+</Limits>
+
+**Choose it if** the same content feeds more than one website.
+
+</AlternativePick>
+
+<AlternativePick rank={7} name="Ghost" bestFor="Writers and publishers with newsletters and paid memberships" pricing="Free to self-host; Ghost(Pro) from $18/mo billed yearly; paid memberships from $29/mo" compareHref="/compare/gitcms-vs-ghost/">
+
+Ghost is an open-source (MIT) publishing platform with newsletters and Stripe-based memberships built in, self-hosted or managed as Ghost(Pro).
+
+<Strengths>
+
+- A polished writing editor.
+- Newsletters and paid subscriptions out of the box, with 0% revenue share.
+- Contributors draft and editors publish.
+
+</Strengths>
+
+<Limits>
+
+- Built for a blog or publication, not a custom marketing site.
+- Content lives in a MySQL database on a Node.js server.
+- Posts are stored as JSON, not Markdown.
+
+</Limits>
+
+**Choose it if** the site is mainly a publication and newsletters pay the bills.
+
+</AlternativePick>
+
+## What it costs to run
+
+The calculator compares a year of running client sites on WordPress with a code-first site on free static hosting plus GitCMS. The WordPress figures are estimates for managed hosting, premium plugins, and update time.
+
+<CostComparator compare="wordpress" sites={5} editors={3} />
+
+For the builders, see the calculators on [GitCMS vs Webflow](/compare/gitcms-vs-webflow/) and [GitCMS vs Framer](/compare/gitcms-vs-framer/).
+
+## Not building in code?
+
+The ranking above assumes someone on the team builds the site in code, or wants to with a coding agent. If not:
+
+- **A small business owner building alone:** Wix or Squarespace, hosted builders with templates, domains, and commerce in one subscription. See [GitCMS vs Squarespace](/compare/gitcms-vs-squarespace/).
+- **Next.js teams that want the CMS and the app in one codebase:** Payload, open source, with your own database. See [GitCMS vs Payload](/compare/gitcms-vs-payload/).
+- **A self-hosted content API:** Strapi. See [GitCMS vs Strapi](/compare/gitcms-vs-strapi/).
+
+Why so many teams are leaving WordPress in the first place, with the numbers, is in [WordPress is dead for the agency content site](/blog/wordpress-is-dead-for-agency-sites/).
+
+
+## When should you stay on WordPress?
+
+Stay if any of these describe your site:
+
+- **E-commerce runs on WooCommerce.** Products, checkout, inventory, and taxes are a whole application. Moving them is a re-platforming project, not a CMS swap.
+- **Memberships, courses, or gated content.** Logins, payments, and access rules are dynamic features WordPress plugins handle well. A static site needs a separate service for each.
+- **Workflows depend on specific plugins.** Booking, forms feeding a CRM, LMS, multilingual. List each one and price its replacement before planning a migration.
+- **No developer, and the team designs pages visually.** If the people running the site build new layouts themselves, WordPress with a page builder (or Webflow or Framer) suits them better than a code-first site.
+- **It works, and it's maintained.** A patched, fast WordPress site with a happy client doesn't need rescuing.
+
+## How do you move a WordPress site to code?
+
+Here's the practical path. Each step has a prompt you can hand to Claude Code, Codex, or Cursor.
+
+1. **Export the content.** In the WordPress admin, go to Tools → Export and download everything as a WXR (XML) file. Download the media library too, or let the agent fetch images from the live site.
+2. **Convert posts to Markdown.** Turn the export into one Markdown file per post, with title, date, slug, categories, featured image, and meta description in frontmatter. Use the [convert WordPress posts to Markdown prompt](/prompts/convert-wordpress-posts-to-markdown/), and match field names to your framework's content schema first.
+3. **Rebuild the site with a coding agent.** Recreate the design and templates in Astro (or your framework), keep every existing URL, and generate redirects for any that must change. The [migrate WordPress to Astro prompt](/prompts/migrate-wordpress-to-astro/) spells out the parts that matter for search: URLs, redirects, metadata, and the sitemap.
+4. **Make the site client-editable.** Agents tend to write copy straight into components. Move headlines, opening hours, prices, and contact details into content files so a CMS can edit them safely. Use the [make a site client-editable prompt](/prompts/make-site-client-editable/).
+5. **Give the client back an admin.** Connect the repository to a Git-based CMS, invite the client to their site only, and decide whether changes publish directly or wait for review. The [Claude Code client handoff guide](/blog/hand-off-claude-code-website-to-client/) walks through the whole handoff.
+
+Before you switch DNS, check every template, a sample of posts, and the redirects against the old site's URLs. Lost rankings after a migration usually come from broken URLs, not the new framework.
+
+## FAQ
+
+### What is the best WordPress alternative for agencies?
+
+For agencies that build client sites in code, a code-first site with GitCMS as its admin. Clients edit and publish without Git, changes can wait for review, and the agency keeps the code. For agencies that design visually without code, Webflow.
+
+### Is there a WordPress alternative without PHP or a database to maintain?
+
+Yes. A static or pre-rendered site built with Astro, Next.js, Hugo, or Eleventy serves files from a CDN, so there's no PHP runtime or MySQL database to patch. A Git-based CMS like GitCMS, CloudCannon, or TinaCMS edits the content files in the repository.
+
+### Can clients still edit a site built with Claude Code?
+
+Yes, once the editable text lives in content files instead of components. A Git-based CMS then gives clients a visual editor on top of those files. GitCMS lets them sign in with Google, so they don't need a GitHub account.
+
+### What's the cheapest way to replace WordPress?
+
+For a marketing site, static hosting on a free tier of Vercel, Netlify, Cloudflare, or GitHub Pages, plus a Git-based CMS. There's no managed WordPress hosting or premium plugins to pay for. The calculator above compares the yearly totals.

@@ -1,6 +1,6 @@
 /** Site-wide navigation, shared by the header and the footer. */
 import type { LucideIcon } from 'lucide-react'
-import { BookA, Bot, Building2, GitCompareArrows, History, Laptop, Newspaper, PenLine, Puzzle, Rocket, SearchCheck, SquareTerminal, Wrench } from 'lucide-react'
+import { BookA, Bot, Building2, GitCompareArrows, History, Laptop, Newspaper, PenLine, Puzzle, Rocket, SearchCheck, Signpost, SquareTerminal, Wrench } from 'lucide-react'
 import { features } from '@/lib/features'
 import { frameworkList } from '@/lib/framework-data'
 import type { UseCaseSlug } from '@/lib/use-cases'
@@ -24,7 +24,7 @@ export const FEATURE_LINKS: ReadonlyArray<NavLink> = [
 export const PLATFORM_LINKS: ReadonlyArray<NavLink> = [
   { label: 'Agents & MCP', href: '/agents/', blurb: 'ChatGPT, Claude and coding agents draft for review', icon: Bot },
   { label: 'One-prompt setup', href: '/docs/getting-started/cli-onboarding/', blurb: 'Your coding agent runs create-gitcms', icon: SquareTerminal },
-  { label: 'Chrome extension', href: '/extension/', blurb: 'Open any GitHub repo or file in GitCMS', icon: Puzzle },
+  { label: 'Browser extension', href: '/extension/', blurb: 'Open any GitHub repo or file in GitCMS', icon: Puzzle },
 ]
 
 export const USE_CASE_LINKS: ReadonlyArray<NavLink> = useCases.map((useCase) => ({ label: useCase.name, href: useCase.path, blurb: useCase.blurb, icon: USE_CASE_ICONS[useCase.slug] }))
@@ -36,6 +36,7 @@ export const LEARN_LINKS: ReadonlyArray<NavLink> = [
   { label: 'Prompt library', href: '/prompts/', blurb: 'Copy-paste prompts for your coding agent', icon: SquareTerminal },
   { label: 'Glossary', href: '/glossary/', blurb: 'Website and CMS terms, explained', icon: BookA },
   { label: 'Compare', href: '/compare/', blurb: 'GitCMS next to the tools you’re weighing', icon: GitCompareArrows },
+  { label: 'Alternatives', href: '/alternatives/', blurb: 'Where to go from WordPress and others, by situation', icon: Signpost },
 ]
 
 export const UPDATE_LINKS: ReadonlyArray<NavLink> = [

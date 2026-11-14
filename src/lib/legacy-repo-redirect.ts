@@ -14,6 +14,7 @@ const RESERVED_ROOT_SEGMENTS = new Set([
   'tweets',
   'videos',
   'agents',
+  'alternatives',
   'api',
   'app',
   'auth',

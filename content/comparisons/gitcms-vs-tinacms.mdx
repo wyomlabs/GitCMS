@@ -1,32 +1,33 @@
 ---
 title: 'GitCMS vs TinaCMS'
-description: 'TinaCMS is a Git-backed CMS with a GraphQL data layer. GitCMS edits plain files in your repo and is built for AI-built websites. Here''s when each fits.'
+description: 'TinaCMS is an open-source Git-backed CMS with visual editing and a GraphQL layer. GitCMS is the admin for AI-built websites. Here''s when each fits.'
 competitor: 'TinaCMS'
 category: 'Git-based CMS'
-lastReviewed: '2026-04-16'
-order: 12
+cta: 'Plain files in Git, an admin for your team and clients, and review for every agent change.'
+lastReviewed: '2026-10-28'
+order: 13
 ---
 
-TinaCMS is the most technically ambitious Git-based CMS on the market. It offers visual editing with live preview, a GraphQL data layer over your Git content, schema-as-code in TypeScript, and a hosted backend (Tina Cloud) that syncs with your repo. If you want a Git CMS with the feature depth of a headless CMS, Tina is a serious option.
+TinaCMS is the most technically ambitious Git-based CMS on the market. It is open source (Apache 2.0), now on version 3, and offers in-context visual editing, a GraphQL data layer over your Git content, schema-as-code in TypeScript, and a backend you either use as a service (TinaCloud) or self-host. If you want a Git CMS with the feature depth of a headless CMS, Tina is a serious option.
 
-GitCMS is less ambitious by design. It keeps content as plain files, gives clients and marketers a visual editor, and runs review and publishing for people and AI agents on top of Git. No GraphQL. No hosted data layer. The content is the files. The workflow is Git.
+GitCMS is less ambitious about the data layer by design. It keeps content as plain files, gives clients and marketers a visual editor, and runs review and publishing for people and AI agents on top of Git. No GraphQL. No CMS package in your codebase. The content is the files.
 
-Both tools store content in your repo. The question is how much infrastructure you want between the files and the people editing them.
+The deeper difference is who each tool is for. Tina calls itself a visual editor for developers: you integrate it into your app and build the editing experience. GitCMS is for the people and agents who run the site after launch, connected to a repo that already exists.
 
 ## What changed in 2026
 
 Git-based CMSs started as tools for developers who already preferred static sites and Markdown. That audience still exists. But a much larger group now arrives at the same architecture by a different road: they had Claude Code, Codex, or Cursor build the site, and the site naturally lives in Git.
 
-That group doesn't mainly need a nicer way for developers to edit Markdown. They need **Day Two**: a way for clients and marketers to run the site without Git, and a way to review what AI agents change before it goes live. TinaCMS is a powerful Git-backed CMS you integrate into your codebase, with a GraphQL layer and live preview. GitCMS is built around that Day Two workflow: a hosted admin you connect to an existing repo, review before publish, and bring-your-own agents through MCP.
+That group doesn't mainly need a nicer way for developers to edit Markdown. They need **Day Two**: a way for clients and marketers to run the site without Git, and a way to review what AI agents change before it goes live. TinaCMS is a powerful Git-backed CMS you integrate into your codebase, with a GraphQL layer and live preview. GitCMS is built around that Day Two workflow: a hosted admin you connect to an existing GitHub repo, review before publish, and bring-your-own agents through MCP.
 
 ## The short verdict
 
 <Verdict>
   <VerdictCompetitor title="TinaCMS">
-    - You want visual editing with real-time live preview on your actual site
+    - You want click-to-edit visual editing with live preview on your actual site
     - You need a GraphQL data layer for querying content programmatically
     - Your content model is complex and benefits from schema-as-code in TypeScript
-    - You want a Git CMS with the feature depth of a traditional headless CMS
+    - You want an open-source CMS you can self-host, including the backend
   </VerdictCompetitor>
   <VerdictGitCMS>
     - Your site was built with code or a coding agent and already deploys
@@ -38,67 +39,40 @@ That group doesn't mainly need a nicer way for developers to edit Markdown. They
 
 ## Where the approaches diverge
 
-Both GitCMS and TinaCMS store content in a Git repo. That shared foundation is real — and it is why both are better than database-backed CMSs for text-heavy content sites.
+Both GitCMS and TinaCMS store content in a Git repo. That shared foundation is real, and it is why both are better than database-backed CMSs for text-heavy content sites.
 
 But what each tool builds on top of that foundation is different.
 
 ### TinaCMS adds a data layer
 
-TinaCMS introduces a **GraphQL data layer** between your content files and your application. Content is queried through GraphQL, typed by schema definitions, and delivered through Tina Cloud (a hosted backend that syncs with your GitHub repo). This gives you structured queries, type safety, and the ability to treat your markdown files like a queryable database.
+TinaCMS introduces a **GraphQL data layer** between your content files and your application. Content is typed by schema definitions, indexed by a backend, and queried through GraphQL. TinaCloud runs that backend for you. Self-hosting means running your own: an API function with an auth provider, a database adapter for indexing (MongoDB or Postgres, for example), and a Git provider.
 
-The tradeoff: your content is still files in Git, but the editing and querying experience depends on Tina Cloud and the GraphQL layer. That is more infrastructure to maintain, more abstraction between you and your files, and a dependency on a hosted service for the editorial experience.
+That gives you structured queries and type safety over Markdown files. The cost is more infrastructure and more abstraction between you and your files, and the integration lives in your codebase.
 
 ### GitCMS stays closer to the files
 
-GitCMS does not add a data layer. Your content is markdown files. You read them as files. The editor writes them as files. Branches are drafts. PRs are review. There is no hosted backend syncing with your repo — the repo *is* the system.
+GitCMS does not add a data layer. Your site reads its content files the way it already does. The editor writes them as files. There is nothing to install in the site's code: a coding agent runs `create-gitcms`, detects your collections, and writes the `.gitcms/` configuration. One repository can hold several websites, each configured separately.
 
-This means GitCMS cannot do some things Tina does. You do not get real-time visual preview on your live site. You do not get GraphQL queries over your content. You do not get the same level of schema programmability.
-
-What you get is a system with fewer moving parts, less infrastructure to understand, and a direct relationship between the editor and the file.
+This means GitCMS can't do some things Tina does. You don't get click-to-edit on your live site. You don't get GraphQL queries over your content. What you get is fewer moving parts and a direct relationship between the editor and the file.
 
 ## The editor question
 
-TinaCMS's marquee feature is **contextual visual editing** — you edit content directly on your rendered site, seeing changes in real time. This is powerful for layout-heavy pages where seeing the final result while editing matters.
+TinaCMS's marquee feature is **contextual visual editing**: you edit content beside your rendered page and see changes in real time. This is powerful for layout-heavy pages where seeing the final result matters.
 
-GitCMS gives you a **Notion-like block editor**. Rich text, slash commands, inline formatting, drag-and-drop blocks. It is optimized for *writing*, not for visual page building. If your content is docs, blog posts, changelogs, and marketing copy, the writing-focused editor is often the better tool.
+GitCMS gives you a **document-style visual editor**: slash commands, drag-and-drop blocks, tables, callouts, and frontmatter as typed form fields. Menus, footers, and team lists in JSON, YAML, or TOML files are edited as forms. It is built for writing, not page building.
 
-Different editors for different jobs. If your content is primarily text, a writing-focused editor is more natural than an in-page visual editor. If your content is layout-heavy, Tina's contextual editing has a real advantage.
+Different editors for different jobs. If your content is primarily text, a writing-focused editor is more natural. If your content is layout-heavy, Tina's contextual editing has a real advantage.
 
-## The markdown-in-git approach works
+## Review, clients, and agents
 
-Both tools bet on this — and it is the right bet.
+Tina's editorial workflow (branch-based drafts and review) is on its paid Team plan and up. GitCMS is built around review, because that's what clients and agents need:
 
-<CaseStudy
-  title="Markdown-in-git scales: the Cursor migration"
-  logo={{ src: '/ai-logos/cursor.svg', alt: 'Cursor' }}
-  source="Lee Robinson — Coding Agents & Complexity Budgets"
-  sourceUrl="https://leerob.com/agents"
-  stats={[
-    { label: 'Migration cost', value: '$260' },
-    { label: 'Build speed improvement', value: '2x faster' },
-    { label: 'CDN savings (prior spend)', value: '$56,848' },
-    { label: 'Commits in one weekend', value: '67' },
-  ]}
->
-  <p>
-    Cursor's engineering team migrated their content site — engineering blog, product changelog, and docs — from an API-based CMS back to markdown files in their codebase. The migration took one weekend using AI agents, cost $260 in tokens, and resulted in 2x faster builds.
-  </p>
-  <p>
-    This validates the thesis that both TinaCMS and GitCMS share: for text-heavy content, markdown in the repo beats an API-based CMS backed by a database. The debate between Tina and GitCMS is about what sits on top of the files — not whether the files are the right foundation.
-  </p>
-</CaseStudy>
+- **Content board.** Content tasks move through Ideas, Draft, Review, and Published.
+- **Reviews in the editor.** Inline comments, changes marked inline, approve or request changes.
+- **Editors without GitHub accounts.** Invited editors sign in with Google and see only their site.
+- **Preview deployments (beta)** and **Change Requests (beta)**, where clients pin feedback on the live site and it becomes a GitHub issue your coding agent can pick up.
 
-## AI agents and content workflows
-
-AI coding agents — Claude Code, Cursor, Windsurf, GitHub Copilot — work natively with markdown files in a repository. Both GitCMS and TinaCMS benefit from this shared foundation. An agent can read and edit a markdown file regardless of which CMS sits on top.
-
-The difference is in **structured content workflows**.
-
-GitCMS's **MCP app** turns AI assistants like ChatGPT, Claude, and other MCP-compatible agents into content agents. They can create drafts, edit posts, manage collections, check SEO, and submit changes for review — all through a structured interface. GitCMS handles the git workflow underneath.
-
-TinaCMS has recently added AI features in beta on their Team Plus plan ($49/mo) and above. These are platform-integrated features — useful, but tied to Tina's editing environment rather than working through the open MCP protocol that any AI assistant can use.
-
-GitCMS's approach means your AI assistant of choice — whether that is ChatGPT, Claude, a coding agent, or a future tool — can work with your content through a standard interface. No vendor lock-in on the AI side either.
+On AI, Tina lists "AI features" as coming soon on its Team plan as of October 2026. GitCMS's MCP access is available now: ChatGPT, Claude, and other MCP clients read and edit entries and site data, draft inside content tasks, and submit for review. A person publishes, and you bring the agent you already use.
 
 ## Feature comparison
 
@@ -107,32 +81,25 @@ GitCMS's approach means your AI assistant of choice — whether that is ChatGPT,
   rows={[
     {
       category: 'Content storage',
-      gitcms: 'Markdown files in Git',
-      competitor: 'Markdown files in Git',
-      note: 'Same foundation — both store content in your repo',
+      gitcms: 'Markdown, MDX, and data files in Git',
+      competitor: 'Markdown, MDX, and data files in Git',
+      note: 'Same foundation: both store content in your repo',
     },
     {
       category: 'Version control',
       gitcms: 'native',
       competitor: 'native',
-      note: 'Both use Git for version history',
     },
     {
-      category: 'Branching and drafts',
-      gitcms: 'native',
-      competitor: 'Editorial workflow (paid plans)',
-      note: 'GitCMS uses Git branches as first-class UI. Tina adds editorial workflow on Team Plus+.',
+      category: 'Drafts and review',
+      gitcms: 'Content board, reviews in the editor',
+      competitor: 'Editorial workflow (Team plan and up)',
     },
     {
       category: 'Editor experience',
-      gitcms: 'Notion-like block editor',
+      gitcms: 'Document-style visual editor',
       competitor: 'Contextual visual editor (live preview)',
-      note: 'Tina edits on the rendered site. GitCMS has a dedicated writing editor.',
-    },
-    {
-      category: 'Markdown / MDX support',
-      gitcms: 'native',
-      competitor: 'native',
+      note: 'Tina edits beside the rendered page. GitCMS has a dedicated writing editor.',
     },
     {
       category: 'Content querying',
@@ -142,47 +109,35 @@ GitCMS's approach means your AI assistant of choice — whether that is ChatGPT,
     },
     {
       category: 'Schema definition',
-      gitcms: 'Type-safe config',
+      gitcms: 'Written by create-gitcms, then the Settings UI',
       competitor: 'Schema-as-code (TypeScript)',
-      note: 'Both define schemas in code. Tina has deeper schema programmability.',
+      note: 'Tina has deeper schema programmability',
     },
     {
-      category: 'Hosted backend',
-      gitcms: 'Optional (content in repo)',
-      competitor: 'Tina Cloud (syncs with GitHub)',
-      note: 'Tina Cloud is the hosted layer that powers editing and GraphQL',
+      category: 'Code changes to your site',
+      gitcms: 'None',
+      competitor: 'Tina integration in your app',
     },
     {
-      category: 'Content delivery',
-      gitcms: 'Local files (no network hop)',
-      competitor: 'Local files + GraphQL queries',
+      category: 'Backend',
+      gitcms: 'Hosted GitCMS app',
+      competitor: 'TinaCloud, or self-hosted with auth, database adapter, and Git provider',
     },
     {
-      category: 'AI agent workflow',
-      gitcms: 'Native + MCP app for ChatGPT/Claude',
-      competitor: 'AI features in beta (paid plans)',
-      note: 'GitCMS uses open MCP protocol. Tina has platform-integrated AI.',
-    },
-    {
-      category: 'Self-hosting',
-      gitcms: 'yes',
-      competitor: 'yes',
-      note: 'Both can be self-hosted. Tina self-hosting requires more setup.',
+      category: 'AI agents',
+      gitcms: 'MCP for ChatGPT, Claude, and other clients; drafts go to review',
+      competitor: 'AI features listed as coming soon',
     },
     {
       category: 'Open source',
-      gitcms: 'yes',
+      gitcms: 'no',
       competitor: 'yes',
+      note: 'TinaCMS is Apache 2.0',
     },
     {
       category: 'Vendor lock-in',
-      gitcms: 'Low (plain markdown files)',
-      competitor: 'Low-medium (files portable, but GraphQL layer is Tina-specific)',
-    },
-    {
-      category: 'Complexity',
-      gitcms: 'Lower (files + editor + Git)',
-      competitor: 'Higher (files + GraphQL + Tina Cloud + schema config)',
+      gitcms: 'Low (plain Markdown files)',
+      competitor: 'Low-medium (files portable, but GraphQL queries are Tina-specific)',
     },
   ]}
 />
@@ -192,74 +147,65 @@ GitCMS's approach means your AI assistant of choice — whether that is ChatGPT,
 <PricingCompare
   competitorName="TinaCMS"
   gitcms={{
-    note: 'Includes Notion-like editor, MCP app, and active development. No hosted backend dependency.',
+    note: 'Includes the visual editor, review workflow, and MCP access. Nothing to add to your codebase.',
   }}
   competitor={{
-    free: 'Free: 2 users, basic features',
-    paid: 'Team $29/mo (3 users), Team Plus $49/mo (5 users), Business $299/mo (20 users)',
-    note: 'Editorial workflow and AI features require Team Plus ($49/mo) or higher. Extra seats: $9-18/mo depending on tier.',
+    free: 'Free: 2 users, unlimited projects',
+    paid: 'Team $29/project/mo or $290/yr (3 users, up to 10); Business $299/project/mo or $2,990/yr (20 users); Enterprise custom',
+    note: 'As of October 2026, TinaCloud pricing. Extra seats $90/yr on Team, $180/yr on Business. Editorial workflow starts on Team.',
   }}
 />
 
-TinaCMS's free tier is useful for small projects. But editorial workflow features — the branch-based drafting and review that makes a Git CMS actually useful for teams — require the Team Plus plan at $49/mo. AI features are also locked behind that tier.
+TinaCMS's free tier is useful for small projects and developers. Editorial workflow, the branch-based drafting and review that makes a Git CMS work for teams, starts on the Team plan, priced per project. Self-hosting avoids TinaCloud fees but means running the backend yourself.
 
-GitCMS includes its core workflow and MCP integration at every tier.
+GitCMS includes review before publish and MCP access on every site; see pricing above.
 
 ## Where TinaCMS is genuinely better
 
-TinaCMS is the stronger choice when you need **a programmable Git CMS with visual editing**.
+TinaCMS is the stronger choice when you need **a programmable, open-source Git CMS with visual editing**.
 
-If your team needs:
+- **Contextual visual editing** directly beside the rendered site, for layout-heavy pages.
+- **A GraphQL data layer** for programmatic content queries.
+- **Schema-as-code** in TypeScript for complex content models.
+- **Open source and self-hostable**, backend included, under Apache 2.0.
+- **A free tier** that covers small projects with two users.
 
-- Real-time contextual editing directly on the rendered site
-- A GraphQL data layer for programmatic content queries
-- Deep schema customization with TypeScript-defined content models
-- A Git CMS that feels more like a full headless CMS platform
-- Visual editing for layout-heavy pages where seeing the rendered result matters
-
-Then TinaCMS is solving a harder problem and solving it well. Its technical ambition is genuine, and for teams that need that depth, it earns its complexity.
+Tina is solving a harder problem and solving it well. For teams that need that depth, it earns its complexity.
 
 ## Where GitCMS is better
 
-GitCMS is better when **the content is text and the workflow should be simple**.
+GitCMS is better when **the site already exists and the people running it aren't developers**.
 
-Most content-heavy sites — docs, blog posts, changelogs, marketing pages — do not need a GraphQL layer or contextual visual editing. They need a good place to write, a way to review before publishing, and a system that stays out of the way.
+Most content-heavy sites (docs, blog posts, changelogs, marketing pages) don't need a GraphQL layer. They need a good place to write, review before publishing, and a system that stays out of the codebase.
 
-GitCMS gives you:
+- **No integration work.** A coding agent runs `create-gitcms`; the site's code doesn't change.
+- **Review as the default**, not an upsell: content board, reviews in the editor, preview deployments (beta).
+- **Agents available today.** ChatGPT, Claude, and other MCP clients draft for review.
+- **Client-friendly access.** Google sign-in, per-site access, and Change Requests (beta) on the live site.
 
-- A **Notion-like writing editor** that is optimized for prose, not page layouts
-- **Git branches as drafts** and **PRs as review** — first-class, not an upsell
-- **MCP integration** so AI assistants can draft, edit, and manage content
-- **Less infrastructure** — no hosted backend, no GraphQL layer, no sync service
-- A **simpler mental model** — the content is the files, the workflow is Git
-
-If you do not need TinaCMS's depth, you are carrying complexity that does not serve you.
+If you don't need Tina's depth, you're carrying complexity that doesn't serve you.
 
 <Tradeoffs>
   <p>Choosing GitCMS over TinaCMS is a real tradeoff:</p>
   <ul>
-    <li>TinaCMS's contextual visual editing is genuinely useful for layout-heavy content. GitCMS does not offer in-page editing.</li>
-    <li>TinaCMS's GraphQL data layer enables structured content queries that GitCMS does not support.</li>
-    <li>TinaCMS's schema-as-code system is more programmable and flexible for complex content models.</li>
-    <li>If your team needs a Git CMS that rivals the feature depth of headless CMSs like Contentful or Sanity, TinaCMS is closer to that.</li>
+    <li>TinaCMS's contextual visual editing is genuinely useful for layout-heavy content. GitCMS doesn't offer click-to-edit on the page.</li>
+    <li>TinaCMS's GraphQL data layer enables structured content queries that GitCMS doesn't support.</li>
+    <li>TinaCMS is open source and can be fully self-hosted. GitCMS is a hosted product.</li>
+    <li>TinaCMS has a free tier for small teams. GitCMS is paid.</li>
   </ul>
-  <p>For teams whose content is primarily text — docs, blogs, changelogs — and whose workflow is writing, reviewing, and publishing, these tradeoffs are usually worth it. You get a simpler system, a better writing experience, AI-native workflows, and fewer moving parts between your content and your readers.</p>
+  <p>For teams whose content is primarily text and whose workflow is writing, reviewing, and publishing with clients and agents, these tradeoffs are usually worth it.</p>
 </Tradeoffs>
 
 ## Decision by use case
 
 **Git CMS with visual editing and a GraphQL data layer:** TinaCMS is the better fit.
 
-**Docs, blog, changelog with a Notion-like writing experience:** GitCMS is the better fit.
+**Open-source CMS you want to self-host end to end:** TinaCMS is the better fit.
 
 **Complex content models with deep schema customization:** TinaCMS is the better fit.
 
-**Simple content workflow where AI agents help with drafting and SEO:** GitCMS is the better fit.
+**Agency handing a Claude Code or Astro site to a client:** GitCMS is the better fit.
 
-**Layout-heavy pages that need real-time contextual editing:** TinaCMS is the better fit.
+**AI agents drafting website changes with human review before publishing:** GitCMS is the better fit.
 
-**Startup or content team that wants less infrastructure and a focused editor:** GitCMS is the better fit.
-
-<CompareCTA
-  description="Plain files in Git, an admin for your team and clients, and review for every agent change."
-/>
+**Existing site where you'd rather not add a CMS integration to the code:** GitCMS is the better fit.

@@ -3,11 +3,12 @@ title: 'GitCMS vs Framer'
 description: 'Framer is a design-first website builder with hosting, a CMS, and AI. GitCMS is the CMS for code-first websites you own in Git. Here''s when each fits.'
 competitor: 'Framer'
 category: 'Website builders and traditional CMS'
-lastReviewed: '2026-10-10'
+cta: 'Build it in code. Run it with GitCMS.'
+lastReviewed: '2026-10-28'
 order: 2
 ---
 
-Framer is the fastest way for a designer to ship a beautiful marketing site without writing code. You design on a canvas that feels like a design tool, publish to Framer's hosting, and manage posts and pages in its built-in CMS. In 2026 it also leans hard into AI, with agents that generate and edit pages inside Framer.
+Framer is the fastest way for a designer to ship a beautiful marketing site without writing code. You design on a canvas that feels like a design tool, publish to Framer's hosting, and manage posts and pages in its built-in CMS. In 2026 it also leans hard into AI, with Agents that generate and edit pages inside Framer and an MCP server for outside tools.
 
 GitCMS is built for the other way sites get made now: **in code**, by developers and coding agents like Claude Code, Codex, and Cursor. The site lives in your Git repository and deploys wherever you like. GitCMS gives everyone who runs it an admin: a visual editor for content, review before publish, and bring-your-own AI agents.
 
@@ -48,7 +49,7 @@ With GitCMS, the site is a normal framework project. Coding agents and developer
 
 ## AI: built-in credits vs your own agents
 
-Framer's AI runs inside Framer and is metered by the platform.
+Framer's AI runs inside Framer and is metered by the platform: Agents and other AI features draw on a shared pool of workspace credits, with more included on higher plans. Its MCP server, free while in preview, lets outside tools work on a Framer project, still in Framer's format.
 
 GitCMS takes the opposite bet: **bring your own agent**. Coding agents you already pay for build and improve the site in the repo. ChatGPT, Claude, and other MCP agents connect to GitCMS, draft inside content tasks, and submit for review. You don't buy AI credits from your CMS.
 
@@ -81,7 +82,12 @@ GitCMS takes the opposite bet: **bring your own agent**. Coding agents you alrea
     {
       category: 'Review before publish',
       gitcms: 'native',
-      competitor: 'Limited',
+      competitor: 'Staging and branches with previews (Pro)',
+    },
+    {
+      category: 'Client editors',
+      gitcms: 'Invites with Google sign-in and per-site access',
+      competitor: 'Content editor seats, billed per editor',
     },
     {
       category: 'Hosting',
@@ -91,7 +97,7 @@ GitCMS takes the opposite bet: **bring your own agent**. Coding agents you alrea
     {
       category: 'AI',
       gitcms: 'Bring your own agents; no AI credits',
-      competitor: 'Built-in AI, metered by the platform',
+      competitor: 'Built-in Agents on platform credits; MCP server (preview)',
     },
     {
       category: 'Portability',
@@ -109,11 +115,15 @@ GitCMS takes the opposite bet: **bring your own agent**. Coding agents you alrea
     note: 'Unlimited content edits. No AI credits. Host the site wherever you already host.',
   }}
   competitor={{
-    free: 'Free plan on a framer.website domain',
-    paid: 'Paid site plans, plus paid editor seats for collaborators',
-    note: 'AI usage draws on platform credits, so costs grow with how much the built-in AI does.',
+    free: 'Free plan on a Framer subdomain',
+    paid: 'Site plans from $10/mo, plus $20/mo per extra editor or $10/mo per content editor (as of October 2026)',
+    note: 'AI usage draws on workspace credits (1,000/mo on Basic, 3,000/mo on Pro), so costs grow with how much the built-in AI does.',
   }}
 />
+
+Framer prices each site and each person who edits it. Most client sites need the Pro plan for the CMS, so here's a year of Pro with content editors, against a code-first site on free static hosting. Drag the sliders to match your sites and the people who edit them.
+
+<CostComparator compare="framer" sites={5} editors={3} />
 
 ## Where Framer is genuinely better
 
@@ -128,7 +138,8 @@ If your team never wants to touch code or review a pull request, Framer is a gre
 - **Ownership.** The site is your code, in your repo, on your host.
 - **Agent-friendly.** Coding agents are at their best in a codebase, and they can keep improving the site over time.
 - **Review for every change.** Content changes from people and agents go through draft, review, and publish.
-- **Clean client handoff.** Clients edit content without access to design or components.
+- **Clean client handoff.** Clients edit content and [site data](/docs/features/site-data/) like menus and footers without access to design or components, and sign in with Google.
+- **Feedback that reaches your agent.** With [Change Requests](/features/change-requests/) (beta), clients pin feedback on the live site and you hand it to Claude Code, Codex, or Cursor.
 
 <Tradeoffs>
   <p>Choosing a code-first site with GitCMS over Framer is a real tradeoff:</p>
@@ -149,7 +160,3 @@ If your team never wants to touch code or review a pull request, Framer is a gre
 **Startup with a code-first site where marketing needs to edit and publish:** GitCMS is the better fit.
 
 **Team that wants its own AI agents working on the site, with review:** GitCMS is the better fit.
-
-<CompareCTA
-  description="Build it in code. Run it with GitCMS."
-/>
