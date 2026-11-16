@@ -5,18 +5,22 @@ description: See how each entry does in Google and Bing, whether its page is ind
 
 Once a site is linked to [Google Search Console or Bing Webmaster Tools](/docs/features/search-connections), GitCMS shows how its pages do in search in the places where you already work. A site without search data just doesn't show any of this: no errors, no empty tabs.
 
-All of it depends on one setting: GitCMS has to know which live page an entry belongs to.
+All of it depends on GitCMS knowing which live page an entry belongs to. Usually it works that out on its own.
 
-## Tell GitCMS where entries are published
+## Where entries are published
 
-Open **Settings**, edit a collection, and fill in **Entry URL**: the path its entries are published at, like `/blog/{slug}`.
+GitCMS compares each collection's entries with your live [sitemap](/docs/features/sitemaps-internal-links) and finds the path they're published at, like `/blog/{slug}`. Nothing to set up: once your site has its Website URL and a sitemap, entries get their live links and search data.
+
+It only uses a path when the evidence is clear: most of the collection's entries are found in the sitemap, each on its own page, and no other collection's pages share those URLs. When it can't tell, the entry says so instead of guessing.
+
+To see or pin the path, open **Settings** and edit a collection. An empty **Entry URL** shows what GitCMS found, like *Inferred from your sitemap:* `/blog/{slug}/` *· 41 of 43 entries found*. Select **Keep** to save it, or type your own:
 
 - `{slug}` is the last part of the entry's path: `2024/launch.md` becomes `launch`.
 - `{path}` is the entry's whole path inside the collection, without the extension: `2024/launch.md` becomes `2024/launch`.
 
-Instead of typing it, select **Detect**. GitCMS compares your collection's entries with your [sitemap](/docs/features/sitemaps-internal-links) and fills in the route it finds, then tells you how many entries matched. Detect needs the site's Website URL and sitemap set, and the collection saved first.
+A path you set always wins. Set one when your sitemap is missing or incomplete, or when your URLs don't follow your files.
 
-Entry URL powers two things: the **live link** from an entry to its page, and matching search data to entries. A collection without one still works as a collection, but its entries get no search data.
+The path powers two things: the **live link** from an entry to its page, and matching search data to entries.
 
 On multilingual sites, don't put the locale in the route. GitCMS adds the locale prefix your site already uses.
 
@@ -80,7 +84,7 @@ On sites with **Review before publish**, editors can select **Add to Ideas** on 
 
 **The Page tab has no "In search" section.** The site isn't linked to a property yet. A workspace owner or admin can link it under **Workspace settings → Integrations**.
 
-**The Clicks and Trend columns don't appear.** The collection has no Entry URL, or the site has no search data. Set the Entry URL, or use **Detect**.
+**The Clicks and Trend columns don't appear.** The site has no search data, or GitCMS couldn't work out where the collection's entries are published. Check the collection's **Entry URL** in Settings: it says why nothing was found. Set the path yourself if your sitemap doesn't list these pages.
 
 **An entry has no numbers.** It may be unpublished, new, or not getting searches in the period. Check its index status on the Page tab first: a page that isn't indexed needs its indexing fixed, not its wording.
 

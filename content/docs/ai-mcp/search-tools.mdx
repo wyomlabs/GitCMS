@@ -5,7 +5,7 @@ description: The MCP tools that let ChatGPT, Claude, and coding agents read Goog
 
 When a site is linked to [Google Search Console or Bing Webmaster Tools](/docs/features/search-connections), your AI client can read the same search data editors see, and use it to decide what to write or fix. The tools are read-only: they never change content or anything in a search account. Changes still go through the usual [task-first workflow](/docs/ai-mcp/task-first-workflows).
 
-Results speak in **entries**, like `/blog/launch.md`, so an agent can open a result with `read` right away. For that to work, each collection needs an [Entry URL](/docs/features/search-data#tell-gitcms-where-entries-are-published). Without one, GitCMS can't match search data to entries, and the site guide tells the agent which collections are missing it.
+Results speak in **entries**, like `/blog/launch.md`, so an agent can open a result with `read` right away. For that to work, GitCMS has to know [where each collection's entries are published](/docs/features/search-data#where-entries-are-published). It works that out from your sitemap, or uses the Entry URL you set. The site guide tells the agent each collection's path, whether it was inferred, and which collections have none.
 
 You don't need to name tools in a prompt. "What should I write next for the blog?" or "Which posts are losing traffic?" is enough. The site guide (`get_site_context`) tells the agent whether search data is connected and which sources the site has.
 
