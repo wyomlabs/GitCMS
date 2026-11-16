@@ -10,7 +10,7 @@ Two things to know up front:
 - **Access is read-only.** GitCMS can look at your search data. It can't change anything in Search Console or Bing Webmaster Tools.
 - **Nothing is copied into a database.** GitCMS reads search data when someone asks for it and caches it briefly. Your content stays in your repository.
 
-Once a site is linked, search data shows up in the [editor and on the Search page](/docs/features/search-data), and your AI client can read it through [MCP search tools](/docs/ai-mcp/search-tools).
+Once a site is linked, search data shows up in the [editor and on the SEO page](/docs/features/search-data), and your AI client can read it through [MCP search tools](/docs/ai-mcp/search-tools).
 
 ## Before you start
 
@@ -20,11 +20,13 @@ Once a site is linked, search data shows up in the [editor and on the Search pag
 
 ## Connect an account
 
-1. Open **Workspace settings** → **Integrations**.
-2. Under **Google Search Console** or **Bing Webmaster Tools**, select **Connect**.
+1. Open **Workspace settings** → **SEO**.
+2. On the **Google Search Console** or **Bing Webmaster Tools** row, select **Connect**.
 3. Sign in and allow GitCMS to view your search data. That's the only permission it asks for.
 
-You can connect more than one account per provider. Agencies often do: one for their own properties and one per client who shares theirs.
+You can connect more than one account per provider with **Add account**. Agencies often do: one for their own properties and one per client who shares theirs. **Manage** on a provider's row lists its accounts, what each one reads, and its actions.
+
+The top of the tab shows how many of your sites read search data, and one suggestion for the most useful next step, such as reconnecting an account or linking sites automatically.
 
 ### Google Search Console
 
@@ -34,15 +36,17 @@ GitCMS asks for Google's read-only Search Console permission (`webmasters.readon
 
 GitCMS asks for Bing's read-only permission (`webmaster.read`). Bing doesn't tell GitCMS who signed in, so a Bing connection is named after whoever connected it: your email, or **Client's Bing account** when a client shared it through a link.
 
-**Bing Webmaster Tools** only appears under Integrations when it is set up for your GitCMS deployment. If you don't see it, Bing isn't available yet there.
+**Bing Webmaster Tools** only appears under SEO when it is set up for your GitCMS deployment. If you don't see it, Bing isn't available yet there.
 
 ## Link sites to properties
 
 A **property** is what Search Console or Bing calls a site you've added, like `sc-domain:example.com` or `https://example.com/`. Each GitCMS site reads search data from one property per provider.
 
-**Match sites** is the fast way. After you connect an account, select **Match sites** next to it. GitCMS compares your sites' website addresses with the properties the account can read and shows what it found. Review the list, then select **Link**.
+The SEO tab lists your sites by domain, with a column for Google and one for Bing. Each cell shows the property the site reads and the account it reads through, or what's missing.
 
-If a site has no match, use **Choose property** on that site's row, pick the account and property yourself, and select **Use this property**. Properties the account can see but can't read data for (an unverified user, for example) aren't offered.
+Linking automatically is the fast way. GitCMS compares your sites' website addresses with the properties your accounts can read. When it finds matches, the top of the tab offers to link them: review the site → property list, then select **Link**. You can also select **Match sites** for one account under **Manage**.
+
+If a site has no match, select **Link** in its cell, pick the account and property yourself, and select **Use this property**. Properties the account can see but can't read data for (an unverified user, for example) aren't offered.
 
 When several GitCMS sites live under one domain, each site only sees the pages under its own address. A site at `example.com/docs` doesn't see traffic for `example.com/blog`, even if both use the same property.
 
@@ -50,7 +54,7 @@ A site can be linked to Google, to Bing, or to both.
 
 ## Ask a client to share their account
 
-When the Search Console or Bing property belongs to your client, you don't need their login. Select **Ask client** on the site's row. GitCMS copies a link to your clipboard.
+When the Search Console or Bing property belongs to your client, you don't need their login. Select **Ask client** in the site's cell for that provider. GitCMS copies a link to your clipboard.
 
 Send that link to your client. They'll see:
 
@@ -64,21 +68,21 @@ The link:
 
 - works **once**, and for **7 days**
 - is tied to one site and one provider
-- shows up afterwards as a **Client** connection with the site's name, so you can see who shared what
+- shows up afterwards in that site's cell as the client's account, so you can see who shared what
 
 If the link expired or was already used, the client sees a message saying so. Select **Ask client** again for a new one.
 
 ## When access stops working
 
-If the provider stops accepting GitCMS's access, for example because a client removed GitCMS from their account, GitCMS marks the connection **Needs reconnecting** and the site's search data is replaced with a message asking for reconnection.
+If the provider stops accepting GitCMS's access, for example because a client removed GitCMS from their account, GitCMS marks the connection as having lost access, the sites it served show as **Paused**, and their search data is replaced with a message asking for reconnection.
 
 - For your own connections, select **Reconnect** and sign in again. On Bing, **Reconnect** replaces that exact connection.
 - For a client's, select **Ask client again** to send a new link.
 
 ## Stop reading search data
 
-- **Unlink a site.** Select the unlink icon on the site's row. The connection stays, and the site stops reading from that property.
-- **Remove a connection.** Select the trash icon next to it. Sites linked through that connection lose their search data, and GitCMS deletes its stored token.
+- **Stop reading for a site.** In the site's cell menu, select **Stop reading search data**. The connection stays, and the site stops reading from that property.
+- **Remove a connection.** Under **Manage**, select **Remove account** (or, for a client's connection, **Remove client's connection** in its site's cell). Sites linked through that connection lose their search data, and GitCMS deletes its stored token. GitCMS asks you to confirm first.
 
 What happens at the provider differs:
 
@@ -100,7 +104,7 @@ The [Privacy Policy](/privacy/) has the full account of what's collected and how
 
 ## Self-hosting
 
-A GitCMS deployment needs `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` on both the web and MCP Workers to connect Google accounts. `BING_CLIENT_ID` and `BING_CLIENT_SECRET` are optional; without them, Bing Webmaster Tools doesn't appear in Integrations.
+A GitCMS deployment needs `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` on both the web and MCP Workers to connect Google accounts. `BING_CLIENT_ID` and `BING_CLIENT_SECRET` are optional; without them, Bing Webmaster Tools doesn't appear under SEO.
 
 ## Troubleshooting
 
