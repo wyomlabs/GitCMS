@@ -1,0 +1,47 @@
+{
+  "git_path": "/content/prompts/",
+  "file_extension": ".mdx",
+  "filename_pattern": "",
+  "collection_type": "flat",
+  "frontmatter_schema": [
+    {
+      "name": "title",
+      "type": "title",
+      "label": "Title"
+    },
+    {
+      "name": "description",
+      "type": "richtext",
+      "label": "Description"
+    },
+    {
+      "name": "category",
+      "type": "select",
+      "label": "Category",
+      "options": [
+        "handoff",
+        "content",
+        "seo",
+        "migration"
+      ],
+      "color": "purple"
+    },
+    {
+      "name": "agents",
+      "type": "multiselect",
+      "label": "Agents",
+      "allowCustom": true,
+      "color": "blue"
+    },
+    {
+      "name": "order",
+      "type": "number",
+      "label": "Order"
+    },
+    {
+      "name": "lastReviewed",
+      "type": "datetime",
+      "label": "Last Reviewed"
+    }
+  ]
+}

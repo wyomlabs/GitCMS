@@ -1,0 +1,36 @@
+{
+  "git_path": "/content/tools/",
+  "file_extension": ".mdx",
+  "filename_pattern": "",
+  "collection_type": "flat",
+  "frontmatter_schema": [
+    {
+      "name": "title",
+      "type": "title",
+      "label": "Title"
+    },
+    {
+      "name": "description",
+      "type": "richtext",
+      "label": "Description"
+    },
+    {
+      "name": "tool",
+      "type": "select",
+      "label": "Tool",
+      "options": [
+        "markdown-editor",
+        "agents-md-editor",
+        "claude-md-editor",
+        "image-compressor",
+        "github-repo"
+      ],
+      "color": "purple"
+    },
+    {
+      "name": "order",
+      "type": "number",
+      "label": "Order"
+    }
+  ]
+}

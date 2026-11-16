@@ -1,0 +1,47 @@
+{
+  "git_path": "/content/comparisons/",
+  "file_extension": ".mdx",
+  "filename_pattern": "",
+  "collection_type": "flat",
+  "i18n": {
+    "enabled": true,
+    "strategy": "path"
+  },
+  "frontmatter_schema": [
+    {
+      "name": "title",
+      "type": "title",
+      "label": "Title"
+    },
+    {
+      "name": "description",
+      "type": "richtext",
+      "label": "Description"
+    },
+    {
+      "name": "competitor",
+      "type": "text",
+      "label": "Competitor"
+    },
+    {
+      "name": "category",
+      "type": "text",
+      "label": "Category"
+    },
+    {
+      "name": "cta",
+      "type": "text",
+      "label": "CTA line"
+    },
+    {
+      "name": "lastReviewed",
+      "type": "datetime",
+      "label": "Last Reviewed"
+    },
+    {
+      "name": "order",
+      "type": "number",
+      "label": "Order"
+    }
+  ]
+}

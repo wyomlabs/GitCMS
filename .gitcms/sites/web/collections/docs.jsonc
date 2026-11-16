@@ -1,0 +1,22 @@
+{
+  "git_path": "/content/docs/",
+  "file_extension": ".mdx",
+  "filename_pattern": "",
+  "collection_type": "grouped",
+  "i18n": {
+    "enabled": true,
+    "strategy": "path"
+  },
+  "frontmatter_schema": [
+    {
+      "name": "title",
+      "type": "title",
+      "label": "Title"
+    },
+    {
+      "name": "description",
+      "type": "richtext",
+      "label": "Description"
+    }
+  ]
+}

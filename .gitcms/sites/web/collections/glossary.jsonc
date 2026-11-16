@@ -1,0 +1,52 @@
+{
+  "git_path": "/content/glossary/",
+  "file_extension": ".mdx",
+  "filename_pattern": "",
+  "collection_type": "flat",
+  "frontmatter_schema": [
+    {
+      "name": "title",
+      "type": "title",
+      "label": "Title"
+    },
+    {
+      "name": "category",
+      "type": "select",
+      "label": "Category",
+      "options": [
+        "building",
+        "rendering",
+        "content",
+        "git",
+        "cms",
+        "agents",
+        "seo",
+        "deploy",
+        "operations"
+      ],
+      "color": "purple"
+    },
+    {
+      "name": "definition",
+      "type": "text",
+      "label": "Definition"
+    },
+    {
+      "name": "description",
+      "type": "richtext",
+      "label": "Description"
+    },
+    {
+      "name": "related",
+      "type": "multiselect",
+      "label": "Related terms",
+      "allowCustom": true,
+      "color": "blue"
+    },
+    {
+      "name": "lastReviewed",
+      "type": "datetime",
+      "label": "Last Reviewed"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "git_path": "/content/alternatives/",
+  "file_extension": ".mdx",
+  "filename_pattern": "",
+  "collection_type": "flat",
+  "frontmatter_schema": [
+    {
+      "name": "title",
+      "type": "title",
+      "label": "Title"
+    },
+    {
+      "name": "description",
+      "type": "richtext",
+      "label": "Description"
+    },
+    {
+      "name": "competitor",
+      "type": "text",
+      "label": "Competitor"
+    },
+    {
+      "name": "cta",
+      "type": "text",
+      "label": "CTA line"
+    },
+    {
+      "name": "lastReviewed",
+      "type": "datetime",
+      "label": "Last Reviewed"
+    },
+    {
+      "name": "order",
+      "type": "number",
+      "label": "Order"
+    }
+  ]
+}
