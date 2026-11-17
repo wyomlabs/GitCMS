@@ -51,6 +51,16 @@ Use `/` to open slash commands and insert blocks without remembering Markdown sy
 
 Blocks can also be moved with drag-and-drop, which makes it easier to restructure long content without cutting and pasting raw Markdown.
 
+## HTML blocks and MDX
+
+In `.md` entries, existing HTML blocks such as tables open with **Preview** and **Code** views. Use Code to edit the markup, then switch to Preview to see the result. The preview is isolated from the editor, and scripts in your content do not run there. Your site supplies its own styling when the entry is published.
+
+In `.mdx` entries, HTML tags are JSX. The editor keeps these blocks as source, alongside other MDX components, rather than converting them to Markdown tables.
+
+Changing only an entry's fields leaves its body unchanged. When you edit the body, untouched blocks retain their original source formatting; edited Markdown blocks may be reformatted. Editing fields can also change YAML quoting without changing the field values.
+
+Inline HTML inside an ordinary Markdown paragraph is not a separate HTML block. Editing that paragraph can escape its tags; use a standalone block when you need to edit HTML as source.
+
 ## Frontmatter without YAML editing
 
 Above the document body, GitCMS renders your frontmatter as a structured editor instead of forcing you to edit raw YAML, TOML, or JSON by hand.
