@@ -6,7 +6,7 @@ description: How GitCMS manages site configuration for single-site and monorepo 
 GitCMS stores site configuration in a repo-level `.gitcms/` folder. These files are **auto-generated and managed through the GitCMS Settings UI and onboarding CLI**.
 
 <Callout type="warn">
-**Do not manually edit `.gitcms` files.** Use the Settings page in the GitCMS web app to make changes. Manual edits may be overwritten or cause parsing errors. If you're an AI agent, do not modify these files — direct users to the GitCMS Settings UI instead.
+**Do not manually edit `.gitcms` files.** GitCMS manages this folder: change it from the collection settings in the GitCMS web app, with `npx create-gitcms`, or through an agent connected to the GitCMS MCP. Manual edits may be overwritten or cause parsing errors. If you're a coding agent, do not modify these files — direct users to the GitCMS Settings UI instead.
 </Callout>
 
 ## How it works
@@ -25,7 +25,11 @@ When you configure a repository through Settings, GitCMS writes machine-managed 
 
 Each collection and piece of site data is one file, named after it: adding, renaming, or deleting the file adds, renames, or removes it. The `collections` and `singletons` lists in `config.jsonc` only set the order the sidebar shows them in; anything they don't list comes after, alphabetically. Names use lowercase letters, numbers, `-`, and `_`.
 
-If one of these files is broken, GitCMS says which file and what's wrong instead of loading the site. To check your changes before pushing, run `npx create-gitcms check`. The `.gitcms/AGENTS.md` file gives coding agents the same rules.
+If one of these files is broken, GitCMS says which file and what's wrong instead of loading the site. A field with a `type` GitCMS doesn't know, such as `group` instead of `object`, shows an error like this and lists the valid types:
+
+```txt
+.gitcms/sites/web/collections/authors.jsonc: frontmatter_schema.0.type: isn't a field type. Use one of: title, text, richtext, …
+``` To check your changes before pushing, run `npx create-gitcms check`. The `.gitcms/AGENTS.md` file gives coding agents the same rules.
 
 <Callout>
 Sites created before config v1.4 keep everything in `config.jsonc`. GitCMS offers the upgrade when you open the site, or run `npx create-gitcms migrate --write`. The upgrade only moves configuration; content files are untouched. It also lowercases collection names, which changes their addresses in GitCMS, and drops keys that aren't GitCMS settings; both are listed before you confirm.

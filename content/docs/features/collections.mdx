@@ -18,7 +18,7 @@ src/content/blog/          ← collection "blog"
 
 ## Managing collections
 
-Collections are configured through the **Settings** page in the GitCMS web app. You can add, edit, and remove collections and their fields entirely through the UI. The configuration is saved into your repository's `.gitcms/` folder — you don't need to edit it manually.
+Collections are configured through the **Settings** page in the GitCMS web app. You can add, edit, and remove collections and their fields entirely through the UI. The configuration is saved into your repository's `.gitcms/` folder. GitCMS manages that folder for you, so you don't need to edit it by hand; see [Configuration](/docs/getting-started/configuration).
 
 ### Collection settings
 
@@ -76,7 +76,29 @@ Common patterns by use case:
 
 ## Field types
 
-Fields define the frontmatter schema for a collection. Each field has a name, type, and optional validation/display options. GitCMS supports the following field types:
+Fields define the frontmatter schema for a collection. Each field has a name, type, and optional validation/display options. GitCMS supports the following field types.
+
+The settings page shows each type by its label. In the configuration, the `type` is the lowercase value in the second column, and it's the value you'll see in error messages:
+
+| In the editor | `type` in the configuration |
+|---------------|-----------------------------|
+| Title | `title` |
+| Text | `text` |
+| Rich Text | `richtext` |
+| Boolean | `boolean` |
+| Number | `number` |
+| Date/Time | `datetime` |
+| Select | `select` |
+| Multi Select | `multiselect` |
+| URL | `url` |
+| Email | `email` |
+| Slug | `slug` |
+| Image | `image` |
+| File | `file` |
+| Group | `object` |
+| List | `list` |
+
+A group's type is `object`, not `group`. A `type` that isn't in this list stops the collection from loading, and the error names the file and field.
 
 ![Frontmatter fields rendered in the editor — title, description, date, image, authors, and tags](/images/docs/screenshots/fields-in-editor.webp)
 
@@ -193,9 +215,47 @@ An image picker that integrates with the media library. Users can upload a new i
 
 The stored value is the file path relative to the repository root.
 
+### File
+
+A file picker for downloads and other non-image files: a PDF, a GPX route, a spreadsheet. It opens the [media library](/docs/features/media-management) filtered to the file types you allow, and users can upload a new file or choose an existing one.
+
+| Option | Description |
+|--------|-------------|
+| `extensions` | Allowed file extensions, such as `["gpx", "kml"]`. Leave it out to allow any file |
+
+```json
+{ "name": "route", "type": "file", "extensions": ["gpx"] }
+```
+
+Extensions are case-insensitive. Type them with or without the leading dot (`GPX`, `.gpx`, and `gpx` are the same); GitCMS stores them lowercase without the dot. In settings, enter them in **Allowed extensions**, separated by commas.
+
+The stored value is the file's path in the format set by [How links should look](/docs/features/media-management#how-links-should-look), such as `/files/route.gpx`:
+
+```yaml
+route: /files/route.gpx
+```
+
+The picker only accepts uploads with an allowed extension, and the editor flags a path that has a different one. A field holds one file. For several, use a [List](#list) whose items contain a File field:
+
+```json
+{
+  "name": "routes",
+  "type": "list",
+  "fields": [{ "name": "track", "type": "file", "extensions": ["gpx"] }]
+}
+```
+
+```yaml
+routes:
+  - track: /files/morning-loop.gpx
+  - track: /files/ridge-trail.gpx
+```
+
+AI agents see a file field as a string path, with the allowed extensions in its description.
+
 ### Group
 
-Related fields kept together under one key, like an `seo` object with a title and description. List the fields inside it; groups can hold lists and other groups.
+Related fields kept together under one key, like an `seo` object with a title and description. List the fields inside it; groups can hold lists and other groups. In the configuration, a group's `type` is `object`.
 
 ```yaml
 seo:
@@ -209,7 +269,7 @@ Configs from before v1.4 had a separate JSON field type; upgrading turns each on
 
 ### List
 
-Repeated items, each with the same fields: authors, links, FAQ entries. Editors add, duplicate, reorder, and remove items without touching the file's syntax.
+Repeated items, each with the same fields: authors, links, FAQ entries. In the configuration, the `type` is `list`. Editors add, duplicate, reorder, and remove items without touching the file's syntax.
 
 | Option | Description |
 |--------|-------------|
