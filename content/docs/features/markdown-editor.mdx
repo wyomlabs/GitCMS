@@ -65,7 +65,7 @@ The preview is a quick check, not your site. It shows the HTML without your site
 
 GitCMS never partially loads an `.mdx` file that isn't valid MDX. It opens the whole file as text, with a warning that names the line. Fix the error and save to return to the visual editor.
 
-Agents connected through MCP can write files directly, and those writes are saved as given, without a syntax check. If an agent's edit leaves an entry invalid, the editor shows it as text: keep the edit and fix it there, or undo it.
+Agents connected through MCP get the same check. An agent can't save a change that would make a working `.mdx` entry invalid; GitCMS tells it the line to fix and saves nothing. An entry that is already invalid can still be edited, so it can be fixed in steps. If an AI edit in the editor leaves an entry invalid, it's shown as text: keep the edit and fix it there, or undo it.
 
 In the visual editor, a change that would break the MDX, such as a component that lost its closing tag, isn't saved. GitCMS tells you which line to check. The usual fixes:
 
