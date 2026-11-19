@@ -96,6 +96,17 @@ Eleventy is flexible about content location. It processes any Markdown files it 
 - Eleventy uses `tags` in front matter for its own collection system. Make sure your GitCMS multiselect field matches what your templates expect.
 - The input directory depends on your Eleventy config — adjust content paths accordingly in Settings.
 
+## Docusaurus
+
+Docusaurus compiles both `.md` and `.mdx` files as MDX, so GitCMS edits both as MDX on a Docusaurus site.
+
+### Key notes
+
+- Docs usually live in `docs/` and blog posts in `blog/`. Add each as a collection.
+- HTML comments (`<!-- … -->`), heading IDs (`## Title {#id}`) and `:::tip` admonitions work as they do in Docusaurus 3, and are kept as written. See [Which entries are MDX](/docs/features/markdown-editor/#which-entries-are-mdx).
+- If an entry should be compiled as plain Markdown, add `format: md` to its frontmatter. GitCMS follows it too.
+- Media goes in `static/` (for example `static/img`), which Docusaurus serves from the site root.
+
 ## Other frameworks
 
 GitCMS works with any framework that reads Markdown files from disk, including VuePress, Docusaurus, Nuxt.js, MkDocs, and Svelte-based frameworks. The general approach:

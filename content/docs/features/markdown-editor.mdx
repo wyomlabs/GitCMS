@@ -53,24 +53,44 @@ Blocks can also be moved with drag-and-drop, which makes it easier to restructur
 
 ## HTML blocks and MDX
 
+### Which entries are MDX
+
+GitCMS edits an entry as MDX when your site compiles it as MDX, and as Markdown otherwise:
+
+- `.mdx` entries are MDX.
+- `.md` entries on a Docusaurus site are MDX, because Docusaurus compiles every `.md` file as MDX.
+- Other `.md` entries are Markdown.
+
+A `.md` entry's frontmatter can override this: `format: mdx` makes it MDX, and `format: md` keeps it Markdown. This is Docusaurus's own per-file switch. The editor, its save check, and agents connected through MCP all follow the same rule.
+
+On Docusaurus sites, MDX entries can also use the syntax Docusaurus 3 accepts by default (its `mdx1Compat` options), and GitCMS keeps it exactly as written:
+
+- HTML comments, such as `<!-- prettier-ignore -->`. A comment on its own lines opens as an HTML block; a comment inside text stays part of the paragraph.
+- Heading IDs, such as `## Install {#install}`. The heading stays editable, and the ID is kept unchanged when you edit it.
+- Admonitions, such as `:::tip Title` … `:::`. Each one opens as a source block.
+
+Other MDX sites, such as Next.js, Astro, and Fumadocs, don't accept HTML comments or heading IDs, so GitCMS doesn't either.
+
+### HTML in entries
+
 Use `/HTML block` to add a standalone HTML block to any entry. HTML blocks open with **Preview** and **Code** views: edit the markup in Code, then check it in Preview.
 
-**In `.md` entries**, top-level raw HTML, such as a table or a `<div>` wrapper, opens as an HTML block. HTML mixed with text inside an ordinary paragraph stays part of that paragraph. Editing the paragraph can escape its tags, so use a standalone block for HTML you want to edit as source.
+**In Markdown entries**, top-level raw HTML, such as a table or a `<div>` wrapper, opens as an HTML block. HTML mixed with text inside an ordinary paragraph stays part of that paragraph. Editing the paragraph can escape its tags, so use a standalone block for HTML you want to edit as source.
 
-**In `.mdx` entries**, there is no raw HTML: tags are JSX. A block made only of HTML elements, text, and plain attributes (`class="…"`, `style="…"`, `colspan="2"`) opens as an HTML block. A block with expressions (`{…}`, `style={{ … }}`), components, or Markdown inside keeps the component source view. Either way, the source has to stay valid MDX for the entry to save.
+**In MDX entries**, there is no raw HTML: tags are JSX. A block made only of HTML elements, text, and plain attributes (`class="…"`, `style="…"`, `colspan="2"`) opens as an HTML block. A block with expressions (`{…}`, `style={{ … }}`), components, or Markdown inside keeps the component source view. Either way, the source has to stay valid MDX for the entry to save.
 
 The preview is a quick check, not your site. It shows the HTML without your site's styles, components, or scripts, and scripts in your content don't run. Tables get the editor's borders and padding in the preview only; nothing is added to the saved file. Tall content scrolls inside the preview. Edit HTML tables in Code: the controls for adding rows and columns work on Markdown tables.
 
 ### When an MDX entry opens as text
 
-GitCMS never partially loads an `.mdx` file that isn't valid MDX. It opens the whole file as text, with a warning that names the line. Fix the error and save to return to the visual editor.
+GitCMS never partially loads an MDX entry that isn't valid MDX. It opens the whole file as text, with a warning that names the line. Fix the error and save to return to the visual editor.
 
-Agents connected through MCP get the same check. An agent can't save a change that would make a working `.mdx` entry invalid; GitCMS tells it the line to fix and saves nothing. An entry that is already invalid can still be edited, so it can be fixed in steps. If an AI edit in the editor leaves an entry invalid, it's shown as text: keep the edit and fix it there, or undo it.
+Agents connected through MCP get the same check. An agent can't save a change that would make a working MDX entry invalid; GitCMS tells it the line to fix and saves nothing. An entry that is already invalid can still be edited, so it can be fixed in steps. If an AI edit in the editor leaves an entry invalid, it's shown as text: keep the edit and fix it there, or undo it.
 
 In the visual editor, a change that would break the MDX, such as a component that lost its closing tag, isn't saved. GitCMS tells you which line to check. The usual fixes:
 
 - Close void tags: `<br />`, `<img src="…" />`.
-- Write comments as `{/* … */}`, not `<!-- … -->`.
+- Write comments as `{/* … */}`, not `<!-- … -->`. Docusaurus sites accept both.
 - Close every component you open.
 - Escape a literal `{` or `<` in text as `\{` or `&lt;`.
 
