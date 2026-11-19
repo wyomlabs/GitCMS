@@ -3,10 +3,10 @@ title: Configuration
 description: How GitCMS manages site configuration for single-site and monorepo repositories, including i18n settings.
 ---
 
-GitCMS stores site configuration in a repo-level `.gitcms/` folder. These files are **auto-generated and managed through the GitCMS Settings UI and onboarding CLI**.
+GitCMS stores site configuration in a repo-level `.gitcms/` folder. These files are **auto-generated and managed through the GitCMS Settings UI and onboarding CLI**, except a site's own component definitions, which you or your coding agent write (see [Your own components](#your-own-components)).
 
 <Callout type="warn">
-**Do not manually edit `.gitcms` files.** GitCMS manages this folder: change it from the collection settings in the GitCMS web app, with `npx create-gitcms`, or through an agent connected to the GitCMS MCP. Manual edits may be overwritten or cause parsing errors. If you're a coding agent, do not modify these files — direct users to the GitCMS Settings UI instead.
+**Do not manually edit `.gitcms` files, other than your site's own component definitions.** GitCMS manages this folder: change it from the collection settings in the GitCMS web app, with `npx create-gitcms`, or through an agent connected to the GitCMS MCP. Manual edits may be overwritten or cause parsing errors. If you're a coding agent, do not modify these files — direct users to the GitCMS Settings UI instead — unless you were asked to define a component in `components/<Name>.jsonc`.
 </Callout>
 
 ## How it works
@@ -21,6 +21,7 @@ When you configure a repository through Settings, GitCMS writes machine-managed 
 | **Site settings** | `.gitcms/sites/<site_key>/config.jsonc` |
 | **One collection** | `.gitcms/sites/<site_key>/collections/<name>.jsonc` |
 | **One piece of site data** | `.gitcms/sites/<site_key>/singletons/<name>.jsonc` |
+| **One of the site's own components** | `.gitcms/sites/<site_key>/components/<Name>.jsonc` |
 | **Content instructions** | `<site-root>/CONTENT.md` |
 
 Each collection and piece of site data is one file, named after it: adding, renaming, or deleting the file adds, renames, or removes it. The `collections` and `singletons` lists in `config.jsonc` only set the order the sidebar shows them in; anything they don't list comes after, alphabetically. Names use lowercase letters, numbers, `-`, and `_`.
@@ -47,6 +48,10 @@ This speed-run shows the settings surface you will use for site and collection c
   Your browser does not support the site settings walkthrough video.
 </video>
 
+## Your own components
+
+A component definition, `.gitcms/sites/<site_key>/components/<Name>.jsonc`, is the exception to the warning above. Write it by hand, or have a coding agent write it from the component's source; its format is documented in the site's `.gitcms/AGENTS.md`. Settings never writes these files: a settings save leaves them as they are, and **Configure → Components** only lists them. It also copies a prompt for your agent, and shows the exact error for a definition that doesn't validate. Run `npx create-gitcms check` before you push.
+
 ## Site settings
 
 These are the top-level settings managed through the Settings UI:
@@ -59,6 +64,7 @@ These are the top-level settings managed through the Settings UI:
 | **Framework** | Your static site generator — GitCMS auto-detects this from your repo and uses it to suggest sensible defaults |
 | **Default branch** | The branch GitCMS treats as the production branch (auto-detected from GitHub) |
 | **Frontmatter format** | Format for frontmatter in content files — `yaml` (default), `toml`, or `json` |
+| **Components** | The docs frameworks whose components editors change in place: Fumadocs, Starlight, and GitHub alerts (`> [!NOTE]` blockquotes). GitCMS marks the ones your dependencies point to as **Detected**. **Configure → Components** also lists the components your site defines in `components/<Name>.jsonc`, with the exact error for any definition that doesn't validate, and copies a prompt that has your coding agent add one |
 | **Publishing mode** | **Review before publish** (`editorial_workflow`, default) keeps in-progress work off the live site and enables the **content board** (Ideas → Draft → Review → Published). **Direct publish** (`direct_publish`) saves every edit to your site’s **default branch** |
 | **Locales** | Supported locale list for this site (for example `en`, `fr`, `de`) |
 | **Default locale** | Locale used when no locale is explicitly selected |
