@@ -58,12 +58,17 @@ Blocks can also be moved with drag-and-drop, which makes it easier to restructur
 GitCMS edits an entry as MDX when your site compiles it as MDX, and as Markdown otherwise:
 
 - `.mdx` entries are MDX.
-- `.md` entries on a Docusaurus site are MDX, because Docusaurus compiles every `.md` file as MDX.
+- `.md` entries on a Docusaurus site are MDX, because Docusaurus compiles every `.md` file as MDX by default. If your site config sets `markdown.format: 'detect'`, it doesn't: add `format: md` to the frontmatter of your plain Markdown files.
 - Other `.md` entries are Markdown.
 
-A `.md` entry's frontmatter can override this: `format: mdx` makes it MDX, and `format: md` keeps it Markdown. This is Docusaurus's own per-file switch. The editor, its save check, and agents connected through MCP all follow the same rule.
+An entry's frontmatter can override this with `format`:
 
-On Docusaurus sites, MDX entries can also use the syntax Docusaurus 3 accepts by default (its `mdx1Compat` options), and GitCMS keeps it exactly as written:
+- On Docusaurus, `format` is the site's own per-file switch, and GitCMS follows it as Docusaurus does, before the file extension. `format: md` makes an entry Markdown, even in an `.mdx` file. `format: mdx` makes it MDX. `format: detect` uses the extension, so a `.md` entry is Markdown.
+- On other sites, `format: mdx` only changes how GitCMS reads the file; your site's build ignores it. Use it only when your site compiles that file as MDX. `.mdx` entries stay MDX whatever `format` says.
+
+The editor, its save check, and agents connected through MCP all follow the same rule.
+
+On Docusaurus sites, MDX entries can also use the syntax Docusaurus 3 accepts through its `markdown.mdx1Compat` options, and GitCMS keeps it exactly as written. Comments and heading IDs depend on those options, which are on by default in Docusaurus 3. GitCMS doesn't read your site config, so it accepts them even if you turned them off, and your build would then reject them.
 
 - HTML comments, such as `<!-- prettier-ignore -->`. A comment on its own lines opens as an HTML block; a comment inside text stays part of the paragraph.
 - Heading IDs, such as `## Install {#install}`. The heading stays editable, and the ID is kept unchanged when you edit it.
