@@ -51,6 +51,33 @@ Use `/` to open slash commands and insert blocks without remembering Markdown sy
 
 Blocks can also be moved with drag-and-drop, which makes it easier to restructure long content without cutting and pasting raw Markdown.
 
+## HTML blocks and MDX
+
+Use `/HTML block` to add a standalone HTML block to any entry. HTML blocks open with **Preview** and **Code** views: edit the markup in Code, then check it in Preview.
+
+**In `.md` entries**, top-level raw HTML, such as a table or a `<div>` wrapper, opens as an HTML block. HTML mixed with text inside an ordinary paragraph stays part of that paragraph. Editing the paragraph can escape its tags, so use a standalone block for HTML you want to edit as source.
+
+**In `.mdx` entries**, there is no raw HTML: tags are JSX. A block made only of HTML elements, text, and plain attributes (`class="…"`, `style="…"`, `colspan="2"`) opens as an HTML block. A block with expressions (`{…}`, `style={{ … }}`), components, or Markdown inside keeps the component source view. Either way, the source has to stay valid MDX for the entry to save.
+
+The preview is a quick check, not your site. It shows the HTML without your site's styles, components, or scripts, and scripts in your content don't run. Tables get the editor's borders and padding in the preview only; nothing is added to the saved file. Tall content scrolls inside the preview. Edit HTML tables in Code: the controls for adding rows and columns work on Markdown tables.
+
+### When an MDX entry opens as text
+
+GitCMS never partially loads an `.mdx` file that isn't valid MDX. It opens the whole file as text, with a warning that names the line. Fix the error and save to return to the visual editor.
+
+Agents connected through MCP get the same check. An agent can't save a change that would make a working `.mdx` entry invalid; GitCMS tells it the line to fix and saves nothing. An entry that is already invalid can still be edited, so it can be fixed in steps. If an AI edit in the editor leaves an entry invalid, it's shown as text: keep the edit and fix it there, or undo it.
+
+In the visual editor, a change that would break the MDX, such as a component that lost its closing tag, isn't saved. GitCMS tells you which line to check. The usual fixes:
+
+- Close void tags: `<br />`, `<img src="…" />`.
+- Write comments as `{/* … */}`, not `<!-- … -->`.
+- Close every component you open.
+- Escape a literal `{` or `<` in text as `\{` or `&lt;`.
+
+### What a save changes
+
+Changing only an entry's fields leaves its body unchanged. When you edit the body, untouched blocks keep their original source formatting; edited Markdown blocks may be reformatted. When you change a field, GitCMS writes the frontmatter block again from its values: YAML comments are removed, and quoting and list style can change. The values themselves stay the same.
+
 ## Frontmatter without YAML editing
 
 Above the document body, GitCMS renders your frontmatter as a structured editor instead of forcing you to edit raw YAML, TOML, or JSON by hand.
