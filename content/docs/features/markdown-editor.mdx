@@ -1,6 +1,6 @@
 ---
 title: Markdown Editor
-description: How the GitCMS editor works — Notion-like editing, slash commands, frontmatter forms, media, and beta custom SSG component support.
+description: How the GitCMS editor works — Notion-like editing, slash commands, docs framework components, frontmatter forms, media, and beta custom SSG component support.
 ---
 
 GitCMS gives you a visual Markdown editor that feels closer to a modern doc tool than a raw text area, while still saving back to real files in your repository.
@@ -51,6 +51,47 @@ Use `/` to open slash commands and insert blocks without remembering Markdown sy
 
 Blocks can also be moved with drag-and-drop, which makes it easier to restructure long content without cutting and pasting raw Markdown.
 
+## Docs framework components
+
+Docs frameworks add their own building blocks to Markdown: callouts, tabs, steps. GitCMS edits them as visual blocks, so writers don't touch the syntax. Content stays in your files in the framework's own syntax, and a block you didn't edit is saved byte-identical.
+
+### Choose your framework
+
+Open **Configure → Components** and pick one:
+
+| Choice | Blocks |
+| --- | --- |
+| **Fumadocs** | Callout, Tabs, Steps, Cards, Accordions, File Tree and more |
+| **Starlight** | Asides (`:::note`), Tabs, Steps, Cards, File Tree and more |
+| **GitHub alerts** | `> [!NOTE]` style callouts, for GitHub-rendered docs, VitePress and Nextra |
+| **None** | No docs components |
+
+GitCMS detects the framework from your repository and marks it **Detected**. **Docusaurus** needs no choice: its admonitions and Tabs are built in.
+
+### What you can edit
+
+- **Callouts** (Fumadocs `<Callout>`, GitHub alerts, and `:::note` containers in Docusaurus and Starlight) open as a callout block with a type picker, an editable title, and a body. Changing the type renames it in the file, and an edited callout keeps the form it was written in.
+- **Tabs** (Fumadocs, Starlight and Docusaurus `<Tabs>` / `<TabItem>`) open as visual tabs. You can rename, add, remove and reorder tabs. Renaming a Docusaurus tab keeps its `value`, so `defaultValue` and `groupId` still match.
+- **Steps** (Fumadocs `<Steps>` and Starlight `<Steps>`) show a **Step** chip with **Add step below**, **Move up**, **Move down** and **Remove step**. Content you add after the last step stays inside a step.
+- **Comments** (`<!-- -->`, or `{/* */}` in MDX) are shown as a Comment row you can edit. Text that would end the comment (`-->` or `*/`) is refused.
+- **Imports** are shown read-only under the frontmatter. GitCMS adds the import a component needs when you insert it.
+
+Type `/` and look under **Components** to insert one. The menu lists what your site has: the framework you chose, Docusaurus built-ins, and your [custom components](#custom-components). **Comment** is in the menu too. Components arrive as a valid empty block in the syntax the page already uses.
+
+### Custom components
+
+**Configure → Components** also lists the components your pages already use, with the fields GitCMS suggests from how each one is written: text, number, toggle, image or a choice of values. Owners and admins can open **Review** to adjust labels and types, then choose **Make editable**. The button is enabled once every page that uses the component still opens and saves unchanged.
+
+A component written as code (`plans={…}`) stays as code and can be hidden from the list.
+
+When an entry has a component GitCMS doesn't know, owners and admins also see **Make editable** under it in the editor. Writers see nothing new.
+
+Each definition is saved in your repository at `.gitcms/sites/<site_key>/components/<Tag>.jsonc`. Edit it from **Configure → Components**, as with the rest of `.gitcms`.
+
+### Docusaurus `.md` files
+
+Docusaurus compiles `.md` files as MDX by default, so GitCMS does too. If your `docusaurus.config` sets `markdown: { format: 'detect' }` or `'md'`, GitCMS reads it automatically and opens `.md` files as plain Markdown. A page's own `format:` frontmatter (`mdx`, `md` or `detect`) takes precedence over the site setting. Heading anchors (`{#id}`), HTML comments and `:::` admonitions open visually on Docusaurus sites.
+
 ## HTML blocks and MDX
 
 Use `/HTML block` to add a standalone HTML block to any entry. HTML blocks open with **Preview** and **Code** views: edit the markup in Code, then check it in Preview.
@@ -70,7 +111,7 @@ Agents connected through MCP get the same check. An agent can't save a change th
 In the visual editor, a change that would break the MDX, such as a component that lost its closing tag, isn't saved. GitCMS tells you which line to check. The usual fixes:
 
 - Close void tags: `<br />`, `<img src="…" />`.
-- Write comments as `{/* … */}`, not `<!-- … -->`.
+- Write comments as `{/* … */}`, not `<!-- … -->` (Docusaurus sites accept both).
 - Close every component you open.
 - Escape a literal `{` or `<` in text as `\{` or `&lt;`.
 
