@@ -36,6 +36,11 @@
     "default_locale": "en",
     "prefix_default_locale": false
   },
+  "components": {
+    "presets": [
+      "fumadocs"
+    ]
+  },
   "collections": [
     "docs",
     "comparisons",
