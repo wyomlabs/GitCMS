@@ -1,0 +1,91 @@
+---
+title: Search Data in the Editor
+description: See how each entry does in Google and Bing, whether its page is indexed, and what to improve next, from the Page tab, collection lists, and the SEO page.
+---
+
+Once a site is linked to [Google Search Console or Bing Webmaster Tools](/docs/features/search-connections), GitCMS shows how its pages do in search in the places where you already work. A site without search data just doesn't show any of this: no errors, no empty tabs.
+
+All of it depends on GitCMS knowing which live page an entry belongs to. Usually it works that out on its own.
+
+## Where entries are published
+
+GitCMS compares each collection's entries with your live [sitemap](/docs/features/sitemaps-internal-links) and finds the path they're published at, like `/blog/{slug}`. Nothing to set up: once your site has its Website URL and a sitemap, entries get their live links and search data.
+
+It only uses a path when the evidence is clear: most of the collection's entries are found in the sitemap, each on its own page, and no other collection's pages share those URLs. When it can't tell, the entry says so instead of guessing.
+
+To see or pin the path, open **Settings** and edit a collection. An empty **Entry URL** shows what GitCMS found, like *Inferred from your sitemap:* `/blog/{slug}/` *· 41 of 43 entries found*. Select **Keep** to save it, or type your own:
+
+- `{slug}` is the last part of the entry's path: `2024/launch.md` becomes `launch`.
+- `{path}` is the entry's whole path inside the collection, without the extension: `2024/launch.md` becomes `2024/launch`.
+
+A path you set always wins. Set one when your sitemap is missing or incomplete, or when your URLs don't follow your files.
+
+The path powers two things: the **live link** from an entry to its page, and matching search data to entries.
+
+On multilingual sites, don't put the locale in the route. GitCMS adds the locale prefix your site already uses.
+
+## The Page tab
+
+Open an entry and choose the **Page** tab in the side panel. It's everything about the entry's live page. Below a preview of how it looks as a search result, **In search** shows:
+
+- **Index status.** Whether the search engine has the page in its index, and when it last crawled it.
+- **Four numbers.** Clicks, impressions, click-through rate, and average position, each with its change from the previous period.
+- **What to improve.** Specific suggestions for this entry, each with the numbers behind it.
+- **Searches it shows for.** The searches that brought people to this page, with clicks.
+
+Below that, **Checks** list things to fix in the entry itself, such as a missing description.
+
+### Index status
+
+On Google, the status line says **Indexed**, or **Not indexed** with Google's own reason, like "Crawled - currently not indexed". When something specific explains it, a note says so: blocked by noindex, blocked by robots.txt, the page returned a 404, or Google picked a different canonical URL. A link opens the page in Search Console.
+
+On Bing, the line reads **Crawled by Bing** with the last crawl date. Bing reports that it crawled a page, not whether it indexed it, and GitCMS never says "indexed" on Bing's behalf.
+
+Both are what the search engine saw at its **last crawl**, not a live test. A page you fixed this morning can still show last week's state.
+
+### Google or Bing
+
+When a site is linked to both, a **Google | Bing** switch appears above the section. GitCMS starts on Google. Each source shows its own numbers, and GitCMS never adds or blends them, since they describe different search engines. A site with one source shows no switch.
+
+## Live link
+
+Next to an entry's title, the green globe opens its live page. With search data, the page's **clicks and their trend** appear beside it. Selecting it opens the Page tab. The chip reads Google, or Bing when that's the only source.
+
+## Collection lists
+
+A collection's list gets **Clicks** and **Trend** columns right after Name. They sort like any column, so one click on **Clicks** or **Trend** shows the pages losing the most traffic. Entries with no searches show `—`.
+
+The columns only appear when the site has search data and the collection has an Entry URL. With both sources linked, a **Google | Bing** switch sits beside **View**.
+
+## The SEO page
+
+**SEO** in a site's sidebar is a queue of what to work on next, ranked, each item with its numbers. Pick a period (last 28 days, 3 months, or 12 months) and a kind:
+
+| Kind | What it finds |
+|------|---------------|
+| **Almost on page one** | Searches where your best entry ranks 4–20. Strengthening it can bring it onto the first page. |
+| **Low click-through** | Entries shown often but clicked less than usual for their position. A clearer title and description can help. |
+| **Losing clicks** | Entries that lost at least 30% of their clicks since the previous period. They may need a refresh. |
+| **Competing entries** | Searches where several entries compete. Combine or differentiate them so one ranks. |
+| **Missing topics** | Searches that show your site but that nothing ranks well for. Ideas for new entries. |
+| **Questions** | Questions people search for. A direct answer helps in results and in AI answers. |
+
+On sites with **Review before publish**, editors can select **Add to Ideas** on an item. It goes onto the [content board](/docs/features/editorial-workflow) as an idea with the evidence in its notes, ready for someone to pick up.
+
+## How fresh is the data?
+
+- **Google data ends about three days ago**, when Google finalizes it. Dates are Pacific time.
+- **Rare searches are hidden.** Both providers leave out very rare searches, so the searches listed add up to less than the totals.
+- **Bing reports weekly.** Its period reads **Last 4 weeks**, counts whole weeks, and the newest days may be missing. Bing has no country or device breakdown.
+- **Numbers are cached for up to 6 hours**, and index status for a day.
+- **Google's page inspection allows 2,000 checks per property per day.** The Page tab checks one entry at a time, so it's rare to hit it.
+
+## Troubleshooting
+
+**The Page tab has no "In search" section.** The site isn't linked to a property yet. A workspace owner or admin can link it under **Workspace settings → SEO**.
+
+**The Clicks and Trend columns don't appear.** The site has no search data, or GitCMS couldn't work out where the collection's entries are published. Check the collection's **Entry URL** in Settings: it says why nothing was found. Set the path yourself if your sitemap doesn't list these pages.
+
+**An entry has no numbers.** It may be unpublished, new, or not getting searches in the period. Check its index status on the Page tab first: a page that isn't indexed needs its indexing fixed, not its wording.
+
+**A message asks to reconnect.** The provider stopped accepting GitCMS's access. A workspace owner or admin can reconnect it under **Workspace settings → SEO**.

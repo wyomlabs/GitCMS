@@ -1,0 +1,84 @@
+---
+title: Search Tools for Agents
+description: The MCP tools that let ChatGPT, Claude, and coding agents read Google and Bing search data, find what to improve, and check whether a page is indexed.
+---
+
+When a site is linked to [Google Search Console or Bing Webmaster Tools](/docs/features/search-connections), your AI client can read the same search data editors see, and use it to decide what to write or fix. The tools are read-only: they never change content or anything in a search account. Changes still go through the usual [task-first workflow](/docs/ai-mcp/task-first-workflows).
+
+Results speak in **entries**, like `/blog/launch.md`, so an agent can open a result with `read` right away. For that to work, GitCMS has to know [where each collection's entries are published](/docs/features/search-data#where-entries-are-published). It works that out from your sitemap, or uses the Entry URL you set. The site guide tells the agent each collection's path, whether it was inferred, and which collections have none.
+
+You don't need to name tools in a prompt. "What should I write next for the blog?" or "Which posts are losing traffic?" is enough. The site guide (`get_site_context`) tells the agent whether search data is connected and which sources the site has.
+
+## The tools
+
+| Tool | Use it to |
+|------|-----------|
+| `find_search_opportunities` | Get a ranked list of what to work on, with the numbers behind each item and a suggested action. |
+| `list_page_performance` | Compare every entry of a collection: a content inventory, sortable by clicks, impressions, decline, or growth. |
+| `get_page_performance` | See how one entry does: its numbers against the previous period, the searches it shows for, and what to improve on it. |
+| `get_page_index_status` | Check whether a search engine has one entry's page indexed and, if not, why. |
+| `get_search_performance` | See how the whole site or one collection does, grouped by search, date, country, or device. |
+
+### Finding opportunities
+
+`find_search_opportunities` takes a `kind`:
+
+- `striking_distance`: searches where the site's best entry ranks 4–20. Expand it.
+- `low_ctr`: entries shown often but clicked less than usual for their position. Rewrite the title and description.
+- `declining`: entries losing clicks. Refresh them.
+- `cannibalization`: several entries competing for one search. Consolidate or differentiate them.
+- `uncovered_queries`: searches nothing ranks well for. Create an entry (on sites with review before publish, as a content task).
+- `questions`: question searches. Add a direct answer section, or a new entry.
+
+Each item carries its evidence and a suggested action, so the agent can judge whether it's worth acting on.
+
+### Checking index status
+
+Check `get_page_index_status` before rewriting an entry that gets no searches. A page that isn't indexed needs its indexing fixed, not its wording.
+
+On Google, it returns the verdict and its reason (such as "Crawled - currently not indexed"), the last crawl, whether noindex or robots.txt blocks the page, how the last fetch went, and whether Google chose a different canonical URL. On Bing, it only reports crawling: a state of `unknown` with a last-crawled date means Bing crawled the page, never that it indexed it.
+
+The result is what the engine saw at its last crawl, not a live test. Use it for specific entries, not for every entry on a site: Google allows 2,000 inspections per property per day.
+
+### Grouping and filtering
+
+`get_search_performance` groups by `query` (the default), `date`, `country`, or `device`, and can filter searches with `queryContains` or an RE2 `queryRegex`. For one entry use `get_page_performance` instead.
+
+## Choosing a source
+
+Every tool takes an optional `source`: `google` or `bing`. Without one, it reads Google when the site has it connected, otherwise Bing. Results always name their source.
+
+Sources describe different search engines, so an agent should compare entries within one source and never add numbers across them.
+
+## Periods and limits
+
+Tools take a `period` (`7d`, `28d` by default, `3m`, `6m`, `12m`, or `16m`) that ends at the newest final data.
+
+- **Data is about three days behind.** Google finalizes it then. Dates are Pacific time.
+- **Rare searches are left out**, so searches add up to less than the totals. Results say how many clicks came from searches that aren't listed.
+- **Bing is weekly.** A period counts the weeks that end inside it, and the newest days may be missing. Bing has no country or device breakdown, and `groupBy: country` or `device` on Bing returns an error that points to Google.
+- **Cached for up to 6 hours**; index status for a day.
+- A collection's list returns entries that had searches in the period, up to `limit` (default 50, max 200).
+
+## Example prompts
+
+```text
+Which posts are losing the most traffic? Check whether any of them
+dropped out of Google's index before suggesting rewrites.
+```
+
+```text
+Find striking-distance searches for the blog and create a content task
+for the best one. Use the numbers as the brief.
+```
+
+```text
+Two of my guides seem to compete for "astro cms". Check whether
+they're cannibalizing each other and suggest which to keep.
+```
+
+## Access
+
+Reading search data uses the same site access as the rest of MCP: the site has to be licensed, and the agent only sees sites its user can access. Connecting search accounts is a workspace owner or admin job, done in the web app.
+
+See [Using AI with GitCMS](/docs/ai-mcp/ai-overview) for the core workflow tools.
