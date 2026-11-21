@@ -21,10 +21,10 @@ const {
 } = Astro.props
 
 const tools = [
-  { name: 'search_entries', detail: '“pricing” in Pages, Services · 6 entries' },
-  { name: 'update_entry', detail: 'pages/pricing.mdx · 3 fields' },
-  { name: 'update_entry', detail: 'services/*.mdx · 5 entries' },
-  { name: 'submit_for_review', detail: 'Content task #57' },
+  { name: 'bash', detail: 'grep -rl “pricing” content · 6 entries' },
+  { name: 'edit', detail: 'pages/pricing.mdx · 3 fields' },
+  { name: 'edit', detail: 'services/*.mdx · 5 entries' },
+  { name: 'gitcms', detail: 'task submit · Content task #57' },
 ] as const
 // Step the message is sent; everything in the thread follows it. Tool calls
 // run one per step, so `data-ms` is the pace of the agent's work.
