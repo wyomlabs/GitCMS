@@ -176,7 +176,16 @@ Our pricing page gets no searches. Check whether it is indexed
 before changing any wording.
 ```
 
+```text
+Which blog posts haven't been updated in the last 6 months and are losing
+search clicks? List the top 5 with their last edit dates.
+```
+
 Ask for one source at a time (`Google` or `Bing`). GitCMS never adds numbers across them.
+
+## Team skills
+
+For repeatable workflows (such as release notes, SEO refreshes, or comparison pages), commit a `SKILL.md` file in `.gitcms/sites/<site_key>/skills/<skill-name>/SKILL.md` with `name` and `description` frontmatter. GitCMS indexes those skills in `GITCMS.md` and exposes them read-only under `/sites/<site>/skills/` so agents read the right playbook before starting.
 
 ## Locale-aware prompting
 

@@ -65,6 +65,7 @@ The model gets one filesystem per connection, and it works with your site the wa
 ```text
 /sites/example.com/GITCMS.md                        a generated guide to the site (read-only)
 /sites/example.com/CONTENT.md                       your editorial rules
+/sites/example.com/skills/seo-refresh/SKILL.md      team skills from .gitcms/sites/<site>/skills/ (read-only, when defined)
 /sites/example.com/content/posts/hello-world.mdx    an entry: frontmatter, then the body
 /sites/example.com/content/docs/fr/setup.md         translated collections start with the locale
 /sites/example.com/content/posts/.schema.json       the collection's fields (read-only)
@@ -77,7 +78,8 @@ The model gets one filesystem per connection, and it works with your site the wa
 - **Entries** are the real Markdown files. GitCMS still checks their fields before saving and fills in managed fields like created and updated dates.
 - **Site data** such as navigation, footers, or theme settings shows as JSON. GitCMS writes changed values back into the original JSON, YAML, or TOML file and keeps its comments and formatting. Keys outside your configured site data never appear.
 - **Field definitions** show as JSON Schema files. They can't be changed through MCP; edit them in **Configure**.
-- **`CONTENT.md`** is part of the site folder, and `get_site_context` returns it with the guide. Site managers can ask the model to update it; changes apply site-wide right away, outside any content task. Other editors can still read the rules.
+- **`CONTENT.md`** is part of the site folder, and `open_site` returns it with the guide. Site managers can ask the model to update it; changes apply site-wide right away, outside any content task. Other editors can still read the rules.
+- **Team skills (`skills/`)** are optional, repository-backed playbooks stored in `.gitcms/sites/<site_key>/skills/<skill-name>/SKILL.md` (with YAML frontmatter `name` and `description`, plus any sibling reference files). When present, GitCMS lists them in `GITCMS.md` and exposes them read-only under `/sites/<site>/skills/` so agents read the matching `SKILL.md` before starting.
 - **Tasks** exist only on sites that use Review before publish. Inside a task's `content/` folder the model reads and writes the task's draft; the same path under the site's `content/` folder is the live site. Direct publish sites have no `tasks/` folder.
 
 ## The six tools
@@ -86,12 +88,12 @@ The model gets six tools. You do not need to call them yourself, but it helps to
 
 | Tool | What it does |
 | --- | --- |
-| `get_site_context` | Loads a site's guide: its files, publishing mode, search sources, and your writing instructions |
-| `bash` | Reads the workspace with a read-only shell: `ls`, `cat`, `grep`, `find`, `jq`, and pipes |
+| `open_site` | Loads a site's guide: its files, publishing mode, search sources, team skills, and your writing instructions |
+| `bash` | Reads the workspace with a read-only shell: `ls`, `cat`, `grep`, `find`, `jq`, pipes, and read-only `gitcms` subcommands |
 | `read` | Opens one file in full, with the revision that `write` needs to replace it |
 | `write` | Creates a file or replaces its full content; a replacement needs the revision returned by `read`, so a stale draft cannot silently overwrite newer work |
 | `edit` | Makes one or more precise `oldText` → `newText` edits to an existing file, including frontmatter and site data |
-| `gitcms` | Runs GitCMS's own commands: content tasks, checks, the sitemap, media, search data, and moving or copying entries |
+| `gitcms` | Runs GitCMS's own commands: content tasks, history, checks, the sitemap, media, search data, and moving or copying entries |
 
 ### Reading with bash
 
@@ -103,18 +105,19 @@ grep -rl "pricing" /sites/example.com/content/posts
 jq . /sites/example.com/content/navigation.json
 ```
 
-It has no network access, and nothing you change in it is saved; edits go through `write` and `edit`. A single command reads one site, loads at most 20 files, lists at most 50 folders, and runs for at most 20 seconds. When GitCMS has to stop a command (a limit, a second site, a path it won't serve), the output ends with a `[Stopped by GitCMS: …]` line saying why, and what was printed before it is kept.
+It has no network access, and nothing you change in it is saved; edits go through `write` and `edit`. A single command reads one site, searches a site's `content/` folder whole from a cached snapshot (skipping individual files over 1 MiB with a notice, and falling back to folder listings on sites over 16 MiB), loads at most 20 non-content files, lists at most 50 folders, and runs for at most 20 seconds. When GitCMS has to stop a command (a limit, a second site, a path it won't serve), the output ends with a `[Stopped by GitCMS: …]` line saying why, and what was printed before it is kept.
 
 ### Changing files with write and edit
 
 `edit` is the default for changing an existing entry or site data. `write` creates a file or replaces most of one. Before it creates an entry, the model reads the collection's `.schema.json`. On Review before publish sites, both write inside a task's `content/` folder; a write outside a task is rejected. On Direct publish sites, every write commits to the publishing branch.
 
-### Tasks, checks, and search with gitcms
+### Tasks, history, checks, and search with gitcms
 
 `gitcms` takes the text you would type after the command, such as `task submit /sites/example.com/tasks/12-launch-post/`. Some subcommands only read, and those also run inside `bash`, so their output can be piped to `grep` or `jq`:
 
-- `task list`, `task show`, `task diff`: find a content task, see its stage and brief, and see what its draft changes
-- `check`: look for search and sharing problems in an entry (inside a task, the draft preview too)
+- `task list`, `task show`, `task diff`: find content tasks with their updated/published dates (`--window 30d|90d|all`), see a task's stage and brief, and see what its draft changes
+- `history`: see when a site, collection, or entry changed (`--since`, `--limit`), or list each entry's last-updated date across a collection with `--last-updated`
+- `check`: look for search, sharing, alt-text, and broken-link problems on an entry (inside a task, on the draft preview too) — used for new entries, metadata/link/image edits, renames/deletes, and SEO refreshes
 - `sitemap`: list the pages on the live website, each with its entry when it has one
 - `media list`, `media url`: list images in a media library and preview a media reference
 - `search site`, `search pages`, `search page`, `search opportunities`, and `index`: [search data](#search-data)
@@ -134,7 +137,7 @@ You still do not need to name tools directly. The better pattern is to express i
 
 ### Search data
 
-When the site has Google Search Console or Bing Webmaster Tools connected, the model can ground changes in the searches people actually make. It starts from `gitcms search opportunities` (striking-distance searches, low click-through, declining pages, and more) or `gitcms search pages` to compare a collection's entries, checks one entry with `gitcms search page`, and runs `gitcms index` on an entry that gets no searches to see whether its page is indexed.
+When the site has Google Search Console or Bing Webmaster Tools connected, the model can ground changes in the searches people actually make. It starts from `gitcms search opportunities --kind all` (striking-distance searches, low click-through, declining pages, cannibalization, uncovered queries, and questions in one call) or `gitcms search pages` to compare a collection's entries, checks one entry with `gitcms search page` and `gitcms history`, and runs `gitcms index` on an entry that gets no searches to see whether its page is indexed.
 
 Each command reads one source, chosen with `--source google` or `--source bing`. Google is the default when it is connected. The two sources measure different search engines, so GitCMS never combines their numbers. Bing data is weekly and has no country or device breakdown, and its index status only says whether Bing crawled a page. A source that isn't connected for the site answers with how to connect it. A workspace owner or admin connects them in **Workspace settings → Integrations**.
 
