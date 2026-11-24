@@ -38,7 +38,28 @@ const firstMonthOver = bars.findIndex((bar) => bar.over) + 1
       <ul class="mt-6 grid gap-x-6 gap-y-2.5 text-[14px] text-neutral-300 sm:grid-cols-2">
         {FOUNDING_FEATURES.map((feature) => <li class="flex items-start gap-2"><Check className="mt-0.5 size-4 shrink-0 text-[#DCF986]" />{feature}</li>)}
       </ul>
-      <div class="mt-6 flex items-center justify-between gap-4 rounded-xl border border-white/10 bg-white/[0.04] px-5 py-4">
+      <a href={loginUrl('/')} data-umami-event="bf-cta" data-umami-event-placement="pricing" class="mt-8 inline-flex h-11 items-center gap-2 rounded-xl bg-[#DCF986] px-5 text-[14px] font-semibold text-neutral-950 hover:bg-[#d4f47a]">Get the founding license <ArrowRight className="size-4" /></a>
+      <p class="mt-3 text-[13px] text-neutral-500">Ends in <span class="text-neutral-300"><Countdown /></span></p>
+    </div>
+    <!-- Right column: the plan-versus-license chart, then the agency code under it. -->
+    <div class="grid gap-4">
+      <figure class="rounded-xl border border-white/10 bg-white/[0.04] p-6">
+        <figcaption class="flex items-baseline justify-between gap-4">
+          <span class="text-[13px] text-neutral-400">{team.name} plan, first year</span>
+          <span class="text-[13px] text-neutral-400"><span class="text-[22px] font-semibold tracking-tight text-white">${yearly}</span> vs <span class="font-semibold text-[#DCF986]">${FOUNDING_LICENSE.sitePrice}</span></span>
+        </figcaption>
+        <div class="relative mt-6 h-40" role="img" aria-label={`${team.name} at ${team.priceLabel} costs $${yearly} in a year; the founding license is $${FOUNDING_LICENSE.sitePrice} once.`}>
+          <div class="flex h-full items-end gap-1.5">
+            {bars.map((bar) => <span class:list={['flex-1 rounded-t-sm', bar.over ? 'bg-white/25' : 'bg-white/10']} style={`height: ${bar.height}%`}></span>)}
+          </div>
+          <div class="absolute inset-x-0 border-t-2 border-dashed border-[#DCF986]" style={`bottom: ${licenseLine}%`}>
+            <span class="absolute -top-6 left-0 rounded bg-[#DCF986] px-1.5 py-0.5 text-[11px] font-semibold text-neutral-950">${FOUNDING_LICENSE.sitePrice} once</span>
+          </div>
+        </div>
+        <div class="mt-2 flex justify-between text-[11px] text-neutral-500"><span>Month 1</span><span>Month {MONTHS}</span></div>
+        <p class="mt-5 text-[13px] leading-relaxed text-neutral-400">By month {firstMonthOver}, monthly has cost more. The founding license never does.</p>
+      </figure>
+      <div class="flex items-center justify-between gap-4 rounded-xl border border-white/10 bg-white/[0.04] px-5 py-4">
         <div class="min-w-0 flex-1 text-[14px]">
           <div class="font-semibold text-white">Agency pack: {agency.percentOff}% off {agency.minSites} or more sites</div>
           <div class="mt-1 text-[13px] text-neutral-400">
@@ -47,24 +68,6 @@ const firstMonthOver = bars.findIndex((bar) => bar.over) + 1
         </div>
         <CopyButton text={agency.code} label={agency.code} copiedLabel="Copied" tone="dark" size="sm" event={{ name: 'bf-code-copy', placement: 'pricing' }} class="font-mono" />
       </div>
-      <a href={loginUrl('/')} data-umami-event="bf-cta" data-umami-event-placement="pricing" class="mt-8 inline-flex h-11 items-center gap-2 rounded-xl bg-[#DCF986] px-5 text-[14px] font-semibold text-neutral-950 hover:bg-[#d4f47a]">Get the founding license <ArrowRight className="size-4" /></a>
-      <p class="mt-3 text-[13px] text-neutral-500">Ends in <span class="text-neutral-300"><Countdown /></span></p>
     </div>
-    <figure class="rounded-xl border border-white/10 bg-white/[0.04] p-6">
-      <figcaption class="flex items-baseline justify-between gap-4">
-        <span class="text-[13px] text-neutral-400">{team.name} plan, first year</span>
-        <span class="text-[13px] text-neutral-400"><span class="text-[22px] font-semibold tracking-tight text-white">${yearly}</span> vs <span class="font-semibold text-[#DCF986]">${FOUNDING_LICENSE.sitePrice}</span></span>
-      </figcaption>
-      <div class="relative mt-6 h-40" role="img" aria-label={`${team.name} at ${team.priceLabel} costs $${yearly} in a year; the founding license is $${FOUNDING_LICENSE.sitePrice} once.`}>
-        <div class="flex h-full items-end gap-1.5">
-          {bars.map((bar) => <span class:list={['flex-1 rounded-t-sm', bar.over ? 'bg-white/25' : 'bg-white/10']} style={`height: ${bar.height}%`}></span>)}
-        </div>
-        <div class="absolute inset-x-0 border-t-2 border-dashed border-[#DCF986]" style={`bottom: ${licenseLine}%`}>
-          <span class="absolute -top-6 left-0 rounded bg-[#DCF986] px-1.5 py-0.5 text-[11px] font-semibold text-neutral-950">${FOUNDING_LICENSE.sitePrice} once</span>
-        </div>
-      </div>
-      <div class="mt-2 flex justify-between text-[11px] text-neutral-500"><span>Month 1</span><span>Month {MONTHS}</span></div>
-      <p class="mt-5 text-[13px] leading-relaxed text-neutral-400">By month {firstMonthOver}, monthly has cost more. The founding license never does.</p>
-    </figure>
   </div>
 </div>
