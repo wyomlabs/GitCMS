@@ -1,58 +1,95 @@
 ---
-// Search Console insights for a site: clicks over time, top queries mapped
-// to entries, and an opportunity turned into a content task.
-import { ArrowUpRight, Sparkles } from 'lucide-react'
+// The site's SEO page (the app's `/sites/$site/search`): search
+// opportunities from Google Search Console or Bing Webmaster Tools, grouped by
+// page. The cursor picks two searches and adds them to Ideas; the button
+// itself says what happened.
+import { Check, ChevronDown, Search, TrendingUp } from 'lucide-react'
 import Cursor from './Cursor.astro'
-import { SEARCH_QUERIES } from '@/lib/site-content'
+import { SEO_OPPORTUNITIES, SEO_OPPORTUNITY_FILTERS } from '@/lib/site-content'
 
 interface Props {
   class?: string
 }
 const { class: className = '' } = Astro.props
-const clicks = 'M0 62 C 30 58, 45 64, 70 52 S 120 40, 150 44 S 200 30, 230 28 S 280 18, 320 10'
-const impressions = 'M0 48 C 40 44, 60 50, 90 40 S 150 34, 180 30 S 240 24, 270 18 S 300 14, 320 12'
+
+const problemTone: Record<string, string> = {
+  'Near page one': 'bg-amber-50 text-amber-700',
+  'Few clicks': 'bg-sky-50 text-sky-700',
+  Question: 'bg-violet-50 text-violet-700',
+  'No page': 'bg-neutral-100 text-neutral-600',
+}
+// The searches the cursor ticks, in order, each one step before it shows
+// ticked. The last count stays up through the click on Add (step `addAt`).
+const picks = ['metal roof cost texas', '24 hour roofer austin']
+// A beat to read the table first; the rows themselves are there from the start.
+const firstPick = 2
+const addAt = firstPick + picks.length
+const columns = 'grid grid-cols-[16px_1fr_104px_60px_80px_52px] items-center gap-3'
 ---
-<div data-seq="8" data-ms="1100" data-hold="8:2200" data-final="7" class:list={['relative flex h-full flex-col bg-white text-[12px]', className]}>
+<div data-seq={addAt + 1} data-final={addAt + 1} data-ms="1000" data-hold={`${addAt + 1}:2200`} class:list={['relative flex h-full flex-col bg-white text-[12px]', className]}>
   <div class="flex items-center gap-2 border-b border-neutral-200 px-4 py-2.5">
-    <span class="font-medium text-neutral-900">Search performance</span>
-    <span class="rounded-full bg-neutral-100 px-1.5 py-0.5 text-[10px] text-neutral-500">Google Search Console</span>
-    <span class="ml-auto rounded-md border border-neutral-200 px-1.5 py-0.5 text-[10.5px] text-neutral-500">Last 28 days</span>
-  </div>
-  <div class="grid grid-cols-3 gap-px border-b border-neutral-200 bg-neutral-200">
-    {[['Clicks', '1,284', '+18%'], ['Impressions', '42.6k', '+9%'], ['Avg. position', '8.4', '−1.2']].map(([label, value, delta]) => (
-      <div class="bg-white px-4 py-2">
-        <div class="text-[10.5px] text-neutral-500">{label}</div>
-        <div class="flex items-baseline gap-1.5"><span class="text-[17px] font-semibold tracking-tight">{value}</span><span class="text-[10.5px] text-emerald-600">{delta}</span></div>
-      </div>
-    ))}
-  </div>
-  <svg viewBox="0 0 320 72" class="h-20 w-full shrink-0 px-4 pt-2" preserveAspectRatio="none" aria-hidden="true">
-    <path d={impressions} fill="none" stroke="#c4b5fd" stroke-width="1.5" class="rd-draw" data-at="0" data-fx="fade" style="--len: 400" />
-    <path d={clicks} fill="none" stroke="#7c3aed" stroke-width="2" class="rd-draw" data-at="0" data-fx="fade" style="--len: 400" />
-  </svg>
-  <div class="flex-1 overflow-hidden px-4 pb-3">
-    <div class="grid grid-cols-[1fr_44px_48px_44px] gap-2 border-b border-neutral-100 py-1.5 text-[10px] font-medium uppercase tracking-wide text-neutral-400">
-      <span>Query</span><span class="text-right">Clicks</span><span class="text-right">Impr.</span><span class="text-right">Pos.</span>
-    </div>
-    {SEARCH_QUERIES.map((row, index) => (
-      <div class:list={['grid grid-cols-[1fr_44px_48px_44px] items-center gap-2 border-b border-neutral-100 py-1.5', 'opportunity' in row && 'relative']} data-at={1 + index}>
-        <span class="truncate text-neutral-800">{row.query}</span>
-        <span class="text-right tabular-nums">{row.clicks}</span>
-        <span class="text-right tabular-nums text-neutral-500">{row.impressions}</span>
-        <span class:list={['text-right tabular-nums', 'opportunity' in row ? 'font-semibold text-amber-600' : 'text-neutral-500']}>{row.position}</span>
-      </div>
-    ))}
-    <div class="mt-2.5 flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50/70 p-2.5" data-at="5">
-      <Sparkles className="mt-0.5 size-3.5 shrink-0 text-amber-600" />
-      <div class="min-w-0 flex-1 text-[11.5px] leading-snug text-neutral-700">
-        <span class="font-medium text-neutral-900">“metal roof cost texas”</span> gets 5.9k impressions but sits on page two. <span class="text-neutral-500">Blog › Metal roof cost guide</span>
-      </div>
-      <span data-at="5" data-fx="enable" data-cursor-at="6" class="inline-flex shrink-0 items-center gap-1 rounded-md bg-neutral-900 px-2 py-1 text-[10.5px] font-medium text-white">
-        <span data-at="7" data-fx="collapse">#58 created</span>
-        <span data-at="0" data-until="7" data-fx="collapse">Create task</span>
-        <ArrowUpRight className="size-3" />
+    <TrendingUp className="size-4 text-neutral-500" />
+    <span class="font-medium text-neutral-900">SEO</span>
+    <!-- The app's search source switch: one engine at a time, never summed. -->
+    <span class="ml-auto inline-flex items-center rounded-md bg-neutral-100 p-0.5 text-[10.5px]">
+      {[['Google', '/logos/google.svg'], ['Bing', '/logos/bing.svg']].map(([engine, logo], index) => (
+        <span class:list={['inline-flex items-center gap-1 rounded px-2 py-0.5', index === 0 ? 'bg-white font-medium text-neutral-900 shadow-[0_1px_2px_rgb(0_0_0/0.08)]' : 'text-neutral-500']}>
+          <img src={logo} alt="" class="size-3 object-contain" />{engine}
+        </span>
+      ))}
+    </span>
+    <span class="inline-flex items-center gap-1 rounded-md border border-neutral-200 px-2 py-1 text-[10.5px] text-neutral-600">Last 28 days <ChevronDown className="size-3" /></span>
+    <!-- One button: Add to Ideas, counting the picks, then the result in green. -->
+    <span class="[&.on>span]:!bg-emerald-600" data-at={addAt + 1} data-fx="state">
+      <span data-cursor-at={addAt} data-at={firstPick} data-fx="state" class="[&.on>[data-base]]:hidden inline-flex items-center gap-1 rounded-md bg-neutral-900 px-2.5 py-1 text-[10.5px] font-medium text-white transition-colors">
+        <span data-base>Add to Ideas</span>
+        {picks.map((_, index) => (
+          <span data-at={firstPick + index} data-until={index === picks.length - 1 ? addAt + 1 : firstPick + index + 1} data-fx="collapse">Add {index + 1} to Ideas</span>
+        ))}
+        <span class="inline-flex items-center gap-1" data-at={addAt + 1} data-fx="collapse"><Check className="size-3" /> {picks.length} ideas added</span>
       </span>
+    </span>
+  </div>
+  <div class="flex items-center gap-1.5 px-4 pt-2.5 text-[10.5px]">
+    {SEO_OPPORTUNITY_FILTERS.map(([label, count], index) => (
+      <span class:list={['inline-flex items-center gap-1 rounded-full border px-2 py-0.5', index === 0 ? 'border-neutral-900 bg-neutral-900 text-white' : 'border-neutral-200 text-neutral-600']}>
+        {label} <span class="text-neutral-400">{count}</span>
+      </span>
+    ))}
+    <span class="ml-auto inline-flex w-40 items-center gap-1.5 rounded-md border border-neutral-200 px-2 py-1 text-neutral-400"><Search className="size-3" /> Filter</span>
+  </div>
+  <div class="flex-1 overflow-hidden px-4 pt-2">
+    <div class:list={[columns, 'border-b border-neutral-200 py-1.5 text-[9.5px] font-medium uppercase tracking-wide text-neutral-400']}>
+      <span class="size-3 rounded-[3px] border border-neutral-300"></span>
+      <span>What people searched</span><span>Problem</span><span class="text-right">Position</span><span class="text-right">Impressions</span><span class="text-right">Clicks</span>
     </div>
+    {SEO_OPPORTUNITIES.map((group) => (
+      <div>
+        <div class="flex items-baseline gap-2 pb-1 pt-2.5 text-[11px]">
+          <span class="font-medium text-neutral-900">{group.page}</span>
+          {group.path && <span class="font-mono text-[10px] text-neutral-400">{group.path}</span>}
+        </div>
+        {group.rows.map((row) => {
+          const pick = picks.indexOf(row.query)
+          return (
+            <div class:list={[columns, 'border-b border-neutral-100 py-1.5']}>
+              {pick === -1
+                ? <span class="size-3 rounded-[3px] border border-neutral-300"></span>
+                : (
+                  <span class="group/cb grid size-3 place-items-center rounded-[3px] border border-neutral-300 [&.on]:border-neutral-900 [&.on]:bg-neutral-900" data-at={firstPick + pick} data-fx="state" data-cursor-at={firstPick + pick - 1}>
+                    <Check className="size-2.5 text-white opacity-0 group-[.on]/cb:opacity-100" strokeWidth={3} />
+                  </span>
+                )}
+              <span class:list={['truncate', row.query === 'The whole page' ? 'italic text-neutral-500' : 'text-neutral-800']}>{row.query}</span>
+              <span><span class:list={['rounded px-1.5 py-0.5 text-[10px] font-medium', problemTone[row.problem]]}>{row.problem}</span></span>
+              <span class="text-right tabular-nums text-neutral-600">{row.position}</span>
+              <span class="text-right tabular-nums text-neutral-900">{row.impressions}</span>
+              <span class="text-right tabular-nums text-neutral-600">{row.clicks}</span>
+            </div>
+          )
+        })}
+      </div>
+    ))}
   </div>
   <Cursor />
 </div>

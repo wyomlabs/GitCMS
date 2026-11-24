@@ -9,6 +9,12 @@
 // `data-fx="state"` keeps it as is and only toggles `.on` for `[&.on]:` styles;
 // `data-fx="collapse"` removes it from layout while off.
 //
+// A button whose label changes (Submit for review → Sent for review) keeps
+// its first label as a plain `[data-base]` span, hidden by a `state` ancestor
+// once a later label turns on (`[&.on_[data-base]]:hidden`). Never give the
+// first label a `data-at`: before the demo starts and as a loop restarts no
+// step is on, and the button would show empty.
+//
 // Timing: each step lasts `data-ms` (default 1000), a typing step lasts as
 // long as its typing plus a beat, and `data-hold="k:ms k:ms"` overrides steps.
 //

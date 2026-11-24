@@ -2,7 +2,7 @@
 // Homepage — "Day Two". Live app UI in the hero, then agent setup, the Day
 // Two story, change requests, integrations, proof, and what running a site
 // really costs.
-import { ArrowRight, Check, Copy, GitBranch, Inbox, MousePointerClick, Plug, Quote, Rocket, ScanEye, Search, Sparkles, Terminal } from 'lucide-react'
+import { ArrowRight, Check, GitBranch, Inbox, Plug, Quote, Rocket, Search, Sparkles, Terminal } from 'lucide-react'
 import { GitCMSLogo } from '@/components/gitcms-logo'
 import { loginUrl } from '@/lib/start-login'
 import MarketingLayout from '@/layouts/MarketingLayout.astro'
@@ -13,6 +13,7 @@ import { card, eyebrow, heading } from '@/components/site/styles'
 import { faqStructuredData } from '@/lib/structured-data'
 import { DEFAULT_SEO_DESCRIPTION, PRODUCT_NAME, SITE_URL } from '@/lib/positioning'
 import { FOUNDING_LICENSE } from '@/lib/pricing-plans'
+import { BLACK_FRIDAY } from '@/lib/promo'
 import ProductTour from '@/components/sections/ProductTour.astro'
 import AppWindow from '@/components/mock/AppWindow.astro'
 import EditorMock from '@/components/mock/EditorMock.astro'
@@ -48,7 +49,7 @@ const companies = [
 
 const integrations = [
   { group: 'Frameworks', items: [['Astro', '/ssg-logos/astro.svg'], ['Next.js', '/ssg-logos/nextjs.svg'], ['Nuxt', '/ssg-logos/nuxtjs.svg'], ['SvelteKit', '/ssg-logos/svelte.svg'], ['Hugo', '/ssg-logos/hugo.svg'], ['Eleventy', '/ssg-logos/eleventy.svg']] },
-  { group: 'Hosting and data', items: [['GitHub', '/brand-logos/github.svg'], ['Cloudflare', '/logos/cloudflare.svg'], ['Vercel', '/logos/vercel.svg'], ['Netlify', '/logos/netlify.svg'], ['Search Console', '/logos/google-search-console.svg'], ['AWS S3', '/logos/amazon-s3.svg']] },
+  { group: 'Hosting and data', items: [['Cloudflare', '/logos/cloudflare.svg'], ['Vercel', '/logos/vercel.svg'], ['Netlify', '/logos/netlify.svg'], ['Search Console', '/logos/google-search-console.svg'], ['Bing Webmaster', '/logos/bing.svg'], ['AWS S3', '/logos/amazon-s3.svg']] },
   { group: 'Agents', items: [['ChatGPT', '/ai-logos/openai-bw.svg'], ['Claude', '/ai-logos/claude-orange.svg'], ['Grok', '/ai-logos/grok-bot.svg'], ['OpenClaw', '/ai-logos/openclaw.svg'], ['Hermes', '/ai-logos/hermes.svg'], ['Muse', '/ai-logos/muse.svg']] },
 ] as const
 
@@ -60,7 +61,8 @@ const tones: Record<string, string> = {
 }
 
 // The FAQ markup matches the questions on the page. The only offer is the
-// founding license: the monthly plans in the table can't be bought yet.
+// founding license, sold until the Black Friday sale ends: the monthly plans
+// in the table can't be bought yet.
 const structuredData = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -79,6 +81,7 @@ const structuredData = {
         price: FOUNDING_LICENSE.sitePrice,
         priceCurrency: 'USD',
         availability: 'https://schema.org/InStock',
+        priceValidUntil: BLACK_FRIDAY.lastDay,
       },
     },
     { '@type': 'FAQPage', mainEntity: faqStructuredData(FAQS).mainEntity },
@@ -263,17 +266,21 @@ const structuredData = {
     </AppWindow>
     <!-- Chapters of the demo above: each lights up while the demo plays its
          part and jumps there when picked. Steps match ChangeRequestMock. -->
-    <div data-chapters class="mt-3 grid gap-5 sm:grid-cols-3">
+    <!-- Chapters, styled like the product tour's steps: numbered, a thin progress line, no card. -->
+    <div data-chapters class="mt-10 grid gap-6 sm:grid-cols-3">
       {[
-        { icon: MousePointerClick, title: 'Select element', body: 'Feedback lands on the exact heading, image or button.', from: 0, to: 6 },
-        { icon: Copy, title: 'Copy prompt', body: 'Hand open feedback to Claude Code, Codex or Cursor.', from: 7, to: 9 },
-        { icon: ScanEye, title: 'Verify on the preview', body: 'Pins show as changed, still matching, or gone.', from: 10, to: 12 },
-      ].map(({ icon: Icon, title, body, from, to }) => (
-        <button type="button" data-chapter-from={from} data-chapter-to={to} aria-pressed="false" class:list={['group cursor-pointer overflow-hidden p-0 text-left text-[14px] leading-relaxed text-neutral-500 transition-colors hover:border-neutral-300 aria-pressed:border-neutral-300', card]}>
-          <span class="block h-0.5 bg-neutral-100"><span data-chapter-bar class="block h-full w-0 bg-neutral-900"></span></span>
-          <span class="block p-7 pt-[26px]">
-            <span class="flex items-center gap-2 font-medium text-neutral-400 transition-colors group-hover:text-neutral-700 group-aria-pressed:text-neutral-900"><Icon className="size-4 shrink-0" />{title}</span>{body}
+        { title: 'Select element', body: 'Feedback lands on the exact heading, image or button.', from: 0, to: 6 },
+        { title: 'Copy prompt', body: 'Hand open feedback to Claude Code, Codex or Cursor.', from: 7, to: 9 },
+        { title: 'Verify on the preview', body: 'Pins show as changed, still matching, or gone.', from: 10, to: 12 },
+      ].map(({ title, body, from, to }, index) => (
+        <button type="button" data-chapter-from={from} data-chapter-to={to} aria-pressed="false" class="group -m-2 rounded-xl p-2 text-left transition-colors hover:bg-neutral-900/[0.03] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900">
+          <span class="block h-0.5 overflow-hidden rounded-full bg-neutral-200 transition-colors group-hover:bg-neutral-300">
+            <span data-chapter-bar class="block h-full w-0 bg-neutral-900"></span>
           </span>
+          <span class="mt-3 flex items-baseline gap-2 text-sm font-medium text-neutral-400 transition-colors group-hover:text-neutral-700 group-aria-pressed:text-neutral-900">
+            <span class="font-mono text-[11px]">0{index + 1}</span>{title}
+          </span>
+          <span class="mt-1 block text-[13px] leading-snug text-neutral-400 transition-colors group-hover:text-neutral-500 group-aria-pressed:text-neutral-600">{body}</span>
         </button>
       ))}
     </div>
@@ -281,7 +288,7 @@ const structuredData = {
 
   <!-- Integrations -->
   <Section>
-    <SectionHeading eyebrow="Integrations" icon={Plug} title="Your stack. Your agents. Your search data." description="GitCMS works with the framework and host you already use. Connect Search Console, and the agents you already rely on, like OpenClaw, Hermes or Grok, become content agents: they see what ranks, draft the fix, and wait for a person to approve it." />
+    <SectionHeading eyebrow="Integrations" icon={Plug} title="Your stack. Your agents. Your search data." description="GitCMS works with the framework and host you already use. Connect Google Search Console or Bing Webmaster Tools, and the agents you already rely on, like OpenClaw, Hermes or Grok, become content agents: they see what ranks, draft the fix, and wait for a person to approve it." />
     <div class="mt-16 grid gap-5 lg:grid-cols-3">
       {integrations.map((group) => (
         <div class:list={['p-7', card]}>
@@ -300,8 +307,8 @@ const structuredData = {
 
   <!-- SEO + Search Console -->
   <Section id="seo">
-    <SectionHeading eyebrow="SEO" icon={Search} badge="Soon" title="The SEO plugin, without the plugin" description="A search preview and a pre-publish checklist in the editor, and Search Console next to the page it’s about. See what each page ranks for, and turn a page-two keyword into a content task for a writer or your agent." />
-    <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/services/emergency-roof-repair?panel=seo" height={440} fill class="mt-16">
+    <SectionHeading eyebrow="SEO" icon={Search} badge="New" title="The SEO plugin, without the plugin" description="Connect Google Search Console and Bing Webmaster Tools. Every page shows how it looks in search, the searches it shows for, and what to improve. The SEO page ranks the opportunities across your site and adds them to Ideas for a writer or your agent." />
+    <AppWindow url="app.gitcms.dev/sites/acme-roofing.com/services/emergency-roof-repair?panel=page" height={480} fill class="mt-16">
       <EditorMock panel="seo" />
     </AppWindow>
     <ScaleFrame width={1024} height={400} fill class="mt-3"><div class:list={['h-full overflow-hidden', card]}><SearchMock /></div></ScaleFrame>
@@ -337,7 +344,7 @@ const structuredData = {
   <Section id="pricing">
     <SectionHeading eyebrow="Pricing" icon={Rocket} title="Pay for sites, not seats" description="Unlimited people and agents on paid plans. Bring your own AI; we don’t resell credits." />
     <div class="mt-16"><FoundingLicenseOffer /></div>
-    <p class="mt-12 flex items-center justify-center gap-2 text-[13px] font-medium text-neutral-500"><span class="rounded-full border border-neutral-200 bg-white px-2.5 py-0.5">Monthly plans · launching soon</span></p>
+    <p class="mt-12 flex items-center justify-center gap-2 text-[13px] font-medium text-neutral-500"><span class="rounded-full border border-neutral-200 bg-white px-2.5 py-0.5">Monthly plans · for new sites after {BLACK_FRIDAY.endsDateLabel}</span></p>
     <div class:list={['mt-4 p-5 sm:p-8', card]}><PricingTable /></div>
   </Section>
 

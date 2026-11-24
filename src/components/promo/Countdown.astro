@@ -1,0 +1,37 @@
+---
+// Live countdown to the end of the Black Friday sale, as "6d 04h 12m 09s".
+// The build can't know the visitor's time, so units render as placeholders
+// and the script fills them in; once the sale ends it hides the promo around
+// it (`[data-promo]`).
+import { BLACK_FRIDAY } from '@/lib/promo'
+
+const units = ['d', 'h', 'm', 's'] as const
+---
+<span data-countdown data-ends={BLACK_FRIDAY.endsAt} role="timer" aria-label={`Ends ${BLACK_FRIDAY.endsLabel}`} class="whitespace-nowrap tabular-nums">
+  {units.map((unit, index) => <span>{index > 0 && ' '}<span data-unit={unit}>--</span>{unit}</span>)}
+</span>
+
+<script>
+  const pad = (value: number) => String(value).padStart(2, '0')
+
+  function tick() {
+    for (const timer of document.querySelectorAll<HTMLElement>('[data-countdown]')) {
+      const left = Date.parse(timer.dataset.ends ?? '') - Date.now()
+      if (left <= 0) {
+        const promo = timer.closest<HTMLElement>('[data-promo]')
+        if (promo) promo.hidden = true
+        continue
+      }
+      const seconds = Math.floor(left / 1000)
+      const values = { d: Math.floor(seconds / 86400), h: Math.floor(seconds / 3600) % 24, m: Math.floor(seconds / 60) % 60, s: seconds % 60 }
+      for (const unit of timer.querySelectorAll<HTMLElement>('[data-unit]')) {
+        const key = unit.dataset.unit
+        if (key === 'd' || key === 'h' || key === 'm' || key === 's') {
+          unit.textContent = key === 'd' ? String(values.d) : pad(values[key])
+        }
+      }
+    }
+  }
+  tick()
+  setInterval(tick, 1000)
+</script>

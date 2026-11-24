@@ -1,14 +1,15 @@
 ---
 // Entry editor (DESIGN.md "Editor" page type): serif title, fields, body,
-// the violet task chip, and optionally the SEO view in the docked side panel
+// the violet task chip, and optionally the Page tab in the docked side panel
 // (DESIGN.md "Side panel": full height beside the header, tabs on top, no
-// title row). Submit for review stays disabled until the change is ready.
+// title row): the search result preview and the page's search data. Submit for review stays disabled until the change is ready,
+// and after the click the button itself says what happened.
 // With `siteData`, the cursor then opens the Footer under Site data and edits
 // the JSON file behind it as a form (docs: features/site-data).
-import { AlertTriangle, AtSign, Building2, CalendarDays, Check, ChevronDown, Copyright, FileCode2, FileText, Image, ListChecks, Megaphone, Phone, Tag, X } from 'lucide-react'
+import { AtSign, Building2, Check, ChevronDown, Copyright, FileCode2, FileText, Image, Lightbulb, ListChecks, Megaphone, Phone, ScanSearch, Tag, X } from 'lucide-react'
 import AppShell from './AppShell.astro'
 import Cursor from './Cursor.astro'
-import { SEO_CHECKS } from '@/lib/site-content'
+import { PAGE_SEARCHES, PAGE_STATS } from '@/lib/site-content'
 
 interface Props {
   panel?: 'none' | 'seo'
@@ -17,9 +18,9 @@ interface Props {
   siteData?: boolean
 }
 const { panel = 'none', class: className = '', compact = false, siteData = false } = Astro.props
-const firstCheckStep = 2
-// Step the edit is ready to submit: right after the typing, or after the checks.
-const submitStep = panel === 'seo' ? firstCheckStep + SEO_CHECKS.length : 2
+// Step the edit is ready to submit: right after the typing.
+const submitStep = 2
+const panelLabel = 'text-[10px] font-medium uppercase tracking-wide text-neutral-400'
 // Site data scene: the cursor clicks Footer, then the phone field, the
 // banner toggle and Save, each one step before the change it causes.
 const footerAt = submitStep + 3
@@ -49,14 +50,22 @@ const editorUntil = siteData ? footerAt : undefined
         <span class="border-l border-violet-200 px-1 py-1"><ChevronDown className="size-3" /></span>
       </span>
       <span class="flex items-center gap-1.5" data-at="0" data-until={editorUntil} data-fx="collapse">
-        <span class="px-1 text-[11px] text-neutral-400" data-at="0" data-until={submitStep + 1} data-fx="collapse">Saved</span>
-        <span class="inline-flex items-center gap-1 px-1 text-[11px] text-emerald-700" data-at={submitStep + 1} data-fx="collapse"><Check className="size-3" /> Sent for review</span>
-        <span data-at={submitStep} data-until={submitStep + 1} data-fx="enable" data-cursor-at={submitStep} class="rounded-md bg-neutral-900 px-2.5 py-1 text-[11px] font-medium text-white">Submit for review</span>
+        <!-- One button: disabled, then Submit for review, then Sent for review (green). -->
+        <span class="[&.on>span]:!bg-emerald-600 [&.on_[data-base]]:hidden" data-at={submitStep + 1} data-fx="state">
+          <span data-at={submitStep} data-fx="enable" data-cursor-at={submitStep} class="inline-flex items-center gap-1 rounded-md bg-neutral-900 px-2.5 py-1 text-[11px] font-medium text-white">
+            <span data-base>Submit for review</span>
+            <span class="inline-flex items-center gap-1" data-at={submitStep + 1} data-fx="collapse"><Check className="size-3" /> Sent for review</span>
+          </span>
+        </span>
       </span>
       {siteData && (
         <span class="flex items-center gap-1.5" data-at={footerAt} data-fx="collapse">
-          <span class="inline-flex items-center gap-1 px-1 text-[11px] text-emerald-700" data-at={savedAt} data-fx="collapse"><Check className="size-3" /> Saved to draft</span>
-          <span data-at={saveAt} data-until={savedAt} data-fx="enable" data-cursor-at={saveAt} class="rounded-md bg-neutral-900 px-2.5 py-1 text-[11px] font-medium text-white">Save</span>
+          <span class="[&.on>span]:!bg-emerald-600 [&.on_[data-base]]:hidden" data-at={savedAt} data-fx="state">
+            <span data-at={saveAt} data-fx="enable" data-cursor-at={saveAt} class="inline-flex items-center gap-1 rounded-md bg-neutral-900 px-2.5 py-1 text-[11px] font-medium text-white">
+              <span data-base>Save</span>
+              <span class="inline-flex items-center gap-1" data-at={savedAt} data-fx="collapse"><Check className="size-3" /> Saved to draft</span>
+            </span>
+          </span>
         </span>
       )}
     </Fragment>
@@ -129,39 +138,65 @@ const editorUntil = siteData ? footerAt : undefined
       </div>
     )}
     {panel === 'seo' && (
-      <aside slot="panel" class="flex w-[260px] shrink-0 flex-col border-l border-neutral-200 bg-white">
+      <aside slot="panel" class="flex w-[272px] shrink-0 flex-col overflow-hidden border-l border-neutral-200 bg-white">
         <div class="flex h-10 shrink-0 items-center gap-4 border-b border-neutral-200 px-3 text-[11.5px]">
-          <span class="text-neutral-400">Task</span>
           <span class="text-neutral-400">History</span>
-          <span class="relative flex h-full items-center font-medium text-neutral-900">SEO<span class="absolute inset-x-0 -bottom-px h-0.5 rounded-full bg-neutral-900"></span></span>
+          <span class="text-neutral-400">In this draft</span>
+          <span class="relative flex h-full items-center gap-1 font-medium text-neutral-900"><ScanSearch className="size-3.5" /> Page<span class="absolute inset-x-0 -bottom-px h-0.5 rounded-full bg-neutral-900"></span></span>
           <X className="ml-auto size-3.5 text-neutral-400" />
         </div>
-        <div class="p-3">
-          <div class="flex items-center justify-between">
-            <span class="text-[10px] font-medium uppercase tracking-wide text-neutral-400">Search preview</span>
-            <span class="rounded-full bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700">92 · Good</span>
-          </div>
-          <div class="mt-1.5 rounded-lg border border-neutral-200 p-2.5">
-            <div class="flex items-center gap-1.5 text-[10px] text-neutral-500">
-              <span class="grid size-3.5 place-items-center rounded-full bg-amber-500 text-[7px] font-bold text-white">A</span> acme-roofing.com › services
+        <div class="space-y-3 p-3">
+          <section>
+            <div class={panelLabel}>In search results</div>
+            <div class="mt-1.5 rounded-lg border border-neutral-200 p-2">
+              <div class="flex items-center gap-1.5 text-[9.5px] text-neutral-500">
+                <span class="grid size-3.5 place-items-center rounded-full bg-amber-500 text-[7px] font-bold text-white">A</span> acme-roofing.com › services
+              </div>
+              <div class="mt-0.5 truncate text-[11.5px] leading-snug text-[#1a0dab]">Emergency Roof Repair in Austin, 24/7 | Acme Roofing</div>
+              <div class="mt-0.5 line-clamp-2 text-[10px] leading-snug text-neutral-600">Fast, insured roof repairs across Austin, day or night. Crews on site within 90 minutes…</div>
             </div>
-            <div class="mt-1 text-[12.5px] leading-snug text-[#1a0dab]">Emergency Roof Repair in Austin, 24/7 | Acme Roofing</div>
-            <div class="mt-0.5 text-[10.5px] leading-snug text-neutral-600">Fast, insured roof repairs across Austin, day or night. Crews on site within 90 minutes…</div>
-          </div>
-          <div class="mt-3 text-[10px] font-medium uppercase tracking-wide text-neutral-400">Before you publish</div>
-          <ul class="mt-1.5 space-y-1.5">
-            {SEO_CHECKS.map((check, index) => (
-              <li class="flex items-start gap-1.5 text-[11px] leading-snug text-neutral-700" data-at={firstCheckStep + index}>
-                {check.state === 'pass'
-                  ? <Check className="mt-px size-3.5 shrink-0 text-emerald-600" />
-                  : <AlertTriangle className="mt-px size-3.5 shrink-0 text-amber-500" />}
-                {check.label}
-              </li>
-            ))}
-          </ul>
-          <div class="mt-3 flex items-center gap-1.5 rounded-md bg-neutral-50 px-2 py-1.5 text-[10.5px] text-neutral-500">
-            <CalendarDays className="size-3.5" /> Last checked just now
-          </div>
+          </section>
+          <section>
+            <div class="flex items-center justify-between">
+              <span class={panelLabel}>In search</span>
+              <!-- The app's search source switch: one engine at a time, never summed. -->
+              <span class="inline-flex items-center rounded-md bg-neutral-100 p-0.5 text-[9.5px]">
+                {[['Google', '/logos/google.svg'], ['Bing', '/logos/bing.svg']].map(([engine, logo], index) => (
+                  <span class:list={['inline-flex items-center gap-1 rounded px-1.5 py-0.5', index === 0 ? 'bg-white font-medium text-neutral-900 shadow-[0_1px_2px_rgb(0_0_0/0.08)]' : 'text-neutral-500']}>
+                    <img src={logo} alt="" class="size-2.5 object-contain" />{engine}
+                  </span>
+                ))}
+              </span>
+            </div>
+            <div class="mt-1.5 flex items-center gap-1 text-[10px] text-emerald-700"><Check className="size-3" /> Indexed · last crawled Nov 21</div>
+            <div class="mt-0.5 text-[10px] text-neutral-400">Last 28 days · through Nov 22</div>
+            <div class="mt-1.5 grid grid-cols-2 gap-1">
+              {PAGE_STATS.map((stat) => (
+                <div class="rounded-md bg-neutral-50 px-2 py-1">
+                  <div class="text-[9.5px] text-neutral-500">{stat.label}</div>
+                  <div class="flex items-baseline gap-1"><span class="text-[13px] font-semibold tracking-tight text-neutral-900">{stat.value}</span><span class="text-[9.5px] text-emerald-600">{stat.change}</span></div>
+                </div>
+              ))}
+            </div>
+            <div class="mt-2 flex items-start gap-1.5 rounded-md border border-amber-200 bg-amber-50/70 px-2 py-1.5">
+              <Lightbulb className="mt-px size-3 shrink-0 text-amber-600" />
+              <div class="min-w-0 text-[10px] leading-snug">
+                <div class="font-medium text-neutral-900">Expand it for “24 hour roofer austin”</div>
+                <div class="text-neutral-500">Almost on page one · Position 8.7</div>
+              </div>
+            </div>
+            <div class="mt-2 text-[9.5px] font-medium text-neutral-500">Searches it shows for</div>
+            <div class="mt-1 text-[10px]">
+              {PAGE_SEARCHES.map((row) => (
+                <div class="grid grid-cols-[1fr_28px_32px_24px] gap-1.5 border-b border-neutral-100 py-1">
+                  <span class="truncate text-neutral-800">{row.query}</span>
+                  <span class="text-right tabular-nums">{row.clicks}</span>
+                  <span class="text-right tabular-nums text-neutral-500">{row.impressions}</span>
+                  <span class="text-right tabular-nums text-neutral-500">{row.position}</span>
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
       </aside>
     )}
