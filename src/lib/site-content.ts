@@ -1,6 +1,7 @@
 // Copy for the homepage and its demo mockups. B and C (pages/redesign/_b,
 // _c) still read a few of these until they're deleted.
 import { UPCOMING_PLANS } from '@/lib/pricing-plans'
+import { BLACK_FRIDAY } from '@/lib/promo'
 
 export const CATEGORY = 'The control plane for code-first websites'
 
@@ -169,5 +170,9 @@ export const FAQS = [
   {
     question: 'What happens to the founding license after Black Friday?',
     answer: 'It keeps working, and you never have to move to a monthly plan. A founding license is a single payment per site and includes every future update. The Black Friday sale is the last time it is sold: it ends on Cyber Monday, November 30, and new sites move to monthly plans after that.',
+  },
+  {
+    question: 'Is there a discount for agencies?',
+    answer: `Yes, until ${BLACK_FRIDAY.endsLabel}, ${BLACK_FRIDAY.endsDateLabel}. Buy ${BLACK_FRIDAY.agency.minSites} or more site licenses in one order and code ${BLACK_FRIDAY.agency.code} takes ${BLACK_FRIDAY.agency.percentOff}% off them, for the first ${BLACK_FRIDAY.agency.maxAgencies} agencies. Each site license is a single payment, like any founding license.`,
   },
 ] as const

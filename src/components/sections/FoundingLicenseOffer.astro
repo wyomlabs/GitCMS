@@ -4,13 +4,16 @@
 // PricingTable. The urgency is factual (one payment, a fixed last day, keeps
 // working after), plus a year of the Team plan charted against the one-time
 // price. Prices read from LICENSE_PRICING via pricing-plans; the deadline
-// from BLACK_FRIDAY.
+// from BLACK_FRIDAY, and so does the agency code for 5+ sites.
 import { ArrowRight, Check, Clock } from 'lucide-react'
 import { FOUNDING_FEATURES, FOUNDING_LICENSE, getUpcomingPlan } from '@/lib/pricing-plans'
 import { loginUrl } from '@/lib/start-login'
 import { heading } from '@/components/site/styles'
 import Countdown from '@/components/promo/Countdown.astro'
-import { BLACK_FRIDAY } from '@/lib/promo'
+import CopyButton from '@/components/site/CopyButton.astro'
+import { BLACK_FRIDAY, formatUsd } from '@/lib/promo'
+
+const { agency } = BLACK_FRIDAY
 
 // A year of the Team plan, month by month, against the one-time price.
 const team = getUpcomingPlan('team')
@@ -35,6 +38,15 @@ const firstMonthOver = bars.findIndex((bar) => bar.over) + 1
       <ul class="mt-6 grid gap-x-6 gap-y-2.5 text-[14px] text-neutral-300 sm:grid-cols-2">
         {FOUNDING_FEATURES.map((feature) => <li class="flex items-start gap-2"><Check className="mt-0.5 size-4 shrink-0 text-[#DCF986]" />{feature}</li>)}
       </ul>
+      <div class="mt-6 flex items-center justify-between gap-4 rounded-xl border border-white/10 bg-white/[0.04] px-5 py-4">
+        <div class="min-w-0 flex-1 text-[14px]">
+          <div class="font-semibold text-white">Agency pack: {agency.percentOff}% off {agency.minSites} or more sites</div>
+          <div class="mt-1 text-[13px] text-neutral-400">
+            {agency.examples.map(({ sites, total }) => `${sites} sites ${formatUsd(total)}`).join(' · ')} · first {agency.maxAgencies} agencies
+          </div>
+        </div>
+        <CopyButton text={agency.code} label={agency.code} copiedLabel="Copied" tone="dark" size="sm" event={{ name: 'bf-code-copy', placement: 'pricing' }} class="font-mono" />
+      </div>
       <a href={loginUrl('/')} data-umami-event="bf-cta" data-umami-event-placement="pricing" class="mt-8 inline-flex h-11 items-center gap-2 rounded-xl bg-[#DCF986] px-5 text-[14px] font-semibold text-neutral-950 hover:bg-[#d4f47a]">Get the founding license <ArrowRight className="size-4" /></a>
       <p class="mt-3 text-[13px] text-neutral-500">Ends in <span class="text-neutral-300"><Countdown /></span></p>
     </div>
