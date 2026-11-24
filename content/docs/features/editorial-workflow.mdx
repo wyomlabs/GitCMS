@@ -43,6 +43,7 @@ A small status sits where **Save** would be:
 | **Fix fields to sync** | A field doesn't fit its collection. Choose the button to see the fields. |
 | **Changed elsewhere** | The draft changed since you opened it, or conflicts with the live site. Your edits stay on this device until you choose what to do. |
 | **Approved · sync paused** | The review is approved, and saving again would withdraw the approval. |
+| **Task closed · not synced** or **Task published · not synced** | The task is no longer open, so nothing more is saved to it. The status says what to do next, and your edits stay on this device. |
 
 Once a task is in **Review**, GitCMS saves only when you leave the entry or switch away, not while you type. Autosave pauses entirely while the review is approved. **Request review** and the other task actions save whatever is waiting first.
 
@@ -188,7 +189,7 @@ https://{sha8}.my-site.pages.dev
 | `{sha}` | The full version id |
 | `{branch}` | The draft's name, as a lowercase host label |
 
-The address must use `https`, with no port, login, or IP address. Placeholders can fill only the first part of the host or the path, so the address always stays on your host. GitCMS uses it only when the host reports no preview and none is building, and only offers it after the address answers a check from GitCMS.
+The address must use `https`, with no port, login, or IP address. Placeholders can fill only the first part of the host or the path, so the address always stays on your host. If GitCMS rejects an address, it shows the specific reason. GitCMS uses it only when the host reports no preview and none is building, and only offers it after the address answers a check from GitCMS.
 
 **Change Requests is a public beta.** All authorized members can explore visual feedback without beta enrollment. Point to an element on your website, describe the change, and prepare a draft. Submitting, discussing, and resolving requests requires a licensed site and the appropriate workspace permissions. Previews are optional and may be unavailable on protected deployments.
 
@@ -204,7 +205,7 @@ If you open the repository on GitHub:
 
 ### Builds and checks (for developers)
 
-Autosaves are real commits on the draft branch. GitCMS starts their message with `[skip ci] `, so your CI and preview builds don't run for every few minutes of typing. **Request review** and **Publish** each push one more commit without the prefix (an empty one, with the fixed message `Ready for review` or `Publish`) when the latest commit is an autosave, so the version a reviewer sees and the version that merges both run your checks. **Build preview** does the same on demand, with the message `Build preview`. These messages never include the task's title.
+Autosaves are real commits on the draft branch. GitCMS starts their message with `[skip ci] `, so your CI and preview builds don't run for every few minutes of typing. **Request review** and **Publish** each push one more commit without the prefix (an empty one, with the fixed message `Ready for review` or `Publish`) when the latest commit is an autosave, so the version a reviewer sees and the version that merges both run your checks. **Build preview** does the same on demand, with the message `Build preview`. These messages never include the task's title. When a task is published, the change lands on your live branch under the task's title, with any CI-skip text removed, so publishing always runs your site's checks and deploy.
 
 Whether the prefix works depends on your host:
 
