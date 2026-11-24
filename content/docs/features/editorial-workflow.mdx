@@ -25,6 +25,29 @@ While a task is in **Draft**, GitCMS keeps that work **separate from your live s
 
 You do **not** name branches, open tickets, or sync Git state — the workflow keeps each task’s changes isolated for you.
 
+#### Autosave
+
+In a task, there is no **Save** button. GitCMS saves your edits to the task's draft in the background, so work in progress doesn't live in one browser. It saves:
+
+- about 45 seconds after you stop typing
+- when you leave the entry
+- when you switch to another tab or window
+
+A small status sits where **Save** would be:
+
+| Status | Meaning |
+|--------|---------|
+| **Saving…** | A save is in progress. |
+| **Saved · 2m ago** | The last save went through and nothing is waiting. |
+| **Saved on this device** | Your edits are kept in this browser and will sync on the next save. GitCMS retries if the draft can't be reached. |
+| **Fix fields to sync** | A field doesn't fit its collection. Choose the button to see the fields. |
+| **Changed elsewhere** | The draft changed since you opened it, or conflicts with the live site. Your edits stay on this device until you choose what to do. |
+| **Approved · sync paused** | The review is approved, and saving again would withdraw the approval. |
+
+Once a task is in **Review**, GitCMS saves only when you leave the entry or switch away, not while you type. Autosave pauses entirely while the review is approved. **Request review** and the other task actions save whatever is waiting first.
+
+Sites that use **direct publish** keep the **Save** button, and GitCMS never saves to them in the background. Autosave doesn't cover new entries that haven't been created yet.
+
 ### 3. Review
 
 When the copy is ready for feedback, move the task to **Review**. On any page inside a task, the task's number in the header (for example **#113 ▾**) holds its actions: open the arrow for **Request review**, **Approve**, **Publish** and the rest, with your next step first. Click the number to open the task beside the page.
@@ -133,7 +156,39 @@ You can change publishing mode in Settings; existing files are not rewritten.
 - **One task, one thread of work.** Keeps review focused and publishing predictable.
 - **Review on a steady cadence.** Stale review columns lose context — agree on turnaround inside your team.
 - **Check the board daily.** Faster than hunting through folders for “where did that post go?”
-- **Use previews.** GitCMS detects deployment previews from recent GitHub reviews and deployment statuses. During site setup, it looks for available preview sources without blocking onboarding; if none exist yet, detection remains automatic. Owners and admins can change this later under **Site Settings → General → Preview deployments**, choose a specific deployment source, or disable previews. This preference does not modify the website's files. A preview must belong to the current revision and be verifiably associated with the site; in multi-site repositories, generic deployment hosts may not be safe to embed. Existing GitHub installations may need their owners to approve Deployments and Commit statuses read permissions. Protected preview deployments may require opening the host directly.
+- **Use previews.** See [Previews](#previews) for how GitCMS finds and builds them.
+
+## Previews
+
+A preview shows a draft on your hosting, before it's live. GitCMS finds previews your host already builds. It doesn't build them itself.
+
+It detects a preview from the deployments, commit statuses, and check runs your host reports for the draft. Check runs are how **Cloudflare Pages** and **Cloudflare Workers Builds** report previews, so they show up like any other host. During site setup, GitCMS looks for available preview sources without blocking onboarding; if none exist yet, detection stays automatic.
+
+Owners and admins can change this under **Site Settings → General → Preview deployments**: choose a specific deployment source, or disable previews. This preference does not modify the website's files. A preview must belong to the current version of the draft and be verifiably associated with the site. In multi-site repositories, generic deployment hosts may not be safe to embed. Protected preview deployments may require opening the host directly.
+
+Existing GitHub installations need their owners to approve the GitHub App's **Deployments** and **Commit statuses** read permissions, and **Checks: read** to see Cloudflare previews. Until then owners see an approve-access prompt.
+
+### Build preview on demand
+
+Autosaves don't trigger your host's build (see [Builds and checks](#builds-and-checks-for-developers)), so a draft that was only autosaved may have no preview yet. **Preview page** then offers **Build preview**. GitCMS asks your host for a build, shows **Building preview…**, and opens the preview when it's ready. Editors and above can build a preview; it isn't available while a review is approved. Looking for a preview never changes the draft.
+
+**Request review** and **Publish** also make sure the draft has a build, so reviewers see a preview of exactly what they approve.
+
+### Preview address (optional)
+
+Some hosts name a preview after the version it builds, like `https://3f9a1c2e.my-site.pages.dev`, but never report it back. Owners and admins can describe that address in **Site Settings → General → Preview deployments → Preview address**:
+
+```txt
+https://{sha8}.my-site.pages.dev
+```
+
+| Placeholder | Filled with |
+|-------------|-------------|
+| `{sha8}` | The first eight characters of the draft's latest version id |
+| `{sha}` | The full version id |
+| `{branch}` | The draft's name, as a lowercase host label |
+
+The address must use `https`, with no port, login, or IP address. Placeholders can fill only the first part of the host or the path, so the address always stays on your host. GitCMS uses it only when the host reports no preview and none is building, and only offers it after the address answers a check from GitCMS.
 
 **Change Requests is a public beta.** All authorized members can explore visual feedback without beta enrollment. Point to an element on your website, describe the change, and prepare a draft. Submitting, discussing, and resolving requests requires a licensed site and the appropriate workspace permissions. Previews are optional and may be unavailable on protected deployments.
 
@@ -146,3 +201,20 @@ If you open the repository on GitHub:
 - **Tasks** are issues labeled `gitcms:board`, plus `gitcms:site:<site key>` for the site they belong to. The site key is the site's folder name under `.gitcms/sites/`, and the label's description names the site's address.
 - **Drafts** are branches named `gitcms-draft-<task number>`.
 - Each task drafts on **one branch**, whoever writes on it.
+
+### Builds and checks (for developers)
+
+Autosaves are real commits on the draft branch. GitCMS starts their message with `[skip ci] `, so your CI and preview builds don't run for every few minutes of typing. **Request review** and **Publish** each push one more commit without the prefix (an empty one, titled `Ready for review: <title>` or `Publish: <title>`) when the latest commit is an autosave, so the version a reviewer sees and the version that merges both run your checks. **Build preview** does the same on demand, titled `Build preview: <title>`.
+
+Whether the prefix works depends on your host:
+
+| Host | `[skip ci]` |
+|------|-------------|
+| GitHub Actions | Honored |
+| Netlify | Honored |
+| Cloudflare Pages | Honored |
+| Vercel | Ignored. Vercel builds every commit unless you add an Ignored Build Step (Project Settings → Git) that checks `VERCEL_GIT_COMMIT_MESSAGE` for `[skip ci]` and exits 0 to skip the build. |
+
+Approvals survive these empty commits, so a task that was approved before **Publish** stays approved.
+
+If your repository has **required checks**, **Publish** waits for them. The button reads **Running checks…** and GitCMS retries for about six minutes; if a check fails, it tells you. GitCMS infers this from the repository host refusing the publish, because it can't know which checks you require.
