@@ -1,9 +1,11 @@
 ---
-// Black Friday popup on every marketing page. It opens once per campaign,
-// after a short read or some scrolling, and never after the sale ends. A
-// native <dialog> gives focus trapping, Esc and a backdrop; on phones it is a
-// bottom sheet, within thumb reach.
-import { ArrowRight, X } from 'lucide-react'
+// Black Friday popup on every marketing page. It opens by itself once per
+// campaign, after a short read or some scrolling, and any time from the deal
+// button pinned bottom left (the Discord support button's twin on the
+// right). Neither shows after the sale ends. A native <dialog> gives focus
+// trapping, Esc and a backdrop; on phones it is a bottom sheet, within thumb
+// reach.
+import { ArrowRight, Tag, X } from 'lucide-react'
 import Countdown from './Countdown.astro'
 import { BLACK_FRIDAY } from '@/lib/promo'
 import { loginUrl } from '@/lib/start-login'
@@ -58,6 +60,20 @@ const sparkles = [[44, 34], [404, 96], [70, 112]]
     </div>
   </div>
 </dialog>
+<!-- Hidden until the script knows the sale is still on. Below `sm` it shrinks to the icon, like the Discord button. -->
+<button
+  type="button"
+  data-promo-opener
+  hidden
+  aria-label="Black Friday deal"
+  class="fixed bottom-4 left-4 z-40 inline-flex items-center gap-2.5 rounded-full border border-neutral-200 bg-white p-3.5 text-sm font-semibold text-neutral-900 shadow-lg shadow-neutral-900/10 transition-all hover:-translate-y-0.5 hover:border-neutral-300 hover:shadow-xl motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:bottom-6 sm:left-6 sm:px-5 sm:py-3"
+>
+  <span class="relative grid size-5 place-items-center">
+    <Tag className="size-5" />
+    <span class="absolute -right-0.5 -top-0.5 size-2 rounded-full bg-[#DCF986] ring-2 ring-white"></span>
+  </span>
+  <span class="hidden sm:inline">Black Friday deal</span>
+</button>
 
 <script>
   import { BLACK_FRIDAY } from '@/lib/promo'
@@ -68,7 +84,15 @@ const sparkles = [[44, 34], [404, 96], [70, 112]]
   const SCROLL_SHARE = 0.35
 
   const dialog = document.querySelector<HTMLDialogElement>('dialog[data-promo="popup"]')
-  if (dialog && !localStorage.getItem(seenKey) && Date.now() < Date.parse(BLACK_FRIDAY.endsAt)) {
+  const opener = document.querySelector<HTMLButtonElement>('[data-promo-opener]')
+  if (dialog && opener && Date.now() < Date.parse(BLACK_FRIDAY.endsAt)) {
+    const open = () => {
+      if (dialog.open) return
+      dialog.showModal()
+      // The browser focuses the first control, the close button; hold focus
+      // on the dialog so nothing opens ringed. Tab still reaches every control.
+      dialog.focus()
+    }
     for (const button of dialog.querySelectorAll('[data-promo-close]')) {
       button.addEventListener('click', () => dialog.close())
     }
@@ -76,22 +100,29 @@ const sparkles = [[44, 34], [404, 96], [70, 112]]
     dialog.addEventListener('click', (event) => {
       if (event.target === dialog) dialog.close()
     })
-    dialog.addEventListener('close', () => localStorage.setItem(seenKey, '1'), { once: true })
+    opener.hidden = false
+    opener.addEventListener('click', open)
 
-    const open = () => {
-      window.removeEventListener('scroll', onScroll)
-      clearTimeout(timer)
-      dialog.showModal()
-      // The browser focuses the first control, the close button; hold focus
-      // on the dialog so nothing opens ringed. Tab still reaches every control.
-      dialog.focus()
+    // The automatic open happens once per campaign; closing it, however it
+    // was opened, counts as seen.
+    if (!localStorage.getItem(seenKey)) {
+      dialog.addEventListener('close', () => localStorage.setItem(seenKey, '1'), { once: true })
+      const autoOpen = () => {
+        window.removeEventListener('scroll', onScroll)
+        clearTimeout(timer)
+        open()
+      }
+      const onScroll = () => {
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight
+        if (scrollable > 0 && window.scrollY / scrollable > SCROLL_SHARE) autoOpen()
+      }
+      const timer = setTimeout(autoOpen, DELAY_MS)
+      window.addEventListener('scroll', onScroll, { passive: true })
+      dialog.addEventListener('close', () => {
+        window.removeEventListener('scroll', onScroll)
+        clearTimeout(timer)
+      }, { once: true })
     }
-    const onScroll = () => {
-      const scrollable = document.documentElement.scrollHeight - window.innerHeight
-      if (scrollable > 0 && window.scrollY / scrollable > SCROLL_SHARE) open()
-    }
-    const timer = setTimeout(open, DELAY_MS)
-    window.addEventListener('scroll', onScroll, { passive: true })
   }
 </script>
 
