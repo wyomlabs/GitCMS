@@ -40,14 +40,16 @@ You can insert and edit common blocks such as:
 - bulleted, numbered, and to-do lists
 - code blocks
 - blockquotes
-- callouts
+- callouts, when your site's [docs framework or components](#docs-framework-components) provide one
 - dividers
 - tables
 - images
 - table of contents blocks
 - equations
 
-Use `/` to open slash commands and insert blocks without remembering Markdown syntax.
+Use `/` to open slash commands and insert blocks without remembering Markdown syntax. The menu only offers blocks your site can save, so there is no generic Callout: it appears when your docs framework or your own components provide one.
+
+The block menu (the handle beside a block) offers **Indent** and **Outdent** only when every selected block is a list item. A list item can sit at most one level deeper than the item before it. There is no text alignment option.
 
 Blocks can also be moved with drag-and-drop, which makes it easier to restructure long content without cutting and pasting raw Markdown.
 
@@ -73,10 +75,10 @@ GitCMS detects the framework from your repository and marks it **Detected**. **D
 - **Callouts** (Fumadocs `<Callout>`, GitHub alerts, and `:::note` containers in Docusaurus and Starlight) open as a callout block with a type picker, an editable title, and a body. Changing the type renames it in the file, and an edited callout keeps the form it was written in.
 - **Tabs** (Fumadocs, Starlight and Docusaurus `<Tabs>` / `<TabItem>`) open as visual tabs. You can rename, add, remove and reorder tabs. Renaming a Docusaurus tab keeps its `value`, so `defaultValue` and `groupId` still match.
 - **Steps** (Fumadocs `<Steps>` and Starlight `<Steps>`) show a **Step** chip with **Add step below**, **Move up**, **Move down** and **Remove step**. Content you add after the last step stays inside a step.
-- **Comments** (`<!-- -->`, or `{/* */}` in MDX) are shown as a Comment row you can edit. Text that would end the comment (`-->` or `*/`) is refused.
+- **Hidden notes** (`<!-- -->`, or `{/* */}` in MDX) are shown as a Hidden note row you can edit. They stay in the file and never render on your site. Text that would end the comment (`-->` or `*/`) is refused.
 - **Imports** are shown read-only under the frontmatter. GitCMS adds the import a component needs when you insert it.
 
-Type `/` and look under **Components** to insert one. The menu lists what your site has: the framework you chose, Docusaurus built-ins, and your [custom components](#custom-components). **Comment** is in the menu too. Components arrive as a valid empty block in the syntax the page already uses.
+Type `/` and look under **Components** to insert one. The menu lists what your site has: the framework you chose, Docusaurus built-ins, and your [custom components](#custom-components). **Hidden note** is in the menu too. Components arrive as a valid empty block in the syntax the page already uses.
 
 ### Custom components
 
@@ -163,7 +165,7 @@ You configure that at the site level, and the editor keeps working against that 
 
 ## Media inside the editor
 
-Image fields and body content can use GitCMS media workflows directly from the editor.
+Image fields and body content can use the **Media & files** workflows directly from the editor.
 
 That means teams can:
 
@@ -171,13 +173,13 @@ That means teams can:
 - pick existing media from the configured media libraries
 - keep image references in Git-backed content files
 
-See [Media Library](/docs/features/media-management) for media-specific behavior.
+See [Media & files](/docs/features/media-management) for media-specific behavior.
 
 ## Internal links without leaving the editor
 
 If your site has a configured sitemap, GitCMS can help writers add internal links faster.
 
-When you insert or edit a link, the editor can suggest published pages from your site so you can search instead of pasting URLs by hand.
+Two slash items add links. **Link** takes any URL. **Internal link** opens the same input in page-search mode, so you search your site's published pages instead of pasting a URL. When the sitemap has no pages yet it says "No pages yet — paste a URL", and when nothing matches your search it says "No pages match".
 
 This works especially well for:
 
