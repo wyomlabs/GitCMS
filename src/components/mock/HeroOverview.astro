@@ -113,9 +113,9 @@ const caption = 'mb-3 flex items-center gap-2 text-[15px] font-semibold tracking
               <span class="grid size-5 place-items-center rounded-full bg-neutral-900 text-white ring-2 ring-white"><Bot className="size-3" /></span>
             </span>
             <!-- One button: disabled, then Publish, then Published (green). -->
-            <span class="[&.on>span]:!bg-emerald-600" data-at={PUBLISH + 1} data-fx="state">
+            <span class="[&.on>span]:!bg-emerald-600 [&.on_[data-base]]:hidden" data-at={PUBLISH + 1} data-fx="state">
               <span data-at={PUBLISH} data-fx="enable" data-cursor-at={PUBLISH} class="inline-flex items-center gap-1 rounded-md bg-neutral-900 px-3 py-1.5 text-[12px] font-medium text-white transition-colors">
-                <span data-at={EDIT.from} data-until={PUBLISH + 1} data-fx="collapse">Publish</span>
+                <span data-base>Publish</span>
                 <span class="inline-flex items-center gap-1" data-at={PUBLISH + 1} data-fx="collapse"><Check className="size-3.5" /> Published</span>
               </span>
             </span>

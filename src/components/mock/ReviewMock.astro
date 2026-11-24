@@ -47,8 +47,13 @@ const { class: className = '' } = Astro.props
   </div>
   <div class="flex items-center gap-2 border-t border-neutral-200 px-4 py-2.5">
     <span class="flex items-center gap-1 text-[11px] text-neutral-500"><MessageSquare className="size-3.5" /> 1 thread</span>
-    <span class="ml-auto flex items-center gap-1 text-[11px] text-emerald-700" data-at="4" data-fx="fade"><Check className="size-3.5" /> Approved by Jess</span>
-    <span data-at="3" data-fx="enable" data-cursor-at="3" class="rounded-md bg-neutral-900 px-2.5 py-1 text-[11px] font-medium text-white">Approve and publish</span>
+    <!-- One button: disabled, then Approve and publish, then Published (green). -->
+    <span class="ml-auto [&.on>span]:!bg-emerald-600 [&.on_[data-base]]:hidden" data-at="4" data-fx="state">
+      <span data-at="3" data-fx="enable" data-cursor-at="3" class="inline-flex items-center gap-1 rounded-md bg-neutral-900 px-2.5 py-1 text-[11px] font-medium text-white">
+        <span data-base>Approve and publish</span>
+        <span class="inline-flex items-center gap-1" data-at="4" data-fx="collapse"><Check className="size-3" /> Published</span>
+      </span>
+    </span>
   </div>
   <Cursor />
 </div>

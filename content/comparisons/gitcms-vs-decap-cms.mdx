@@ -75,7 +75,7 @@ GitCMS builds the whole product around review, because that's the problem client
 - **Content board.** Content tasks move through Ideas, Draft, Review, and Published.
 - **Reviews in the editor.** Inline comments beside the text, changes marked inline, approve or request changes, and optional required approval.
 - **Preview deployments (beta).** Reviewers see drafts on Vercel- or Netlify-style preview builds before publishing.
-- **Change Requests (beta).** Clients pin feedback on the live website; it arrives as a GitHub issue that "Copy prompt" hands to Claude Code, Codex, or Cursor.
+- **Change Requests (alpha).** Clients pin feedback on the live website; it arrives as a GitHub issue that "Copy prompt" hands to Claude Code, Codex, or Cursor.
 
 On the agent side, any coding agent can edit Decap's Markdown files, and that's true for GitCMS too. GitCMS adds a structured path for **content agents**: ChatGPT, Claude, and other MCP clients read and edit entries and site data, draft inside content tasks, and submit for review. A person publishes. Decap has no MCP server or AI integration layer.
 
@@ -195,7 +195,7 @@ GitCMS is better when **the people running the site aren't developers, and some 
 - A **writing-focused visual editor** clients adopt without training, plus forms for site data
 - **Review as the product**: content board, reviews in the editor, preview deployments (beta)
 - **MCP access** so ChatGPT, Claude, and other agents draft for review instead of committing directly
-- **Change Requests (beta)** so client feedback on the live site reaches your coding agent
+- **Change Requests (alpha)** so client feedback on the live site reaches your coding agent
 - **Setup by your coding agent** with `create-gitcms`, including several sites in one repository
 
 If you believe in Markdown in Git but the site is run by clients, marketers, and agents, GitCMS is built for that job.

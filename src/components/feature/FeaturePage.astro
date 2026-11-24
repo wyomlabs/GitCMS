@@ -28,7 +28,7 @@ const audiences = feature.audiences.map((audience) => ({ ...audience, useCase: g
 ---
 <MarketingLayout title={feature.seoTitle} description={feature.seoDescription} structuredData={faqStructuredData(feature.faqs)}>
   <Section first>
-    <SectionHeading level={1} eyebrow={feature.name} icon={feature.icon} badge={feature.beta && 'Beta'} title={feature.title} description={feature.description}>
+    <SectionHeading level={1} eyebrow={feature.name} icon={feature.icon} badge={feature.alpha && 'Alpha'} title={feature.title} description={feature.description}>
       <div class="mt-8 flex flex-wrap justify-center gap-3">
         <a href={loginUrl('/')} class={primaryButton}>Connect your site, free <ArrowRight className="size-4" /></a>
         <CopyButton text={AGENT_SETUP_PROMPT} label="Set up with your agent" copiedLabel="Copied. Paste it into your agent" />

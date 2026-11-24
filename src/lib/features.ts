@@ -24,7 +24,7 @@ export type Feature = {
   blurb: string
   icon: LucideIcon
   /** Shipped, but still labeled Beta in the product. */
-  beta?: true
+  alpha?: true
   seoTitle: string
   seoDescription: string
   title: string
@@ -193,7 +193,7 @@ export const features: ReadonlyArray<Feature> = [
     name: 'Change requests',
     blurb: 'Feedback pinned to the live site and its previews',
     icon: MousePointerClick,
-    beta: true,
+    alpha: true,
     seoTitle: 'Website Feedback Pinned to the Page, Checked on Previews — GitCMS',
     seoDescription: 'Clients click the element they want changed. Your coding agent gets the feedback as one prompt, and GitCMS checks every pin on the preview deployment.',
     title: 'Feedback on the page, checked on the preview',
@@ -242,7 +242,7 @@ export const features: ReadonlyArray<Feature> = [
       { question: 'Which hosts work with previews?', answer: 'Hosts that report a deployment or commit status to GitHub for each pull request, such as Vercel and Netlify. Owners can pick the deployment source or turn previews off in Site Settings → Preview deployments.' },
       { question: 'Which coding agents work with Copy prompt?', answer: 'Any agent that can work in your repository and open a pull request, including Claude Code, Codex and Cursor. The prompt is plain text.' },
       { question: 'What do the labels on a preview mean?', answer: 'Changed on preview means the element differs from when the feedback was left, so check it before resolving. Still matches means it hasn’t changed. Target not found means the element is no longer on that page.' },
-      { question: 'Is it on every plan?', answer: 'It’s a public beta. Everyone who can edit a site can explore it; submitting and discussing requests needs a licensed site. See pricing for what a license includes.' },
+      { question: 'Is it on every plan?', answer: 'It’s in alpha. Everyone who can edit a site can explore it; submitting and discussing requests needs a licensed site. See pricing for what a license includes.' },
     ],
     related: [
       { label: 'Previews and change requests docs', href: '/docs/features/editorial-workflow/' },

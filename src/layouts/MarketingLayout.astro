@@ -1,7 +1,8 @@
 ---
 // Every marketing and content page (not docs): grey page background, the
 // floating header, a bordered 1200px column holding the page's sections, the
-// footer inside that column, and the floating Discord support button. Pages
+// footer inside that column, the floating Discord support button, and while
+// the Black Friday sale runs, its banner card and popup. Pages
 // compose Section and SectionHeading.
 import '@/styles/global.css'
 import BaseLayout from './BaseLayout.astro'
@@ -9,6 +10,8 @@ import SiteNav from '@/components/site/SiteNav.astro'
 import SiteFooter from '@/components/site/SiteFooter.astro'
 import Sequencer from '@/components/site/Sequencer.astro'
 import DiscordSupportButton from '@/components/site/DiscordSupportButton.astro'
+import PromoBanner from '@/components/promo/PromoBanner.astro'
+import PromoPopup from '@/components/promo/PromoPopup.astro'
 import type { SeoOptions } from '@/lib/seo'
 
 interface Props extends SeoOptions {
@@ -20,12 +23,14 @@ interface Props extends SeoOptions {
     <SiteNav />
     <!-- The fixed header floats over this column; the top padding clears it. -->
     <div class="mx-auto max-w-[1200px] border-x border-neutral-200 pt-[88px]">
+      <PromoBanner />
       <main><slot /></main>
       <SiteFooter />
     </div>
   </div>
   <DiscordSupportButton />
   <Sequencer />
+  <PromoPopup />
 </BaseLayout>
 
 <style>

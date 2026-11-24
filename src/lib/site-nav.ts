@@ -6,7 +6,7 @@ import { frameworkList } from '@/lib/framework-data'
 import type { UseCaseSlug } from '@/lib/use-cases'
 import { useCases } from '@/lib/use-cases'
 
-export type NavLink = { label: string; href: string; blurb: string; icon: LucideIcon; badge?: 'Soon' | 'Beta' }
+export type NavLink = { label: string; href: string; blurb: string; icon: LucideIcon; badge?: 'Soon' | 'Alpha' }
 
 export const USE_CASE_ICONS: Record<UseCaseSlug, LucideIcon> = {
   agencies: Building2,
@@ -15,10 +15,10 @@ export const USE_CASE_ICONS: Record<UseCaseSlug, LucideIcon> = {
   'solo-builders': PenLine,
 }
 
-/** Feature pages, plus SEO pointing at its homepage section until it ships. */
+/** Feature pages, plus SEO pointing at its homepage section until it has a page of its own. */
 export const FEATURE_LINKS: ReadonlyArray<NavLink> = [
-  ...features.map((feature) => ({ label: feature.name, href: feature.path, blurb: feature.blurb, icon: feature.icon, badge: feature.beta && ('Beta' as const) })),
-  { label: 'SEO & AEO', href: '/#seo', blurb: 'Search data and content checks for your agent', icon: SearchCheck, badge: 'Soon' },
+  ...features.map((feature) => ({ label: feature.name, href: feature.path, blurb: feature.blurb, icon: feature.icon, badge: feature.alpha && ('Alpha' as const) })),
+  { label: 'SEO & AEO', href: '/#seo', blurb: 'Search data and content checks for your agent', icon: SearchCheck, badge: 'Alpha' },
 ]
 
 export const PLATFORM_LINKS: ReadonlyArray<NavLink> = [

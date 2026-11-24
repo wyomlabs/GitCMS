@@ -43,19 +43,56 @@ export const WORDPRESS_SWAP = [
   { kept: 'One place to publish', left: 'Content locked in somebody else’s tables' },
 ] as const
 
-export const SEO_CHECKS = [
-  { label: 'Title is 54 characters', state: 'pass' },
-  { label: 'Meta description is 148 characters', state: 'pass' },
-  { label: 'Focus keyword appears in the first heading', state: 'pass' },
-  { label: '2 images are missing alt text', state: 'warn' },
-  { label: '3 internal links to related pages', state: 'pass' },
+/**
+ * Demo data for the SEO mocks, in the app's own words: the Page tab in the
+ * editor's side panel and the site's SEO page (opportunities grouped by page).
+ * Opportunity labels are the app's badge labels.
+ */
+export const PAGE_SEARCHES = [
+  { query: 'emergency roof repair austin', clicks: 412, impressions: '8.1k', position: '3.2' },
+  { query: 'roof leak repair near me', clicks: 96, impressions: '2.2k', position: '5.1' },
+  { query: '24 hour roofer austin', clicks: 31, impressions: '1.4k', position: '8.7' },
 ] as const
 
-export const SEARCH_QUERIES = [
-  { query: 'emergency roof repair austin', clicks: 412, impressions: '8.1k', position: '3.2' },
-  { query: 'roof leak repair near me', clicks: 188, impressions: '6.4k', position: '7.8' },
-  { query: 'metal roof cost texas', clicks: 21, impressions: '5.9k', position: '11.4', opportunity: true },
-  { query: 'hail damage roof inspection', clicks: 96, impressions: '2.2k', position: '5.1' },
+export const PAGE_STATS = [
+  { label: 'Clicks', value: '539', change: '+38' },
+  { label: 'Impressions', value: '11.7k', change: '+1.2k' },
+  { label: 'Click-through', value: '4.6%', change: '+0.4 pts' },
+  { label: 'Average position', value: '4.1', change: '+0.6' },
+] as const
+
+export const SEO_OPPORTUNITY_FILTERS = [
+  ['All', 5],
+  ['Near page one', 2],
+  ['Few clicks', 1],
+  ['Question', 1],
+  ['No page', 1],
+] as const
+
+export const SEO_OPPORTUNITIES = [
+  {
+    page: 'Metal roof cost guide',
+    path: '/blog/metal-roof-cost/',
+    rows: [
+      { query: 'metal roof cost texas', problem: 'Near page one', position: '11.4', impressions: '5,900', clicks: '21' },
+      { query: 'The whole page', problem: 'Few clicks', position: '6.2', impressions: '3,100', clicks: '18' },
+    ],
+  },
+  {
+    page: 'Emergency roof repair',
+    path: '/services/emergency-roof-repair/',
+    rows: [
+      { query: '24 hour roofer austin', problem: 'Near page one', position: '8.7', impressions: '1,400', clicks: '31' },
+      { query: 'how fast can a roof be repaired', problem: 'Question', position: '12.3', impressions: '640', clicks: '4' },
+    ],
+  },
+  {
+    page: 'New page: “roof insurance claim texas”',
+    path: '',
+    rows: [
+      { query: 'roof insurance claim texas', problem: 'No page', position: '14.8', impressions: '2,300', clicks: '6' },
+    ],
+  },
 ] as const
 
 export const FLEET = [
@@ -130,7 +167,7 @@ export const FAQS = [
     answer: 'Your site keeps working. Content was always files in your repository, and every change is already in its Git history.',
   },
   {
-    question: 'What happens to the founding license when monthly plans launch?',
-    answer: 'It keeps working, and you never have to move to a monthly plan. A founding license is a single payment per site and includes every future update. It stops being sold when monthly plans launch, so the price is only available until then.',
+    question: 'What happens to the founding license after Black Friday?',
+    answer: 'It keeps working, and you never have to move to a monthly plan. A founding license is a single payment per site and includes every future update. The Black Friday sale is the last time it is sold: it ends on Cyber Monday, November 30, and new sites move to monthly plans after that.',
   },
 ] as const

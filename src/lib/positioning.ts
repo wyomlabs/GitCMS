@@ -21,12 +21,13 @@ export const DEFAULT_SEO_DESCRIPTION =
   'Your AI built the website. GitCMS gives your team, clients, and AI agents one safe place to edit, review, and publish changes while it stays in your repo.'
 
 /**
- * Founding site license, sold until monthly plans launch. Display-only:
+ * Founding site license, sold for the last time until the Black Friday sale
+ * ends (`BLACK_FRIDAY` in promo.ts). Display-only:
  * checkout amounts live in the billing provider, and the product's billing
  * panel keeps its own copy. Change all three together.
  */
 export const LICENSE_PRICING = {
-  sitePrice: 79,
+  sitePrice: 89,
   seatPrice: 9,
 } as const
 

@@ -1,6 +1,7 @@
 /**
  * Pricing shown in the landing pricing section. The founding license reads
- * from `LICENSE_PRICING`; the monthly plans are not purchasable yet.
+ * from `LICENSE_PRICING` and is sold until the Black Friday sale ends; the
+ * monthly plans are for new sites after that.
  */
 import { LICENSE_PRICING } from '@/lib/positioning'
 
@@ -15,6 +16,7 @@ export const FOUNDING_FEATURES = [
   'Structured fields for page content',
   'Media uploads and image optimization',
   'Team roles, invites, and site access',
+  'Google Search Console insights',
   'All future updates included',
 ] as const
 
