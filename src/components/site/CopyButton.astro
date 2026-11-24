@@ -10,9 +10,11 @@ interface Props {
   size?: 'md' | 'sm'
   /** Overlapping logos shown in place of the copy icon, e.g. the agents a prompt is for. */
   logos?: ReadonlyArray<string>
+  /** Umami event for the click, and its `placement` property. */
+  event?: { name: string; placement?: string }
   class?: string
 }
-const { text, label, copiedLabel = 'Copied', tone = 'light', size = 'md', logos, class: className = '' } = Astro.props
+const { text, label, copiedLabel = 'Copied', tone = 'light', size = 'md', logos, event, class: className = '' } = Astro.props
 const tones = {
   light: 'border border-neutral-200 bg-white text-neutral-900 hover:bg-neutral-50',
   dark: 'border border-white/15 bg-white/5 text-white hover:bg-white/10',
@@ -23,7 +25,7 @@ const sizes = {
   sm: 'h-8 gap-1.5 rounded-lg px-2.5 text-[12.5px] [&_svg]:size-3.5',
 }
 ---
-<button type="button" data-copy={text} class:list={['group/copy inline-flex shrink-0 items-center font-medium transition-colors', sizes[size], tones[tone], className]}>
+<button type="button" data-copy={text} data-umami-event={event?.name} data-umami-event-placement={event?.placement} class:list={['group/copy inline-flex shrink-0 items-center font-medium transition-colors', sizes[size], tones[tone], className]}>
   <span class="contents group-data-[copied=true]/copy:hidden">
     {logos
       ? <span class="flex shrink-0 -space-x-2">{logos.map((logo) => <span class="grid size-6 place-items-center rounded-full border border-neutral-200 bg-white"><img src={logo} alt="" class="size-3.5 object-contain" /></span>)}</span>

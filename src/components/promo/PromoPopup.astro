@@ -7,11 +7,12 @@
 // reach.
 import { ArrowRight, Tag, X } from 'lucide-react'
 import Countdown from './Countdown.astro'
+import CopyButton from '@/components/site/CopyButton.astro'
 import { BLACK_FRIDAY } from '@/lib/promo'
 import { loginUrl } from '@/lib/start-login'
 import { heading } from '@/components/site/styles'
 
-const { sitePrice, seatPrice, teamPlanName, teamYearly } = BLACK_FRIDAY
+const { sitePrice, seatPrice, teamPlanName, teamYearly, agency } = BLACK_FRIDAY
 
 // The header is a commit graph in place of an illustration: main runs along
 // the bottom, a branch forks off and merges back, and the last commit, the
@@ -54,6 +55,14 @@ const sparkles = [[44, 34], [404, 96], [70, 112]]
           <div class="text-[12px] text-neutral-500">Founding license</div>
           <div class="mt-0.5 text-[22px] font-semibold tracking-tight">${sitePrice} <span class="text-[13px] font-normal text-neutral-500">once</span></div>
         </div>
+      </div>
+      <!-- The agency code: a real discount for 5+ sites in one order. -->
+      <div class="mt-3 flex items-center justify-between gap-3 rounded-2xl bg-neutral-950 py-3 pl-5 pr-3 text-white">
+        <div class="min-w-0">
+          <div class="text-[12px] text-neutral-400">Agencies · {agency.minSites}+ sites · first {agency.maxAgencies}</div>
+          <div class="mt-0.5 text-[15px] font-semibold">{agency.percentOff}% off with code <span class="font-mono text-[#DCF986]">{agency.code}</span></div>
+        </div>
+        <CopyButton text={agency.code} label="Copy" copiedLabel="Copied" tone="dark" size="sm" event={{ name: 'bf-code-copy', placement: 'popup' }} />
       </div>
       <a href={loginUrl('/')} data-umami-event="bf-cta" data-umami-event-placement="popup" class="mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-neutral-950 text-[15px] font-medium text-white hover:bg-neutral-800">Get the founding license <ArrowRight className="size-4" /></a>
       <p class="mt-3 text-center text-[12px] text-neutral-500">${seatPrice} per extra seat · every future update included</p>
