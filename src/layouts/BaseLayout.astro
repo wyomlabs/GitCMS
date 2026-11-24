@@ -79,7 +79,8 @@ const siteStructuredData = [
     <link rel="preload" href="/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
     {siteStructuredData.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
     {structuredData && <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
-    <script defer src="https://cloud.umami.is/script.js" data-website-id="a8229929-c431-4b01-85b5-61675a78dc24"></script>
+    <!-- Only production counts: local, LAN and branch-preview visits stay out of the numbers. -->
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="a8229929-c431-4b01-85b5-61675a78dc24" data-domains="gitcms.dev"></script>
   </head>
   <body class="min-h-screen bg-background font-sans antialiased">
     <slot />

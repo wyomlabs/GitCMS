@@ -55,7 +55,7 @@ const sparkles = [[44, 34], [404, 96], [70, 112]]
           <div class="mt-0.5 text-[22px] font-semibold tracking-tight">${sitePrice} <span class="text-[13px] font-normal text-neutral-500">once</span></div>
         </div>
       </div>
-      <a href={loginUrl('/')} class="mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-neutral-950 text-[15px] font-medium text-white hover:bg-neutral-800">Get the founding license <ArrowRight className="size-4" /></a>
+      <a href={loginUrl('/')} data-umami-event="bf-cta" data-umami-event-placement="popup" class="mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-neutral-950 text-[15px] font-medium text-white hover:bg-neutral-800">Get the founding license <ArrowRight className="size-4" /></a>
       <p class="mt-3 text-center text-[12px] text-neutral-500">${seatPrice} per extra seat · every future update included</p>
     </div>
   </div>
@@ -64,6 +64,7 @@ const sparkles = [[44, 34], [404, 96], [70, 112]]
 <button
   type="button"
   data-promo-opener
+  data-umami-event="bf-opener"
   hidden
   aria-label="Black Friday deal"
   class="fixed bottom-4 left-4 z-40 inline-flex items-center gap-2.5 rounded-full border border-neutral-200 bg-white p-3.5 text-sm font-semibold text-neutral-900 shadow-lg shadow-neutral-900/10 transition-all hover:-translate-y-0.5 hover:border-neutral-300 hover:shadow-xl motion-reduce:transition-none motion-reduce:hover:translate-y-0 sm:bottom-6 sm:left-6 sm:px-5 sm:py-3"
@@ -77,6 +78,7 @@ const sparkles = [[44, 34], [404, 96], [70, 112]]
 
 <script>
   import { BLACK_FRIDAY } from '@/lib/promo'
+  import { track } from '@/lib/analytics'
 
   const seenKey = `gitcms:${BLACK_FRIDAY.id}:popup`
   // Wait for some intent before interrupting: a short read or a third of the page.
@@ -86,8 +88,10 @@ const sparkles = [[44, 34], [404, 96], [70, 112]]
   const dialog = document.querySelector<HTMLDialogElement>('dialog[data-promo="popup"]')
   const opener = document.querySelector<HTMLButtonElement>('[data-promo-opener]')
   if (dialog && opener && Date.now() < Date.parse(BLACK_FRIDAY.endsAt)) {
-    const open = () => {
+    // `trigger` says what opened it: the delay, the scroll, or the deal button.
+    const open = (trigger: 'delay' | 'scroll' | 'button') => {
       if (dialog.open) return
+      track('bf-popup-open', { trigger })
       dialog.showModal()
       // The browser focuses the first control, the close button; hold focus
       // on the dialog so nothing opens ringed. Tab still reaches every control.
@@ -101,22 +105,22 @@ const sparkles = [[44, 34], [404, 96], [70, 112]]
       if (event.target === dialog) dialog.close()
     })
     opener.hidden = false
-    opener.addEventListener('click', open)
+    opener.addEventListener('click', () => open('button'))
 
     // The automatic open happens once per campaign; closing it, however it
     // was opened, counts as seen.
     if (!localStorage.getItem(seenKey)) {
       dialog.addEventListener('close', () => localStorage.setItem(seenKey, '1'), { once: true })
-      const autoOpen = () => {
+      const autoOpen = (trigger: 'delay' | 'scroll') => {
         window.removeEventListener('scroll', onScroll)
         clearTimeout(timer)
-        open()
+        open(trigger)
       }
       const onScroll = () => {
         const scrollable = document.documentElement.scrollHeight - window.innerHeight
-        if (scrollable > 0 && window.scrollY / scrollable > SCROLL_SHARE) autoOpen()
+        if (scrollable > 0 && window.scrollY / scrollable > SCROLL_SHARE) autoOpen('scroll')
       }
-      const timer = setTimeout(autoOpen, DELAY_MS)
+      const timer = setTimeout(() => autoOpen('delay'), DELAY_MS)
       window.addEventListener('scroll', onScroll, { passive: true })
       dialog.addEventListener('close', () => {
         window.removeEventListener('scroll', onScroll)

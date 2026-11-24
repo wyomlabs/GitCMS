@@ -34,9 +34,9 @@ const rightCommits = [52, 96, 140]
       <span class:list={['shrink-0 text-[17px] leading-none text-white sm:text-[19px]', heading]}>Black Friday</span>
       <span class="shrink-0 rounded-md bg-[#DCF986] px-2 py-1 text-[13px] font-semibold leading-none text-neutral-950">${BLACK_FRIDAY.sitePrice} once<span class="hidden sm:inline"> per site</span></span>
       <span class="hidden min-w-0 truncate text-neutral-400 md:inline">the last one-time license, ends in <span class="text-neutral-200"><Countdown /></span></span>
-      <a href={loginUrl('/')} class="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full bg-white px-3 text-[13px] font-semibold text-neutral-950 transition-colors hover:bg-neutral-200 sm:px-3.5"><span>Get <span class="hidden sm:inline">the deal</span><span class="sm:hidden">it</span></span> <ArrowRight className="size-3.5" /></a>
+      <a href={loginUrl('/')} data-umami-event="bf-cta" data-umami-event-placement="banner" class="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full bg-white px-3 text-[13px] font-semibold text-neutral-950 transition-colors hover:bg-neutral-200 sm:px-3.5"><span>Get <span class="hidden sm:inline">the deal</span><span class="sm:hidden">it</span></span> <ArrowRight className="size-3.5" /></a>
     </div>
-    <button type="button" data-promo-dismiss aria-label="Dismiss" class="absolute right-2 top-1/2 grid size-7 -translate-y-1/2 sm:right-3 place-items-center rounded-md text-neutral-500 transition-colors hover:bg-white/10 hover:text-white"><X className="size-4" /></button>
+    <button type="button" data-promo-dismiss data-umami-event="bf-banner-dismiss" aria-label="Dismiss" class="absolute right-2 top-1/2 grid size-7 -translate-y-1/2 sm:right-3 place-items-center rounded-md text-neutral-500 transition-colors hover:bg-white/10 hover:text-white"><X className="size-4" /></button>
   </div>
 </div>
 <script is:inline define:vars={{ dismissedKey, endsAt: BLACK_FRIDAY.endsAt }}>
