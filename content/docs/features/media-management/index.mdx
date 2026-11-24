@@ -1,6 +1,6 @@
 ---
-title: Media Library
-description: How to upload, organize, and manage media files through GitCMS.
+title: Media & files
+description: How to upload, organize, search, and manage media and files through GitCMS.
 ---
 
 GitCMS includes a media library for images, videos, downloads, and other static files used by your content. You can store media in your Git repository, or connect object storage such as Cloudflare R2 or AWS S3 when files should live outside Git.
@@ -64,7 +64,7 @@ GitCMS suggests a default folder during onboarding based on your framework:
 | VuePress | `docs/.vuepress/public` |
 | MkDocs | `docs/assets` |
 
-You can change this in **Settings** → **Media**. In a monorepo, the folder is resolved from the selected site root.
+You can change this in **Settings** → **Media & files**. In a monorepo, the folder is resolved from the selected site root.
 
 <Callout type="warn">
 **Git LFS is not compatible with GitCMS uploads.** GitCMS writes files through the GitHub API, so uploaded files are stored as regular Git blobs even if the repository has Git LFS tracking rules. If repository size is a concern, use R2 or S3 for large media.
@@ -103,11 +103,12 @@ Use **Custom media URI** only when your website build already knows how to trans
 
 ### From the sidebar
 
-Open a site and click **Media** in the sidebar. From there you can:
+Open a site and click **Media & files** in the sidebar. From there you can:
 
 - Browse files in a grid or list view.
 - Switch between media libraries.
 - Navigate through folders.
+- Search the open folder by name. The search box filters that folder's folders and files, and resets when you open another folder. It works for repository and object-storage libraries.
 - Upload files by dragging and dropping or using the upload button. Any file type works, not only images.
 - Preview images. Other files, such as PDFs or GPX routes, show as file tiles.
 - Copy a file's link, in the format set by [How links should look](#how-links-should-look).
