@@ -162,11 +162,11 @@ You can change publishing mode in Settings; existing files are not rewritten.
 
 A preview shows a draft on your hosting, before it's live. GitCMS finds previews your host already builds. It doesn't build them itself.
 
-It detects a preview from the deployments, commit statuses, and check runs your host reports for the draft. Check runs are how **Cloudflare Pages** and **Cloudflare Workers Builds** report previews, so they show up like any other host. During site setup, GitCMS looks for available preview sources without blocking onboarding; if none exist yet, detection stays automatic.
+It detects a preview from the deployments, commit statuses, and check runs your host reports for the draft. **Cloudflare Pages** reports its previews as check runs, so they show up like any other host. GitCMS reads only the "Cloudflare Pages" check published by Cloudflare's own GitHub app (**Cloudflare Workers and Pages**), and only when it carries a `*.pages.dev` address. **Cloudflare Workers Builds** check runs carry no preview address, so GitCMS doesn't read them; a Workers site can use the [preview address](#preview-address-optional) instead. During site setup, GitCMS looks for available preview sources without blocking onboarding; if none exist yet, detection stays automatic.
 
 Owners and admins can change this under **Site Settings → General → Preview deployments**: choose a specific deployment source, or disable previews. This preference does not modify the website's files. A preview must belong to the current version of the draft and be verifiably associated with the site. In multi-site repositories, generic deployment hosts may not be safe to embed. Protected preview deployments may require opening the host directly.
 
-Existing GitHub installations need their owners to approve the GitHub App's **Deployments** and **Commit statuses** read permissions, and **Checks: read** to see Cloudflare previews. Until then owners see an approve-access prompt.
+Existing GitHub installations need their owners to approve the GitHub App's **Deployments** and **Commit statuses** read permissions, and **Checks: read** to see Cloudflare Pages previews. Until then owners see an approve-access prompt.
 
 ### Build preview on demand
 
@@ -204,7 +204,7 @@ If you open the repository on GitHub:
 
 ### Builds and checks (for developers)
 
-Autosaves are real commits on the draft branch. GitCMS starts their message with `[skip ci] `, so your CI and preview builds don't run for every few minutes of typing. **Request review** and **Publish** each push one more commit without the prefix (an empty one, titled `Ready for review: <title>` or `Publish: <title>`) when the latest commit is an autosave, so the version a reviewer sees and the version that merges both run your checks. **Build preview** does the same on demand, titled `Build preview: <title>`.
+Autosaves are real commits on the draft branch. GitCMS starts their message with `[skip ci] `, so your CI and preview builds don't run for every few minutes of typing. **Request review** and **Publish** each push one more commit without the prefix (an empty one, with the fixed message `Ready for review` or `Publish`) when the latest commit is an autosave, so the version a reviewer sees and the version that merges both run your checks. **Build preview** does the same on demand, with the message `Build preview`. These messages never include the task's title.
 
 Whether the prefix works depends on your host:
 
