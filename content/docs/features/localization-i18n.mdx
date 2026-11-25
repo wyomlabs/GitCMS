@@ -85,6 +85,8 @@ Setup, in the web app and the CLI, sets up i18n for you.
 - Next.js `i18n` in `next.config` or `next-i18next.config`
 - Nuxt `i18n`
 
+A declared language with a region, such as `en-US`, uses the `en-us/` folder, or `en/` when it's the only declared language that could. Your site's locale codes then match the folder names.
+
 **Otherwise GitCMS reads the folders.** Only real language codes, such as `fr` or `pt-br`, count.
 
 - **All language folders.** When a collection holds two or more language folders and nothing else, such as `content/en/` and `content/fr/`, each is a language, even if the page names are translated.
