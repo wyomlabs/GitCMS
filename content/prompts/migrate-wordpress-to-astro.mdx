@@ -1,21 +1,44 @@
 ---
 title: 'Migrate a WordPress site to Astro'
-description: 'Rebuild a WordPress site as a code-first Astro site with your coding agent, keeping URLs and content, and ready for client editing.'
+description: 'Rebuild a WordPress site as a code-first Astro site with your coding agent, matching the original look page by page in a browser, keeping URLs and content, and ready for client editing.'
 category: migration
 agents:
   - 'Claude Code'
   - 'Codex'
   - 'Cursor'
 order: 12
-lastReviewed: '2026-10-10'
+lastReviewed: '2026-11-25'
 ---
 
 ## The prompt
 
 ```text
 Migrate the WordPress site at [URL] to a new Astro project in this repository.
+The finished site must look and behave like the original, page for page.
+Judge that with a browser, not from the export or the HTML alone.
 
-- Recreate the design and every page template in Astro components.
+Browser
+- Use a browser you can drive: agent-browser, Playwright (MCP or CLI), Chrome
+  DevTools MCP, or your built-in browser. If you have none, stop and tell me
+  which one to install. Don't rebuild the design from guesswork.
+- Save screenshots and captures in .migration/ and add it to .gitignore.
+
+1. Study the original
+- List every URL from the sitemap (/wp-sitemap.xml or /sitemap_index.xml) and
+  the main menus. Group them by template: home, page, post, archive, category,
+  search, 404, and any custom layouts.
+- For each template, open one or two real URLs and take full-page screenshots
+  at 1440px and 390px wide. Scroll to the bottom first so lazy content loads,
+  and dismiss cookie banners and popups.
+- Record the design from computed styles, not by eye: fonts and weights, font
+  sizes and line heights, colors, content widths, spacing, borders, radii,
+  shadows, and breakpoints. Download the web fonts, logo, favicon, and icons.
+- Note what moves: menus and dropdowns, the mobile nav, sliders, accordions,
+  tabs, hover states, sticky headers, forms, and embeds.
+
+2. Rebuild
+- Recreate the layout and every template as Astro components and CSS. Don't
+  copy WordPress or page-builder markup.
 - Convert posts and pages from the WordPress export ([path to WXR file]) into
   Markdown in content collections, keeping titles, dates, slugs, categories,
   featured images, and meta descriptions in frontmatter.
@@ -23,14 +46,30 @@ Migrate the WordPress site at [URL] to a new Astro project in this repository.
 - Download media into public/images and rewrite image links.
 - Put all client-editable page copy in content collections, not components.
 - Generate a sitemap, and keep existing SEO titles and descriptions.
-- When done, report pages migrated, posts migrated, redirects, and anything
-  you couldn't convert.
+
+3. Compare and fix
+- Run the Astro dev server. For every URL you screenshotted, capture the new
+  page at the same widths and compare it with the original, side by side.
+- Fix every visible difference: fonts, spacing, colors, image sizes and crops,
+  header, footer, menus, and section order. Then check the interactions you
+  noted, including the mobile nav. Repeat until a page matches before you move
+  on to the next.
+- Spot-check posts you didn't screenshot for broken embeds, shortcodes, and
+  images.
+
+When done, report pages migrated, posts migrated, redirects, a before/after
+screenshot pair for each template, any differences that remain and why, and
+anything you couldn't convert.
 ```
 
 ## What it does
 
-Agents can rebuild a typical small-business WordPress site in hours. The parts that matter for search (URLs, redirects, metadata) are spelled out so nothing is lost.
+Agents can rebuild a typical small-business WordPress site in hours. The WordPress export holds the content but not the theme, so an agent that only reads the export guesses at the design and the result looks off. This prompt makes the agent study the live site in a browser, measure its styles, and keep comparing screenshots until each template matches. The parts that matter for search (URLs, redirects, metadata) are spelled out so nothing is lost.
+
+## Before you run it
+
+Give your agent a browser. Claude Code, Codex, and Cursor can all use the [Playwright MCP server](https://github.com/microsoft/playwright-mcp); in Claude Code, run `claude mcp add playwright npx @playwright/mcp@latest`. Agents with a shell can also use a browser CLI such as agent-browser.
 
 ## After you run it
 
-Check every template and a sample of posts, then deploy. To give the client back the admin they had in WordPress, [set up GitCMS](/prompts/set-up-gitcms).
+Open the before/after screenshots and click through every template on a phone and a laptop, then deploy. To give the client back the admin they had in WordPress, [set up GitCMS](/prompts/set-up-gitcms/).
