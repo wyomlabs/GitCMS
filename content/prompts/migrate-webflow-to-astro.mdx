@@ -1,0 +1,93 @@
+---
+title: 'Migrate a Webflow site to Astro'
+description: 'Rebuild a Webflow site as a code-first Astro site with your coding agent, matching the original look and interactions in a browser, pulling every asset off Webflow, and keeping content editable.'
+category: migration
+agents:
+  - 'Claude Code'
+  - 'Codex'
+  - 'Cursor'
+order: 15
+lastReviewed: '2026-11-25'
+---
+
+## The prompt
+
+```text
+Migrate the Webflow site at [URL] to a new Astro project in this repository.
+The finished site must look and behave like the original, page for page.
+Judge that with a browser, not from exported HTML or CSVs alone.
+
+Browser
+- Use a browser you can drive: agent-browser, Playwright (MCP or CLI), Chrome
+  DevTools MCP, or your built-in browser. If you have none, stop and tell me
+  which one to install. Don't rebuild the design from guesswork.
+- Save screenshots and captures in .migration/ and add it to .gitignore.
+
+1. Study the original
+- List every URL from /sitemap.xml and the nav and footer links. Group them by
+  template: home, static pages, CMS collection indexes, CMS detail pages,
+  category or tag pages, and 404.
+- For each template, open one or two real URLs, scroll through the full page so
+  lazy assets and scroll-triggered animations finish loading, dismiss banners,
+  and take full-page screenshots at 1440px and 390px wide.
+- Record the design from computed styles, not by eye: fonts and weights, font
+  sizes and line heights, colors, gradients, max widths, spacing, borders,
+  radii, shadows, and breakpoints.
+- Note every Webflow interaction and widget while scrolling and clicking:
+  scroll reveals, sticky sections, hover states, navbars, dropdowns, tabs,
+  sliders, lightboxes, accordions, Lottie animations, embeds, and forms.
+
+2. Rebuild
+- Recreate the layout and templates as semantic Astro components and CSS. Don't
+  copy webflow.css, webflow.js, or w-* wrapper markup.
+- Turn repeated Webflow components and sections into reusable Astro components
+  driven by data props, so layout changes update every page at once.
+- Convert Webflow CMS collections from exported CSVs ([path to CSV folder], if
+  provided) or from the live pages into Astro content collections in
+  Markdown/MDX or JSON. Convert Rich Text HTML fields into clean Markdown,
+  preserve Reference and Multi-Reference slugs in frontmatter, and keep titles,
+  dates, slugs, images, and SEO fields intact.
+- Put editable page copy and collection items in content collections or
+  structured data files, not hardcoded in components.
+- Download every image, video, font, Lottie JSON, logo, favicon, and SVG off
+  cdn.prod.website-files.com, assets-global.website-files.com, and
+  uploads-ssl.webflow.com into public/ (including images inside Rich Text
+  fields) and rewrite all URLs so nothing breaks after Webflow is cancelled.
+- Rebuild tabs, dropdowns, sliders, lightboxes, mobile nav, and scroll
+  animations with clean CSS or lightweight JS instead of webflow.js.
+- Keep every existing URL. Carry over any existing 301 redirect rules, generate
+  redirects for any URL that must change, generate a sitemap, and preserve SEO
+  titles, meta descriptions, and OG tags.
+- Flag every Webflow form, since native Webflow forms stop working once hosting
+  leaves Webflow. Wire them to [form endpoint] or leave a clear TODO in the
+  report.
+
+3. Compare and fix
+- Run the Astro dev server. For every URL you screenshotted, capture the new
+  page at 1440px and 390px and compare it with the original, side by side.
+- Fix every visible difference: fonts, spacing, colors, image crops, header,
+  footer, mobile nav, and section order. Then verify the widgets, tabs,
+  sliders, and scroll animations you noted. Repeat until a page matches before
+  moving to the next.
+- Spot-check CMS detail pages you didn't screenshot for broken embeds, raw HTML
+  artifacts from Rich Text fields, or leftover website-files.com links.
+
+When done, report pages migrated, CMS items migrated, assets pulled off
+Webflow, forms needing a new endpoint, redirects, a before/after screenshot
+pair for each template, and any differences that remain.
+```
+
+## What it does
+
+Webflow's code export skips CMS items and bundles `webflow.css` and `webflow.js`, while CSV exports leave Rich Text as raw HTML full of `website-files.com` CDN links. If an agent migrates from exports alone, you end up with broken images once you cancel Webflow, dead widgets, and layout drift.
+
+This prompt makes your agent study the live Webflow site in a real browser, measure its styles and interactions, convert CMS Rich Text and references into clean Astro content collections, pull every media asset locally, and verify every template side by side.
+
+## Before you run it
+
+- Give your agent a browser. Claude Code, Codex, and Cursor can all use the [Playwright MCP server](https://github.com/microsoft/playwright-mcp); in Claude Code, run `claude mcp add playwright npx @playwright/mcp@latest`. Agents with a shell can also use a browser CLI such as agent-browser.
+- Export each Webflow CMS collection as CSV and put the files in a folder before you start. It's faster and cleaner than scraping dozens of collection items, and preserves slugs and reference fields accurately.
+
+## After you run it
+
+Open the before/after screenshots, click through every template and interactive widget on a phone and a laptop, confirm zero `website-files.com` or `webflow.com` asset URLs remain in the repo, and wire up any forms before switching DNS. To give your team or client visual editing back on top of the new Astro repo, [set up GitCMS](/prompts/set-up-gitcms/).
