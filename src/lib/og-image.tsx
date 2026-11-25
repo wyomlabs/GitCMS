@@ -305,7 +305,7 @@ function OrbitScene({ out }: { out: ReadonlyArray<OgOrbitOut> }) {
   const innerNodes = [
     { src: '/ai-logos/claude-orange.svg', left: 381, top: 169, icon: 36 },
     { src: '/ssg-logos/astro.svg', left: 269, top: 281, icon: 36 },
-    { src: '/logos/google-search-console.svg', left: 381, top: 393, icon: 35 },
+    { src: '/logos/search-console.svg', left: 381, top: 393, icon: 35 },
     { src: isSingle ? '/ssg-logos/nextjs.svg' : '/ai-logos/openai-bw.svg', left: 493, top: 281, icon: 35 },
   ]
 
@@ -359,7 +359,7 @@ function Scene({ scene }: { scene: Exclude<OgScene, { type: 'text' | 'orbit' }> 
           </div>
           {[
             { logo: '/ssg-logos/astro.svg', domain: 'acme-roofing.com', pill: 'Client editing', tone: 'green' as const },
-            { logo: '/logos/google-search-console.svg', domain: 'northstar.dental', pill: 'SEO · +38% clicks', tone: 'sky' as const },
+            { logo: '/logos/search-console.svg', domain: 'northstar.dental', pill: 'SEO · +38% clicks', tone: 'sky' as const },
             { logo: '/ai-logos/claude-orange.svg', domain: 'paperco.studio', pill: '2 agent drafts', tone: 'violet' as const },
             { logo: '/logos/cloudflare.svg', domain: 'harborcafe.co', pill: 'Live · $0 host', tone: 'neutral' as const },
           ].map((row, index) => (
@@ -403,7 +403,7 @@ function Scene({ scene }: { scene: Exclude<OgScene, { type: 'text' | 'orbit' }> 
         <FloatingCard>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 22px', backgroundColor: '#fafaf8', borderBottom: '1px solid #ededeb' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <img src={asset('/logos/google-search-console.svg')} width={22} height={22} />
+              <img src={asset('/logos/search-console.svg')} width={22} height={22} />
               <span style={{ fontFamily: 'Geist', fontSize: 17, fontWeight: 600, color: INK }}>SEO opportunities</span>
             </div>
             <Pill label="+38% clicks" tone="green" />
@@ -780,7 +780,7 @@ function OgTemplate({ resource }: { resource: PublicResource }) {
 function getCachePath(resource: PublicResource, fontBytes: Awaited<ReturnType<typeof loadFonts>>) {
   const hash = createHash('sha256')
   hash.update(readFileSync(resolve('src/lib/og-image.tsx')))
-  hash.update(readFileSync(resolve('public/logos/google-search-console.svg')))
+  hash.update(readFileSync(resolve('public/logos/search-console.svg')))
   hash.update(JSON.stringify({ id: resource.id, title: resource.title, description: resource.description, kind: resource.kind, htmlPath: resource.htmlPath, og: resource.og, ogCopy: resource.ogCopy }))
   for (const font of fontBytes) hash.update(new Uint8Array(font.data))
   return resolve(CACHE_DIR, `${hash.digest('hex')}.png`)
