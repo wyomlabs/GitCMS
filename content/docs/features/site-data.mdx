@@ -24,7 +24,8 @@ Setup adds **at most 20 files per site**, starting with the ones nearest the sit
 | Left out | Why |
 |----------|-----|
 | Files whose top level is a list or a single value | Site data needs named keys at the top level. Top-level lists aren't supported yet |
-| Files over 64 KB, or that would need more than 200 fields | They're datasets rather than something to edit in a form |
+| Files over 64 KB, holding more than 10,000 values, or that would need more than 200 fields | They're datasets rather than something to edit in a form |
+| Files nested more than 16 levels deep | Too deep to work with as a form |
 | YAML files with anchors or aliases | GitCMS can't edit shared values without changing or breaking the other copy |
 | Empty files and files that can't be parsed | There are no fields to detect |
 | Tooling files, such as `manifest.json`, `*.config.json`, `*.schema.json`, and hidden files | They aren't website content |
