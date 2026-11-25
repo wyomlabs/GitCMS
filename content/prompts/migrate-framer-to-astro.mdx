@@ -1,0 +1,89 @@
+---
+title: 'Migrate a Framer site to Astro'
+description: 'Rebuild a Framer site as a code-first Astro site with your coding agent, matching the original look and motion in a browser, pulling every asset off Framer, and keeping content editable.'
+category: migration
+agents:
+  - 'Claude Code'
+  - 'Codex'
+  - 'Cursor'
+order: 14
+lastReviewed: '2026-11-25'
+---
+
+## The prompt
+
+```text
+Migrate the Framer site at [URL] to a new Astro project in this repository.
+The finished site must look and behave like the original, page for page.
+Judge that with a browser, not from raw HTML or exports alone.
+
+Browser
+- Use a browser you can drive: agent-browser, Playwright (MCP or CLI), Chrome
+  DevTools MCP, or your built-in browser. If you have none, stop and tell me
+  which one to install. Don't rebuild the design from guesswork.
+- Save screenshots and captures in .migration/ and add it to .gitignore.
+
+1. Study the original
+- List every URL from /sitemap.xml and the nav and footer links. Group them by
+  template: home, marketing pages, CMS collection indexes, CMS detail pages,
+  legal pages, and 404.
+- For each template, open one or two real URLs, scroll through the full page so
+  lazy assets and scroll-triggered sections finish loading, dismiss banners, and
+  take full-page screenshots at 1440px and 390px wide.
+- Record the design from computed styles, not by eye: fonts and weights, font
+  sizes and line heights, colors, gradients, max widths, spacing, borders,
+  radii, shadows, and breakpoints.
+- Note every interaction and animation while scrolling and hovering: scroll
+  reveals, sticky sections, hover states, component variants, tabs, accordions,
+  modals, mobile nav, embeds, and forms.
+
+2. Rebuild
+- Recreate the layout and templates as semantic Astro components and CSS. Don't
+  copy Framer's nested framer-* div markup or inline absolute positioning.
+- Turn repeated sections and Framer component variants into reusable components
+  driven by data props, so changing a layout updates every page at once.
+- Convert Framer CMS collections from exported CSVs ([path to CSV folder], if
+  provided) or directly from the live pages into Astro content collections in
+  Markdown/MDX or JSON, keeping titles, dates, slugs, categories, images, and
+  meta descriptions in frontmatter.
+- Put editable page copy and repeated item data in content collections or
+  structured data files, not hardcoded in components.
+- Download every image, video, font, logo, favicon, and SVG off
+  framerusercontent.com into public/ and rewrite all URLs so nothing breaks
+  after Framer is cancelled.
+- Rebuild scroll reveals, sticky sections, and hover transitions with clean CSS
+  or lightweight JS. Don't bundle Framer's runtime.
+- Keep every existing URL. Generate redirects for any that must change,
+  generate a sitemap, and preserve SEO titles, meta descriptions, and OG tags.
+- Flag every Framer form, since native Framer forms stop working once the site
+  leaves Framer. Wire them to [form endpoint] or leave a clear TODO in the
+  report.
+
+3. Compare and fix
+- Run the Astro dev server. For every URL you screenshotted, capture the new
+  page at 1440px and 390px and compare it with the original, side by side.
+- Fix every visible difference: fonts, spacing, colors, image crops, header,
+  footer, mobile nav, and section order. Then verify the scroll animations and
+  interactions you noted. Repeat until a page matches before moving to the next.
+- Spot-check CMS detail pages you didn't screenshot for broken images, embeds,
+  or leftover framerusercontent.com links.
+
+When done, report pages migrated, CMS items migrated, assets pulled off Framer,
+forms needing a new endpoint, redirects, a before/after screenshot pair for
+each template, and any differences that remain.
+```
+
+## What it does
+
+Framer has no full-site export like WordPress. You can export CMS collections as CSV, but static pages, layouts, and interactions only exist in the published site. An agent that tries to copy Framer's compiled HTML ends up with unmaintainable `framer-*` div soup and broken `framerusercontent.com` links the day you cancel your plan.
+
+This prompt makes your agent study the live Framer site in a real browser, measure its styles and animations, pull every media asset locally, and rebuild clean Astro components with content separated into collections. It also catches the things teams usually forget until launch day, like Framer's native forms stopping and OG tags disappearing.
+
+## Before you run it
+
+- Give your agent a browser. Claude Code, Codex, and Cursor can all use the [Playwright MCP server](https://github.com/microsoft/playwright-mcp); in Claude Code, run `claude mcp add playwright npx @playwright/mcp@latest`. Agents with a shell can also use a browser CLI such as agent-browser.
+- If your Framer site has CMS collections, export each collection as CSV from Framer and drop the files in a folder before you start. It's faster and cleaner than scraping dozens of detail pages.
+
+## After you run it
+
+Open the before/after screenshots, click through every template on a phone and a laptop, verify zero `framerusercontent.com` URLs remain in the repo, and wire up any forms before switching DNS. To give your marketing team visual editing back on top of the new Astro repo, [set up GitCMS](/prompts/set-up-gitcms/).
