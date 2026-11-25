@@ -7,6 +7,12 @@ GitCMS works with any static site generator that reads Markdown or MDX files fro
 
 The core idea is the same everywhere: point GitCMS at the folder where your framework expects content files, match the frontmatter fields your framework uses, and you're done — all through the Settings UI.
 
+## How GitCMS detects your framework
+
+Only the framework's configuration files decide, such as `astro.config.mjs`, `hugo.toml`, `_config.yml`, or `.vuepress/config.js`. Folder names don't: a `docs/` folder in a Hugo site doesn't make it VuePress.
+
+Hugo's split configuration counts too. `config/_default/` and environment folders such as `config/production/` belong to the Hugo site above them, and are never listed as sites of their own.
+
 ## Supported frameworks
 
 GitCMS recognizes and provides optimized defaults for:

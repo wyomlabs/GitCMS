@@ -76,6 +76,15 @@ For multilingual workflows, explicitly mention target locale in your prompt (for
 
 ## Detection during onboarding
 
-Onboarding can detect locale-folder patterns and suggest i18n setup.
+Setup, in the web app and the CLI, sets up i18n for you.
 
-If default locale cannot be safely inferred, GitCMS keeps i18n conservative and asks you to confirm defaults in Settings.
+**Your framework's language config comes first.** When a site declares its languages (Hugo `languages` in `hugo` or `config` files, including `config/_default/languages.*`, or Astro and Starlight `locales`), those are the site's languages and its default. Only folders named after them are treated as translations.
+
+**Otherwise GitCMS reads the folders.** A folder counts as a language only when both are true:
+
+- Its name is a real language code, such as `fr` or `pt-br`.
+- Its pages mirror other content: at least half of them exist at the same path among the untranslated pages, or it shares at least half the pages of the smaller of the two with another language folder.
+
+So a folder like `it/` holding IT service pages of its own stays an ordinary folder. Without untranslated pages beside the folders, at least two language folders have to mirror each other.
+
+Untranslated pages are taken to be English. If English already has its own folder, GitCMS can't tell which language they are: it uses the first language found as the default, so check **Default locale** in Settings.
