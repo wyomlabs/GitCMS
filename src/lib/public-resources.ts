@@ -30,12 +30,34 @@ export type PublicResourceKind =
   | 'index'
 
 /** The product scene on a page's OG image; pages without one get a default for their kind. */
+export type OgOrbitOut = {
+  label: string
+  logo?: string
+}
+
 export type OgScene =
   | { type: 'text' }
-  | { type: 'published' }
-  | { type: 'agent'; logo: string }
-  | { type: 'files'; logo: string; files: 'data' | 'markdown' }
-  | { type: 'versus'; competitor: string }
+  | { type: 'orbit'; out: ReadonlyArray<OgOrbitOut> }
+  | { type: 'fleet' }
+  | { type: 'handoff' }
+  | { type: 'seo' }
+  | { type: 'startup-review' }
+  | { type: 'editor' }
+  | { type: 'board' }
+  | { type: 'change-requests' }
+  | { type: 'agent'; logo: string; name: string }
+  | { type: 'files'; logo: string; name: string; files: 'data' | 'markdown' }
+  | { type: 'versus'; competitor: string; logo?: string }
+  | { type: 'tool'; filename: string; badge: string }
+  | { type: 'extension' }
+  | { type: 'audiences' }
+
+export type OgCopy = {
+  eyebrow?: string
+  title?: string
+  titleLines?: readonly [string, string]
+  subtitle?: string
+}
 
 export type PublicResource = {
   id: string
@@ -50,6 +72,92 @@ export type PublicResource = {
   noIndex?: boolean
   updatedAt?: string
   og?: OgScene
+  ogCopy?: OgCopy
+}
+
+const COMPETITOR_LOGOS: Record<string, string> = {
+  WordPress: '/logos/wordpress.svg',
+  Webflow: '/logos/webflow.svg',
+  Framer: '/logos/framer.svg',
+  Sanity: '/logos/sanity.svg',
+  TinaCMS: '/logos/tina.svg',
+}
+
+const DEFAULT_ORBIT_OUT: ReadonlyArray<OgOrbitOut> = [
+  { label: 'WordPress', logo: '/logos/wordpress.svg' },
+  { label: 'Webflow', logo: '/logos/webflow.svg' },
+  { label: 'Framer', logo: '/logos/framer.svg' },
+]
+
+const TOOL_OG_META: Record<string, { filename: string; badge: string }> = {
+  'markdown-editor': { filename: 'src/content/blog/post.md', badge: 'Free · No sign-up' },
+  'agents-md-editor': { filename: 'AGENTS.md', badge: 'Free · Coding agents' },
+  'claude-md-editor': { filename: 'CLAUDE.md', badge: 'Free · Claude Code' },
+  'github-markdown-editor': { filename: 'github.com/owner/repo', badge: 'Free · Public repos' },
+  'readme-editor': { filename: 'README.md', badge: 'Free · Visual editor' },
+  'image-compressor': { filename: 'hero-banner.png → .webp', badge: 'Free · Runs locally' },
+}
+
+const PERSONA_OG: Record<string, { og: OgScene; ogCopy: OgCopy }> = {
+  agencies: {
+    og: { type: 'fleet' },
+    ogCopy: {
+      eyebrow: 'GitCMS for agencies',
+      title: 'Ship client sites in Astro. Hand them off without WordPress.',
+      subtitle: 'Every client site, review, and agent in one workspace.',
+    },
+  },
+  freelancers: {
+    og: { type: 'handoff' },
+    ogCopy: {
+      eyebrow: 'GitCMS for freelancers',
+      title: 'Let clients edit the site you built.',
+      subtitle: 'Hand off Astro and Next.js sites with a visual editor and full Git history.',
+    },
+  },
+  'solo-builders': {
+    og: { type: 'seo' },
+    ogCopy: {
+      eyebrow: 'GitCMS for solo builders',
+      title: 'Keep your blog, docs, and changelog shipping.',
+      subtitle: 'Search Console opportunities, agent drafts, and SEO checks in one place.',
+    },
+  },
+  startups: {
+    og: { type: 'startup-review' },
+    ogCopy: {
+      eyebrow: 'GitCMS for startups',
+      title: 'Your site is code. Editing it shouldn’t need an engineer.',
+      subtitle: 'Marketing and AI agents draft visually; every change goes through review.',
+    },
+  },
+}
+
+const FEATURE_OG: Record<string, { og: OgScene; ogCopy: OgCopy }> = {
+  'visual-editor': {
+    og: { type: 'editor' },
+    ogCopy: {
+      eyebrow: 'Feature · Visual editor',
+      title: 'Visual editor for the files your site is made of.',
+      subtitle: 'Edit Markdown, MDX, frontmatter, and JSON or YAML data files straight in Git.',
+    },
+  },
+  'editorial-workflow': {
+    og: { type: 'board' },
+    ogCopy: {
+      eyebrow: 'Feature · Editorial workflow',
+      title: 'Ideas to published, with review in between.',
+      subtitle: 'Inline comments, approvals, and publish permissions without touching branches.',
+    },
+  },
+  'change-requests': {
+    og: { type: 'change-requests' },
+    ogCopy: {
+      eyebrow: 'Feature · Change requests',
+      title: 'Feedback pinned to the page, checked on previews.',
+      subtitle: 'Clients click what to fix. Your coding agent gets one prompt.',
+    },
+  },
 }
 
 export function normalizeHtmlPath(path: string) {
@@ -263,6 +371,12 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
     title: DEFAULT_SEO_TITLE,
     description: DEFAULT_SEO_DESCRIPTION,
     htmlPath: '/',
+    og: { type: 'orbit', out: DEFAULT_ORBIT_OUT },
+    ogCopy: {
+      eyebrow: 'For agencies, freelancers & SEO teams',
+      titleLines: ['Move clients to Astro.', 'Keep the CMS.'],
+      subtitle: 'Visual editor, Search Console SEO, and agent drafts on top of your Git repo.',
+    },
     body: [
       PRODUCT_DEFINITION,
       '',
@@ -322,13 +436,19 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       description: entry.data.description,
       htmlPath: `/compare/${slug}`,
       body: entry.body ?? '',
-      og: { type: 'versus', competitor: entry.data.competitor },
+      og: { type: 'versus', competitor: entry.data.competitor, logo: COMPETITOR_LOGOS[entry.data.competitor] },
+      ogCopy: {
+        eyebrow: 'Honest comparison',
+        title: `GitCMS vs ${entry.data.competitor}`,
+        subtitle: entry.data.description,
+      },
       updatedAt: entry.data.lastReviewed,
     }))
   }
 
   for (const entry of alternatives) {
     const slug = slugFromId(entry.id)
+    const competitor = entry.data.competitor
     resources.push(resource({
       id: `alternative:${slug}`,
       kind: 'alternative',
@@ -336,6 +456,11 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       description: entry.data.description,
       htmlPath: `/alternatives/${slug}`,
       body: entry.body ?? '',
+      og: { type: 'orbit', out: [{ label: competitor, logo: COMPETITOR_LOGOS[competitor] }] },
+      ogCopy: {
+        eyebrow: `${competitor} alternatives`,
+        subtitle: entry.data.cta ?? entry.data.description,
+      },
       updatedAt: entry.data.lastReviewed,
     }))
   }
@@ -381,6 +506,7 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
 
   for (const entry of tools.sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999) || a.data.title.localeCompare(b.data.title))) {
     const slug = slugFromId(entry.id)
+    const toolMeta = TOOL_OG_META[slug] ?? { filename: 'content.md', badge: 'Free · No sign-up' }
     resources.push(resource({
       id: `tool:${slug}`,
       kind: 'tool',
@@ -388,6 +514,11 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       description: entry.data.description,
       htmlPath: `/tools/${slug}`,
       body: entry.body ?? '',
+      og: { type: 'tool', filename: toolMeta.filename, badge: toolMeta.badge },
+      ogCopy: {
+        eyebrow: 'Free browser tool',
+        subtitle: entry.data.description,
+      },
     }))
   }
 
@@ -400,6 +531,7 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       description: entry.data.description ?? `${entry.data.title} from GitCMS.`,
       htmlPath: `/${slug}`,
       body: entry.body ?? '',
+      og: { type: 'text' },
       listed: slug === 'manifesto',
       noIndex: slug === 'privacy' || slug === 'terms',
     }))
@@ -413,11 +545,16 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       description: getAgentLandingDescription(agent),
       htmlPath: `/agents/${agent.slug}`,
       body: agentBody(agent),
-      og: { type: 'agent', logo: agent.logoPath },
+      og: { type: 'agent', logo: agent.logoPath, name: agent.name },
+      ogCopy: {
+        eyebrow: 'AI agents · MCP',
+        subtitle: agent.description,
+      },
     }))
   }
 
   for (const feature of features) {
+    const featureOg = FEATURE_OG[feature.slug]
     resources.push(resource({
       id: `feature:${feature.slug}`,
       kind: 'feature',
@@ -425,10 +562,13 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       description: feature.seoDescription,
       htmlPath: feature.path,
       body: featureBody(feature),
+      og: featureOg?.og,
+      ogCopy: featureOg?.ogCopy,
     }))
   }
 
   for (const useCase of useCases) {
+    const personaOg = PERSONA_OG[useCase.slug]
     resources.push(resource({
       id: `persona:${useCase.slug}`,
       kind: 'persona',
@@ -436,6 +576,8 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       description: useCase.seoDescription,
       htmlPath: useCase.path,
       body: useCaseBody(useCase),
+      og: personaOg?.og,
+      ogCopy: personaOg?.ogCopy,
     }))
   }
 
@@ -447,7 +589,11 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       description: getFrameworkLandingDescription(framework),
       htmlPath: `/git-based-cms-for-${framework.slug}`,
       body: frameworkBody(framework),
-      og: { type: 'files', logo: framework.logo, files: 'markdown' },
+      og: { type: 'files', logo: framework.logo, name: framework.name, files: 'markdown' },
+      ogCopy: {
+        eyebrow: `${framework.name} CMS`,
+        subtitle: `Visual editor, Search Console SEO, and agent drafts for ${framework.name} sites.`,
+      },
     }))
   }
 
@@ -459,7 +605,11 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
       description: getSiteBuilderDescription(builder),
       htmlPath: `/cms-for-${builder.slug}`,
       body: builderBody(builder),
-      og: { type: 'files', logo: builder.logo, files: 'data' },
+      og: { type: 'files', logo: builder.logo, name: builder.name, files: 'data' },
+      ogCopy: {
+        eyebrow: 'AI site builders',
+        subtitle: `Make ${builder.name} sites editable for clients without touching code.`,
+      },
     }))
   }
 
@@ -469,6 +619,12 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
     title: 'GitCMS Browser Extension for Chrome and Firefox',
     description: 'Open GitHub repositories, Markdown files, and folders directly in GitCMS. A free browser companion for managing code-first websites.',
     htmlPath: '/extension',
+    og: { type: 'extension' },
+    ogCopy: {
+      eyebrow: 'Browser extension',
+      title: 'Open any GitHub repo in GitCMS in one click.',
+      subtitle: 'Free companion for Chrome and Firefox. Type gitcms in the address bar.',
+    },
     body: 'The GitCMS browser extension opens GitHub repositories, Markdown files, and folders in GitCMS from a right-click, the current GitHub location, or the address bar (type `gitcms`). It is a shortcut to the GitCMS web app, not an embedded editor. Install it from the Chrome Web Store or Firefox Add-ons. See /docs/features/chrome-extension.',
   }))
 
@@ -486,22 +642,50 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
     resource({
       id: 'index:compare', kind: 'index', title: 'GitCMS Comparisons',
       description: 'Honest comparisons between GitCMS and website builders, headless CMSs, Git-based CMSs, and publishing platforms.',
-      htmlPath: '/compare', body: listBody('Comparisons', 'Every comparison says where the other tool is genuinely better.', byKind('comparison')),
+      htmlPath: '/compare',
+      og: { type: 'versus', competitor: 'Legacy CMSs', logo: '/logos/wordpress.svg' },
+      ogCopy: {
+        eyebrow: 'Comparisons',
+        title: 'How GitCMS compares to other CMSs.',
+        subtitle: 'Honest side-by-side tradeoffs against WordPress, Webflow, Sanity, and more.',
+      },
+      body: listBody('Comparisons', 'Every comparison says where the other tool is genuinely better.', byKind('comparison')),
     }),
     resource({
       id: 'index:alternatives', kind: 'index', title: 'Alternatives',
       description: 'Ranked alternatives to WordPress and popular CMSs for teams running code-first and AI-built websites, with stated criteria and tradeoffs.',
-      htmlPath: '/alternatives', body: listBody('Alternatives', 'Each guide ranks the alternatives on stated criteria, lists every option’s tradeoffs, GitCMS included, and says when to stay.', byKind('alternative')),
+      htmlPath: '/alternatives',
+      og: { type: 'orbit', out: DEFAULT_ORBIT_OUT },
+      ogCopy: {
+        eyebrow: 'CMS alternatives',
+        title: 'Alternatives to WordPress, Webflow, and legacy CMSs.',
+        subtitle: 'Ranked guides with stated criteria and honest tradeoffs for agencies and teams.',
+      },
+      body: listBody('Alternatives', 'Each guide ranks the alternatives on stated criteria, lists every option’s tradeoffs, GitCMS included, and says when to stay.', byKind('alternative')),
     }),
     resource({
       id: 'index:agents', kind: 'index', title: 'GitCMS for AI Agents',
       description: 'Connect ChatGPT, Claude, coding agents, and personal agents to website content through GitCMS.',
-      htmlPath: '/agents', og: { type: 'agent', logo: '/ai-logos/claude-orange.svg' }, body: listBody('Agents', 'Agents draft website changes through GitCMS while people keep control of publishing.', byKind('agent')),
+      htmlPath: '/agents',
+      og: { type: 'agent', logo: '/ai-logos/claude-orange.svg', name: 'Claude & Codex' },
+      ogCopy: {
+        eyebrow: 'AI agents · MCP',
+        title: 'Connect your AI agents to website content.',
+        subtitle: 'Claude, ChatGPT, Codex, and Cursor draft through GitCMS while humans approve.',
+      },
+      body: listBody('Agents', 'Agents draft website changes through GitCMS while people keep control of publishing.', byKind('agent')),
     }),
     resource({
       id: 'index:for', kind: 'index', title: 'Who GitCMS Is For',
       description: 'GitCMS workflows for agencies, startups, freelancers, and solo builders running code-first websites.',
-      htmlPath: '/for', body: listBody('Use cases', 'Choose the setup that most closely matches how your website is run.', byKind('persona')),
+      htmlPath: '/for',
+      og: { type: 'audiences' },
+      ogCopy: {
+        eyebrow: 'Who it’s for',
+        title: 'Built for teams running code-first websites.',
+        subtitle: 'Workflows for agencies, freelancers, SEO teams, startups, and solo builders.',
+      },
+      body: listBody('Use cases', 'Choose the setup that most closely matches how your website is run.', byKind('persona')),
     }),
     resource({
       id: 'index:glossary', kind: 'index', title: 'GitCMS Glossary',
@@ -516,7 +700,14 @@ export async function getPublicResources(): Promise<Array<PublicResource>> {
     resource({
       id: 'index:tools', kind: 'index', title: 'GitCMS Free Tools',
       description: 'Free browser tools for Markdown, README, AGENTS.md, and CLAUDE.md files, public GitHub Markdown, and WebP image compression.',
-      htmlPath: '/tools', body: listBody('Tools', 'Free tools that run in the browser. No sign-up.', byKind('tool')),
+      htmlPath: '/tools',
+      og: { type: 'tool', filename: 'AGENTS.md · README.md · .webp', badge: '6 free browser tools' },
+      ogCopy: {
+        eyebrow: 'Free browser tools',
+        title: 'Free tools for Markdown and coding-agent files.',
+        subtitle: 'Edit AGENTS.md, CLAUDE.md, READMEs, and compress WebP images locally.',
+      },
+      body: listBody('Tools', 'Free tools that run in the browser. No sign-up.', byKind('tool')),
     }),
   ]
 
