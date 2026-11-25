@@ -19,7 +19,11 @@ It looks for `.json`, `.jsonc`, `.yaml`, `.yml`, and `.toml` files in these fold
 
 Each file becomes one piece of site data, named after its path inside the folder: `data/en/menu.yaml` becomes `en-menu`.
 
-Setup adds **at most 20 files per site**, starting with the ones nearest the site root, so a folder holding hundreds of records doesn't turn into hundreds of forms. It also leaves out:
+A subfolder holding more than 5 data files, such as `_data/comments/`, is treated as a dataset and left out, unless it's named for a language, such as `data/en/`.
+
+Setup adds **at most 20 files per site**. Files named for what people usually edit (menu, nav, navigation, header, footer, site, settings, social, authors) come first, then the ones nearest the site root. `create-gitcms` prints how many files it left out, by reason, as `site_data_skipped`.
+
+It also leaves out:
 
 | Left out | Why |
 |----------|-----|

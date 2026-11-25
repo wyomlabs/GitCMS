@@ -9,7 +9,7 @@ The core idea is the same everywhere: point GitCMS at the folder where your fram
 
 ## How GitCMS detects your framework
 
-Only the framework's configuration files decide, such as `astro.config.mjs`, `hugo.toml`, `_config.yml`, or `.vuepress/config.js`. Folder names don't: a `docs/` folder in a Hugo site doesn't make it VuePress.
+Only the framework's configuration files decide, such as `astro.config.mjs`, `hugo.toml`, `_config.yml`, or `.vuepress/config.ts`, in any of the formats the framework accepts. Folder names don't: a `docs/` folder in a Hugo site doesn't make it VuePress.
 
 Hugo's split configuration counts too. `config/_default/` and environment folders such as `config/production/` belong to the Hugo site above them, and are never listed as sites of their own.
 
