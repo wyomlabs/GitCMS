@@ -27,6 +27,7 @@ It also leaves out:
 
 | Left out | Why |
 |----------|-----|
+| Files a `package.json` script writes, and files whose top-level key or leading comment says they're generated | Your next build would overwrite an editor's changes |
 | Files whose top level is a list or a single value | Site data needs named keys at the top level. Top-level lists aren't supported yet |
 | Files over 64 KB, holding more than 10,000 values, or that would need more than 200 fields | They're datasets rather than something to edit in a form |
 | Files nested more than 16 levels deep | Too deep to work with as a form |

@@ -34,7 +34,7 @@ The CLI inspects your repository and infers:
 - Site roots (single-site or monorepo)
 - Each site's website address, from the site's own config (Astro `site`, Hugo `baseURL`, Jekyll `url`, Docusaurus `url`, Gatsby `siteUrl`, `next-sitemap` `siteUrl`, or `package.json` `homepage`)
 - The framework, from its [configuration files](/docs/getting-started/frameworks#how-gitcms-detects-your-framework), and its defaults (repository media root, frontmatter format)
-- Collections and content paths
+- Collections, content paths, and each collection's [fields](/docs/features/collections#schema-inference)
 - Languages, from the framework's language config or [language folders](/docs/features/localization-i18n#detection-during-onboarding)
 - [Site data](/docs/features/site-data#added-during-setup) from data files with named keys in `data/`, `_data/`, `src/data/`, and `src/_data/`
 
@@ -140,6 +140,8 @@ npx create-gitcms@latest --mode monorepo --dry-run
 The CLI sets up i18n from the framework's language config, or from language folders, as described in [Localization](/docs/features/localization-i18n#detection-during-onboarding).
 
 If it can't tell which language is the default, it uses the first one it found and warns you to check `i18n.default_locale`.
+
+It also warns about what the configuration can't express: [translations by file name](/docs/features/localization-i18n#translations-by-file-name), and the `.md` or `.mdx` files left out of a collection that mixes both.
 
 ## Checking and upgrading configuration
 

@@ -67,6 +67,10 @@ GitCMS MCP tools are locale-aware.
 
 For multilingual workflows, explicitly mention target locale in your prompt (for example: "use locale `fr`"). This helps AI read and write the intended locale path.
 
+## Translations by file name
+
+GitCMS groups translations kept in a folder per language, such as `content/es/`. It can't yet group translations named by language, such as Hugo's `post.es.md`: each file is listed as its own entry. Setup says how many it found.
+
 ## Detection during onboarding
 
 Setup, in the web app and the CLI, sets up i18n for you.

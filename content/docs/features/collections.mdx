@@ -298,6 +298,12 @@ Every field type accepts these shared options:
 | **Description** | Help text shown below the input |
 | **Required** | Whether the field must have a value |
 
+## Files that aren't content
+
+Setup doesn't make collections out of files that are about the repository: `README`, `CHANGELOG`, `CONTRIBUTING`, `LICENSE`, `SECURITY`, and `CODE_OF_CONDUCT` files, agent instructions such as `AGENTS.md` and `CLAUDE.md`, and anything in a `vendor`, `third_party`, or `bower_components` folder.
+
+This applies to what setup suggests. A collection lists every file of its type in its folder.
+
 ## Schema inference
 
 If you don't define a frontmatter schema for a collection, GitCMS automatically infers field types from your existing content. It analyzes the frontmatter in your Markdown files and detects:
@@ -308,6 +314,8 @@ If you don't define a frontmatter schema for a collection, GitCMS automatically 
 - Arrays of strings become multiselect fields.
 - Objects become groups, and lists of objects become lists, with their fields detected from every item.
 - Boolean values become boolean fields.
+
+During setup, GitCMS reads up to five entries of each collection, so a field that only some entries use is included, and a field with different kinds of values gets one that fits them all.
 
 This means you can start using GitCMS immediately without defining any schema — it just works with your existing content. You can then refine the schema through Settings for better labels, validation, and field-specific options.
 
