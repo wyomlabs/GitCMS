@@ -302,7 +302,15 @@ Every field type accepts these shared options:
 
 Setup doesn't make collections out of files that are about the repository: `README`, `CHANGELOG`, `CONTRIBUTING`, `LICENSE`, `SECURITY`, and `CODE_OF_CONDUCT` files, agent instructions such as `AGENTS.md` and `CLAUDE.md`, and anything in a `vendor`, `third_party`, or `bower_components` folder.
 
+A folder named `build` is left out only when `.gitignore` lists it or its files have no front matter, so a docs section about building stays.
+
 This applies to what setup suggests. A collection lists every file of its type in its folder.
+
+## How folders become collections
+
+In a content folder such as `content/`, each folder inside it is its own collection. When more pages sit directly in the folder than in any one folder inside it, as in a docs site, the whole folder is one collection instead.
+
+Because a collection takes every file in its folder, pages beside collection folders (such as `content/about.md` next to `content/blog/`) or at the site root can't be in one. Setup counts them and says where they are.
 
 ## Schema inference
 
