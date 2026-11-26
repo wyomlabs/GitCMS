@@ -1,0 +1,31 @@
+{
+  "dialect": "mdx-jsx",
+  "children": {
+    "kind": "none"
+  },
+  "props": [
+    {
+      "name": "compare",
+      "label": "Compare",
+      "required": true,
+      "type": "select",
+      "options": [
+        "wordpress",
+        "framer",
+        "webflow"
+      ]
+    },
+    {
+      "name": "sites",
+      "label": "Sites",
+      "required": true,
+      "type": "number"
+    },
+    {
+      "name": "editors",
+      "label": "Editors",
+      "required": true,
+      "type": "number"
+    }
+  ]
+}
