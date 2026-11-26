@@ -7,7 +7,7 @@ Not all of a site's content is entries. Menus, footers, team lists, homepage sec
 
 ## Added during setup
 
-When you set up a site, in the web app or with [`create-gitcms`](/docs/getting-started/cli-onboarding), GitCMS adds the data files it finds as site data, with fields detected from what each file holds. There's nothing to add by hand for the usual cases.
+When you set up a site, in the web app or with [`create-gitcms`](/docs/getting-started/cli-onboarding), GitCMS adds the data files it finds as site data, with fields detected from what each file holds. There's nothing to add by hand for the usual cases. Both find the same files; in the web app, setup lists them first so you can untick any you don't want.
 
 It looks for `.json`, `.jsonc`, `.yaml`, `.yml`, and `.toml` files in these folders and their subfolders, from the site root:
 
@@ -21,7 +21,7 @@ Each file becomes one piece of site data, named after its path inside the folder
 
 A subfolder holding more than 5 data files, such as `_data/comments/`, is treated as a dataset and left out, unless it's named for a language, such as `data/en/`.
 
-Setup adds **at most 20 files per site**. Files named for what people usually edit (menu, nav, navigation, header, footer, site, settings, social, authors) come first, then the ones nearest the site root. `create-gitcms` prints how many files it left out, by reason, as `site_data_skipped`.
+Setup adds **at most 20 files per site**. Files named for what people usually edit (menu, nav, navigation, header, footer, site, settings, social, authors) come first, then the ones nearest the site root. The web app's setup checklist shows how many files were left out, with the reasons; `create-gitcms` prints the same counts as `site_data_skipped`.
 
 It also leaves out:
 
