@@ -12,8 +12,8 @@ For production, use:
 - one bucket per site or environment
 - a dedicated IAM user or access key with least-privilege bucket access
 - a public asset domain, usually through CloudFront or another CDN
-- a GitCMS workspace integration that stores the S3 credentials
-- a site media library that references that workspace integration
+- a GitCMS storage account that holds the S3 credentials
+- a site media library that uses that storage account
 
 Do not commit S3 credentials into `.gitcms`. GitCMS stores workspace integration credentials separately and encrypts them.
 
@@ -101,23 +101,22 @@ Use a CORS policy like this:
 
 Set `AllowedOrigins` to the GitCMS application origin your editors use. If your organization uses a separate GitCMS deployment, replace `https://gitcms.dev` with that origin. Do not include development or localhost origins in a production bucket unless that bucket is only for testing.
 
-## Add the bucket to your workspace
+## Connect the storage account
 
-In GitCMS, open **Settings** → **Media storage** → **Add bucket**.
+In GitCMS, open **Settings** → **Media storage** → **Add account**, choose the provider, and fill in:
 
 For AWS S3:
 
 ```txt
-Provider: AWS S3 / S3-compatible
-Display name: Production S3
-Integration key: production-s3
+Provider: Amazon S3
+Name: Production S3
 Access Key ID: <S3 access key ID>
 Secret Access Key: <S3 secret access key>
 Region: <bucket region>
 Endpoint: leave empty for AWS S3
 ```
 
-For another S3-compatible provider, set the endpoint to that provider's S3 API endpoint:
+For another S3-compatible provider, set **Advanced** → **Endpoint** to that provider's S3 API endpoint:
 
 ```txt
 Endpoint: https://s3.example-provider.com
@@ -127,18 +126,18 @@ The endpoint is the S3 API endpoint used for signed upload/list/delete operation
 
 ## Add the site media library
 
-Open the site **Settings** → **Media** and add an S3 media library.
+Open the site's **Configure** → **Media & files**, then **Add library** → **AWS S3**.
 
 Use:
 
 ```txt
 Library key: production_media
 Label: Production media
-Integration: workspace:production-s3
+Account: Production S3
 Bucket: example-production-media
 Path prefix: assets
 Public base URL: https://assets.example.com
-How links should look: Full CDN URL
+Links: Full URL
 ```
 
 With this setup, GitCMS uploads the file to S3 at:
@@ -155,7 +154,7 @@ https://assets.example.com/assets/blog/hero.webp
 
 If you do not want the `assets` segment in the public URL, leave **Path prefix** empty.
 
-Do not commit the S3 access key or secret access key. GitCMS stores credentials in the encrypted workspace integration, not in the site config.
+Do not commit the S3 access key or secret access key. GitCMS stores them encrypted in the workspace's storage account, never in the repository.
 
 ## Website-relative links
 
@@ -166,7 +165,7 @@ Example:
 ```txt
 Path prefix: assets
 Public base URL: https://assets.example.com
-How links should look: Website-relative URL
+Links: Website path
 Base path: /assets
 ```
 

@@ -12,33 +12,26 @@ You can:
 - control whether the default locale is prefixed in paths
 - configure per-collection locale path overrides
 
-## Site-level i18n settings
+## Languages in Configure
 
-In **Settings → General**, enable i18n and configure:
+Open the site's **Configure** → **Languages**:
 
-| Setting | Purpose |
-|---------|---------|
-| **Locales** | Allowed locale codes for the site |
-| **Default locale** | Fallback locale when none is selected |
-| **Default locale path** | Whether default locale should be prefixed in paths |
+- **Languages** lists the site's languages by name and code (for example "Français fr"). Use **Add language** to add one, **Make default** to change the default, and remove a language from its row. A site is multilingual once it has two languages; there is no separate switch.
+- **Translated collections** is a table with a collection per row and a language per column. Turn a collection on to translate it; each cell is the folder that language's entries live in (`locale_paths`), and the default language shows the collection's own folder. Adding a language fills in folders for translated collections, following where their other translations live. Collections you don't translate are listed under **Not translated**.
+- **Website URLs** chooses whether the default language's addresses carry its code, shown with real examples from your site (for example `/blog/hello` or `/en/blog/hello`). Other languages always carry theirs (`/fr/blog/hello`).
 
-![Global i18n settings](/images/docs/screenshots/i18n-settings.webp)
+## Default language in addresses
 
-## Default locale path behavior
+Assume collection path is `/posts/`, default language is `en`, and the other is `fr`.
 
-Assume collection path is `/posts/`, default locale is `en`, and secondary locale is `fr`.
-
-| Option | `en` path | `fr` path |
+| Website URLs | `en` path | `fr` path |
 |--------|-----------|-----------|
-| Default locale path **off** | `/posts/hello-world` | `/posts/fr/hello-world` |
-| Default locale path **on** | `/posts/en/hello-world` | `/posts/fr/hello-world` |
+| Without the code | `/posts/hello-world` | `/posts/fr/hello-world` |
+| With the code | `/posts/en/hello-world` | `/posts/fr/hello-world` |
 
-## Collection-level i18n
+## In the configuration
 
-In each collection, enable i18n when that collection should be localized.
-
-- Strategy is path-based (`path`).
-- You can add `locale_paths` overrides for framework-specific folder structures.
+Translation is path-based (`strategy: path`). `locale_paths` overrides where a language's entries live, for framework-specific folder structures.
 
 Example:
 
@@ -104,4 +97,4 @@ i18n:
 
 So a folder like `it/` holding IT service pages beside your other posts stays an ordinary folder.
 
-Untranslated pages are taken to be English. If English already has its own folder, GitCMS can't tell which language they are: it uses the first language found as the default, so check **Default locale** in Settings.
+Untranslated pages are taken to be English. If English already has its own folder, GitCMS can't tell which language they are: it uses the first language found as the default, so confirm it in **Configure** → **Languages**.

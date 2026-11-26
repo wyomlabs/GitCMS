@@ -84,6 +84,8 @@ Type `/` and look under **Components** to insert one. The menu lists what your s
 
 A component written as code (`plans={…}`) stays as code and can be hidden from the list.
 
+To define one your pages don't use yet, choose **Add component** at the top of **Configure → Components**. Give it a name, choose whether it sits on its own line or inside text, whether editors write content inside it, and, for MDX, where it's imported from; then add its props as fields. A preview shows how the tag will look in an entry. While something is missing, **Add component** stays disabled and its tooltip says what.
+
 When an entry has a component GitCMS doesn't know, owners and admins also see **Make editable** under it in the editor. Writers see nothing new.
 
 Each definition is saved in your repository at `.gitcms/sites/<site_key>/components/<Tag>.jsonc`. Edit it from **Configure → Components**, as with the rest of `.gitcms`.
