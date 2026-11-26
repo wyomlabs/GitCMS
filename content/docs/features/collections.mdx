@@ -163,7 +163,7 @@ A dropdown menu for choosing a single value from predefined options — category
 | Option | Description |
 |--------|-------------|
 | `options` | List of allowed values |
-| `allowCustom` | Whether values outside the options list are accepted |
+| `allowCustom` | Allow other values than the listed options (**Allow other values** in Configure). On by default; `false` limits the field to the list |
 | `color` | Notion-like tag color for visual distinction |
 
 In frontmatter, the value is stored as a plain string.
@@ -175,7 +175,7 @@ A tag-style input for choosing multiple values — tags, categories, labels.
 | Option | Description |
 |--------|-------------|
 | `options` | List of suggested values |
-| `allowCustom` | Whether values outside the options list are accepted |
+| `allowCustom` | Allow other values than the listed options (**Allow other values** in Configure). On by default; `false` limits the field to the list |
 | `color` | Notion-like tag color for visual distinction |
 
 In frontmatter, values are stored as an array of strings:
