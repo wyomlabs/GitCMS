@@ -1,0 +1,56 @@
+{
+  "dialect": "mdx-jsx",
+  "childrenRegion": {
+    "region": "body"
+  },
+  "children": {
+    "kind": "markdown"
+  },
+  "props": [
+    {
+      "name": "rank",
+      "label": "Rank",
+      "required": true,
+      "type": "number"
+    },
+    {
+      "name": "name",
+      "label": "Name",
+      "required": true,
+      "type": "text"
+    },
+    {
+      "name": "logo",
+      "label": "Logo",
+      "type": "image"
+    },
+    {
+      "name": "pick",
+      "label": "Pick",
+      "type": "select",
+      "options": [
+        "Our pick for client sites",
+        "Our pick for designers who build in code",
+        "Our pick for code-first agencies",
+        "Our pick for code-first teams"
+      ]
+    },
+    {
+      "name": "bestFor",
+      "label": "Best For",
+      "required": true,
+      "type": "text"
+    },
+    {
+      "name": "pricing",
+      "label": "Pricing",
+      "required": true,
+      "type": "text"
+    },
+    {
+      "name": "compareHref",
+      "label": "Compare Href",
+      "type": "text"
+    }
+  ]
+}
