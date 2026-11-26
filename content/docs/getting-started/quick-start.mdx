@@ -51,12 +51,14 @@ After you pick a repository, GitCMS reads it and lists every website it finds, o
 
 Choose the websites to set up. Then, one site per step, GitCMS shows a checklist of what it found, so you only fix what's wrong. Everything is ticked; untick what editors shouldn't change, and it isn't written to the repository.
 
-- **Website address** — Read from the site's own config when it declares one (Astro `site`, Hugo `baseURL`, Jekyll `url`, Docusaurus `url`, Gatsby `siteUrl`, `next-sitemap` `siteUrl`), otherwise asked. It also becomes the site's address in GitCMS (`/sites/example.com`).
-- **Collections** — The Markdown and MDX folders GitCMS found, with each one's folder, number of entries, and format.
-- **Site data** — Your data files, such as menus in `data/`, with each one's path. See [site data](/docs/features/site-data#added-during-setup). A line below counts the data files GitCMS saw but didn't add; point at it to see why.
+- **Website address** — Read from the site's own config when it declares one (Astro `site`, Hugo `baseURL`, Jekyll `url`, Docusaurus `url`, Gatsby `siteUrl`, `next-sitemap` `siteUrl`), otherwise asked, and the field says it wasn't found. It also becomes the site's address in GitCMS (`/sites/example.com`).
+- **Collections** — The Markdown and MDX folders GitCMS found, with each one's folder, the number of entries editors will see, and format. A collection holds one file type, so when a folder mixes `.md` and `.mdx`, the more common one is used and a note counts the files not included.
+- **Site data** — Your data files, such as menus in `data/`, with each one's path. See [site data](/docs/features/site-data#added-during-setup). A line below counts the data files GitCMS skipped; point at it to see why.
 - **Languages** — If your content has translations in language folders, the languages and the default one.
 - **Components** — If the site uses a docs framework GitCMS knows (Fumadocs or Starlight), the components editors can insert.
 - **Media folder** — Where uploaded images go, and the link GitCMS writes into entries.
+
+If your workspace has no license to spare, the step says the site will be [preview only](#step-4-open-your-site-in-preview-mode), with a link to buy one.
 
 Last, choose how changes go live: **Review before publishing** or **Publish right away**. The choice already selected follows your answer to **Who is GitCMS for?** GitCMS saves every chosen site in one change to the repository, then offers to **Invite editors**.
 
