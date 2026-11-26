@@ -68,6 +68,8 @@ When GitCMS can confidently match the current file to a published URL, it can sh
 
 Matching is based on the file name, collection context, and sitemap paths, so it works best when your published URLs stay reasonably close to your content structure.
 
+GitCMS also works out each collection's path from your sitemap, like `/blog/{slug}`, when the evidence is clear, and builds every entry's live URL from it. The same URL matches [search data](/docs/features/search-data) to entries. To pin the path or override it, set the collection's **Entry URL** in its settings.
+
 This speed-run shows GitCMS jumping from an entry to its matched live page:
 
 <video src="/videos/docs/live-url-matching-trimmed.mp4" controls muted playsInline preload="none" style={{ width: '100%', borderRadius: '0.5rem' }} poster="/images/video-posters/docs/live-url-matching-trimmed.webp">

@@ -1,4 +1,4 @@
 {
   "title": "Features",
-  "pages": ["markdown-editor", "chrome-extension", "collections", "site-data", "localization-i18n", "media-management", "sitemaps-internal-links", "editorial-workflow", "access-control"]
+  "pages": ["markdown-editor", "chrome-extension", "collections", "site-data", "localization-i18n", "media-management", "sitemaps-internal-links", "search-connections", "search-data", "editorial-workflow", "access-control"]
 }

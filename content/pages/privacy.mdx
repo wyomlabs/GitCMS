@@ -5,7 +5,7 @@ description: What data GitCMS collects, why, which third-party services process 
 
 # Privacy Policy
 
-Last updated: November 2, 2026
+Last updated: November 14, 2026
 
 Thank you for using GitCMS ("we," "us," or "our"). This Privacy Policy outlines how we collect, use, and protect your personal and non-personal information when you use our website at [gitcms.dev](https://gitcms.dev) and the GitCMS app at [app.gitcms.dev](https://app.gitcms.dev). By using GitCMS, you agree to the terms of this Privacy Policy.
 
@@ -20,6 +20,7 @@ We collect the following personal information:
 - **Payment information:** Collected to process your one-time license purchase securely. We use a third-party payment processor — we don't store your card details.
 - **GitHub repository access data:** Collected to enable read/write access to repositories you explicitly connect through our GitHub App.
 - **Google Search Console connection data:** When you connect Google Search Console, we store the connected Google account's ID and email address, the permissions it granted, and an encrypted refresh token. See [Google Search Console Data](#5-google-search-console-data).
+- **Bing Webmaster Tools connection data:** When you connect Bing Webmaster Tools, we store the permission it granted, a label that says who connected it (the email of the workspace member, or "Client's Bing account" when a client shared it through a link), and an encrypted refresh token. Bing doesn't tell us the account's ID or email, so we don't store them. See [Bing Webmaster Tools Data](#6-bing-webmaster-tools-data).
 - **MCP personal access token metadata:** When you create an MCP personal access token, we store metadata such as its label, prefix, scopes, expiration, last-used timestamp, and revocation status. We store token hashes, not raw tokens. Raw tokens are shown only once when created.
 
 ### 1.2 Non-Personal Data
@@ -37,7 +38,7 @@ We collect and use your data to:
 - **Authenticate you** via Google or GitHub OAuth and maintain your session.
 - **Operate the service** — read and write files in repositories you've connected, manage workspaces and team access.
 - **Operate MCP access** — authenticate supported MCP clients through OAuth or personal access tokens.
-- **Show search performance** — display Google Search Console data for the sites you link, to you, your workspace, and the AI tools you connect.
+- **Show search performance** — display Google Search Console and Bing Webmaster Tools data for the sites you link, to you, your workspace, and the AI tools you connect.
 - **Process payments** for site license purchases.
 - **Communicate with you** — send transactional emails like workspace invitations and account notifications. We only send important product updates. You can unsubscribe from updates anytime.
 - **Improve the service** — analyze aggregate usage patterns and fix bugs.
@@ -69,11 +70,26 @@ GitCMS can connect to Google Search Console so that you, your workspace, and the
 
 **Limited Use.** GitCMS's use and transfer of information received from Google APIs will adhere to the [Google API Services User Data Policy](https://developers.google.com/terms/api-services-user-data-policy), including the Limited Use requirements.
 
-## 6. Third-Party Services
+## 6. Bing Webmaster Tools Data
+
+GitCMS can connect to Bing Webmaster Tools so that you, your workspace, and the AI tools you connect can see how people find your sites in Bing Search. This is only available when it is enabled for the GitCMS deployment you use. A workspace admin connects a Microsoft account, or sends a site owner a single-use link to connect their own for one site.
+
+**What we access.** We request read-only access to Bing Webmaster Tools (the `webmaster.read` scope). With it, we read the list of sites the account has in Bing Webmaster Tools, and, for the site linked to each GitCMS site: page URLs, search queries, clicks, impressions, average position, and dates (Bing reports them weekly), plus crawl information for individual pages, such as when Bing last crawled a page and whether the crawl got an error. We never change anything in your Bing Webmaster Tools account.
+
+**How we use it.** We use this data only to show search performance and crawl status in GitCMS: in the app's Search pages, in an entry's search details, and through the GitCMS MCP server to AI tools that you or your workspace members have connected. Requests are limited to the pages of the site the property is linked to. A site owner who connects through a single-use link shares only the property they choose for that site.
+
+**What we don't do with it.** We don't sell Bing or Microsoft user data, use it for advertising, or transfer it to anyone except as needed to provide the features described here, for security, or to comply with the law. We don't use it to train or improve AI or machine learning models. Our staff don't read it unless you ask us to for support, it is needed for security or abuse investigation, or the law requires it.
+
+**AI tools you connect.** When an AI tool you've connected asks the GitCMS MCP server for search data, we return that data to the tool so it can help with your content. The tool's provider then handles the data under its own terms. You choose which AI tools connect to your workspace.
+
+**Storage and deletion.** We store only the encrypted refresh token and the connection details described in [1.1](#11-personal-data). Search performance data is fetched from Bing when it's requested and cached for up to 6 hours, and page crawl status for up to a day; we don't keep a copy beyond that. Removing a connection in your workspace settings deletes its refresh token, which ends GitCMS's access on our side. Bing doesn't offer a way for an application to revoke its own access, so to also remove GitCMS from your Microsoft account, remove it in Bing Webmaster Tools or in your Microsoft account's app permissions.
+
+## 7. Third-Party Services
 
 We use the following third-party services:
 
 - **Google** — authentication when you choose Google sign-in, and Search Console data when you connect Google Search Console.
+- **Microsoft (Bing)** — Bing Webmaster Tools data when you connect Bing Webmaster Tools.
 - **GitHub** — authentication when you choose GitHub sign-in, and repository access through the GitCMS GitHub App.
 - **Payment processor** — to handle license purchases securely. We don't store your payment details.
 - **Hosting provider** — infrastructure for the application (encrypted data).
@@ -81,11 +97,11 @@ We use the following third-party services:
 
 We do not share your repository content with any third party.
 
-## 7. Data Sharing
+## 8. Data Sharing
 
 We do not share your personal data with any other parties except as required to operate the service (e.g., GitHub for repository access, the payment processor for purchases, or search data returned to AI tools you connect). We will only share data if required by law.
 
-## 8. Cookies
+## 9. Cookies
 
 We use minimal, functional cookies:
 
@@ -94,30 +110,31 @@ We use minimal, functional cookies:
 
 No tracking cookies. No advertising cookies.
 
-## 9. Data Retention
+## 10. Data Retention
 
 - **Account data** is retained while your account is active. Delete your account and we remove your data within 30 days.
 - **Repository content** is not stored persistently — it's fetched from GitHub on demand during your session.
 - **Google Search Console connections** are retained until you remove the connection or your workspace is deleted. Search performance data is cached for up to 6 hours.
+- **Bing Webmaster Tools connections** are retained until you remove the connection or your workspace is deleted. Search performance data is cached for up to 6 hours, and page crawl status for up to a day.
 - **MCP token metadata** is retained until the token is revoked, expires, or your account is deleted. Raw token values are not retained.
 - **Usage analytics** are aggregated and anonymized. Individual-level data is not retained beyond 90 days.
 
-## 10. Data Protection
+## 11. Data Protection
 
-We take the protection of your data seriously. OAuth credentials and service credentials are protected using industry-standard protocols both in transit and at rest. MCP personal access tokens and Search Console connection links are stored as hashes, not raw values, and Google refresh tokens are encrypted. All connections use TLS encryption. While we implement commercially acceptable security measures, no method of transmission over the Internet is 100% secure — we cannot guarantee absolute security.
+We take the protection of your data seriously. OAuth credentials and service credentials are protected using industry-standard protocols both in transit and at rest. MCP personal access tokens and Search Console connection links are stored as hashes, not raw values, and Google and Bing refresh tokens are encrypted. All connections use TLS encryption. While we implement commercially acceptable security measures, no method of transmission over the Internet is 100% secure — we cannot guarantee absolute security.
 
-## 11. Your Rights
+## 12. Your Rights
 
 You can access, correct, or delete your personal data at any time. Your content already lives in your Git repository — `git clone` is your export button. For account data, contact us and we'll handle it.
 
-## 12. Children's Privacy
+## 13. Children's Privacy
 
 GitCMS is not intended for children under 16, and we do not knowingly collect data from children. If you believe a child has created an account, contact us and we will delete it.
 
-## 13. Updates to This Policy
+## 14. Updates to This Policy
 
 We may update this Privacy Policy from time to time. We will notify you of material changes via email or through the service. The "Last updated" date at the top indicates the latest revision.
 
-## 14. Contact
+## 15. Contact
 
 If you have any questions or concerns about this Privacy Policy, contact us at [help@gitcms.dev](mailto:help@gitcms.dev).
