@@ -64,7 +64,7 @@ GitCMS suggests a default folder during onboarding based on your framework:
 | VuePress | `docs/.vuepress/public` |
 | MkDocs | `docs/assets` |
 
-You can change this in **Settings** → **Media**. In a monorepo, the folder is resolved from the selected site root.
+You can change this in the site's **Configure** → **Media & files**. In a monorepo, the folder is resolved from the selected site root.
 
 <Callout type="warn">
 **Git LFS is not compatible with GitCMS uploads.** GitCMS writes files through the GitHub API, so uploaded files are stored as regular Git blobs even if the repository has Git LFS tracking rules. If repository size is a concern, use R2 or S3 for large media.
@@ -76,28 +76,28 @@ Object storage keeps media files outside the Git repository while content remain
 
 The production shape is usually:
 
-1. Connect a workspace media integration for R2 or S3.
-2. Add a site media library that uses that integration.
-3. Choose the bucket and optional folder prefix where uploads should go.
-4. Set the public asset URL GitCMS should use for previews and inserted links.
-5. Choose how links should look in Markdown and frontmatter.
+1. In **Settings** → **Media storage**, use **Add account** to connect your Cloudflare R2 or AWS S3 account.
+2. In the site's **Configure** → **Media & files**, use **Add library** and choose that **Account**.
+3. Choose the bucket and optional folder where uploads should go.
+4. Set the public URL GitCMS should use for previews and inserted links.
+5. Choose **Links**: how links look in Markdown and frontmatter.
 
 For provider-specific setup, see [Cloudflare R2](/docs/features/media-management/r2-production) or [AWS S3](/docs/features/media-management/s3-production).
 
-## How links should look
+## Links
 
-This setting controls what GitCMS inserts after someone chooses or uploads media. Pick the format your website already understands.
+The **Links** setting controls what GitCMS inserts after someone chooses or uploads media. Pick the format your website already understands.
 
 | Option | Example inserted into content | Use when |
 |--------|-------------------------------|----------|
-| **Full CDN URL** | `https://assets.example.com/blog/hero.webp` | Media is served from a public asset domain or CDN |
-| **Website-relative URL** | `/assets/blog/hero.webp` | Your site or CDN serves that path from the same website domain |
-| **Folder-relative path** | `blog/hero.webp` | Your renderer adds the media base path later |
-| **Custom media URI** | `media://blog/hero.webp` | Your build pipeline transforms custom media references |
+| **Full URL** | `https://assets.example.com/blog/hero.webp` | Media is served from a public asset domain or CDN |
+| **Website path** | `/assets/blog/hero.webp` | Your site or CDN serves that path from the same website domain |
+| **Folder path** | `blog/hero.webp` | Your renderer adds the media base path later (repository media only) |
+| **media://** | `media://blog/hero.webp` | Your build pipeline transforms custom media references |
 
-Most sites should use **Website-relative URL** for repository media and **Full CDN URL** for R2 or S3 media.
+Most sites should use **Website path** for repository media and **Full URL** for R2 or S3 media. **Full URL** needs the library's public URL. The value GitCMS will insert is shown under the choice.
 
-Use **Custom media URI** only when your website build already knows how to transform those references. If it does not, images may appear broken on the published site.
+Use **media://** only when your website build already knows how to transform those references. If it does not, images may appear broken on the published site.
 
 ## Accessing the media library
 
@@ -110,7 +110,7 @@ Open a site and click **Media** in the sidebar. From there you can:
 - Navigate through folders.
 - Upload files by dragging and dropping or using the upload button. Any file type works, not only images.
 - Preview images. Other files, such as PDFs or GPX routes, show as file tiles.
-- Copy a file's link, in the format set by [How links should look](#how-links-should-look).
+- Copy a file's link, in the format set by [Links](#links).
 - Delete files you no longer need.
 
 When you upload inside a folder, the file is placed in that folder.
@@ -157,14 +157,14 @@ To upload into a folder, navigate there first in the media library. For object s
 
 Check that the media folder matches your framework's public/static asset folder. For example, Next.js, Astro, and Nuxt usually serve files from `public`, while Hugo and SvelteKit commonly use `static`.
 
-Also check the selected link format. If your site expects `/images/photo.webp` but GitCMS inserts `images/photo.webp`, update **How links should look** in media settings.
+Also check the selected link format. If your site expects `/images/photo.webp` but GitCMS inserts `images/photo.webp`, update **Links** in the media library's settings.
 
 ### Object storage uploads fail
 
 Check the provider setup:
 
 - The bucket exists.
-- The integration credentials can read, write, list, and delete objects.
+- The storage account's keys can read, write, list, and delete objects.
 - CORS allows requests from the GitCMS app origin.
 - The endpoint is the provider API endpoint, not the public CDN URL.
 - The public asset URL opens uploaded files in a browser.

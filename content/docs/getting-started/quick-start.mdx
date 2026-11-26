@@ -66,7 +66,7 @@ The button says how that change is saved. **Commit to main** (your default branc
 
 Prefer to let your coding agent do it? Choose **Set up with your coding agent**, paste the prompt into Claude Code, Codex, Cursor, or another agent, and keep the dialog open: each site is ticked off as soon as the setup is pushed. For unusual repositories, **Advanced setup** opens the full configuration.
 
-To add another site later, use **Add site** on the dashboard, or **Add site** next to a repository in **Workspace settings → Websites**.
+To add another site later, use **Add site** on the dashboard, or **Add site** next to a repository in **Settings → Websites**.
 
 GitCMS saves configuration into a repo-level `.gitcms/` folder. The manifest lives in `.gitcms/sites.jsonc`, and each site gets its own config file at `.gitcms/sites/<site_key>/config.jsonc`. These files are auto-generated — you don't need to write or edit them by hand. See [Configuration](/docs/getting-started/configuration) for more details.
 
@@ -84,7 +84,7 @@ If your site is not licensed yet, GitCMS opens in preview mode. Preview mode let
 
 ## Step 5: Buy a license to save and publish
 
-When you're ready to use GitCMS for real changes, open **Billing** and buy a site license for the website you want to manage.
+When you're ready to use GitCMS for real changes, open **Settings** → **Billing**. Under **Add licenses**, choose how many websites (and seats) to add and select **Checkout**. The cart already holds a website when you're at your limit.
 
 If you run a personal site or OSS docs, contact [waishnav@gitcms.dev](mailto:waishnav@gitcms.dev) about complimentary access.
 
@@ -100,7 +100,7 @@ Every change is still stored in your repository. Depending on publishing mode, G
 
 ## Step 7: Invite teammates or collaborators
 
-When you're ready to collaborate, open **Workspace Settings → Members** and invite the people who need access.
+When you're ready to collaborate, open **Settings → Members** and invite the people who need access.
 
 Invited teammates can sign in with Google or GitHub. Google works well for non-technical editors, marketers, clients, and reviewers who only need access to GitCMS. GitHub is still required for people who need to install or manage repository connections.
 

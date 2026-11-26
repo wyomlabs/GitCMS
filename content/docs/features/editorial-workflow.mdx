@@ -7,7 +7,7 @@ GitCMS is built so **writers, marketers, and reviewers** can work in a familiar 
 
 ## Enabling the editorial workflow
 
-Open your site’s **Settings** and set **Publishing mode** to **Review before publish** (`editorial_workflow` in config).
+Open your site’s **Configure** → **Publishing** and set **How changes go live** to **Review first** (`editorial_workflow` in config).
 
 Once enabled, the sidebar includes **Content Board** — a single place to see work moving across all collections.
 
@@ -49,7 +49,7 @@ Owners, admins, editors, and reviewers can comment and resolve threads while a t
 
 Every approval and request for changes shows in the task's **Activity**, including ones from people who can't review the site, marked **Doesn't count**.
 
-**Require approval before publishing** — Turn this on in the site's **Settings → General** to block publishing until someone approves the latest version. It's off by default. Owners and admins can still choose **Publish anyway**; the task's activity notes that it was published without approval. In configuration, this is `require_approval: true` in the site's `.gitcms` config.
+**Require approval before publishing** — Turn this on in the site's **Configure** → **Publishing** to block publishing until someone approves the latest version. It's off by default. Owners and admins can still choose **Publish anyway**; the task's activity notes that it was published without approval. In configuration, this is `require_approval: true` in the site's `.gitcms` config.
 
 ### 4. Published
 
@@ -133,7 +133,7 @@ You can change publishing mode in Settings; existing files are not rewritten.
 - **One task, one thread of work.** Keeps review focused and publishing predictable.
 - **Review on a steady cadence.** Stale review columns lose context — agree on turnaround inside your team.
 - **Check the board daily.** Faster than hunting through folders for “where did that post go?”
-- **Use previews.** GitCMS detects deployment previews from recent GitHub reviews and deployment statuses. During site setup, it looks for available preview sources without blocking onboarding; if none exist yet, detection remains automatic. Owners and admins can change this later under **Site Settings → General → Preview deployments**, choose a specific deployment source, or disable previews. This preference does not modify the website's files. A preview must belong to the current revision and be verifiably associated with the site; in multi-site repositories, generic deployment hosts may not be safe to embed. Existing GitHub installations may need their owners to approve Deployments and Commit statuses read permissions. Protected preview deployments may require opening the host directly.
+- **Use previews.** GitCMS detects deployment previews from recent GitHub reviews and deployment statuses. During site setup, it looks for available preview sources without blocking onboarding; if none exist yet, detection remains automatic. Owners and admins can change this later under **Configure** → **Publishing** → **Previews**, choose a specific deployment source, or disable previews. This preference does not modify the website's files. A preview must belong to the current revision and be verifiably associated with the site; in multi-site repositories, generic deployment hosts may not be safe to embed. Existing GitHub installations may need their owners to approve Deployments and Commit statuses read permissions. Protected preview deployments may require opening the host directly.
 
 **Change Requests is in alpha.** All authorized members can explore visual feedback without enrollment. Point to an element on your website, describe the change, and prepare a draft. Submitting, discussing, and resolving requests requires a licensed site and the appropriate workspace permissions. Previews are optional and may be unavailable on protected deployments.
 

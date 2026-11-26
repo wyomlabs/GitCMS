@@ -12,8 +12,8 @@ For production, use:
 - one R2 bucket per site or environment
 - a custom public asset domain, such as `https://assets.example.com`
 - an R2 API token scoped to only the bucket GitCMS should manage
-- a GitCMS workspace integration that stores the R2 credentials
-- a site media library that references that workspace integration
+- a GitCMS storage account that holds the R2 credentials
+- a site media library that uses that storage account
 
 Do not use an `r2.dev` public development URL for production sites. It is useful for temporary testing, but production media should use a custom domain connected to the bucket.
 
@@ -93,38 +93,37 @@ In the bucket **Settings**, add this CORS policy:
 
 Set `AllowedOrigins` to the GitCMS application origin your editors use. If your organization uses a separate GitCMS deployment, replace `https://gitcms.dev` with that origin. Do not include development or localhost origins in a production bucket unless that bucket is only for testing.
 
-## Add the workspace integration
+## Connect the storage account
 
-In GitCMS, open **Workspace Settings** → **Integrations** → **Add integration**.
+In GitCMS, open **Settings** → **Media storage** → **Add account**, choose the provider, and fill in:
 
 Use:
 
 ```txt
 Provider: Cloudflare R2
-Display name: Production R2
-Integration key: production-r2
+Name: Production R2
 Account ID: <Cloudflare account ID>
 Access Key ID: <R2 access key ID>
 Secret Access Key: <R2 secret access key>
 Endpoint: https://<ACCOUNT_ID>.r2.cloudflarestorage.com
 ```
 
-The endpoint is the R2 S3 API endpoint. It is not the public asset domain.
+The endpoint, under **Advanced**, is the R2 S3 API endpoint; it is optional when the account ID is set. It is not the public asset domain.
 
 ## Add the site media library
 
-Open the site **Settings** → **Media** and add a Cloudflare R2 media library.
+Open the site's **Configure** → **Media & files**, then **Add library** → **Cloudflare R2**.
 
 Use:
 
 ```txt
 Library key: production_media
 Label: Production media
-Integration: workspace:production-r2
+Account: Production R2
 Bucket: example-production-media
 Path prefix: assets
 Public base URL: https://assets.example.com
-How links should look: Full CDN URL
+Links: Full URL
 ```
 
 With this setup, GitCMS uploads the file to R2 at:
@@ -141,7 +140,7 @@ https://assets.example.com/assets/blog/hero.webp
 
 If you do not want the `assets` segment in the public URL, leave **Path prefix** empty.
 
-Do not commit the R2 access key or secret access key. GitCMS stores credentials in the encrypted workspace integration, not in the site config.
+Do not commit the R2 access key or secret access key. GitCMS stores them encrypted in the workspace's storage account, never in the repository.
 
 ## Website-relative links
 
@@ -152,7 +151,7 @@ Example:
 ```txt
 Path prefix: assets
 Public base URL: https://assets.example.com
-How links should look: Website-relative URL
+Links: Website path
 Base path: /assets
 ```
 
