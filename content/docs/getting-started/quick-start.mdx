@@ -20,17 +20,26 @@ Here is the flow as a one-minute speed-run before the step-by-step version:
 
 ## Step 1: Sign in
 
-Sign in with Google or GitHub. GitCMS automatically creates a personal workspace for you and opens **Add site**, which connects GitHub and asks which repository holds your websites. Everything else is read from the repository. Invited editors skip this and go straight to the site they were invited to.
+Sign in with Google or GitHub. A new account answers a few questions before anything is created:
+
+1. **Your website**: enter its address. GitCMS reads the homepage and shows the site's name and, when it can tell, what it's built with. No site yet? Choose **I don't have a website yet**.
+2. **Who is GitCMS for?**: choose **My company**, **Just me**, or **My clients**, and name your workspace. A workspace groups your repositories, sites, team members, and billing. New sites start on **Publish right away** for **Just me**, and on **Review before publishing** otherwise. You can change this for each site.
+3. **What are you setting up?**: GitCMS suggests one of three paths based on your website:
+   - **Manage my code site**: your site is already in a GitHub repository. **Connect GitHub** takes you to Step 2 below, or choose **or set it up with your coding agent** to get a prompt instead.
+   - **Move my site to code**: for a site on a builder such as WordPress, Squarespace, Webflow, or Wix. You get a prompt that asks your coding agent to move it and keep its URLs.
+   - **Start a new site**: you get a prompt for your coding agent to build one that's ready to edit.
+
+**Skip setup** creates a workspace with a suggested name and opens the dashboard. Invited editors don't see any of this: they go straight to the site they were invited to.
 
 Use **GitHub** when you are setting up repositories or installing the GitCMS GitHub App. Use **Google** when you are joining as an invited editor and do not need to own or install repositories.
 
 If you use Google and GitHub with the same email address, GitCMS can link both sign-in methods to the same account.
 
-> **Need a team workspace?** If you're setting this up for a startup team, client project, or agency workflow, click the workspace switcher in the sidebar and choose **Create workspace**. A workspace groups your repositories, sites, team members, and billing under one roof. You can always create more workspaces later.
+> **Need another workspace?** For a separate team or client, click the workspace switcher in the sidebar and choose **Create workspace**. You can create more at any time.
 
 ## Step 2: Connect a repository
 
-In **Add site** (on the dashboard, or opened for you after signing up), choose **GitHub**. This redirects you to GitHub to install the GitCMS GitHub App on the repositories you want to manage, then brings you back to pick the repository.
+If you chose **Connect GitHub** during setup, you're already on GitHub. Otherwise open **Add site** on the dashboard and choose **GitHub**. Either way, you install the GitCMS GitHub App on the repositories you want to manage, then come back to **Add site** to pick the repository.
 
 Select the repositories that contain your content. GitCMS only needs read/write access to repository contents — it never touches your CI/CD, secrets, or other settings.
 
@@ -46,7 +55,7 @@ Choose the websites to set up. Then, one site per step, GitCMS shows what it fou
 - **Content** — The Markdown and MDX collections GitCMS found, with how many entries each has. Uncheck anything editors shouldn't change.
 - **Languages** — If your content has translations in language folders, GitCMS shows how each language is laid out.
 - **Media** — Where uploaded images go, and the link GitCMS writes into entries.
-Last, choose how changes go live: **Review before publishing** (the default) or **Publish right away**. GitCMS saves every chosen site in one change to the repository, then offers to **Invite editors**.
+Last, choose how changes go live: **Review before publishing** or **Publish right away**. The choice already selected follows your answer to **Who is GitCMS for?** GitCMS saves every chosen site in one change to the repository, then offers to **Invite editors**.
 
 The same change adds your data files, such as menus in `data/`, as [site data](/docs/features/site-data#added-during-setup).
 
