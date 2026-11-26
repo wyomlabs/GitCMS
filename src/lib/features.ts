@@ -102,7 +102,7 @@ export const features: ReadonlyArray<Feature> = [
     ],
     faqs: [
       { question: 'Can GitCMS edit MDX files with components?', answer: 'Yes. MDX files open in the same visual editor, and JSX components used by Astro, Next.js, Docusaurus and others are kept instead of flattened to text. Editing component syntax is in beta.' },
-      { question: 'How do editors change menus or footers kept in JSON or YAML?', answer: 'Add the file as site data. GitCMS auto-detects its fields and shows it in the sidebar as a form, like Navigation or Footer. Saving changes only the values that were edited.' },
+      { question: 'How do editors change menus or footers kept in JSON or YAML?', answer: 'As site data. Setup adds the files in your data folders and detects their fields, and you can add other files later. Each shows in the sidebar as a form, like Navigation or Footer, and saving changes only the values that were edited.' },
       { question: 'Do I have to write a schema first?', answer: 'No. GitCMS infers field types from your existing entries and data files. Refine labels, types, options and validation later in Settings; the result is saved to the .gitcms folder in your repository.' },
       { question: 'Will my frontmatter format change?', answer: 'No. GitCMS keeps the format your site uses, whether that’s YAML, TOML or JSON, so you don’t have to migrate your content model to get a better editor.' },
       { question: 'Can AI agents use the same fields?', answer: 'Yes. Agents connected through GitCMS MCP read and change entries and site data against the same fields and rules, and follow the same publishing mode as everyone else.' },

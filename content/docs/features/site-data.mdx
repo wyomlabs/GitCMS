@@ -5,6 +5,37 @@ description: Let editors change menus, footers, homepage sections, and theme set
 
 Not all of a site's content is entries. Menus, footers, team lists, homepage sections, and a theme's settings usually live in data files: `data/team.yaml`, `src/data/navigation.json`, or a Hugo site's `config.toml`. **Site data** gives these a form, so editors can change them without learning the file's syntax.
 
+## Added during setup
+
+When you set up a site, in the web app or with [`create-gitcms`](/docs/getting-started/cli-onboarding), GitCMS adds the data files it finds as site data, with fields detected from what each file holds. There's nothing to add by hand for the usual cases.
+
+It looks for `.json`, `.jsonc`, `.yaml`, `.yml`, and `.toml` files in these folders and their subfolders, from the site root:
+
+| Folder | Used by |
+|--------|---------|
+| `data/` | Hugo, Astro, Next.js |
+| `_data/` | Jekyll, Eleventy |
+| `src/data/`, `src/_data/` | Astro, Next.js, Eleventy |
+
+Each file becomes one piece of site data, named after its path inside the folder: `data/en/menu.yaml` becomes `en-menu`.
+
+A subfolder holding more than 5 data files, such as `_data/comments/`, is treated as a dataset and left out, unless it's named for a language, such as `data/en/`.
+
+Setup adds **at most 20 files per site**. Files named for what people usually edit (menu, nav, navigation, header, footer, site, settings, social, authors) come first, then the ones nearest the site root. `create-gitcms` prints how many files it left out, by reason, as `site_data_skipped`.
+
+It also leaves out:
+
+| Left out | Why |
+|----------|-----|
+| Files whose top level is a list or a single value | Site data needs named keys at the top level. Top-level lists aren't supported yet |
+| Files over 64 KB, holding more than 10,000 values, or that would need more than 200 fields | They're datasets rather than something to edit in a form |
+| Files nested more than 16 levels deep | Too deep to work with as a form |
+| YAML files with anchors or aliases | GitCMS can't edit shared values without changing or breaking the other copy |
+| Empty files and files that can't be parsed | There are no fields to detect |
+| Tooling files, such as `manifest.json`, `*.config.json`, `*.schema.json`, and hidden files | They aren't website content |
+
+Files elsewhere, like a Hugo `config.toml`, aren't added automatically. Add those yourself, as below.
+
 ## How it works
 
 Each piece of site data points at:
@@ -17,7 +48,7 @@ Each piece of site data points at:
 | **Part of the file** | Optional. Edit only one section, like `params` in a Hugo config, so build settings in the same file stay out of reach |
 | **Fields** | What editors can change. Use [Groups and Lists](/docs/features/collections#group) for nested data |
 
-Add it in **Configure → Site data**: choose the file, pick the part of it, and select **Auto-detect** to fill in the fields from what the file holds. Refine labels and types afterwards.
+To add one yourself, open **Configure → Site data**: choose the file, pick the part of it, and select **Auto-detect** to fill in the fields from what the file holds. Refine labels and types afterwards, including on the ones setup added. The part you pick must have named keys: a list can't be the whole of a piece of site data, though it can sit under a key.
 
 One file can back several pieces of site data. A Hugo `config.toml`, for example, can give editors a **Navigation** page for `menu` and a **Theme settings** page for `params`, while `baseURL` and `[markup]` stay hidden.
 

@@ -76,6 +76,32 @@ For multilingual workflows, explicitly mention target locale in your prompt (for
 
 ## Detection during onboarding
 
-Onboarding can detect locale-folder patterns and suggest i18n setup.
+Setup, in the web app and the CLI, sets up i18n for you.
 
-If default locale cannot be safely inferred, GitCMS keeps i18n conservative and asks you to confirm defaults in Settings.
+**Your framework's language config comes first.** When a site declares its languages, those are the site's languages and its default, and only folders named after them are treated as translations. GitCMS reads:
+
+- Hugo `languages` in `hugo` or `config` files, including `config/_default/languages.*`
+- Astro `i18n`, or Starlight `locales`
+- Next.js `i18n` in `next.config` or `next-i18next.config`
+- Nuxt `i18n`
+
+A declared language with a region, such as `en-US`, uses the `en-us/` folder, or `en/` when it's the only declared language that could. Your site's locale codes then match the folder names.
+
+**Hugo's default language has no prefix** unless `defaultContentLanguageInSubdir` is on, even when its pages are in `content/en/`. Setup follows that: **Default locale path** stays off, and each collection's `locale_paths` points the default language at its folder:
+
+```yaml
+i18n:
+  enabled: true
+  strategy: path
+  locale_paths:
+    en: /content/en/
+```
+
+**Otherwise GitCMS reads the folders.** Only real language codes, such as `fr` or `pt-br`, count.
+
+- **All language folders.** When a collection holds two or more language folders and nothing else, such as `content/en/` and `content/fr/`, each is a language, even if the page names are translated.
+- **Beside other content.** A language folder next to other pages or folders counts only when its pages mirror them: at least half exist at the same path among the untranslated pages, or it shares at least half the pages of the smaller of the two with another language folder.
+
+So a folder like `it/` holding IT service pages beside your other posts stays an ordinary folder.
+
+Untranslated pages are taken to be English. If English already has its own folder, GitCMS can't tell which language they are: it uses the first language found as the default, so check **Default locale** in Settings.
