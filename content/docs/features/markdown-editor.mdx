@@ -90,9 +90,46 @@ When an entry has a component GitCMS doesn't know, owners and admins also see **
 
 Each definition is saved in your repository at `.gitcms/sites/<site_key>/components/<Tag>.jsonc`. Edit it from **Configure → Components**, as with the rest of `.gitcms`.
 
+### Snippets
+
+A **snippet** is a named, static piece of source that writers insert as a locked block: a Jekyll `{% include cta-buttons.html %}`, a Hugo shortcode without parameters, or an MDX `<NewsletterSignup />` without props. Use one when the same code goes into many entries and nobody should retype it.
+
+Owners and admins manage snippets in **Configure → Components → Snippets**: add, edit, or remove them. Each change is saved to your repository right away. A snippet has a **label**, an optional **description**, and the **source** to insert. Each is saved at `.gitcms/sites/<site_key>/snippets/<name>.jsonc`, named after the file:
+
+```jsonc
+{
+  "label": "CTA buttons",
+  "description": "Download and docs buttons",
+  "source": "{% include cta-buttons.html %}"
+}
+```
+
+Writers type `/` and pick it under **Snippets**. It appears as a block showing the label and a three-line preview. You can move or delete it, not edit it, and the file holds the source exactly, with no escaping.
+
+- GitCMS recognises existing content too: a top-level block whose source is exactly a snippet's source opens as that snippet. A block that only contains it stays as it was.
+- A snippet's source must be exactly one block, and can't contain a link or footnote definition (`[name]: /url`). A snippet that doesn't fit the entry's format is shown disabled in the menu, as **Not for MDX** or **Not for Markdown**.
+- Snippets work in top-level blocks only. If two snippets share the same source, the first one is used. Files with Windows (CRLF) line endings don't match a source written with plain line breaks.
+- Agents get each snippet's exact source in the site guide (`GITCMS.md`), and inserting it means writing that source as its own block. The editor then shows it as the snippet. A snippet file that isn't valid is reported by path and doesn't affect the rest of the site; `create-gitcms check` reports it too.
+
 ### Docusaurus `.md` files
 
 Docusaurus compiles `.md` files as MDX by default, so GitCMS does too. If your `docusaurus.config` sets `markdown: { format: 'detect' }` or `'md'`, GitCMS reads it automatically and opens `.md` files as plain Markdown. A page's own `format:` frontmatter (`mdx`, `md` or `detect`) takes precedence over the site setting. Heading anchors (`{#id}`), HTML comments and `:::` admonitions open visually on Docusaurus sites.
+
+### Images: size and alignment
+
+Select an image to size and align it from its popover: **Small** (320px), **Medium** (480px), **Large** (640px) or **Full**, and left, center or right. You can also drag an image's handles; the size snaps to the nearest one when you let go. GitCMS saves both in the file. An image with a size or alignment is written as a single `<img>` tag:
+
+```html
+<img src="/images/hero.webp" alt="Dashboard" style="width:100%;max-width:480px;display:block;margin-left:auto;margin-right:auto" />
+```
+
+The size is a maximum: on a wide page the image is 480px, and on a narrow screen such as a phone it fills the column. In `.mdx` entries the same tag is written as a JSX style object (`style={{ width: '100%', maxWidth: 480, … }}`) so the file stays valid MDX. A Full image with no alignment stays plain `![alt](src)`.
+
+- Sizing is offered for images whose address starts with `/` or is a full URL. An image with a relative address (`./hero.webp`) keeps `![alt](src)`: Astro, Starlight, Docusaurus and Next.js only bundle images written that way.
+- Sizing is offered for an image on its own line, in a quote, or alone in a table cell. It isn't offered for images in lists, headings or links.
+- GitCMS turns an `<img>` back into a sized image only when it has exactly that shape. An `<img>` with other attributes (`class`, `height`, `loading`) stays an HTML block, saved byte for byte.
+- **Hugo** drops raw HTML by default, so Hugo sites always keep `![alt](src)`, and there is no resizing or alignment.
+- GitHub's Markdown preview strips `style`, so neither size nor alignment shows there.
 
 ## HTML blocks and MDX
 
@@ -101,6 +138,8 @@ Use `/HTML block` to add a standalone HTML block to any entry. HTML blocks open 
 **In `.md` entries**, top-level raw HTML, such as a table or a `<div>` wrapper, opens as an HTML block. HTML mixed with text inside an ordinary paragraph stays part of that paragraph. Editing the paragraph can escape its tags, so use a standalone block for HTML you want to edit as source.
 
 **In `.mdx` entries**, there is no raw HTML: tags are JSX. A block made only of HTML elements, text, and plain attributes (`class="…"`, `style="…"`, `colspan="2"`) opens as an HTML block. A block with expressions (`{…}`, `style={{ … }}`), components, or Markdown inside keeps the component source view. Either way, the source has to stay valid MDX for the entry to save.
+
+A raw HTML wrapper such as a `<table>`, `<div>`, or `<details>` stays **one block**, even when its content has blank lines or Markdown inside. Markdown parsers split such a table into fragments at the first blank line; GitCMS keeps the whole element together, shows the Markdown parts rendered in Preview as GitHub does, and saves it exactly as written. This applies to top-level blocks, not to HTML inside list items or quotes. A wrapper that is never closed is left as it was parsed.
 
 The preview is a quick check, not your site. It shows the HTML without your site's styles, components, or scripts, and scripts in your content don't run. Tables get the editor's borders and padding in the preview only; nothing is added to the saved file. Tall content scrolls inside the preview. Edit HTML tables in Code: the controls for adding rows and columns work on Markdown tables.
 
