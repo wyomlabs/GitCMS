@@ -105,7 +105,7 @@ Owners and admins manage snippets in **Configure → Components → Snippets**: 
 Writers type `/` and pick it under **Snippets**. It appears as a block showing the label and a three-line preview. You can move or delete it, not edit it, and the file holds the source exactly, with no escaping.
 
 - GitCMS recognises existing content too: a top-level block whose source is exactly a snippet's source opens as that snippet. A block that only contains it stays as it was.
-- A snippet's source must be exactly one block. A snippet that doesn't fit the entry's format is shown disabled in the menu, as **Not for MDX** or **Not for Markdown**.
+- A snippet's source must be exactly one block, and can't contain a link or footnote definition (`[name]: /url`). A snippet that doesn't fit the entry's format is shown disabled in the menu, as **Not for MDX** or **Not for Markdown**.
 - Snippets work in top-level blocks only. If two snippets share the same source, the first one is used. Files with Windows (CRLF) line endings don't match a source written with plain line breaks.
 - Agents get each snippet's exact source in the site guide (`GITCMS.md`), and inserting it means writing that source as its own block. The editor then shows it as the snippet. A snippet file that isn't valid is reported by path and doesn't affect the rest of the site; `create-gitcms check` reports it too.
 
@@ -115,17 +115,19 @@ Docusaurus compiles `.md` files as MDX by default, so GitCMS does too. If your `
 
 ### Images: size and alignment
 
-Drag an image's handles to resize it. To align it, select the image and use the left, center, or right button in its popover; choosing the active button again clears the alignment. Alignment isn't offered on Hugo sites. GitCMS saves both in the file. An image with a size or alignment is written as a single `<img>` tag:
+Select an image to size and align it from its popover: **Small** (320px), **Medium** (480px), **Large** (640px) or **Full**, and left, center or right. You can also drag an image's handles; the size snaps to the nearest one when you let go. GitCMS saves both in the file. An image with a size or alignment is written as a single `<img>` tag:
 
 ```html
-<img src="/images/hero.webp" alt="Dashboard" width="480" style="display: block; margin: 0 auto;" />
+<img src="/images/hero.webp" alt="Dashboard" style="width:100%;max-width:480px;display:block;margin-left:auto;margin-right:auto" />
 ```
 
-In `.mdx` entries the same tag is written with JSX attributes (`style={{ display: 'block', margin: '0 auto' }}`) so the file stays valid MDX. An image you haven't resized or aligned stays plain `![alt](src)`, and removing the size returns it to that form.
+The size is a maximum: on a wide page the image is 480px, and on a narrow screen such as a phone it fills the column. In `.mdx` entries the same tag is written as a JSX style object (`style={{ width: '100%', maxWidth: 480, … }}`) so the file stays valid MDX. A Full image with no alignment stays plain `![alt](src)`.
 
+- Sizing is offered for images whose address starts with `/` or is a full URL. An image with a relative address (`./hero.webp`) keeps `![alt](src)`: Astro, Starlight, Docusaurus and Next.js only bundle images written that way.
+- Sizing is offered for an image on its own line, in a quote, or alone in a table cell. It isn't offered for images in lists, headings or links.
 - GitCMS turns an `<img>` back into a sized image only when it has exactly that shape. An `<img>` with other attributes (`class`, `height`, `loading`) stays an HTML block, saved byte for byte.
 - **Hugo** drops raw HTML by default, so Hugo sites always keep `![alt](src)`, and there is no resizing or alignment.
-- GitHub's Markdown preview strips `style`, so alignment doesn't show there. Width does.
+- GitHub's Markdown preview strips `style`, so neither size nor alignment shows there.
 
 ## HTML blocks and MDX
 
