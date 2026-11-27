@@ -85,5 +85,10 @@ const siteStructuredData = [
   <body class="min-h-screen bg-background font-sans antialiased">
     <slot />
     <MdxCopyButtons />
+    <script>
+      import { preserveAttributionOnAppLinks } from '@/lib/attribution'
+
+      preserveAttributionOnAppLinks()
+    </script>
   </body>
 </html>
