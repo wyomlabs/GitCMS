@@ -161,6 +161,32 @@ https://docs.example.com/getting-started/
 Summarize what should change before you rewrite it.
 ```
 
+## Using search data
+
+If the site has Google Search Console or Bing Webmaster Tools connected, start from what people search for instead of guessing:
+
+```text
+Which posts are close to page one in search? Pick the best candidate,
+create a content task, and rewrite its title and introduction around
+the searches it already shows for.
+```
+
+```text
+Our pricing page gets no searches. Check whether it is indexed
+before changing any wording.
+```
+
+```text
+Which blog posts haven't been updated in the last 6 months and are losing
+search clicks? List the top 5 with their last edit dates.
+```
+
+Ask for one source at a time (`Google` or `Bing`). GitCMS never adds numbers across them.
+
+## Team skills
+
+For repeatable workflows (such as release notes, SEO refreshes, or comparison pages), commit a `SKILL.md` file in `.gitcms/sites/<site_key>/skills/<skill-name>/SKILL.md` with `name` and `description` frontmatter. GitCMS indexes those skills in `GITCMS.md` and exposes them read-only under `/sites/<site>/skills/` so agents read the right playbook before starting.
+
 ## Locale-aware prompting
 
 For multilingual sites, always specify the locale:
