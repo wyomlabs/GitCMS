@@ -1,0 +1,10 @@
+{
+  "dialect": "mdx-jsx",
+  "childrenRegion": {
+    "region": "body"
+  },
+  "children": {
+    "kind": "markdown"
+  },
+  "props": []
+}
